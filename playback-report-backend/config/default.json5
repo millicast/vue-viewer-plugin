@@ -1,0 +1,11 @@
+{
+  "dotenv": {
+    "path": ".env"
+  },
+  "cors": {
+    "origins": [
+      "https://viewer.millicast.com",
+      "https://dash.millicast.com"
+    ]
+  }
+}
