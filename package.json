@@ -8,7 +8,7 @@
     "build": "vue-cli-service build --target lib --name millicast-vue-viewer-plugin index.js",
     "lint": "vue-cli-service lint"
   },
-  "main": ".dist/millicast-vue-viewer-plugin.umd.js",
+  "main": "dist/millicast-vue-viewer-plugin.umd.js",
   "module": "dist/millicast-vue-viewer-plugin.common.js",
   "browser": "dist/millicast-vue-viewer-plugin.umd.js",
   "files": [
