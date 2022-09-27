@@ -10,15 +10,21 @@ To install the dependecies to your project, from the command line execute the fo
 npm install millicast/vue-viewer-plugin
 ```
 
-To install the plugin to the application, in the `main.js` file be sure to have the following structure:
+> Note: This command will install the plugin directly from our github repository. The installation steps will change once we publish this project into NPM.
+
+## Basic Usage
+
+To import the plugin to your Vue application, in your `main.js` file be sure to have the following structure:
 
 ```javascript
+import { createApp } from 'vue'
+import App from './App.vue'
 // import the plugin
 import VideoPlayer from "@millicast/vue-viewer-plugin"
 
 const  Vue = createApp(App)
 
-// install to the app
+// install within your app
 Vue.use(VideoPlayer, {})
 
 Vue.mount('#app')
@@ -31,10 +37,7 @@ At the end of the file `App.vue`, you must include the following dependecy:
 </style>
 ```
 
-
 Once this is done, you are ready to use the plugin in any Vue file of your project as a component.
-
-## Basic Usage
 
 ### Configuration Parameters
 
@@ -47,7 +50,6 @@ Once this is done, you are ready to use the plugin in any Vue file of your proje
 | `hideButtons` | `Array.<String>` | Optional  | `[]`    | The list is provided further in this document.                     |
 
 To be able to use the viewer, just reference to the component `VideoPlayer`, and pass the parameters of your choice as an object in the parameter `paramsOptions`.
-
 
 #### `hideButtons` options
 
@@ -72,14 +74,13 @@ In order to customize your experience using the plugin, you are able to hide the
 - Remember that `accountId` and `streamName` are the only requeried parameters.
 - At the moment, this plugin allows **only one** instantiation of the component at a time by project.
 
-
 ## Example App
 
-With this plugin is also provided un example app which integrates [PubNub](https://www.pubnub.com/ "PubNub") chat, and that can be found in the folder `examples/live-chat`.
+An example app is also provided which also integrates a [PubNub](https://www.pubnub.com/docs/) based live chat, this example can be found in the `examples/live-chat` folder.
 
-To set your private PubNub credentials, create a `.env` file. An example of this may be found in the `examples/live-chat/.end.sample`.
+To set your private PubNub & Millicast credentials, create a `.env` file. An example of this may be found in the `examples/live-chat/.env.sample`. Read [Dolby.io streaming docs](https://docs.dolby.io/streaming-apis/docs) for more information on how to obtain your Millicast credentials.
 
-In order to run this example app, write the following in the command line:
+In order to run this example app, execute the following commands:
 
 ```bash
 cd examples/live-chat
@@ -87,13 +88,11 @@ npm install
 npm run serve
 ```
 
-This will install the dependencies and run the app. Once this is done, you will be ready to use it.
+This will install the dependencies and run the app.
 
-In this case, the `accountId` and `streamName` must be provided in the URL as following:
+# Contribute
 
-```
-URL?streamId={{ accountId }}/{{ streamName }}
-```
+To develop and contribute to this project, there are some instructions of how to set up your environment to start contributing. [Follow this link](https://github.com/millicast/vue-viewer-plugin/blob/main/developer-info.md).
 
 # License
 Please refer to [LICENSE](https://github.com/millicast/vue-viewer-plugin/blob/main/LICENSE) file.
