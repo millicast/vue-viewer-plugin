@@ -1,11 +1,9 @@
 <template>
   <div id="container" class="row">
     <div class="col d-flex align-items-center justify-content-center">
-      <VideoPlayer :paramsOptions="params" class="video-container"/>
+      <VideoPlayer :paramsOptions="streamId" class="video-container"/>
     </div>
-    <LiveChat 
-      :streamId="$attrs['streamId']">
-    </LiveChat>
+    <LiveChat />
   </div>
 </template>
 
@@ -18,9 +16,9 @@ export default {
   },
   data() {
     return {
-      params: {
-        accountId: this.$attrs['streamId'].split("/")[0],
-        streamName: this.$attrs['streamId'].split("/")[1]
+      streamId: {
+        accountId: process.env.VUE_APP_MILLICAST_ACCOUNT_ID,
+        streamName: process.env.VUE_APP_MILLICAST_STREAM_NAME
       }
     }
   }
