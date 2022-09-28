@@ -1,7 +1,7 @@
 <template>
   <div id="vplayer" ref="player" class="player" :class="{show: show}" @mousemove="showControls">
     <div id="controls" v-if="queryParams.controls">
-      <div class="container-fluid pt-3 gradient-top" :class="{show: show, 'fixed-top': fullscreen}" style="margin-bottom: -55px">
+      <div class="container-fluid pt-3 gradient-top" :class="{show: show, 'fixed-top': fullscreen}" style="margin-bottom: -55px; z-index: 1">
         <div class="row">
           <div class="col-6 text-left">
             <VideoPlayerControlsUserCount v-if="showButton('userCount')"/>
