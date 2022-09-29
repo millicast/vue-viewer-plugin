@@ -1,6 +1,6 @@
 <template>
   <h4 v-if="!isLoading" class="align-middle">
-    <span class="badge badge-secondary" :class="{ 'badge-danger': isLive }" v-text="text" style="border: 0px"></span>
+    <span class="badge badge-secondary" :class="{ 'badge-danger': isLive }" v-text="text" style="border: 0px;"></span>
   </h4>
 </template>
 

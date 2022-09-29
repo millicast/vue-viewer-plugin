@@ -1,6 +1,6 @@
 <template>
   <h4 class="align-middle" v-if="count">
-      <span class="badge" style="border: 0px">
+      <span class="badge" style="border: 0px;">
         <i class="bi ml-viewer-bi-person-fill"></i>
         {{count}}
       </span>
