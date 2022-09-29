@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="viewer-container">
     <VideoPlayerContainer class="ml-viewer" />
   </div>
 </template>
@@ -50,7 +50,7 @@ export default {
 </script>
 
 <style scoped>
-#app {
+#viewer-container {
   display: inline-block;
   background-color: #000;
   color: white;
