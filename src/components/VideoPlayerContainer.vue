@@ -6,6 +6,7 @@
         :class="{ show: show }"
         @mousemove="showControls"
         @dblclick="toggleFullscreen"
+        @keydown.esc="toggleFullscreen"
     >
         <div id="controls" v-if="queryParams.controls">
             <div
