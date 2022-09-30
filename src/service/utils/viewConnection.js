@@ -1,5 +1,9 @@
 import { Director, View, PeerConnection } from '@millicast/sdk'
-import { setVideoPlayer, addVideoEventListeners, removeVideoPauseListeners } from '../sdkManager'
+import {
+    setVideoPlayer,
+    addVideoEventListeners,
+    removeVideoPauseListeners,
+} from '../sdkManager'
 import store from '../../store'
 import { nextTick } from 'vue'
 const { commit, state } = store
@@ -13,11 +17,17 @@ const setEnvironment = () => {
 }
 
 const setDirectorEndpoint = () => {
-    if (process.env.VUE_APP_DIRECTOR_ENDPOINT || state.Params.queryParams.directorUrl) {
-      Director.setEndpoint(state.Params.queryParams.directorUrl ?? process.env.VUE_APP_DIRECTOR_ENDPOINT)
+    if (
+        process.env.VUE_APP_DIRECTOR_ENDPOINT ||
+        state.Params.queryParams.directorUrl
+    ) {
+        Director.setEndpoint(
+            state.Params.queryParams.directorUrl ??
+                process.env.VUE_APP_DIRECTOR_ENDPOINT
+        )
     }
 }
-  
+
 const setLiveDomain = () => {
     if (process.env.VUE_APP_LIVEWS_ENDPOINT) {
         Director.setLiveDomain(process.env.VUE_APP_LIVEWS_ENDPOINT)
@@ -25,7 +35,7 @@ const setLiveDomain = () => {
 }
 
 const setPeerConnection = () => {
-    if (process.env.VUE_APP_TURN_ENDPOINT){
+    if (process.env.VUE_APP_TURN_ENDPOINT) {
         PeerConnection.setTurnServerLocation(process.env.VUE_APP_TURN_ENDPOINT)
     }
 }
@@ -35,10 +45,17 @@ export const handleInitViewConnection = (accountId, streamName) => {
         throw new Error('Stream ID not provided.')
     }
     setEnvironment()
-    const tokenGenerator = () => Director.getSubscriber(streamName, accountId, state.Params.queryParams.token)
+    const tokenGenerator = () =>
+        Director.getSubscriber(
+            streamName,
+            accountId,
+            state.Params.queryParams.token
+        )
     const millicastView = new View(streamName, tokenGenerator)
     window.millicastView = millicastView
-    window.__defineGetter__('peer', () => { return millicastView.getRTCPeerConnection() })
+    window.__defineGetter__('peer', () => {
+        return millicastView.getRTCPeerConnection()
+    })
     commit('ViewConnection/setMillicastView', millicastView)
 }
 
@@ -51,7 +68,7 @@ export const handleConnectToStream = async () => {
         await setCanAutoPlayStream()
         await millicastView.connect({
             events: ['active', 'inactive', 'layers', 'viewercount'],
-            absCaptureTime: true
+            absCaptureTime: true,
         })
     } catch (e) {
         const message = e.response?.data?.data?.message
@@ -59,8 +76,10 @@ export const handleConnectToStream = async () => {
         commit('Controls/setIsLive', false)
         millicastView.reconnect()
         if (!message) return
-        if(!message.toLowerCase().includes('stream not being published')) {
-            throw new Error(`${message.charAt(0).toUpperCase()}${message.slice(1)}`)
+        if (!message.toLowerCase().includes('stream not being published')) {
+            throw new Error(
+                `${message.charAt(0).toUpperCase()}${message.slice(1)}`
+            )
         }
     }
 }
@@ -68,9 +87,10 @@ export const handleConnectToStream = async () => {
 export const setTrackEvent = () => {
     const millicastView = state.ViewConnection.millicastView
     millicastView.on('track', async (event) => {
-      await setStream(event.streams[0])
-      state.ViewConnection.trackEvent[event.track.kind].transceiver = event.transceiver
-      state.ViewConnection.trackEvent[event.track.kind].track = event.track
+        await setStream(event.streams[0])
+        state.ViewConnection.trackEvent[event.track.kind].transceiver =
+            event.transceiver
+        state.ViewConnection.trackEvent[event.track.kind].track = event.track
     })
 }
 
@@ -81,21 +101,22 @@ const setStream = async (entrySrcObject) => {
     if (video.srcObject && video.srcObject.id !== entrySrcObject.id) {
         commit('Controls/setIsMigrating', true)
         await nextTick()
-        const opositeElementRef = state.Controls.currentElementRef === 'player' ? 'player2' : 'player'
+        const opositeElementRef =
+            state.Controls.currentElementRef === 'player' ? 'player2' : 'player'
         const mediaTag = document.getElementById(opositeElementRef)
         mediaTag.srcObject = entrySrcObject
         mediaTag.autoplay = state.Controls.playing
         mediaTag.muted = state.Controls.muted
         removeVideoPauseListeners()
-        
+
         addVideoEventListeners(mediaTag)
         mediaTag.onloadedmetadata = async () => {
-          commit('Controls/setVideo', mediaTag)
-          commit('Controls/setCurrentElementRef', opositeElementRef)
-          commit('Controls/setIsMigrating', false)
-          if (document.pictureInPictureElement) {
-            mediaTag.requestPictureInPicture()
-          }
+            commit('Controls/setVideo', mediaTag)
+            commit('Controls/setCurrentElementRef', opositeElementRef)
+            commit('Controls/setIsMigrating', false)
+            if (document.pictureInPictureElement) {
+                mediaTag.requestPictureInPicture()
+            }
         }
     } else {
         setVideoPlayer({ videoPlayer: video, srcObject: entrySrcObject })
@@ -104,24 +125,38 @@ const setStream = async (entrySrcObject) => {
 
 const setCanAutoPlayStream = async () => {
     commit('Controls/setVideoAutoplay', state.Params.queryParams.autoplay)
-    if (state.Params.queryParams.autoplay){
-      const canAutoPlayVideo = await canAutoPlay.video({muted: state.Params.queryParams.muted})
-      const muted = !state.Params.queryParams.muted ? !canAutoPlayVideo.result : state.Params.queryParams.muted
-      commit('Controls/setVideoMuted', muted)
-      commit('Controls/setAutoPlayMuted', muted)
+    if (state.Params.queryParams.autoplay) {
+        const canAutoPlayVideo = await canAutoPlay.video({
+            muted: state.Params.queryParams.muted,
+        })
+        const muted = !state.Params.queryParams.muted
+            ? !canAutoPlayVideo.result
+            : state.Params.queryParams.muted
+        commit('Controls/setVideoMuted', muted)
+        commit('Controls/setAutoPlayMuted', muted)
     }
 }
 
 export const setReconnect = () => {
-    state.ViewConnection.eventListeners.reconnect = state.ViewConnection.eventListeners.reconnect ?? state.ViewConnection.millicastView.on('reconnect', ({timeout, error}) => {
-      const errorMessage = error.response?.data?.data?.message?.toLowerCase()
-      if(errorMessage?.toLowerCase().includes('stream not being published')) {
-        commit('Controls/setIsLoading', false)
-        commit('Controls/setIsLive', false)
-      } else {
-        commit('Controls/handleReconnection', { timeout, error })
-      }
-    })
+    state.ViewConnection.eventListeners.reconnect =
+        state.ViewConnection.eventListeners.reconnect ??
+        state.ViewConnection.millicastView.on(
+            'reconnect',
+            ({ timeout, error }) => {
+                const errorMessage =
+                    error.response?.data?.data?.message?.toLowerCase()
+                if (
+                    errorMessage
+                        ?.toLowerCase()
+                        .includes('stream not being published')
+                ) {
+                    commit('Controls/setIsLoading', false)
+                    commit('Controls/setIsLive', false)
+                } else {
+                    commit('Controls/handleReconnection', { timeout, error })
+                }
+            }
+        )
 }
 
 export const handleStopStream = () => {

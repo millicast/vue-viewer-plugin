@@ -8,12 +8,12 @@ import VideoPlayerControlsVolume from './VideoPlayerControlsVolume'
 import VideoPlayerControlsContainer from './VideoPlayerControlsContainer'
 
 export {
-  VideoPlayerControlsBadge,
-  VideoPlayerControlsFullscreen,
-  VideoPlayerControlsPip,
-  VideoPlayerControlsPlay,
-  VideoPlayerControlsSettings,
-  VideoPlayerControlsUserCount,
-  VideoPlayerControlsVolume,
-  VideoPlayerControlsContainer
+    VideoPlayerControlsBadge,
+    VideoPlayerControlsFullscreen,
+    VideoPlayerControlsPip,
+    VideoPlayerControlsPlay,
+    VideoPlayerControlsSettings,
+    VideoPlayerControlsUserCount,
+    VideoPlayerControlsVolume,
+    VideoPlayerControlsContainer,
 }

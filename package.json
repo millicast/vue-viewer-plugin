@@ -1,79 +1,88 @@
 {
-  "name": "@millicast/vue-viewer-plugin",
-  "version": "0.1.0",
-  "private": true,
-  "author": "Millicast, Inc.",
-  "scripts": {
-    "serve": "vue-cli-service serve",
-    "build": "vue-cli-service build --target lib --name millicast-vue-viewer-plugin index.js",
-    "lint": "vue-cli-service lint"
-  },
-  "main": "dist/millicast-vue-viewer-plugin.umd.js",
-  "module": "dist/millicast-vue-viewer-plugin.common.js",
-  "browser": "dist/millicast-vue-viewer-plugin.umd.js",
-  "files": [
-    "dist/*",
-    "*.json",
-    "src/*",
-    "*.js",
-    "README.md"
-  ],
-  "dependencies": {
-    "@millicast/sdk": "^0.1.29",
-    "bootstrap": "github:millicast/bootstrap#ml-viewer",
-    "bootstrap-icons": "github:millicast/icons#ml-viewer",
-    "can-autoplay": "^3.0.0",
-    "vue-toastification": "^2.0.0-rc.1",
-    "vuex": "^4.0.2"
-  },
-  "devDependencies": {
-    "@babel/plugin-proposal-object-rest-spread": "^7.16.7",
-    "@vue/cli-plugin-babel": "^4.5.15",
-    "@vue/cli-plugin-eslint": "~4.5.0",
-    "@vue/cli-service": "~4.5.0",
-    "@vue/compiler-sfc": "^3.0.0",
-    "babel-eslint": "^10.1.0",
-    "eslint": "^6.7.2",
-    "eslint-plugin-vue": "^7.0.0-0",
-    "git-branch-is": "^4.0.0",
-    "sass": "^1.34.0",
-    "sass-loader": "^10"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
+    "name": "@millicast/vue-viewer-plugin",
+    "version": "0.1.0",
+    "private": true,
+    "author": "Millicast, Inc.",
+    "scripts": {
+        "serve": "vue-cli-service serve",
+        "build": "vue-cli-service build --target lib --name millicast-vue-viewer-plugin index.js",
+        "lint": "vue-cli-service lint",
+        "pretty": "prettier --write \"./**/*.{js,json,vue}\""
     },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
+    "main": "dist/millicast-vue-viewer-plugin.umd.js",
+    "module": "dist/millicast-vue-viewer-plugin.common.js",
+    "browser": "dist/millicast-vue-viewer-plugin.umd.js",
+    "files": [
+        "dist/*",
+        "*.json",
+        "src/*",
+        "*.js",
+        "README.md"
     ],
-    "parserOptions": {
-      "parser": "babel-eslint"
+    "dependencies": {
+        "@millicast/sdk": "^0.1.29",
+        "bootstrap": "github:millicast/bootstrap#ml-viewer",
+        "bootstrap-icons": "github:millicast/icons#ml-viewer",
+        "can-autoplay": "^3.0.0",
+        "vue-toastification": "^2.0.0-rc.1",
+        "vuex": "^4.0.2"
     },
-    "rules": {
-      "vue/no-multiple-template-root": "off"
+    "devDependencies": {
+        "@babel/plugin-proposal-object-rest-spread": "^7.16.7",
+        "@vue/cli-plugin-babel": "^4.5.15",
+        "@vue/cli-plugin-eslint": "~4.5.0",
+        "@vue/cli-service": "~4.5.0",
+        "@vue/compiler-sfc": "^3.0.0",
+        "babel-eslint": "^10.1.0",
+        "eslint": "^6.7.2",
+        "eslint-plugin-vue": "^7.0.0-0",
+        "git-branch-is": "^4.0.0",
+        "prettier": "^2.7.1",
+        "sass": "^1.34.0",
+        "sass-loader": "^10"
+    },
+    "eslintConfig": {
+        "root": true,
+        "env": {
+            "node": true
+        },
+        "extends": [
+            "plugin:vue/vue3-essential",
+            "eslint:recommended"
+        ],
+        "parserOptions": {
+            "parser": "babel-eslint"
+        },
+        "rules": {
+            "vue/no-multiple-template-root": "off"
+        }
+    },
+    "browserslist": [
+        "safari >= 7",
+        "ios_saf >= 9",
+        "> 1%",
+        "last 2 versions",
+        "not dead"
+    ],
+    "homepage": "https://github.com/millicast/millicast-vue-viewer-plugin#readme",
+    "keywords": [
+        "sdk",
+        "vue",
+        "millicast",
+        "webrtc",
+        "realtime",
+        "streaming"
+    ],
+    "license": "See in LICENSE file",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/millicast/millicast-vue-viewer-plugin.git"
+    },
+    "description": "Vue.js plugin to embed viewer of a Millicast stream. This plugin allows developers to simplify Millicast services integration into their own Vue.js apps.",
+    "bugs": {
+        "url": "https://github.com/millicast/millicast-vue-viewer-plugin/issues"
+    },
+    "directories": {
+        "example": "examples"
     }
-  },
-  "browserslist": [
-    "safari >= 7",
-    "ios_saf >= 9",
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ],
-  "homepage": "https://github.com/millicast/millicast-vue-viewer-plugin#readme",
-  "keywords": [
-    "sdk",
-    "vue",
-    "millicast",
-    "webrtc",
-    "realtime",
-    "streaming"
-  ],
-  "license": "See in LICENSE file",
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/millicast/millicast-vue-viewer-plugin.git"
-  }
 }

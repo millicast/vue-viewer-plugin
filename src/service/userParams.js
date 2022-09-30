@@ -11,10 +11,19 @@ export const defaultOptions = {
     muted: true,
     placeholderImg: null,
     streamId: null,
-    token: null
+    token: null,
 }
 
-export default function setUserParams({streamId, audioOnly, token, image, directorUrl, hideButtons, autoplay, muted}) {
+export default function setUserParams({
+    streamId,
+    audioOnly,
+    token,
+    image,
+    directorUrl,
+    hideButtons,
+    autoplay,
+    muted,
+}) {
     const options = {}
 
     options.streamId = streamId

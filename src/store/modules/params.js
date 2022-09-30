@@ -1,7 +1,7 @@
 import { defaultOptions } from '../../service/userParams'
 
 const defaulState = {
-    queryParams: defaultOptions
+    queryParams: defaultOptions,
 }
 
 export default {
@@ -10,6 +10,6 @@ export default {
     mutations: {
         setQueryParams(state, queryParams) {
             state.queryParams = queryParams
-        }
-    }
+        },
+    },
 }
