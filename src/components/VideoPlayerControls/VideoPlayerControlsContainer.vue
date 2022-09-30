@@ -1,5 +1,5 @@
 <template>
-    <div class="row" @dblclick="toggleFullscreen">
+    <div class="row">
         <div :class="[isMobile ? 'col-7 text-left pr-0' : 'col-6 text-left']">
             <div v-if="!isConnected">
                 <VideoPlayerControlsPlay v-if="showButton('play')" />

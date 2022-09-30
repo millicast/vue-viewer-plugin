@@ -5,6 +5,7 @@
         class="player"
         :class="{ show: show }"
         @mousemove="showControls"
+        @dblclick="toggleFullscreen"
     >
         <div id="controls" v-if="queryParams.controls">
             <div
@@ -173,6 +174,7 @@ export default {
             'setPlaying',
             'setCastOptions',
             'setAutoPlayMuted',
+            'toggleFullscreen',
         ]),
         onResize() {
             this.windowWidth = window.innerWidth
