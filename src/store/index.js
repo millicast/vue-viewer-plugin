@@ -8,17 +8,15 @@ import Params from './modules/params'
 
 export default createStore({
   state: {
-    sources: []
+    sources: [],
   },
-  mutations: {
-  },
-  actions: {
-  },
+  mutations: {},
+  actions: {},
   modules: {
     Sources,
     Layers,
     Controls,
     ViewConnection,
-    Params
-  }
+    Params,
+  },
 })

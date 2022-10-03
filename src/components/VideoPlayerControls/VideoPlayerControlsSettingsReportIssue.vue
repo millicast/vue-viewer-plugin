@@ -1,9 +1,9 @@
 <template>
-  <a class="dropdown-item" v-show="showReportButton" @click="toggleReport"> 
-    <i class="ml-viewer-bi-flag-fill align-middle control-icon"></i> 
+  <a class="dropdown-item" v-show="showReportButton" @click="toggleReport">
+    <i class="ml-viewer-bi-flag-fill align-middle control-icon"></i>
     Report Playback Issue
     <teleport to="#vplayer" v-if="showReportModal">
-      <VideoPlayerReportModal :streamId="streamId" :close="toggleReport"/>
+      <VideoPlayerReportModal :streamId="streamId" :close="toggleReport" />
     </teleport>
   </a>
 </template>
@@ -17,26 +17,23 @@ export default {
     VideoPlayerReportModal,
   },
   props: {
-    streamId: String
-    },
-  data () {
+    streamId: String,
+  },
+  data() {
     return {
       showReportModal: false,
       showReportButton: false,
     }
   },
   methods: {
-    ...mapMutations(
-      'Controls', ['setDropup']
-    ),
+    ...mapMutations('Controls', ['setDropup']),
     toggleReport() {
       this.showReportModal = !this.showReportModal
       this.setDropup('')
     },
   },
-  mounted(){
+  mounted() {
     this.showReportButton = process.env.VUE_APP_REPORT_URL
-  }
+  },
 }
 </script>
-

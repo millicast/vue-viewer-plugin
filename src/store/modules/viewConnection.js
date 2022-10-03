@@ -5,24 +5,24 @@ const defaultState = {
     stats: null,
     broadcastEvent: null,
   },
-  trackEvent: { 
+  trackEvent: {
     audio: {
       track: null,
-      transceiver: null
+      transceiver: null,
     },
     video: {
       track: null,
-      transceiver: null
-    }
-  }
+      transceiver: null,
+    },
+  },
 }
 
 export default {
   namespaced: true,
   state: defaultState,
   mutations: {
-    setMillicastView (state, millicastView) {
+    setMillicastView(state, millicastView) {
       state.millicastView = millicastView
-    }
-  }
+    },
+  },
 }

@@ -1,4 +1,4 @@
-import videoPlayer from "./src/App.vue"
+import videoPlayer from './src/App.vue'
 
 import baseModal from './src/components/UI/BaseModal'
 import baseButton from './src/components/UI/BaseButton'
@@ -15,7 +15,7 @@ import viewConnection from './src/store/modules/viewConnection'
 import setUserParams from './src/service/userParams'
 
 const filterBeforeCreate = (toast, toasts) => {
-  if (toasts.filter(t => t.type === toast.type).length !== 0) {
+  if (toasts.filter((t) => t.type === toast.type).length !== 0) {
     return false
   }
   return toast
@@ -23,30 +23,30 @@ const filterBeforeCreate = (toast, toasts) => {
 
 export default {
   install(vue, options) {
-    
     if (!options.store) {
       vue.use(store)
     } else {
-      options.store.registerModule('Controls', controls);
-      options.store.registerModule('Layers', layers);
-      options.store.registerModule('Params', params);
-      options.store.registerModule('Sources', sources);
-      options.store.registerModule('ViewConnection', viewConnection);
+      options.store.registerModule('Controls', controls)
+      options.store.registerModule('Layers', layers)
+      options.store.registerModule('Params', params)
+      options.store.registerModule('Sources', sources)
+      options.store.registerModule('ViewConnection', viewConnection)
     }
 
     setUserParams({
-      streamId: options?.accountId +'/'+ options?.streamName,
+      streamId: options?.accountId + '/' + options?.streamName,
       audioOnly: options.audioOnly ?? false,
       token: options?.token,
       image: options?.image,
-      directorUrl: process.env.NODE_ENV !== 'production' ? options?.directorUrl: null,
+      directorUrl:
+        process.env.NODE_ENV !== 'production' ? options?.directorUrl : null,
       hideButtons: options.hideButtons ?? [],
       autoplay: options?.autoplay ?? true,
       muted: options?.muted ?? false,
     })
 
     vue.use(toast, {
-      transition: "Vue-Toastification__fade",
+      transition: 'Vue-Toastification__fade',
       maxToasts: 2,
       newestOnTop: true,
       position: 'top-center',
@@ -56,7 +56,7 @@ export default {
       pauseOnHover: false,
       draggable: false,
       timeout: false,
-      filterBeforeCreate
+      filterBeforeCreate,
     })
 
     vue.component('base-modal', baseModal)
@@ -64,4 +64,4 @@ export default {
 
     vue.component('VideoPlayer', videoPlayer)
   },
-};
+}

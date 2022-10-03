@@ -1,13 +1,25 @@
 <template>
   <template v-if="isMobile">
     <a class="dropdown-item" @click="togglePip">
-      <i class="align-middle control-icon" :class="{ 'ml-viewer-bi-pip': !pip, 'ml-viewer-bi-pip-fill': pip }"></i>
+      <i
+        class="align-middle control-icon"
+        :class="{
+          'ml-viewer-bi-pip': !pip,
+          'ml-viewer-bi-pip-fill': pip,
+        }"
+      ></i>
       Miniplayer
     </a>
   </template>
   <template v-else>
     <div class="mobile-setting" @click="togglePip">
-      <i class="h3 align-middle control-icon" :class="{ 'ml-viewer-bi-pip': !pip, 'ml-viewer-bi-pip-fill': pip }"></i>
+      <i
+        class="h3 align-middle control-icon"
+        :class="{
+          'ml-viewer-bi-pip': !pip,
+          'ml-viewer-bi-pip-fill': pip,
+        }"
+      ></i>
     </div>
   </template>
 </template>
@@ -19,25 +31,29 @@ export default {
   name: 'VideoPlayerControlsPip',
   computed: {
     ...mapState('Controls', {
-      isMobile: state => state.isMobile,
-      pip: state => state.pip,
-      video: state => state.video
-    })
+      isMobile: (state) => state.isMobile,
+      pip: (state) => state.pip,
+      video: (state) => state.video,
+    }),
   },
   methods: {
-    togglePip () {
-      if (!this.pip && this.video.srcObject && this.video.nodeName === 'VIDEO') {
-          this.video.requestPictureInPicture()
+    togglePip() {
+      if (
+        !this.pip &&
+        this.video.srcObject &&
+        this.video.nodeName === 'VIDEO'
+      ) {
+        this.video.requestPictureInPicture()
       } else {
         document.exitPictureInPicture()
       }
     },
-  }
+  },
 }
 </script>
 
 <style scoped>
-  .mobile-icon {
-    pointer-events: none;
-  }
+.mobile-icon {
+  pointer-events: none;
+}
 </style>
