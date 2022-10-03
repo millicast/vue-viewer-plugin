@@ -100,10 +100,11 @@ export default {
     document.addEventListener('webkitfullscreenchange', exitHandler);
     document.addEventListener('mozfullscreenchange', exitHandler);
     document.addEventListener('MSFullscreenChange', exitHandler);
+    var ref = this
 
     function exitHandler() {
       if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
-        this.$store.commit('toggleFullscreen')
+        ref.toggleFullscreen()
       }
     }
 
