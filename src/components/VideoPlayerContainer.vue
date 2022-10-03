@@ -103,7 +103,7 @@ export default {
 
     function exitHandler() {
       if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
-        this.toggleFullscreen()
+        this.$store.commit('toggleFullscreen')
       }
     }
 
