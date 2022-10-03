@@ -12,13 +12,13 @@ export default {
 </script>
 
 <style scoped>
-  .btn-p {
-    background-color: #40308E;
-    color: white;
-    margin-left: 0.3rem;
-  }
-  .btn-p:hover {
-    background-color: #504298;
-    color: white;
-  }
+.btn-p {
+  background-color: #40308e;
+  color: white;
+  margin-left: 0.3rem;
+}
+.btn-p:hover {
+  background-color: #504298;
+  color: white;
+}
 </style>

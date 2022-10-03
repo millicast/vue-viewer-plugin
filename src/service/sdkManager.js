@@ -13,19 +13,21 @@ const { commit, state } = store
 // VIDEO PLAYER
 
 // Similar logic to playerChange event
-export const setVideoPlayer = ({ videoPlayer, srcObject, volume, muted, autoplay }) => {
+export const setVideoPlayer = ({
+  videoPlayer,
+  srcObject,
+  volume,
+  muted,
+  autoplay,
+}) => {
   if (videoPlayer) {
     commit('Controls/setVideo', videoPlayer)
     commit('Controls/setCurrentElementRef', videoPlayer.id)
   }
-  if (srcObject)
-    commit('Controls/setVideoSource', srcObject)
-  if (volume)
-    commit('Controls/setVideoVolume', volume)
-  if (muted)
-    commit('Controls/setVideoMuted', muted)
-  if (autoplay)
-    commit('Controls/setVideoAutoplay', autoplay)
+  if (srcObject) commit('Controls/setVideoSource', srcObject)
+  if (volume) commit('Controls/setVideoVolume', volume)
+  if (muted) commit('Controls/setVideoMuted', muted)
+  if (autoplay) commit('Controls/setVideoAutoplay', autoplay)
   addVideoEventListeners(state.Controls.video)
 }
 
@@ -75,28 +77,30 @@ const setViewerEvents = () => {
 const setBroadcastEvent = () => {
   //todo: catch user count event and set it in Vuex
   const millicastView = state.ViewConnection.millicastView
-  state.ViewConnection.eventListeners.broadcastEvent = state.ViewConnection.eventListeners.broadcastEvent ?? millicastView.on('broadcastEvent', (event) => {
-    const {name} = event
-    switch (name) {
-      case 'active':
-        updateActiveBroadcastState(event)
-        break
-      case 'stopped':
-        updateStoppedBroadcastState(event)
-        break
-      case 'inactive':
-        updateInactiveBroadcastState(event)
-        break
-      case 'layers':
-        updateLayersBroadcastState(event)
-        break
-      case 'viewercount':
-        updateViewerCount(event)
-        break
-      default:
-        break
-    }
-  })
+  state.ViewConnection.eventListeners.broadcastEvent =
+    state.ViewConnection.eventListeners.broadcastEvent ??
+    millicastView.on('broadcastEvent', (event) => {
+      const { name } = event
+      switch (name) {
+        case 'active':
+          updateActiveBroadcastState(event)
+          break
+        case 'stopped':
+          updateStoppedBroadcastState(event)
+          break
+        case 'inactive':
+          updateInactiveBroadcastState(event)
+          break
+        case 'layers':
+          updateLayersBroadcastState(event)
+          break
+        case 'viewercount':
+          updateViewerCount(event)
+          break
+        default:
+          break
+      }
+    })
 }
 
 const updateActiveBroadcastState = (event) => {
@@ -115,16 +119,22 @@ const updateStoppedBroadcastState = () => {
 }
 
 const updateInactiveBroadcastState = (event) => {
-  const {data} = event
+  const { data } = event
   const selectedVideoSource = state.Sources.selectedVideoSource
   const selectedAudioSource = state.Sources.selectedAudioSource
-  const trackWarning = (selectedVideoSource.sourceId === null || selectedAudioSource.sourceId === null) && data.sourceId === null
+  const trackWarning =
+    (selectedVideoSource.sourceId === null ||
+      selectedAudioSource.sourceId === null) &&
+    data.sourceId === null
   sources.handleDeleteSource(data?.sourceId ?? null)
 
-  if (!event.data.streamId){
+  if (!event.data.streamId) {
     commit('Controls/setUserCount', null)
   }
-  if (state.Sources.videoSources.length + state.Sources.audioSources.length === 0) {
+  if (
+    state.Sources.videoSources.length + state.Sources.audioSources.length ===
+    0
+  ) {
     layers.deleteLayers()
     commit('Controls/setTrackWarning', false)
     commit('Controls/setIsLive', false)
@@ -142,7 +152,7 @@ const updateLayersBroadcastState = (event) => {
   layers.updateLayers(event)
 }
 
-const updateViewerCount = (event) => { 
+const updateViewerCount = (event) => {
   commit('Controls/setViewerCount', event.data.viewercount)
 }
 

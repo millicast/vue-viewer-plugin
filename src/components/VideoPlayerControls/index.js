@@ -15,5 +15,5 @@ export {
   VideoPlayerControlsSettings,
   VideoPlayerControlsUserCount,
   VideoPlayerControlsVolume,
-  VideoPlayerControlsContainer
+  VideoPlayerControlsContainer,
 }

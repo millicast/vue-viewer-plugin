@@ -1,32 +1,57 @@
 <template>
-    <div class="row">
-        <div :class="[isMobile ? 'col-7 text-left pr-0' : 'col-6 text-left']">
-            <div v-if="!isConnected">
-                <VideoPlayerControlsPlay v-if="showButton('play')"/>
-                <VideoPlayerControlsVolume v-if="showButton('volume')"/>
-                <span v-if="!isMobile" class="h5 align-middle p-2" v-text="currentTime"></span>
-            </div>
-        </div>
-        <div class="col-6 text-right" v-if="!isMobile">
-            <VideoPlayerControlsSettings :streamId="streamId" v-if="showButton('settings')"/>
-            <VideoPlayerControlsPip v-if="pipEnabled && !fullscreen"/>
-            <VideoPlayerControlsFullscreen v-if="fullscreenEnabled" :click="toggleFullscreen"/>
-        </div>
-        <div class="col-5 pl-0 pr-1 text-right" v-else>
-            <span v-if="(isLive && pipEnabled && showButton('pip') && isVideoTag) || fullscreenEnabled" class="dropup">
-                <i class="h3 align-middle control-icon bi ml-viewer-bi-three-dots-vertical" @click="setDropup('mobile')"></i>
-                <div class="dropdown-menu dropdown-menu-right" :class="{show: dropup === 'mobile'}">
-                    <div class="dropdown-header d-flex m-0 col-12">
-                        <h6 class="p-0 m-0">Options</h6>
-                    </div>
-                    
-                    <VideoPlayerControlsSettingsStats />
-                    <VideoPlayerControlsPip v-if="pipEnabled && !fullscreen"/>
-                    <VideoPlayerControlsFullscreen v-if="fullscreenEnabled" :click="toggleFullscreen"/>
-                </div>
-            </span>
-        </div>
+  <div class="row">
+    <div :class="[isMobile ? 'col-7 text-left pr-0' : 'col-6 text-left']">
+      <div v-if="!isConnected">
+        <VideoPlayerControlsPlay v-if="showButton('play')" />
+        <VideoPlayerControlsVolume v-if="showButton('volume')" />
+        <span
+          v-if="!isMobile"
+          class="h5 align-middle p-2"
+          v-text="currentTime"
+        ></span>
+      </div>
     </div>
+    <div class="col-6 text-right" v-if="!isMobile">
+      <VideoPlayerControlsSettings
+        :streamId="streamId"
+        v-if="showButton('settings')"
+      />
+      <VideoPlayerControlsPip v-if="pipEnabled && !fullscreen" />
+      <VideoPlayerControlsFullscreen
+        v-if="fullscreenEnabled"
+        :click="toggleFullscreen"
+      />
+    </div>
+    <div class="col-5 pl-0 pr-1 text-right" v-else>
+      <span
+        v-if="
+          (isLive && pipEnabled && showButton('pip') && isVideoTag) ||
+          fullscreenEnabled
+        "
+        class="dropup"
+      >
+        <i
+          class="h3 align-middle control-icon bi ml-viewer-bi-three-dots-vertical"
+          @click="setDropup('mobile')"
+        ></i>
+        <div
+          class="dropdown-menu dropdown-menu-right"
+          :class="{ show: dropup === 'mobile' }"
+        >
+          <div class="dropdown-header d-flex m-0 col-12">
+            <h6 class="p-0 m-0">Options</h6>
+          </div>
+
+          <VideoPlayerControlsSettingsStats />
+          <VideoPlayerControlsPip v-if="pipEnabled && !fullscreen" />
+          <VideoPlayerControlsFullscreen
+            v-if="fullscreenEnabled"
+            :click="toggleFullscreen"
+          />
+        </div>
+      </span>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -37,96 +62,102 @@ import {
   VideoPlayerControlsPip,
   VideoPlayerControlsPlay,
   VideoPlayerControlsSettings,
-  VideoPlayerControlsVolume
+  VideoPlayerControlsVolume,
 } from './index'
 import VideoPlayerControlsSettingsStats from './VideoPlayerControlsSettingsStats.vue'
 
 export default {
-    name: 'VideoPlayer',
-    components: {
-        VideoPlayerControlsFullscreen,
-        VideoPlayerControlsPip,
-        VideoPlayerControlsPlay,
-        VideoPlayerControlsSettings,
-        VideoPlayerControlsVolume,
-        VideoPlayerControlsSettingsStats
-    },
-    props: {
-        showButton: Function,
-        streamId: String,
-        isConnected: Boolean,
-        currentTime: String
-    },
-    data() {
-        return {
-            dropupShow: false,
-            fullscreenEnabled: this.showFullscreen()
-        }
-    },
-    computed: {
-        ...mapState('Controls', {
-            video: state => state.video,
-            dropup: state => state.dropup,
-            isMobile: state => state.isMobile,
-            isLive: state => state.isLive,
-            fullscreen: state => state.fullscreen,
-        }),
-        isVideoTag () {
-            return this.video?.nodeName === 'VIDEO'
-        },
-        pipEnabled () {
-            return this.showButton('pip') && document.pictureInPictureEnabled 
-            && this.isLive && this.isVideoTag
-        },
-    },
-    methods: {
-        ...mapMutations(
-            'Controls', ['setDropup', 'toggleFullscreen']
-        ),
-        showFullscreen() {
-            const fullscreenEnabled = this.showButton('fullscreen')
-            if(fullscreenEnabled && !canEnableFullscreen()) {
-                console.warn('Fullscreen disabled due to incompatibility with the browser.')
-                return false
-            }
-            return fullscreenEnabled
-        }
-    },
-    async beforeMount () {
-        await setCast()
+  name: 'VideoPlayer',
+  components: {
+    VideoPlayerControlsFullscreen,
+    VideoPlayerControlsPip,
+    VideoPlayerControlsPlay,
+    VideoPlayerControlsSettings,
+    VideoPlayerControlsVolume,
+    VideoPlayerControlsSettingsStats,
+  },
+  props: {
+    showButton: Function,
+    streamId: String,
+    isConnected: Boolean,
+    currentTime: String,
+  },
+  data() {
+    return {
+      dropupShow: false,
+      fullscreenEnabled: this.showFullscreen(),
     }
+  },
+  computed: {
+    ...mapState('Controls', {
+      video: (state) => state.video,
+      dropup: (state) => state.dropup,
+      isMobile: (state) => state.isMobile,
+      isLive: (state) => state.isLive,
+      fullscreen: (state) => state.fullscreen,
+    }),
+    isVideoTag() {
+      return this.video?.nodeName === 'VIDEO'
+    },
+    pipEnabled() {
+      return (
+        this.showButton('pip') &&
+        document.pictureInPictureEnabled &&
+        this.isLive &&
+        this.isVideoTag
+      )
+    },
+  },
+  methods: {
+    ...mapMutations('Controls', ['setDropup', 'toggleFullscreen']),
+    showFullscreen() {
+      const fullscreenEnabled = this.showButton('fullscreen')
+      if (fullscreenEnabled && !canEnableFullscreen()) {
+        console.warn(
+          'Fullscreen disabled due to incompatibility with the browser.'
+        )
+        return false
+      }
+      return fullscreenEnabled
+    },
+  },
+  async beforeMount() {
+    await setCast()
+  },
 }
 
 const canEnableFullscreen = () => {
-  return document.fullscreenEnabled || 
-	document.webkitFullscreenEnabled || 
-	document.mozFullScreenEnabled ||
-	document.msFullscreenEnabled
+  return (
+    document.fullscreenEnabled ||
+    document.webkitFullscreenEnabled ||
+    document.mozFullScreenEnabled ||
+    document.msFullscreenEnabled
+  )
 }
 </script>
 
 <style lang="scss" scoped>
 .ml-viewer {
-    .dropdown-menu, .dropdown-menu-right {
-        background-color: #343a40;
-        margin-bottom: .8rem;
-        color: rgb(235, 235, 235);
-        
-        .dropdown-header {
-            color: rgb(235, 235, 235);
-        }
+  .dropdown-menu,
+  .dropdown-menu-right {
+    background-color: #343a40;
+    margin-bottom: 0.8rem;
+    color: rgb(235, 235, 235);
 
-        .dropdown-item {
-            color: rgb(235, 235, 235);
-            cursor: pointer;
-            border-bottom: 1px #ffffff;;
-
-            &:hover {
-                background-color: #ffffff;
-                color: #212529;
-            }
-        }
+    .dropdown-header {
+      color: rgb(235, 235, 235);
     }
+
+    .dropdown-item {
+      color: rgb(235, 235, 235);
+      cursor: pointer;
+      border-bottom: 1px #ffffff;
+
+      &:hover {
+        background-color: #ffffff;
+        color: #212529;
+      }
+    }
+  }
 }
 </style>
-

@@ -1,99 +1,136 @@
 <template>
   <template v-if="isMigrating || currentElementRef === 'player'">
-    <audio v-if="displayAudioOnly" playsinline id='player' ref='player' :class="{'display: none;' : currentElementRef === 'player2'}"></audio>
-    <video v-else playsinline id='player' ref='player'
-    :poster="queryParams.placeholderImg" :class="{'display: none;' : currentElementRef === 'player2'}"></video>
+    <audio
+      v-if="displayAudioOnly"
+      playsinline
+      id="player"
+      ref="player"
+      :class="{ 'display: none;': currentElementRef === 'player2' }"
+    ></audio>
+    <video
+      v-else
+      playsinline
+      id="player"
+      ref="player"
+      :poster="queryParams.placeholderImg"
+      :class="{ 'display: none;': currentElementRef === 'player2' }"
+    ></video>
   </template>
   <template v-if="isMigrating || currentElementRef === 'player2'">
-    <audio v-if="displayAudioOnly" playsinline id='player2' ref='player2' :class="{'display: none;' : currentElementRef === 'player'}"></audio>
-    <video v-else playsinline id='player2' ref='player2'
-    :poster="queryParams.placeholderImg" :class="{'display: none;' : currentElementRef === 'player'}"></video>
+    <audio
+      v-if="displayAudioOnly"
+      playsinline
+      id="player2"
+      ref="player2"
+      :class="{ 'display: none;': currentElementRef === 'player' }"
+    ></audio>
+    <video
+      v-else
+      playsinline
+      id="player2"
+      ref="player2"
+      :poster="queryParams.placeholderImg"
+      :class="{ 'display: none;': currentElementRef === 'player' }"
+    ></video>
   </template>
 </template>
 
 <script>
 import { nextTick } from 'vue'
-import { initViewModule, connectToStream, stopStream, setVideoPlayer } from '../service/sdkManager'
+import {
+  initViewModule,
+  connectToStream,
+  stopStream,
+  setVideoPlayer,
+} from '../service/sdkManager'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { useToast } from "vue-toastification"
+import { useToast } from 'vue-toastification'
 
 export default {
   name: 'VideoPlayerMedia',
-  data () {
-    return { 
+  data() {
+    return {
       accountId: null,
       streamName: null,
       eventListeners: {
         reconnect: null,
         stats: null,
         broadcastEvent: null,
-      }
+      },
     }
   },
-  async mounted () {
+  async mounted() {
     const player = document.getElementById(this.currentElementRef)
-    setVideoPlayer({ videoPlayer: player, srcObject: null, volume: 1, muted: this.queryParams.muted, autoplay: this.queryParams.autoplay })
+    setVideoPlayer({
+      videoPlayer: player,
+      srcObject: null,
+      volume: 1,
+      muted: this.queryParams.muted,
+      autoplay: this.queryParams.autoplay,
+    })
   },
   computed: {
     ...mapState('ViewConnection', {
-      millicastView: state => state.millicastView,
+      millicastView: (state) => state.millicastView,
     }),
 
     ...mapState('Layers', {
-      selectedQuality: state => state.selectedQuality,
+      selectedQuality: (state) => state.selectedQuality,
     }),
     ...mapState('Sources', {
-      isAudioOnly: state => state.isAudioOnly,
-      stream: state => state.stream,
-      selectedVideoSource: state => state.selectedVideoSource,
-      selectedAudioSource: state => state.selectedAudioSource,
-      audioSources: state => state.audioSources,
-      videoSources: state => state.videoSources
+      isAudioOnly: (state) => state.isAudioOnly,
+      stream: (state) => state.stream,
+      selectedVideoSource: (state) => state.selectedVideoSource,
+      selectedAudioSource: (state) => state.selectedAudioSource,
+      audioSources: (state) => state.audioSources,
+      videoSources: (state) => state.videoSources,
     }),
     ...mapState('Controls', {
-      video: state => state.video,
-      dropup: state => state.dropup,
-      playerMuted: state => state.muted,
-      isLive: state => state.isLive,
-      reconnection: state => state.reconnection,
-      reconnectionStatus: state => state.reconnection.status,
-      currentElementRef: state => state.currentElementRef,
-      isMigrating: state => state.isMigrating
+      video: (state) => state.video,
+      dropup: (state) => state.dropup,
+      playerMuted: (state) => state.muted,
+      isLive: (state) => state.isLive,
+      reconnection: (state) => state.reconnection,
+      reconnectionStatus: (state) => state.reconnection.status,
+      currentElementRef: (state) => state.currentElementRef,
+      isMigrating: (state) => state.isMigrating,
     }),
     ...mapState('Params', {
-      queryParams: state => state.queryParams
+      queryParams: (state) => state.queryParams,
     }),
-    ...mapGetters(
-      'Sources', ['getVideoHasMain', 'getAudioHasMain']
-    ),
+    ...mapGetters('Sources', ['getVideoHasMain', 'getAudioHasMain']),
     displayAudioOnly() {
-      return (this.isAudioOnly && this.isLive) || (this.queryParams.placeholderImg === null && !this.isLive)
-    }
+      return (
+        (this.isAudioOnly && this.isLive) ||
+        (this.queryParams.placeholderImg === null && !this.isLive)
+      )
+    },
   },
   methods: {
-    ...mapMutations(
-      'Sources', ['addVideoSource', 'addAudioSource', 'setStream']
-    ),
-    ...mapMutations(
-      'Layers', ['addLayers', 'selectQuality', 'deleteLayers']
-    ),
-    ...mapMutations(
-      'Controls', ['setVideoMuted', 'setDropup', 'setTrackWarning', 'stopVideo', 'setAutoPlayMuted', 'userParamOptions']
-    ),
-    ...mapMutations(
-      'ViewConnection', ['setMillicastView']
-    ),
-    ...mapActions(
-      'Sources', ['updateBroadcastState']
-    ),
-    stop () {
+    ...mapMutations('Sources', [
+      'addVideoSource',
+      'addAudioSource',
+      'setStream',
+    ]),
+    ...mapMutations('Layers', ['addLayers', 'selectQuality', 'deleteLayers']),
+    ...mapMutations('Controls', [
+      'setVideoMuted',
+      'setDropup',
+      'setTrackWarning',
+      'stopVideo',
+      'setAutoPlayMuted',
+      'userParamOptions',
+    ]),
+    ...mapMutations('ViewConnection', ['setMillicastView']),
+    ...mapActions('Sources', ['updateBroadcastState']),
+    stop() {
       this.millicastView?.stop()
       this.stopCurrentVideo()
     },
-    stopCurrentVideo () {
+    stopCurrentVideo() {
       this.eventListeners.stats = null
       this.stopVideo()
-    }
+    },
   },
   watch: {
     reconnectionStatus: function (isReconnecting) {
@@ -114,12 +151,18 @@ export default {
       await nextTick()
       //Set new tag params
       const player = document.getElementById(this.currentElementRef)
-      setVideoPlayer({ videoPlayer: player, srcObject, volume, muted, autoplay })
+      setVideoPlayer({
+        videoPlayer: player,
+        srcObject,
+        volume,
+        muted,
+        autoplay,
+      })
     },
     async queryParams() {
       await stopStream()
       await nextTick()
-      
+
       const toast = await useToast()
       initViewModule()
       try {
@@ -130,15 +173,15 @@ export default {
       } catch (e) {
         toast.error(e.message)
       }
-    }
-  }
+    },
+  },
 }
 </script>
 
 <style scoped>
-  video {
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-  }
+video {
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
 </style>

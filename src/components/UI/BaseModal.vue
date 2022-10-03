@@ -1,12 +1,25 @@
 <template>
-  <div class="modal fade show" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true" style="display: block">
+  <div
+    class="modal fade show"
+    tabindex="-1"
+    role="dialog"
+    aria-labelledby="exampleModalLabel"
+    aria-hidden="true"
+    style="display: block"
+  >
     <div @click="toggle" class="backdrop"></div>
     <div class="modal-dialog modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <slot name="modal-header">
             <h5 class="modal-title" v-text="title"></h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click="toggle">
+            <button
+              type="button"
+              class="close"
+              data-dismiss="modal"
+              aria-label="Close"
+              @click="toggle"
+            >
               <span aria-hidden="true">&times;</span>
             </button>
           </slot>
@@ -25,7 +38,6 @@
 </template>
 
 <script>
-
 export default {
   name: 'BaseModal',
   props: {
@@ -36,27 +48,27 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-  .modal-content {
-    color: black
-  }
-  .modal {
-    overflow: auto;
-    word-wrap: break-word;
-  }
-  .modal-dialog{
-    animation: modal 0.3s ease-out forwards;
-  }
-  .backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    width: 100%;
-    background-color: rgba(0, 0, 0, 0.75);
-    z-index: -2;
-  }
+.modal-content {
+  color: black;
+}
+.modal {
+  overflow: auto;
+  word-wrap: break-word;
+}
+.modal-dialog {
+  animation: modal 0.3s ease-out forwards;
+}
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100%;
+  background-color: rgba(0, 0, 0, 0.75);
+  z-index: -2;
+}
 
-  @keyframes modal {
+@keyframes modal {
   from {
     opacity: 0;
     transform: translateY(-30px) scale(0.9);
