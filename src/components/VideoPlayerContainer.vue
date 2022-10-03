@@ -1,383 +1,376 @@
 <template>
-    <div
-        id="vplayer"
-        ref="player"
-        class="player"
-        :class="{ show: show }"
-        @mousemove="showControls"
-        @dblclick="toggleFullscreen"
-        @keydown.esc="toggleFullscreen"
-        tabindex="0"
-    >
-        <div id="controls" v-if="queryParams.controls">
-            <div
-                class="container-fluid pt-3 gradient-top"
-                :class="{ show: show, 'fixed-top': fullscreen }"
-                style="margin-bottom: -55px; z-index: 1"
-            >
-                <div class="row">
-                    <div class="col-6 text-left">
-                        <VideoPlayerControlsUserCount
-                            v-if="showButton('userCount')"
-                        />
-                    </div>
+  <div
+    id="vplayer"
+    ref="player"
+    class="player"
+    :class="{ show: show }"
+    @mousemove="showControls"
+    @dblclick="toggleFullscreen"
+    @keydown.esc="toggleFullscreen"
+    tabindex="0"
+  >
+    <div id="controls" v-if="queryParams.controls">
+      <div
+        class="container-fluid pt-3 gradient-top"
+        :class="{ show: show, 'fixed-top': fullscreen }"
+        style="margin-bottom: -55px; z-index: 1"
+      >
+        <div class="row">
+          <div class="col-6 text-left">
+            <VideoPlayerControlsUserCount v-if="showButton('userCount')" />
+          </div>
 
-                    <div class="col-6 text-right">
-                        <VideoPlayerControlsBadge
-                            v-if="showButton('liveBadge')"
-                        />
-                    </div>
-                </div>
-            </div>
-
-            <VideoPlayerMedia ref="element" />
-
-            <div
-                class="container-fluid pb-2 gradient-bottom"
-                :class="{ show: show, 'fixed-bottom': fullscreen }"
-                style="margin-top: -50px"
-            >
-                <VideoPlayerControlsContainer
-                    :isConnected="cast.isConnected"
-                    :showButton="showButton"
-                    :currentTime="currentTime"
-                    :streamId="queryParams.streamId"
-                />
-            </div>
+          <div class="col-6 text-right">
+            <VideoPlayerControlsBadge v-if="showButton('liveBadge')" />
+          </div>
         </div>
+      </div>
 
-        <div
-            class="overlay d-flex justify-content-center align-items-center"
-            v-if="isLoading"
-        >
-            <div class="spinner-border text-light" role="status">
-                <span class="sr-only">Loading...</span>
-            </div>
-        </div>
+      <VideoPlayerMedia ref="element" />
 
-        <div
-            v-if="autoPlayMuted && isLive"
-            @click="tapUnmute"
-            class="overlay tap-unmute d-flex align-items-center justify-content-center"
-        >
-            <div>
-                <div class="d-flex justify-content-center">
-                    <i class="ml-viewer-bi-volume-mute-fill pb-0"></i>
-                </div>
-                <p class="text-center tap-text">Tap to unmute</p>
-            </div>
-        </div>
+      <div
+        class="container-fluid pb-2 gradient-bottom"
+        :class="{ show: show, 'fixed-bottom': fullscreen }"
+        style="margin-top: -50px"
+      >
+        <VideoPlayerControlsContainer
+          :isConnected="cast.isConnected"
+          :showButton="showButton"
+          :currentTime="currentTime"
+          :streamId="queryParams.streamId"
+        />
+      </div>
     </div>
+
+    <div
+      class="overlay d-flex justify-content-center align-items-center"
+      v-if="isLoading"
+    >
+      <div class="spinner-border text-light" role="status">
+        <span class="sr-only">Loading...</span>
+      </div>
+    </div>
+
+    <div
+      v-if="autoPlayMuted && isLive"
+      @click="tapUnmute"
+      class="overlay tap-unmute d-flex align-items-center justify-content-center"
+    >
+      <div>
+        <div class="d-flex justify-content-center">
+          <i class="ml-viewer-bi-volume-mute-fill pb-0"></i>
+        </div>
+        <p class="text-center tap-text">Tap to unmute</p>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
 import VideoPlayerMedia from './VideoPlayerMedia.vue'
 import { mapMutations, mapState } from 'vuex'
 import {
-    VideoPlayerControlsBadge,
-    VideoPlayerControlsUserCount,
-    VideoPlayerControlsContainer,
+  VideoPlayerControlsBadge,
+  VideoPlayerControlsUserCount,
+  VideoPlayerControlsContainer,
 } from './VideoPlayerControls'
 
 export default {
-    name: 'VideoPlayerContainer',
-    components: {
-        VideoPlayerMedia,
-        VideoPlayerControlsBadge,
-        VideoPlayerControlsUserCount,
-        VideoPlayerControlsContainer,
-    },
-    data() {
-        return {
-            show: true,
-            timeInterval: 0,
-            secondsElapsed: 0,
-            cast: { isConnected: false },
-            windowWidth: false,
-            controlsTimeout: 0,
-            mobileFullscreen: false,
-        }
-    },
-    mounted() {
-        this.windowWidth = window.innerWidth
-        screen.orientation?.addEventListener(
-            'change',
-            this.handleOrientationChange
-        )
+  name: 'VideoPlayerContainer',
+  components: {
+    VideoPlayerMedia,
+    VideoPlayerControlsBadge,
+    VideoPlayerControlsUserCount,
+    VideoPlayerControlsContainer,
+  },
+  data() {
+    return {
+      show: true,
+      timeInterval: 0,
+      secondsElapsed: 0,
+      cast: { isConnected: false },
+      windowWidth: false,
+      controlsTimeout: 0,
+      mobileFullscreen: false,
+    }
+  },
+  mounted() {
+    this.windowWidth = window.innerWidth
+    screen.orientation?.addEventListener('change', this.handleOrientationChange)
 
-        this.$nextTick(() => {
-            window.addEventListener('resize', this.onResize)
-        })
+    this.$nextTick(() => {
+      window.addEventListener('resize', this.onResize)
+    })
 
-        this.controlsTimeout = setTimeout(() => {
-            this.show = false
-        }, 4000)
+    this.controlsTimeout = setTimeout(() => {
+      this.show = false
+    }, 4000)
 
-        this.timeInterval = setInterval(() => {
-            this.secondsElapsed = this.video.currentTime
-        }, 500)
+    this.timeInterval = setInterval(() => {
+      this.secondsElapsed = this.video.currentTime
+    }, 500)
 
-        this.setCastOptions({
-            streamId: this.queryParams.streamId,
-            token: this.queryParams.token,
-            loading: this.isLoading,
-        })
+    this.setCastOptions({
+      streamId: this.queryParams.streamId,
+      token: this.queryParams.token,
+      loading: this.isLoading,
+    })
+  },
+  beforeUnmount() {
+    clearInterval(this.timeInterval)
+    window.removeEventListener('resize', this.onResize)
+  },
+  computed: {
+    ...mapState('Params', {
+      queryParams: (state) => state.queryParams,
+    }),
+    ...mapState('Sources', {
+      videoSources: (state) => state.videoSources,
+      audioSources: (state) => state.audioSources,
+      selectedVideoSource: (state) => state.selectedVideoSource,
+      selectedAudioSource: (state) => state.selectedAudioSource,
+    }),
+    ...mapState('Controls', {
+      video: (state) => state.video,
+      playing: (state) => state.playing,
+      player: (state) => state.player,
+      fullscreen: (state) => state.fullscreen,
+      dropup: (state) => state.dropup,
+      isLoading: (state) => state.isLoading,
+      volume: (state) => state.volume,
+      playerMuted: (state) => state.muted,
+      castIsConnected: (state) => state.castIsConnected,
+      castDevice: (state) => state.castDevice,
+      srcObject: (state) => state.srcObject,
+      autoPlayMuted: (state) => state.autoPlayMuted,
+      isLive: (state) => state.isLive,
+    }),
+    currentTime: function () {
+      let seconds = this.secondsElapsed
+      let minutes = Math.floor(seconds / 60)
+      minutes = minutes >= 10 ? minutes : '0' + minutes
+      seconds = Math.floor(seconds % 60)
+      seconds = seconds >= 10 ? seconds : '0' + seconds
+      return minutes + ':' + seconds
     },
-    beforeUnmount() {
-        clearInterval(this.timeInterval)
-        window.removeEventListener('resize', this.onResize)
+  },
+  methods: {
+    ...mapMutations('Layers', ['deleteLayers']),
+    ...mapMutations('Sources', ['deleteSource']),
+    ...mapMutations('Controls', [
+      'setVideo',
+      'setMobile',
+      'setIsLive',
+      'setIsLoading',
+      'setTrackWarning',
+      'setDropup',
+      'setVideoVolume',
+      'setVideoMuted',
+      'setPlaying',
+      'setCastOptions',
+      'setAutoPlayMuted',
+      'toggleFullscreen',
+    ]),
+    onResize() {
+      this.windowWidth = window.innerWidth
     },
-    computed: {
-        ...mapState('Params', {
-            queryParams: (state) => state.queryParams,
-        }),
-        ...mapState('Sources', {
-            videoSources: (state) => state.videoSources,
-            audioSources: (state) => state.audioSources,
-            selectedVideoSource: (state) => state.selectedVideoSource,
-            selectedAudioSource: (state) => state.selectedAudioSource,
-        }),
-        ...mapState('Controls', {
-            video: (state) => state.video,
-            playing: (state) => state.playing,
-            player: (state) => state.player,
-            fullscreen: (state) => state.fullscreen,
-            dropup: (state) => state.dropup,
-            isLoading: (state) => state.isLoading,
-            volume: (state) => state.volume,
-            playerMuted: (state) => state.muted,
-            castIsConnected: (state) => state.castIsConnected,
-            castDevice: (state) => state.castDevice,
-            srcObject: (state) => state.srcObject,
-            autoPlayMuted: (state) => state.autoPlayMuted,
-            isLive: (state) => state.isLive,
-        }),
-        currentTime: function () {
-            let seconds = this.secondsElapsed
-            let minutes = Math.floor(seconds / 60)
-            minutes = minutes >= 10 ? minutes : '0' + minutes
-            seconds = Math.floor(seconds % 60)
-            seconds = seconds >= 10 ? seconds : '0' + seconds
-            return minutes + ':' + seconds
-        },
+    showControls() {
+      if (this.controlsTimeout) {
+        clearTimeout(this.controlsTimeout)
+      }
+      this.show = true
+      this.hideControls()
     },
-    methods: {
-        ...mapMutations('Layers', ['deleteLayers']),
-        ...mapMutations('Sources', ['deleteSource']),
-        ...mapMutations('Controls', [
-            'setVideo',
-            'setMobile',
-            'setIsLive',
-            'setIsLoading',
-            'setTrackWarning',
-            'setDropup',
-            'setVideoVolume',
-            'setVideoMuted',
-            'setPlaying',
-            'setCastOptions',
-            'setAutoPlayMuted',
-            'toggleFullscreen',
-        ]),
-        onResize() {
-            this.windowWidth = window.innerWidth
-        },
-        showControls() {
-            if (this.controlsTimeout) {
-                clearTimeout(this.controlsTimeout)
-            }
-            this.show = true
-            this.hideControls()
-        },
-        hideControls() {
-            if (!this.playing || this.dropup !== '') return
-            this.controlsTimeout = setTimeout(() => {
-                this.show = false
-            }, 4000)
-        },
-        showButton(button) {
-            return !this.queryParams.hideButtons.includes(button)
-        },
-        handleOrientationChange() {
-            const orientation = screen.orientation.type
-            if (
-                orientation === 'portrait-primary' &&
-                getFullscreenElement() &&
-                !this.mobileFullscreen
-            ) {
-                this.leaveFullScreen()
-                // portrait mode
-            } else if (orientation === 'landscape-primary') {
-                this.goFullScreen()
-            }
-        },
-        goFullScreen() {
-            const player = this.$refs.player
-            player.requestFullscreen?.() ??
-                player.webkitRequestFullscreen?.() ??
-                player.mozRequestFullScreen?.() ??
-                player.msRequestFullscreen?.()
-        },
-        leaveFullScreen() {
-            document.exitFullscreen?.() ??
-                document.webkitExitFullscreen?.() ??
-                document.mozCancelFullScreen?.() ??
-                document.msExitFullscreen?.()
-        },
-        tapUnmute() {
-            this.setVideoMuted(false)
-            this.setAutoPlayMuted(false)
-        },
+    hideControls() {
+      if (!this.playing || this.dropup !== '') return
+      this.controlsTimeout = setTimeout(() => {
+        this.show = false
+      }, 4000)
     },
-    watch: {
-        playing: function (playing) {
-            if (playing) {
-                this.hideControls()
-            } else {
-                this.showControls()
-            }
-        },
-        windowWidth: function (width) {
-            this.setMobile(width < 770)
-        },
-        fullscreen: function () {
-            if (document.pictureInPictureElement) {
-                document.exitPictureInPicture()
-            }
-            if (!getFullscreenElement()) {
-                this.mobileFullscreen = true
-                this.goFullScreen()
-            } else {
-                this.mobileFullscreen = false
-                this.leaveFullScreen()
-            }
-        },
-        dropup: function () {
-            this.showControls()
-        },
-        token: function () {
-            this.setCastOptions({
-                streamId: this.queryParams.streamId,
-                token: this.queryParams.token,
-                loading: this.isLoading,
-            })
-        },
-        castIsConnected: function (isConnected) {
-            if (isConnected) {
-                this.setPlaying(false)
-                this.setIsLoading(false)
-                const device = this.castDevice
-                this.cast = { isConnected, device }
-                this.showControls()
-            } else {
-                this.cast = { isConnected }
-            }
-        },
-        queryParams: function () {
-            this.setCastOptions({
-                streamId: this.queryParams.streamId,
-                token: this.queryParams.token,
-                loading: this.isLoading,
-            })
-        },
+    showButton(button) {
+      return !this.queryParams.hideButtons.includes(button)
     },
+    handleOrientationChange() {
+      const orientation = screen.orientation.type
+      if (
+        orientation === 'portrait-primary' &&
+        getFullscreenElement() &&
+        !this.mobileFullscreen
+      ) {
+        this.leaveFullScreen()
+        // portrait mode
+      } else if (orientation === 'landscape-primary') {
+        this.goFullScreen()
+      }
+    },
+    goFullScreen() {
+      const player = this.$refs.player
+      player.requestFullscreen?.() ??
+        player.webkitRequestFullscreen?.() ??
+        player.mozRequestFullScreen?.() ??
+        player.msRequestFullscreen?.()
+    },
+    leaveFullScreen() {
+      document.exitFullscreen?.() ??
+        document.webkitExitFullscreen?.() ??
+        document.mozCancelFullScreen?.() ??
+        document.msExitFullscreen?.()
+    },
+    tapUnmute() {
+      this.setVideoMuted(false)
+      this.setAutoPlayMuted(false)
+    },
+  },
+  watch: {
+    playing: function (playing) {
+      if (playing) {
+        this.hideControls()
+      } else {
+        this.showControls()
+      }
+    },
+    windowWidth: function (width) {
+      this.setMobile(width < 770)
+    },
+    fullscreen: function () {
+      if (document.pictureInPictureElement) {
+        document.exitPictureInPicture()
+      }
+      if (!getFullscreenElement()) {
+        this.mobileFullscreen = true
+        this.goFullScreen()
+      } else {
+        this.mobileFullscreen = false
+        this.leaveFullScreen()
+      }
+    },
+    dropup: function () {
+      this.showControls()
+    },
+    token: function () {
+      this.setCastOptions({
+        streamId: this.queryParams.streamId,
+        token: this.queryParams.token,
+        loading: this.isLoading,
+      })
+    },
+    castIsConnected: function (isConnected) {
+      if (isConnected) {
+        this.setPlaying(false)
+        this.setIsLoading(false)
+        const device = this.castDevice
+        this.cast = { isConnected, device }
+        this.showControls()
+      } else {
+        this.cast = { isConnected }
+      }
+    },
+    queryParams: function () {
+      this.setCastOptions({
+        streamId: this.queryParams.streamId,
+        token: this.queryParams.token,
+        loading: this.isLoading,
+      })
+    },
+  },
 }
 
 const getFullscreenElement = () => {
-    return document.fullscreenElement || document.webkitFullscreenElement
+  return document.fullscreenElement || document.webkitFullscreenElement
 }
 </script>
 
 <style lang="scss" scoped>
 .player {
-    position: relative;
-    width: 100%;
-    height: 100%;
-    cursor: none;
-    overflow: hidden;
-    &.show {
-        cursor: auto;
-    }
+  position: relative;
+  width: 100%;
+  height: 100%;
+  cursor: none;
+  overflow: hidden;
+  &.show {
+    cursor: auto;
+  }
 }
 
 .gradient-top {
-    background: rgb(0, 0, 0);
-    background: linear-gradient(
-        to top,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.85) 100%
-    );
-    transition: top 0.3s ease-in-out;
-    top: -10rem;
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
+  transition: top 0.3s ease-in-out;
+  top: -10rem;
 
-    &.show {
-        top: 0;
-    }
+  &.show {
+    top: 0;
+  }
 }
 
 .gradient-bottom {
-    background: rgb(0, 0, 0);
-    background: linear-gradient(
-        to bottom,
-        rgba(0, 0, 0, 0) 0%,
-        rgba(0, 0, 0, 0.85) 100%
-    );
-    transition: bottom 0.3s ease-in-out;
-    bottom: -10rem;
+  background: rgb(0, 0, 0);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0) 0%,
+    rgba(0, 0, 0, 0.85) 100%
+  );
+  transition: bottom 0.3s ease-in-out;
+  bottom: -10rem;
 
-    &.show {
-        bottom: 0;
-    }
+  &.show {
+    bottom: 0;
+  }
 }
 
 :deep(i) {
-    padding: 0.5rem;
-    cursor: pointer;
-    border-radius: 0.3rem;
+  padding: 0.5rem;
+  cursor: pointer;
+  border-radius: 0.3rem;
 }
 
 :deep(.control-icon) {
-    &:hover {
-        background: rgba(255, 255, 255, 0.2);
-    }
+  &:hover {
+    background: rgba(255, 255, 255, 0.2);
+  }
 }
 
 .overlay {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    bottom: 0;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  bottom: 0;
 
-    background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.5);
 
-    .spinner-border {
-        width: 3rem;
-        height: 3rem;
-    }
+  .spinner-border {
+    width: 3rem;
+    height: 3rem;
+  }
 
-    img {
-        height: 8rem;
-    }
+  img {
+    height: 8rem;
+  }
 
-    h1,
-    h3 {
-        margin-bottom: 0;
-    }
+  h1,
+  h3 {
+    margin-bottom: 0;
+  }
 }
 
 :deep(.mobile-setting) {
-    display: inline;
+  display: inline;
 }
 
 .tap-text {
-    font-size: 1.5rem;
-    font-weight: 500;
-    line-height: 1.2;
+  font-size: 1.5rem;
+  font-weight: 500;
+  line-height: 1.2;
 }
 
 .ml-viewer-bi-volume-mute-fill {
-    color: white;
-    font-size: 6rem;
-    cursor: default;
+  color: white;
+  font-size: 6rem;
+  cursor: default;
 }
 </style>
