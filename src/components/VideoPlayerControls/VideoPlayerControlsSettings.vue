@@ -1,5 +1,5 @@
 <template>
-  <div class="backdrop" @click="setDropup('')" @keydown.esc="toggleFullscreen"></div>
+  <div class="backdrop" @click="setDropup('')"></div>
   <span class="dropup">
     <i
       class="ml-viewer-bi-gear-fill h3 align-middle control-icon"
