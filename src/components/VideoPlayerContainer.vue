@@ -96,11 +96,16 @@ export default {
     this.windowWidth = window.innerWidth
     screen.orientation?.addEventListener('change', this.handleOrientationChange)
 
-    document.addEventListener("keydown", (e) => {
-      if (e.key === "Esc") {
-        this.toggleFullscreen();
+    document.addEventListener('fullscreenchange', exitHandler);
+    document.addEventListener('webkitfullscreenchange', exitHandler);
+    document.addEventListener('mozfullscreenchange', exitHandler);
+    document.addEventListener('MSFullscreenChange', exitHandler);
+
+    function exitHandler() {
+      if (!document.fullscreenElement && !document.webkitIsFullScreen && !document.mozFullScreen && !document.msFullscreenElement) {
+        this.toggleFullscreen()
       }
-    }, false);
+    }
 
     this.$nextTick(() => {
       window.addEventListener('resize', this.onResize)
