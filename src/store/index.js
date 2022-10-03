@@ -7,16 +7,16 @@ import ViewConnection from './modules/viewConnection'
 import Params from './modules/params'
 
 export default createStore({
-    state: {
-        sources: [],
-    },
-    mutations: {},
-    actions: {},
-    modules: {
-        Sources,
-        Layers,
-        Controls,
-        ViewConnection,
-        Params,
-    },
+  state: {
+    sources: [],
+  },
+  mutations: {},
+  actions: {},
+  modules: {
+    Sources,
+    Layers,
+    Controls,
+    ViewConnection,
+    Params,
+  },
 })
