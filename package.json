@@ -20,7 +20,7 @@
         "README.md"
     ],
     "dependencies": {
-        "@millicast/sdk": "^0.1.29",
+        "@millicast/sdk": "^0.1.33",
         "bootstrap": "github:millicast/bootstrap#ml-viewer",
         "bootstrap-icons": "github:millicast/icons#ml-viewer",
         "can-autoplay": "^3.0.0",
@@ -39,7 +39,11 @@
         "git-branch-is": "^4.0.0",
         "prettier": "^2.7.1",
         "sass": "^1.34.0",
-        "sass-loader": "^10"
+        "sass-loader": "^10",
+        "vue": "^3.0.0"
+    },
+    "peerDependencies": {
+        "vue": ">= 3.0.0"
     },
     "eslintConfig": {
         "root": true,
@@ -68,6 +72,7 @@
     "keywords": [
         "sdk",
         "vue",
+        "vue3",
         "millicast",
         "webrtc",
         "realtime",

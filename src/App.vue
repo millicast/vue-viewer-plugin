@@ -61,6 +61,8 @@ export default {
   color: white;
   min-width: 300px;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  width: 100%;
+  height: 100%;
 }
 
 .Vue-Toastification__container {

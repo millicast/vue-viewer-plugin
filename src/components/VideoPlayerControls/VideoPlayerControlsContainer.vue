@@ -16,7 +16,7 @@
         :streamId="streamId"
         v-if="showButton('settings')"
       />
-      <VideoPlayerControlsPip v-if="pipEnabled && !fullscreen" />
+      <VideoPlayerControlsPip v-if="pipEnabled" />
       <VideoPlayerControlsFullscreen
         v-if="fullscreenEnabled"
         :click="toggleFullscreen"
@@ -37,6 +37,7 @@
         <div
           class="dropdown-menu dropdown-menu-right"
           :class="{ show: dropup === 'mobile' }"
+          style="margin-bottom: 0.9rem;"
         >
           <div class="dropdown-header d-flex m-0 col-12">
             <h6 class="p-0 m-0">Options</h6>

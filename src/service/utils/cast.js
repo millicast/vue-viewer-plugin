@@ -39,26 +39,28 @@ export const handleSetCast = async () => {
 
   window['__onGCastApiAvailable'] = async (isAvailable) => {
     if (isAvailable) {
-      castContext = await window.cast.framework.CastContext.getInstance()
-      if (window.chrome.cast && window.chrome.cast.AutoJoinPolicy) {
-        castContext.setOptions({
-          autoJoinPolicy: window.chrome.cast.AutoJoinPolicy.PAGE_SCOPED,
-          receiverApplicationId,
-        })
-      } else {
-        commit('Controls/setCastAvailable', false)
-      }
+      setTimeout(async () => {
+        //isAvaiable is returning true but window.cast is null if we don't use a timer for some reason
+        castContext = await window.cast.framework.CastContext.getInstance()
+        if (window.chrome.cast && window.chrome.cast.AutoJoinPolicy) {
+          castContext.setOptions({
+            autoJoinPolicy: window.chrome.cast.AutoJoinPolicy.PAGE_SCOPED,
+            receiverApplicationId,
+          })
+          const { CAST_STATE_CHANGED, SESSION_STATE_CHANGED } =
+            window.cast.framework.CastContextEventType
+          await castContext.addEventListener(
+            CAST_STATE_CHANGED,
+            async ({ castState }) => await castStateListener(castState)
+          )
+          await castContext.addEventListener(SESSION_STATE_CHANGED, (e) =>
+            sessionListener(e)
+          )
+        } else {
+          commit('Controls/setCastAvailable', false)
+        }
+      }, 20)
     }
-
-    const { CAST_STATE_CHANGED, SESSION_STATE_CHANGED } =
-      window.cast.framework.CastContextEventType
-    await castContext.addEventListener(
-      CAST_STATE_CHANGED,
-      async ({ castState }) => await castStateListener(castState)
-    )
-    await castContext.addEventListener(SESSION_STATE_CHANGED, (e) =>
-      sessionListener(e)
-    )
   }
 }
 

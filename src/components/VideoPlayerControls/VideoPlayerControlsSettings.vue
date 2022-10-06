@@ -17,6 +17,7 @@
       ref="settings"
       class="dropdown-menu dropdown-menu-right"
       :class="{ show: dropup === 'settings' }"
+      style="margin-bottom: 0.9rem;"
     >
       <div class="dropdown-header d-flex m-0 col-12">
         <h6 class="p-0 m-0">Settings</h6>
@@ -25,6 +26,7 @@
         </div>
       </div>
       <VideoPlayerControlsSettingsQuality v-if="getActiveMedias.length > 1" />
+      <VideoPlayerControlsSettingsSplitView v-if="getVideoSources.length > 1" />
       <VideoPlayerControlsSettingsVideoTrack
         v-if="
           getVideoSources.length > 1 ||
@@ -48,6 +50,7 @@
       class="dropdown-menu dropdown-menu-right"
       :class="{ show: showDropup }"
       :style="{ width: settingsWidth }"
+      style="margin-bottom: 0.9rem;"
     >
       <VideoPlayerControlsSettingsDropdown
         :selected="selected"
@@ -71,6 +74,7 @@ import VideoPlayerControlsSettingsQuality from './VideoPlayerControlsSettingsQua
 import VideoPlayerControlsSettingsStats from './VideoPlayerControlsSettingsStats.vue'
 import VideoPlayerControlsSettingsReportIssue from './VideoPlayerControlsSettingsReportIssue.vue'
 import VideoPlayerControlsSettingsDropdown from './VideoPlayerControlsSettingsDropdown.vue'
+import VideoPlayerControlsSettingsSplitView from './VideoPlayerControlsSettingsSplitView.vue'
 
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { useToast } from 'vue-toastification'
@@ -84,6 +88,7 @@ export default {
     VideoPlayerControlsSettingsStats,
     VideoPlayerControlsSettingsReportIssue,
     VideoPlayerControlsSettingsDropdown,
+    VideoPlayerControlsSettingsSplitView
   },
   props: {
     streamId: String,

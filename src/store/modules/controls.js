@@ -21,6 +21,10 @@ const defaulState = {
   reconnection: { status: false, error: null, timeout: null },
   currentElementRef: 'player',
   isMigrating: false,
+  viewerMigratingEvent: false,
+  migrateListenerIsSet: false,
+  isSplittedView: false,
+  previousSplitState: false,
 }
 
 export default {
@@ -116,6 +120,20 @@ export default {
     },
     setIsMigrating(state, isMigrating) {
       state.isMigrating = isMigrating
+    },
+    setViewerMigratingEvent(state, viewerMigratingEvent) {
+      state.viewerMigratingEvent = viewerMigratingEvent
+    },
+    setMigrateListenerIsSet(state, migrateListenerIsSet) {
+      state.migrateListenerIsSet = migrateListenerIsSet
+    },
+    setIsSplittedView(state, isSplittedView) {
+      state.isSplittedView = isSplittedView
+    },
+    setPreviousSplitState(state, previousSplitState) {
+      if (!state.isMigrating) {
+        state.previousSplitState = previousSplitState
+      }
     },
   },
   getters: {},

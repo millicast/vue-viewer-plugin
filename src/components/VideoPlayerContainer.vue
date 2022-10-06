@@ -1,63 +1,80 @@
 <template>
-  <div
-    id="vplayer"
-    ref="player"
-    class="player"
-    :class="{ show: show }"
+  <div style="height: 100%"
+    :class="{
+      'align-self-center': isSplittedView,
+    }"
     @mousemove="showControls"
-  >
-    <div id="controls" v-if="queryParams.controls">
+    >
+    <div class="row mx-0" style="height: 100%">
       <div
-        class="container-fluid pt-3 gradient-top"
-        :class="{ show: show, 'fixed-top': fullscreen }"
-        style="margin-bottom: -55px; z-index: 1"
+        id="vplayer"
+        ref="player"
+        class="player"
+        :class="{ show: show,
+         'col-xl-9 col-lg-8 col-xs-8 col-sm-9 limit-screen': sourceRemoteTracks.length && isSplittedView}"
+        @mousemove="showControls"
       >
-        <div class="row">
-          <div class="col-6 text-left">
-            <VideoPlayerControlsUserCount v-if="showButton('userCount')" />
+
+
+        <div id="controls" class="controls" v-if="queryParams.controls" :style="!show ? 'display: none' : ''">
+          <div
+            class="container-fluid pt-3 gradient-top controls-top"
+          >
+            <div class="row">
+              <div class="col-6 text-left">
+                <VideoPlayerControlsUserCount v-if="showButton('userCount')" />
+              </div>
+
+              <div class="col-6 text-right">
+                <VideoPlayerControlsBadge v-if="showButton('liveBadge')" />
+              </div>
+            </div>
           </div>
 
-          <div class="col-6 text-right">
-            <VideoPlayerControlsBadge v-if="showButton('liveBadge')" />
+
+          <div
+            class="container-fluid pb-2 gradient-bottom controls-bottom"
+          >
+            <VideoPlayerControlsContainer
+              :isConnected="cast.isConnected"
+              :showButton="showButton"
+              :currentTime="currentTime"
+              :streamId="queryParams.streamId"
+            />
+          </div>
+        </div>
+
+        <VideoPlayerMedia ref="element" />
+
+        <div
+          class="overlay d-flex justify-content-center align-items-center"
+          v-if="isLoading"
+        >
+          <div class="spinner-border text-light" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+
+        <div
+          v-if="autoPlayMuted && isLive"
+          @click="tapUnmute"
+          class="overlay tap-unmute d-flex align-items-center justify-content-center"
+        >
+          <div>
+            <div class="d-flex justify-content-center">
+              <i class="ml-viewer-bi-volume-mute-fill pb-0"></i>
+            </div>
+            <p class="text-center tap-text">Tap to unmute</p>
           </div>
         </div>
       </div>
-
-      <VideoPlayerMedia ref="element" />
-
       <div
-        class="container-fluid pb-2 gradient-bottom"
-        :class="{ show: show, 'fixed-bottom': fullscreen }"
-        style="margin-top: -50px"
-      >
-        <VideoPlayerControlsContainer
-          :isConnected="cast.isConnected"
-          :showButton="showButton"
-          :currentTime="currentTime"
-          :streamId="queryParams.streamId"
-        />
-      </div>
-    </div>
-
-    <div
-      class="overlay d-flex justify-content-center align-items-center"
-      v-if="isLoading"
-    >
-      <div class="spinner-border text-light" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-    </div>
-
-    <div
-      v-if="autoPlayMuted && isLive"
-      @click="tapUnmute"
-      class="overlay tap-unmute d-flex align-items-center justify-content-center"
-    >
-      <div>
-        <div class="d-flex justify-content-center">
-          <i class="ml-viewer-bi-volume-mute-fill pb-0"></i>
-        </div>
-        <p class="text-center tap-text">Tap to unmute</p>
+          class="row d-flex side-panel overflow-auto sc1 col-xl-3 col-lg-4 col-xs-4 col-sm-3"
+          :style="'scroll-snap-type: y mandatory'"
+          v-if="sourceRemoteTracks.length && isSplittedView"
+          @mousemove="showControls"
+        >
+          <VideoPlayerSideVideoSources />
       </div>
     </div>
   </div>
@@ -65,6 +82,7 @@
 
 <script>
 import VideoPlayerMedia from './VideoPlayerMedia.vue'
+import VideoPlayerSideVideoSources from "./VideoPlayerSideVideoSources.vue"
 import { mapMutations, mapState } from 'vuex'
 import {
   VideoPlayerControlsBadge,
@@ -79,6 +97,7 @@ export default {
     VideoPlayerControlsBadge,
     VideoPlayerControlsUserCount,
     VideoPlayerControlsContainer,
+    VideoPlayerSideVideoSources
   },
   data() {
     return {
@@ -126,6 +145,7 @@ export default {
       audioSources: (state) => state.audioSources,
       selectedVideoSource: (state) => state.selectedVideoSource,
       selectedAudioSource: (state) => state.selectedAudioSource,
+      sourceRemoteTracks: (state) => state.sourceRemoteTracks,
     }),
     ...mapState('Controls', {
       video: (state) => state.video,
@@ -141,6 +161,7 @@ export default {
       srcObject: (state) => state.srcObject,
       autoPlayMuted: (state) => state.autoPlayMuted,
       isLive: (state) => state.isLive,
+      isSplittedView: state => state.isSplittedView,
     }),
     currentTime: function () {
       let seconds = this.secondsElapsed
@@ -166,6 +187,7 @@ export default {
       'setPlaying',
       'setCastOptions',
       'setAutoPlayMuted',
+      "toggleFullscreen",
     ]),
     onResize() {
       this.windowWidth = window.innerWidth
@@ -288,6 +310,12 @@ const getFullscreenElement = () => {
   }
 }
 
+.controls {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
 .gradient-top {
   background: rgb(0, 0, 0);
   background: linear-gradient(
@@ -356,6 +384,69 @@ const getFullscreenElement = () => {
 
 :deep(.mobile-setting) {
   display: inline;
+}
+
+.controls-top {
+  position: absolute;
+  top: 0;
+  margin-bottom: -55px; 
+  z-index: 1; 
+}
+
+.controls-bottom {
+  position: absolute;
+  bottom: 0;
+  margin-top: -50px; 
+}
+
+.side-panel {
+  border-radius: 0.4rem;
+  background: rgba(255,255,255,0.013);
+  padding-right:0;
+  height:fit-content
+}
+
+@media (min-width: 768px) and (max-width: 991.98px) {
+  .side-panel {
+    width: 100vw;
+  }
+}
+@media (max-width: 991.98px) {
+  .side-panel {
+    max-height: 71vh;
+    align-self: center;
+  }}
+
+@media (min-width:992px){
+  .side-panel{
+    max-height: 100vh;
+  }}
+@media (max-width: 575.8px){
+  .limit-screen {
+    height: 35vh;
+  }
+  .side-panel {
+    height: 65vh;
+  }
+  li {
+    height: 33%;
+    padding: 0.5rem
+  }
+}
+
+.sc1::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  margin-right: 10px;
+}
+.sc1::-webkit-scrollbar-track {
+  border-radius: 10px;
+  border: solid 3px black;
+}
+.sc1::-webkit-scrollbar-thumb {
+  background-color: #a9a9aa;
+  border-radius: 10px;
+  border: solid 3px black;
 }
 
 .tap-text {
