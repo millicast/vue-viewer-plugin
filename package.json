@@ -1,7 +1,7 @@
 {
     "name": "@millicast/vue-viewer-plugin",
     "version": "0.1.0-beta.0",
-    "private": true,
+    "private": false,
     "author": "Millicast, Inc.",
     "scripts": {
         "serve": "vue-cli-service serve",
