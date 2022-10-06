@@ -2,6 +2,7 @@
   <div
     class="backdrop"
     @click="setDropup('')"
+    @dblclick="toggleFullscreen"
   ></div>
   <span class="dropup">
     <i
