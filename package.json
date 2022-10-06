@@ -64,7 +64,7 @@
         "last 2 versions",
         "not dead"
     ],
-    "homepage": "https://github.com/millicast/millicast-vue-viewer-plugin#readme",
+    "homepage": "https://github.com/millicast/vue-viewer-plugin#readme",
     "keywords": [
         "sdk",
         "vue",
@@ -76,11 +76,11 @@
     "license": "See in LICENSE file",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/millicast/millicast-vue-viewer-plugin.git"
+        "url": "git+https://github.com/millicast/vue-viewer-plugin.git"
     },
     "description": "Vue.js plugin to embed viewer of a Millicast stream. This plugin allows developers to simplify Millicast services integration into their own Vue.js apps.",
     "bugs": {
-        "url": "https://github.com/millicast/millicast-vue-viewer-plugin/issues"
+        "url": "https://github.com/millicast/vue-viewer-plugin/issues"
     },
     "directories": {
         "example": "examples"
