@@ -1,6 +1,6 @@
 {
     "name": "@millicast/vue-viewer-plugin",
-    "version": "0.1-beta.0",
+    "version": "0.1.0-beta.0",
     "private": true,
     "author": "Millicast, Inc.",
     "scripts": {
