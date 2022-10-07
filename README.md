@@ -7,10 +7,8 @@ Vue.js plugin to embed viewer of a Millicast stream. This plugin allows develope
 To install the dependecies to your project, from the command line execute the following instruction:
 
 ```bash
-npm install millicast/vue-viewer-plugin
+npm install @millicast/vue-viewer-plugin
 ```
-
-> Note: This command will install the plugin directly from our github repository. The installation steps will change once we publish this project into NPM.
 
 ## Basic Usage
 
