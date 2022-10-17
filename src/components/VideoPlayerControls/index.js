@@ -17,5 +17,5 @@ export {
   VideoPlayerControlsUserCount,
   VideoPlayerControlsVolume,
   VideoPlayerControlsContainer,
-  VideoPlayerControlsCast
+  VideoPlayerControlsCast,
 }

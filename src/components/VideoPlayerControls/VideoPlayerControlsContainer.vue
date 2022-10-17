@@ -16,7 +16,7 @@
         :streamId="streamId"
         v-if="showButton('settings')"
       />
-      <VideoPlayerControlsCast v-if="showButton('cast') && castAvailable"/>
+      <VideoPlayerControlsCast v-if="showButton('cast') && castAvailable" />
       <VideoPlayerControlsPip v-if="pipEnabled" />
       <VideoPlayerControlsFullscreen
         v-if="showFullscreen"
@@ -43,7 +43,7 @@
         <div
           class="dropdown-menu dropdown-menu-right"
           :class="{ show: dropup === 'mobile' }"
-          style="margin-bottom: 0.9rem;"
+          style="margin-bottom: 0.9rem"
         >
           <div class="dropdown-header d-flex m-0 col-12">
             <h6 class="p-0 m-0">Options</h6>
@@ -80,7 +80,7 @@ export default {
     VideoPlayerControlsPlay,
     VideoPlayerControlsSettings,
     VideoPlayerControlsVolume,
-    VideoPlayerControlsCast
+    VideoPlayerControlsCast,
   },
   props: {
     showButton: Function,
@@ -100,7 +100,7 @@ export default {
       isMobile: (state) => state.isMobile,
       isLive: (state) => state.isLive,
       fullscreen: (state) => state.fullscreen,
-      castAvailable: state => state.castAvailable
+      castAvailable: (state) => state.castAvailable,
     }),
     isVideoTag() {
       return this.video?.nodeName === 'VIDEO'

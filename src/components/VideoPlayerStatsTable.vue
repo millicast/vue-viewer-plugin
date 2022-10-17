@@ -1,11 +1,26 @@
 <template>
   <table class="table table-sm table-dark table-borderless fixed-top">
     <thead>
-      <tr class="row mx-0 align-items-center" :class="multiStatsAvailable ? 'justify-content-between' : 'justify-content-end'">
+      <tr
+        class="row mx-0 align-items-center"
+        :class="
+          multiStatsAvailable
+            ? 'justify-content-between'
+            : 'justify-content-end'
+        "
+      >
         <th v-if="multiStatsAvailable" class="d-flex align-items-center">
-          <span>Source:</span> 
-          <select class="ml-2 source-select" v-model="selectedSourceMid" @change="handleSourceChange">
-            <option v-for="source in getVideoSources" :key="source.sourceId" :value="source.mid">
+          <span>Source:</span>
+          <select
+            class="ml-2 source-select"
+            v-model="selectedSourceMid"
+            @change="handleSourceChange"
+          >
+            <option
+              v-for="source in getVideoSources"
+              :key="source.sourceId"
+              :value="source.mid"
+            >
               {{ source.name }}
             </option>
           </select>
@@ -44,7 +59,7 @@
       </tr>
       <tr v-if="video?.framesPerSecond" class="row mx-0">
         <td class="col-6">FPS</td>
-        <td class="col-6">{{video.framesPerSecond}}</td>
+        <td class="col-6">{{ video.framesPerSecond }}</td>
       </tr>
       <tr v-if="video?.bitrate" class="row mx-0">
         <td class="col-6">Video Bitrate</td>
@@ -134,7 +149,7 @@ export default {
       stats: {},
       statsIndex: 0,
       selectedSourceMid: null,
-      midToStatsIndexMap: {}
+      midToStatsIndexMap: {},
     }
   },
   mounted() {
@@ -145,8 +160,11 @@ export default {
           this.midToStatsIndexMap[stat.mid] = index
         }
       })
-      window.peer?.getReceivers?.().forEach?.(receiver => {
-        this.stats.videoSynchronizationSources = receiver.track.kind === 'video' ? receiver.getSynchronizationSources() : this.stats.videoSynchronizationSources
+      window.peer?.getReceivers?.().forEach?.((receiver) => {
+        this.stats.videoSynchronizationSources =
+          receiver.track.kind === 'video'
+            ? receiver.getSynchronizationSources()
+            : this.stats.videoSynchronizationSources
       })
       this.stats = { ...this.stats, ...peerStats }
     })
@@ -171,7 +189,7 @@ export default {
     handleSourceChange() {
       const mid = this.selectedSourceMid ?? 0
       this.statsIndex = this.midToStatsIndexMap[mid]
-    }
+    },
   },
   computed: {
     ...mapState('Controls', ['isMobile', 'isSplittedView']),
@@ -194,7 +212,11 @@ export default {
       const video = this.stats.video?.inbounds
       const videoLength = video?.length
       if (videoLength) {
-        return video[this.statsIndex > (this.sourceRemoteTracks.length - 1) ? 0 : this.statsIndex]
+        return video[
+          this.statsIndex > this.sourceRemoteTracks.length - 1
+            ? 0
+            : this.statsIndex
+        ]
       }
       return null
     },
@@ -247,8 +269,12 @@ export default {
       return this.millicastView?.signaling?.clusterId
     },
     multiStatsAvailable() {
-      return this.sourceRemoteTracks.length && this.isSplittedView && Object.keys(this.midToStatsIndexMap).length
-    }
+      return (
+        this.sourceRemoteTracks.length &&
+        this.isSplittedView &&
+        Object.keys(this.midToStatsIndexMap).length
+      )
+    },
   },
 }
 
@@ -312,7 +338,7 @@ i {
 }
 
 .source-select {
-  font-size: .79rem;
+  font-size: 0.79rem;
   height: 1.9rem;
   width: 10rem;
   color: white;

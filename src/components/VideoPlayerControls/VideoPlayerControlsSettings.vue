@@ -1,9 +1,6 @@
 <template>
   <Teleport to="#viewer-container" v-if="dropup !== ''">
-    <div
-      class="backdrop"
-      @click="setDropup('')"
-    ></div>
+    <div class="backdrop" @click="setDropup('')"></div>
   </Teleport>
   <span class="dropup">
     <i
@@ -18,7 +15,7 @@
       ref="settings"
       class="dropdown-menu dropdown-menu-right"
       :class="{ show: dropup === 'settings' }"
-      style="margin-bottom: 0.9rem;"
+      style="margin-bottom: 0.9rem"
     >
       <div class="dropdown-header d-flex m-0 col-12">
         <h6 class="p-0 m-0">Settings</h6>
@@ -51,7 +48,7 @@
       class="dropdown-menu dropdown-menu-right"
       :class="{ show: showDropup }"
       :style="{ width: settingsWidth }"
-      style="margin-bottom: 0.9rem;"
+      style="margin-bottom: 0.9rem"
     >
       <VideoPlayerControlsSettingsDropdown
         :selected="selected"
@@ -89,7 +86,7 @@ export default {
     VideoPlayerControlsSettingsStats,
     VideoPlayerControlsSettingsReportIssue,
     VideoPlayerControlsSettingsDropdown,
-    VideoPlayerControlsSettingsSplitView
+    VideoPlayerControlsSettingsSplitView,
   },
   props: {
     streamId: String,
@@ -297,7 +294,6 @@ export default {
     }
   }
 }
-
 
 .ml-viewer-bi-gear-fill .badge {
   position: absolute;

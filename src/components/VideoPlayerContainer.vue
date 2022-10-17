@@ -1,25 +1,24 @@
 <template>
-  <div style="height: 100%"
+  <div
+    style="height: 100%"
     :class="{
       'align-self-center': isSplittedView,
     }"
     @mousemove="showControls"
-    >
+  >
     <div class="row mx-0" style="height: 100%">
       <div
         id="vplayer"
         ref="player"
         class="player"
-        :class="{ show: show,
-         'mv-col-9 limit-screen': sourceRemoteTracks.length && isSplittedView}"
+        :class="{
+          show: show,
+          'mv-col-9 limit-screen': sourceRemoteTracks.length && isSplittedView,
+        }"
         @dblclick="toggleFullscreen"
       >
-
-
         <div id="controls" class="controls" v-if="queryParams.controls && show">
-          <div
-            class="container-fluid pt-3 gradient-top controls-top"
-          >
+          <div class="container-fluid pt-3 gradient-top controls-top">
             <div class="row">
               <div class="col-6 text-left">
                 <VideoPlayerControlsUserCount v-if="showButton('userCount')" />
@@ -31,10 +30,7 @@
             </div>
           </div>
 
-
-          <div
-            class="container-fluid pb-2 gradient-bottom controls-bottom"
-          >
+          <div class="container-fluid pb-2 gradient-bottom controls-bottom">
             <VideoPlayerControlsContainer
               :isConnected="cast.isConnected"
               :showButton="showButton"
@@ -79,12 +75,12 @@
         </div>
       </div>
       <div
-          class="side-panel overflow-auto sc1 mv-col-3"
-          :style="'scroll-snap-type: y mandatory'"
-          v-if="sourceRemoteTracks.length && isSplittedView"
-          @mousemove="showControls"
-        >
-          <VideoPlayerSideVideoSources />
+        class="side-panel overflow-auto sc1 mv-col-3"
+        :style="'scroll-snap-type: y mandatory'"
+        v-if="sourceRemoteTracks.length && isSplittedView"
+        @mousemove="showControls"
+      >
+        <VideoPlayerSideVideoSources />
       </div>
     </div>
   </div>
@@ -92,7 +88,7 @@
 
 <script>
 import VideoPlayerMedia from './VideoPlayerMedia.vue'
-import VideoPlayerSideVideoSources from "./VideoPlayerSideVideoSources.vue"
+import VideoPlayerSideVideoSources from './VideoPlayerSideVideoSources.vue'
 import { mapMutations, mapState } from 'vuex'
 import {
   VideoPlayerControlsBadge,
@@ -107,7 +103,7 @@ export default {
     VideoPlayerControlsBadge,
     VideoPlayerControlsUserCount,
     VideoPlayerControlsContainer,
-    VideoPlayerSideVideoSources
+    VideoPlayerSideVideoSources,
   },
   data() {
     return {
@@ -164,7 +160,7 @@ export default {
       srcObject: (state) => state.srcObject,
       autoPlayMuted: (state) => state.autoPlayMuted,
       isLive: (state) => state.isLive,
-      isSplittedView: state => state.isSplittedView,
+      isSplittedView: (state) => state.isSplittedView,
     }),
     currentTime: function () {
       let seconds = this.secondsElapsed
@@ -189,7 +185,7 @@ export default {
       'setPlaying',
       'setCastOptions',
       'setAutoPlayMuted',
-      "toggleFullscreen",
+      'toggleFullscreen',
     ]),
     showControls() {
       if (this.controlsTimeout) {
@@ -385,8 +381,8 @@ const getFullscreenElement = () => {
 .controls-top {
   position: absolute;
   top: 0;
-  margin-bottom: -55px; 
-  z-index: 1; 
+  margin-bottom: -55px;
+  z-index: 1;
 }
 
 .controls-bottom {
@@ -398,12 +394,11 @@ const getFullscreenElement = () => {
 
 .side-panel {
   border-radius: 0.4rem;
-  background: rgba(255,255,255,0.013);
-  padding-right:0;
-  height:fit-content;
+  background: rgba(255, 255, 255, 0.013);
+  padding-right: 0;
+  height: fit-content;
   width: 100%;
 }
-
 
 .sc1::-webkit-scrollbar {
   width: 8px;
