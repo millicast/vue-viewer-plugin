@@ -7,10 +7,8 @@ Vue.js plugin to embed viewer of a Millicast stream. This plugin allows develope
 To install the dependecies to your project, from the command line execute the following instruction:
 
 ```bash
-npm install millicast/vue-viewer-plugin
+npm install @millicast/vue-viewer-plugin
 ```
-
-> Note: This command will install the plugin directly from our github repository. The installation steps will change once we publish this project into NPM.
 
 ## Basic Usage
 
@@ -81,9 +79,9 @@ In order to customize your experience using the plugin, you are able to hide the
 
 ## Example App
 
-An example app is also provided which also integrates a [PubNub](https://www.pubnub.com/docs/) based live chat, this example can be found in the `examples/live-chat` folder.
+An example app is also provided which integrates a [PubNub](https://www.pubnub.com/docs/) based live chat, this example can be found in the `examples/live-chat` folder.
 
-To set your private PubNub & Millicast credentials, create a `.env` file. An example of this may be found in the `examples/live-chat/.env.sample`. Read [Dolby.io streaming docs](https://docs.dolby.io/streaming-apis/docs) for more information on how to obtain your Millicast credentials.
+To set your private PubNub & Millicast credentials, create a `.env` file. An example of this may be found in the `examples/live-chat/.env.sample`. Read [Dolby.io Streaming Docs](https://docs.dolby.io/streaming-apis/docs) for more information on how to obtain your Millicast credentials.
 
 In order to run this example app, execute the following commands:
 

@@ -218,9 +218,9 @@ html {
   color: rgba(255, 255, 255, 0.553);
 }
 
-.text-msg:focus {
+#text-msg:focus {
   box-shadow: none;
-  outline: 0rem;
+  outline: none;
 }
 
 #emoji-btn {
