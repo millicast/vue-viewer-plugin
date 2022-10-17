@@ -11,12 +11,12 @@
         ref="player"
         class="player"
         :class="{ show: show,
-         'col-xl-9 col-lg-8 col-xs-8 col-sm-9 limit-screen': sourceRemoteTracks.length && isSplittedView}"
-        @mousemove="showControls"
+         'mv-col-9 limit-screen': sourceRemoteTracks.length && isSplittedView}"
+        @dblclick="toggleFullscreen"
       >
 
 
-        <div id="controls" class="controls" v-if="queryParams.controls" :style="!show ? 'display: none' : ''">
+        <div id="controls" class="controls" v-if="queryParams.controls && show">
           <div
             class="container-fluid pt-3 gradient-top controls-top"
           >
@@ -56,6 +56,16 @@
         </div>
 
         <div
+          class="overlay d-flex flex-row justify-content-center align-items-center"
+          v-if="cast.device"
+        >
+          <div class="d-flex flex-column ml-3">
+            <h3>Casting to</h3>
+            <h1 class="font-weight-bold">{{ cast.device.friendlyName }}</h1>
+          </div>
+        </div>
+
+        <div
           v-if="autoPlayMuted && isLive"
           @click="tapUnmute"
           class="overlay tap-unmute d-flex align-items-center justify-content-center"
@@ -69,7 +79,7 @@
         </div>
       </div>
       <div
-          class="row d-flex side-panel overflow-auto sc1 col-xl-3 col-lg-4 col-xs-4 col-sm-3"
+          class="side-panel overflow-auto sc1 mv-col-3"
           :style="'scroll-snap-type: y mandatory'"
           v-if="sourceRemoteTracks.length && isSplittedView"
           @mousemove="showControls"
@@ -105,18 +115,12 @@ export default {
       timeInterval: 0,
       secondsElapsed: 0,
       cast: { isConnected: false },
-      windowWidth: false,
       controlsTimeout: 0,
       mobileFullscreen: false,
     }
   },
   mounted() {
-    this.windowWidth = window.innerWidth
     screen.orientation?.addEventListener('change', this.handleOrientationChange)
-
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.onResize)
-    })
 
     this.controlsTimeout = setTimeout(() => {
       this.show = false
@@ -134,7 +138,6 @@ export default {
   },
   beforeUnmount() {
     clearInterval(this.timeInterval)
-    window.removeEventListener('resize', this.onResize)
   },
   computed: {
     ...mapState('Params', {
@@ -177,7 +180,6 @@ export default {
     ...mapMutations('Sources', ['deleteSource']),
     ...mapMutations('Controls', [
       'setVideo',
-      'setMobile',
       'setIsLive',
       'setIsLoading',
       'setTrackWarning',
@@ -189,9 +191,6 @@ export default {
       'setAutoPlayMuted',
       "toggleFullscreen",
     ]),
-    onResize() {
-      this.windowWidth = window.innerWidth
-    },
     showControls() {
       if (this.controlsTimeout) {
         clearTimeout(this.controlsTimeout)
@@ -246,9 +245,6 @@ export default {
       } else {
         this.showControls()
       }
-    },
-    windowWidth: function (width) {
-      this.setMobile(width < 770)
     },
     fullscreen: function () {
       if (document.pictureInPictureElement) {
@@ -396,43 +392,18 @@ const getFullscreenElement = () => {
 .controls-bottom {
   position: absolute;
   bottom: 0;
-  margin-top: -50px; 
+  margin-top: -50px;
+  z-index: 1;
 }
 
 .side-panel {
   border-radius: 0.4rem;
   background: rgba(255,255,255,0.013);
   padding-right:0;
-  height:fit-content
+  height:fit-content;
+  width: 100%;
 }
 
-@media (min-width: 768px) and (max-width: 991.98px) {
-  .side-panel {
-    width: 100vw;
-  }
-}
-@media (max-width: 991.98px) {
-  .side-panel {
-    max-height: 71vh;
-    align-self: center;
-  }}
-
-@media (min-width:992px){
-  .side-panel{
-    max-height: 100vh;
-  }}
-@media (max-width: 575.8px){
-  .limit-screen {
-    height: 35vh;
-  }
-  .side-panel {
-    height: 65vh;
-  }
-  li {
-    height: 33%;
-    padding: 0.5rem
-  }
-}
 
 .sc1::-webkit-scrollbar {
   width: 8px;
@@ -447,6 +418,10 @@ const getFullscreenElement = () => {
   background-color: #a9a9aa;
   border-radius: 10px;
   border: solid 3px black;
+}
+
+.tap-unmute {
+  z-index: 2;
 }
 
 .tap-text {

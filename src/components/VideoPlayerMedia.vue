@@ -188,20 +188,17 @@ export default {
 video {
   width: 100%;
   height: 100%;
-  max-height: 100vh;
   pointer-events: none;
 }
 
 span{
-  bottom: 1rem;
+  bottom: 3rem;
   left: 1.5rem;
   position: absolute;
   color: #FFF;
   background: rgba(0, 0, 0, 0.288);
   padding: 4px 8px;
-  font-family: 'Open Sans';
   font-size: .875rem;
-  font-weight: bold;
   line-height: 1.15rem;
   border-radius: 2px;
 

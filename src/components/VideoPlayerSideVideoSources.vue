@@ -1,7 +1,7 @@
 <template>
-  <ul class="p-0 flex-lg-column flex-row justify-content-center" style="width: 100%">
+  <ul class="row my-1 mx-0 p-0" style="width: 100%">
     <li
-      class="col-6 col-lg-12 col-sm-12"
+      class="mv-col-6 mv-col-12 mb-1 side-source"
       :style="'scroll-snap-align: end'"
       v-for="(source, index) in sourceRemoteTracks"
       :key="'p' + index"
@@ -105,9 +105,7 @@ li {
   color: #FFF;
   background: rgba(0, 0, 0, 0.288);
   padding: 4px 8px;
-  font-family: 'Open Sans';
   font-size: .875rem;
-  font-weight: bold;
   line-height: 1.15rem;
   border-radius: 2px;
   text-overflow: ellipsis;
@@ -128,28 +126,8 @@ li {
   padding: 0%;
   text-align: center;
 }
-@media (max-width: 991.98px) {
-  li {
-    padding-right: 0;
-    padding-left: 0.8rem
-}
-  ul {display:contents}
-}
-@media (min-width: 992px){
-  col-3{
-    max-width: fit-content;
-  }
-  ul {display:contents}
-  li {height: 18.9vh;
-      margin-bottom: 1.1vh;
-  }
-}
-@media (min-width: 576px) and (max-width: 991.98px){
-   col-3{
-    max-width: fit-content;
-  }
-    li {height: 13.3vh;
-      margin-bottom: 1.1vh;
-  }
+
+li {
+  height: 9rem;
 }
 </style>

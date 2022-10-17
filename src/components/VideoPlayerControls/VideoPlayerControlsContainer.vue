@@ -16,17 +16,23 @@
         :streamId="streamId"
         v-if="showButton('settings')"
       />
+      <VideoPlayerControlsCast v-if="showButton('cast') && castAvailable"/>
       <VideoPlayerControlsPip v-if="pipEnabled" />
       <VideoPlayerControlsFullscreen
-        v-if="fullscreenEnabled"
+        v-if="showFullscreen"
         :click="toggleFullscreen"
       />
     </div>
     <div class="col-5 pl-0 pr-1 text-right" v-else>
+      <VideoPlayerControlsSettings
+        :streamId="streamId"
+        v-if="showButton('settings')"
+      />
       <span
         v-if="
+          (showButton('cast') && castAvailable) ||
           (isLive && pipEnabled && showButton('pip') && isVideoTag) ||
-          fullscreenEnabled
+          showFullscreen
         "
         class="dropup"
       >
@@ -42,11 +48,10 @@
           <div class="dropdown-header d-flex m-0 col-12">
             <h6 class="p-0 m-0">Options</h6>
           </div>
-
-          <VideoPlayerControlsSettingsStats />
-          <VideoPlayerControlsPip v-if="pipEnabled && !fullscreen" />
+          <VideoPlayerControlsCast v-if="showButton('cast') && castAvailable" />
+          <VideoPlayerControlsPip v-if="pipEnabled" />
           <VideoPlayerControlsFullscreen
-            v-if="fullscreenEnabled"
+            v-if="showFullscreen"
             :click="toggleFullscreen"
           />
         </div>
@@ -65,7 +70,7 @@ import {
   VideoPlayerControlsSettings,
   VideoPlayerControlsVolume,
 } from './index'
-import VideoPlayerControlsSettingsStats from './VideoPlayerControlsSettingsStats.vue'
+import VideoPlayerControlsCast from './VideoPlayerControlsCast.vue'
 
 export default {
   name: 'VideoPlayer',
@@ -75,7 +80,7 @@ export default {
     VideoPlayerControlsPlay,
     VideoPlayerControlsSettings,
     VideoPlayerControlsVolume,
-    VideoPlayerControlsSettingsStats,
+    VideoPlayerControlsCast
   },
   props: {
     showButton: Function,
@@ -86,7 +91,6 @@ export default {
   data() {
     return {
       dropupShow: false,
-      fullscreenEnabled: this.showFullscreen(),
     }
   },
   computed: {
@@ -96,6 +100,7 @@ export default {
       isMobile: (state) => state.isMobile,
       isLive: (state) => state.isLive,
       fullscreen: (state) => state.fullscreen,
+      castAvailable: state => state.castAvailable
     }),
     isVideoTag() {
       return this.video?.nodeName === 'VIDEO'
@@ -108,9 +113,6 @@ export default {
         this.isVideoTag
       )
     },
-  },
-  methods: {
-    ...mapMutations('Controls', ['setDropup', 'toggleFullscreen']),
     showFullscreen() {
       const fullscreenEnabled = this.showButton('fullscreen')
       if (fullscreenEnabled && !canEnableFullscreen()) {
@@ -121,6 +123,9 @@ export default {
       }
       return fullscreenEnabled
     },
+  },
+  methods: {
+    ...mapMutations('Controls', ['setDropup', 'toggleFullscreen']),
   },
   async beforeMount() {
     await setCast()

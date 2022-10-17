@@ -37,6 +37,11 @@ At the end of the file `App.vue`, you must include the following dependecy:
 </style>
 ```
 
+**Optional:** If you want to use the chromecast feature you should also add the next script in your HTML:
+```html
+<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+```
+
 Once this is done, you are ready to use the plugin in any Vue file of your project as a component.
 
 ### Configuration Parameters

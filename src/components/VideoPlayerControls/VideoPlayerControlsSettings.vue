@@ -1,9 +1,10 @@
 <template>
-  <div
-    class="backdrop"
-    @click="setDropup('')"
-    @dblclick="toggleFullscreen"
-  ></div>
+  <Teleport to="#viewer-container" v-if="dropup !== ''">
+    <div
+      class="backdrop"
+      @click="setDropup('')"
+    ></div>
+  </Teleport>
   <span class="dropup">
     <i
       class="ml-viewer-bi-gear-fill h3 align-middle control-icon"
@@ -121,7 +122,6 @@ export default {
       selectedAudioSource: (state) => state.selectedAudioSource,
     }),
     ...mapState('Controls', {
-      isMobile: (state) => state.isMobile,
       dropup: (state) => state.dropup,
       trackWarning: (state) => state.trackWarning,
     }),
@@ -298,11 +298,6 @@ export default {
   }
 }
 
-@media (max-width: 768px) {
-  .dropdown-menu {
-    width: 15rem;
-  }
-}
 
 .ml-viewer-bi-gear-fill .badge {
   position: absolute;
@@ -315,12 +310,12 @@ export default {
 }
 
 .backdrop {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  height: 100vh;
+  height: 100%;
   width: 100%;
-  z-index: -2;
+  z-index: 0;
 }
 
 .dropdown-item-name {
