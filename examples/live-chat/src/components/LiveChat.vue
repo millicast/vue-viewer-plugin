@@ -1,5 +1,5 @@
 <template>
-  <div id="chat" class="col-lg-3">
+  <div v-if="pubnubSettled" id="chat" class="col-lg-3">
     <div id="chat-container" class="card">
       <div class="card-header msg-head">
         <div class="d-flex bd-highlight">
@@ -80,16 +80,19 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    You have not settled your PubNub credentials in the .ENV file.
+  </div>
 </template>
 
 <script>
 import faker from '@faker-js/faker'
 const PubNub = require('pubnub')
-const pubnub = new PubNub({
+const pubnub = (process.env.VUE_APP_PUBNUB_PUBLISH_KEY && process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY && process.env.VUE_APP_PUBNUB_UUID) ? new PubNub({
   publishKey: process.env.VUE_APP_PUBNUB_PUBLISH_KEY,
   subscribeKey: process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY,
   uuid: process.env.VUE_APP_PUBNUB_UUID,
-})
+}) : null
 export default {
   data() {
     return {
@@ -101,6 +104,7 @@ export default {
         process.env.VUE_APP_MILLICAST_ACCOUNT_ID +
         '/' +
         process.env.VUE_APP_MILLICAST_STREAM_NAME,
+      pubnubSettled: process.env.VUE_APP_PUBNUB_PUBLISH_KEY && process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY && process.env.VUE_APP_PUBNUB_UUID
     }
   },
   methods: {
@@ -166,8 +170,10 @@ export default {
     },
   },
   mounted() {
-    this.pubnubListeners()
-    this.subscribe()
+    if (this.pubnubSettled) {
+      this.pubnubListeners()
+      this.subscribe()
+    }
   },
 }
 </script>
