@@ -188,15 +188,27 @@ html {
 }
 
 #chat {
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: 0;
   padding: 0;
 }
 
 #chat-container {
-  height: 100vh;
   background-color: rgba(34, 32, 34, 0.2);
   border-radius: 0;
+}
+
+/* for big screens */
+@media only screen and (min-width: 990px) {
+  #chat-container {
+    height: 100vh;
+  }
+}
+
+/* for small screens */
+@media only screen and (max-width: 990px) {
+  #chat-container {
+    max-height: 500px;
+  }
 }
 
 .msg-card-body {
@@ -206,10 +218,6 @@ html {
 
 .card-footer {
   border-top: 0;
-}
-
-.container {
-  align-content: center;
 }
 
 #text-msg {
@@ -277,17 +285,6 @@ html {
   margin-bottom: 0;
 }
 
-.msg-container {
-  min-width: 4rem;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 0.6rem;
-  border-radius: 1.5rem;
-  background-color: #1d2021;
-  padding: 0.6rem;
-  position: relative;
-}
-
 .msg-container p {
   margin-bottom: 0;
   color: white;
@@ -302,7 +299,7 @@ html {
   margin-top: auto;
   margin-bottom: auto;
   margin-right: 0;
-  border-radius: 1.5rem;
+  border-radius: 10px;
   background-color: #3a393a;
   padding: 0.6rem;
   position: relative;
