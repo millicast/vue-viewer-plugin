@@ -303,6 +303,17 @@ html {
   margin-bottom: 0;
 }
 
+.msg-container {
+  min-width: 4rem;
+  margin-top: auto;
+  margin-bottom: auto;
+  margin-left: 0.6rem;
+  border-radius: 10px;
+  background-color: #3a393a;
+  padding: 0.6rem;
+  position: relative;
+}
+
 .msg-container p {
   margin-bottom: 0;
   color: white;
