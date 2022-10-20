@@ -70,6 +70,7 @@ export const handleConnectToStream = async () => {
       events: ['active', 'inactive', 'layers', 'viewercount'],
       absCaptureTime: true,
     })
+    addSignalingMigrateListener()
   } catch (e) {
     const message = e.response?.data?.data?.message
     commit('Controls/setIsLoading', false)
@@ -85,19 +86,42 @@ export const handleConnectToStream = async () => {
 export const setTrackEvent = () => {
   const millicastView = state.ViewConnection.millicastView
   millicastView.on('track', async (event) => {
-    await setStream(event.streams[0])
-    state.ViewConnection.trackEvent[event.track.kind].transceiver =
-      event.transceiver
-    state.ViewConnection.trackEvent[event.track.kind].track = event.track
+    if (event.streams.length) {
+      await setStream(event.streams[0])
+    }
+    if (!state.ViewConnection.trackEvent[event.track.kind].transceiver[0]) {
+      state.ViewConnection.trackEvent[event.track.kind].transceiver[0] =
+        event.transceiver
+    } else {
+      state.ViewConnection.trackEvent[event.track.kind].transceiver.push(
+        event.transceiver
+      )
+    }
+    state.ViewConnection.trackEvent[event.track.kind].track = true
   })
 }
 
 const setStream = async (entrySrcObject) => {
   const video = state.Controls.video
+  addSignalingMigrateListener()
   commit('Controls/setSrcObject', entrySrcObject)
+  //If we already had a a stream and is not migrating then we ignore it (Firefox addRemoteTrack issue)
+  if (
+    video.srcObject &&
+    video.srcObject.id !== entrySrcObject.id &&
+    !state.Controls.viewerMigratingEvent
+  ) {
+    return
+  }
   //If we already had a a stream
-  if (video.srcObject && video.srcObject.id !== entrySrcObject.id) {
+  if (
+    video.srcObject &&
+    video.srcObject.id !== entrySrcObject.id &&
+    state.Controls.viewerMigratingEvent
+  ) {
+    commit('Controls/setPreviousSplitState', state.Controls.isSplittedView)
     commit('Controls/setIsMigrating', true)
+    commit('Controls/setIsSplittedView', false)
     await nextTick()
     const opositeElementRef =
       state.Controls.currentElementRef === 'player' ? 'player2' : 'player'
@@ -112,10 +136,15 @@ const setStream = async (entrySrcObject) => {
       commit('Controls/setVideo', mediaTag)
       commit('Controls/setCurrentElementRef', opositeElementRef)
       commit('Controls/setIsMigrating', false)
+      commit('Controls/setIsSplittedView', state.Controls.previousSplitState)
       if (document.pictureInPictureElement) {
         mediaTag.requestPictureInPicture()
       }
     }
+    commit('Controls/setViewerMigratingEvent', false)
+    commit('Controls/setMigrateListenerIsSet', false)
+    //We have to set the listener again since the signaling attribute of millicastView is changed after the migrate.
+    addSignalingMigrateListener()
   } else {
     setVideoPlayer({ videoPlayer: video, srcObject: entrySrcObject })
   }
@@ -144,6 +173,10 @@ export const setReconnect = () => {
         commit('Controls/setIsLoading', false)
         commit('Controls/setIsLive', false)
       } else {
+        commit('Controls/setVideoSource', null)
+        commit('Controls/setSrcObject', null)
+        commit('Controls/setViewerMigratingEvent', false)
+        commit('Controls/setMigrateListenerIsSet', false)
         commit('Controls/handleReconnection', { timeout, error })
       }
     })
@@ -152,4 +185,21 @@ export const setReconnect = () => {
 export const handleStopStream = () => {
   state.ViewConnection.millicastView?.stop()
   commit('Controls/setVideoSource', null)
+  commit('Controls/setSrcObject', null)
+}
+
+const addSignalingMigrateListener = () => {
+  if (
+    !state.Controls.viewerMigratingEvent &&
+    !state.Controls.migrateListenerIsSet &&
+    state.ViewConnection.millicastView.signaling
+  ) {
+    setTimeout(() => {
+      state.ViewConnection.millicastView.signaling.on('migrate', () => {
+        commit('Controls/setViewerMigratingEvent', true)
+      })
+      // Avoid setting the event listener more than once
+      commit('Controls/setMigrateListenerIsSet', true)
+    }, 50) //We have to set a timeout because it takes a while before the millicastView signaling instance changes on migrate.
+  }
 }

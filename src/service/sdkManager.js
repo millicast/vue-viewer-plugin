@@ -168,6 +168,14 @@ export const selectSource = async ({ kind, source }) => {
   sources.handleSelectSource({ kind, source })
 }
 
+export const projectRemoteTracks = async (index) => {
+  sources.handleProjectRemoteTracks(index)
+}
+
+export const projectVideo = async (what, where, index) => {
+  sources.handleProjectVideo(what, where, index)
+}
+
 // CAST
 
 export const setCast = async () => {
