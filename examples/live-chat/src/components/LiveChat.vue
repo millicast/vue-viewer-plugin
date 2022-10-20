@@ -90,7 +90,8 @@
 <script>
 import faker from '@faker-js/faker'
 const PubNub = require('pubnub')
-const pubnub = (process.env.VUE_APP_PUBNUB_PUBLISH_KEY && process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY && process.env.VUE_APP_PUBNUB_UUID) ? new PubNub({
+const PubNubCredentials = process.env.VUE_APP_PUBNUB_PUBLISH_KEY && process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY && process.env.VUE_APP_PUBNUB_UUID
+const pubnub = PubNubCredentials ? new PubNub({
   publishKey: process.env.VUE_APP_PUBNUB_PUBLISH_KEY,
   subscribeKey: process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY,
   uuid: process.env.VUE_APP_PUBNUB_UUID,
@@ -106,7 +107,7 @@ export default {
         process.env.VUE_APP_MILLICAST_ACCOUNT_ID +
         '/' +
         process.env.VUE_APP_MILLICAST_STREAM_NAME,
-      pubnubSettled: process.env.VUE_APP_PUBNUB_PUBLISH_KEY && process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY && process.env.VUE_APP_PUBNUB_UUID
+      pubnubSettled: PubNubCredentials
     }
   },
   methods: {
