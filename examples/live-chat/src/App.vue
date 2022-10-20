@@ -1,6 +1,6 @@
 <template>
   <div id="container" class="row">
-    <div class="col d-flex align-items-center justify-content-center">
+    <div class="col d-flex align-items-center">
       <template v-if="streamId.accountId && streamId.streamName">
         <VideoPlayer :paramsOptions="streamId" class="video-container" />
       </template>
@@ -32,13 +32,12 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 #container {
   margin: 0;
 }
 
 .video-container {
-  /* line-height: 0; */
   width: 100%;
   margin: 1rem 0;
 }
