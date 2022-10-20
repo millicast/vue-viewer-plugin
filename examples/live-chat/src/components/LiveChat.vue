@@ -81,7 +81,9 @@
     </div>
   </div>
   <div v-else>
-    You have not settled your PubNub credentials in the .ENV file.
+    <div class="alert alert-danger fade show">
+      You have not settled your PubNub credentials in the .ENV file.
+    </div>
   </div>
 </template>
 
