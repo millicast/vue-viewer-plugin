@@ -1,7 +1,14 @@
 <template>
   <div id="container" class="row">
-    <div class="col d-flex align-items-center justify-content-center">
-      <VideoPlayer :paramsOptions="streamId" class="video-container" />
+    <div class="col d-flex align-items-center">
+      <template v-if="streamId.accountId && streamId.streamName">
+        <VideoPlayer :paramsOptions="streamId" class="video-container" />
+      </template>
+      <template v-else>
+        <div class="alert alert-danger fade show" role="alert">
+          You have not settled your Millicast credentials in the .ENV file.
+        </div>
+      </template>
     </div>
     <LiveChat />
   </div>
@@ -25,13 +32,12 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
 #container {
   margin: 0;
 }
 
 .video-container {
-  /* line-height: 0; */
   width: 100%;
   margin: 1rem 0;
 }

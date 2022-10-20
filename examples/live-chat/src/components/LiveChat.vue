@@ -1,5 +1,5 @@
 <template>
-  <div id="chat" class="col-lg-3">
+  <div v-if="pubnubSettled" id="chat" class="col-lg-3">
     <div id="chat-container" class="card">
       <div class="card-header msg-head">
         <div class="d-flex bd-highlight">
@@ -80,16 +80,22 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    <div class="alert alert-danger fade show">
+      You have not settled your PubNub credentials in the .ENV file.
+    </div>
+  </div>
 </template>
 
 <script>
 import faker from '@faker-js/faker'
 const PubNub = require('pubnub')
-const pubnub = new PubNub({
+const PubNubCredentials = process.env.VUE_APP_PUBNUB_PUBLISH_KEY && process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY && process.env.VUE_APP_PUBNUB_UUID
+const pubnub = PubNubCredentials ? new PubNub({
   publishKey: process.env.VUE_APP_PUBNUB_PUBLISH_KEY,
   subscribeKey: process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY,
   uuid: process.env.VUE_APP_PUBNUB_UUID,
-})
+}) : null
 export default {
   data() {
     return {
@@ -101,6 +107,7 @@ export default {
         process.env.VUE_APP_MILLICAST_ACCOUNT_ID +
         '/' +
         process.env.VUE_APP_MILLICAST_STREAM_NAME,
+      pubnubSettled: PubNubCredentials
     }
   },
   methods: {
@@ -166,8 +173,10 @@ export default {
     },
   },
   mounted() {
-    this.pubnubListeners()
-    this.subscribe()
+    if (this.pubnubSettled) {
+      this.pubnubListeners()
+      this.subscribe()
+    }
   },
 }
 </script>
@@ -182,15 +191,27 @@ html {
 }
 
 #chat {
-  margin-top: auto;
-  margin-bottom: auto;
+  margin: 0;
   padding: 0;
 }
 
 #chat-container {
-  height: 100vh;
   background-color: rgba(34, 32, 34, 0.2);
   border-radius: 0;
+}
+
+/* for big screens */
+@media only screen and (min-width: 990px) {
+  #chat-container {
+    height: 100vh;
+  }
+}
+
+/* for small screens */
+@media only screen and (max-width: 990px) {
+  #chat-container {
+    max-height: 500px;
+  }
 }
 
 .msg-card-body {
@@ -200,10 +221,6 @@ html {
 
 .card-footer {
   border-top: 0;
-}
-
-.container {
-  align-content: center;
 }
 
 #text-msg {
@@ -271,17 +288,6 @@ html {
   margin-bottom: 0;
 }
 
-.msg-container {
-  min-width: 4rem;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 0.6rem;
-  border-radius: 1.5rem;
-  background-color: #1d2021;
-  padding: 0.6rem;
-  position: relative;
-}
-
 .msg-container p {
   margin-bottom: 0;
   color: white;
@@ -296,7 +302,7 @@ html {
   margin-top: auto;
   margin-bottom: auto;
   margin-right: 0;
-  border-radius: 1.5rem;
+  border-radius: 10px;
   background-color: #3a393a;
   padding: 0.6rem;
   position: relative;
