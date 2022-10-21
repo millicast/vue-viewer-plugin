@@ -31,7 +31,7 @@
             <p>{{ userName }}</p>
           </div>
         </div>
-        <span id="action-menu-btn" @click=toggleActionMenu><i class="bi bi-gear"></i></span>
+        <span id="action-menu-btn" @click="toggleActionMenu"><i class="bi bi-gear"></i></span>
         <div v-if="showActionMenu" class="action-menu">
           <ul>
             <li @click="modalShow = !modalShow"><i class="bi bi-pen"></i> Change name</li>
