@@ -1,5 +1,21 @@
 <template>
-  <div v-if="pubnubSettled" id="chat" class="col-lg-3">
+<b-modal v-model="modalShow" title="Change username" ok-only>
+  <form ref="form" @submit.stop.prevent="handleSubmit">
+    <b-form-group
+      label="Username"
+      label-for="name-input"
+      invalid-feedback="This will only affect your messages from now on."
+    >
+      <b-form-input
+        id="name-input"
+        v-model="userName"
+        required
+      ></b-form-input>
+    </b-form-group>
+  </form>
+</b-modal>
+
+<div v-if="pubnubSettled" id="chat" class="col-lg-3">
     <div id="chat-container" class="card">
       <div class="card-header msg-head">
         <div class="d-flex bd-highlight">
@@ -15,23 +31,22 @@
             <p>{{ userName }}</p>
           </div>
         </div>
-        <!-- Uncomment to add a gear icon that displays a list of options to be implemented 
-        <span id="action-menu-btn" @click=toggleActionMenu><i class="bi bi-gear"></i></span>
+        <span id="action-menu-btn" @click="toggleActionMenu"><i class="bi bi-gear"></i></span>
         <div v-if="showActionMenu" class="action-menu">
           <ul>
-            <li><i class="bi bi-images"></i>Add photo</li>
-            <li><i class="bi bi-pen"></i>Change name</li>
+            <li @click="changeUsername"><i class="bi bi-pen"></i> Change username</li>
           </ul>
-        </div> -->
+        </div>
       </div>
-      <div class="card-body msg-card-body">
+      <div id="chat-list" class="card-body msg-card-body pb-0 sc1">
         <div
           v-for="message in messages"
           :key="message.id"
+          :id="'m'+message.id"
           class="d-flex mb-4"
           :class="messageAligne(message.userName)"
         >
-          <div v-if="!isUser(message.userName)" class="img-cont-msg">
+          <div v-if="!isUser(message.userName)" class="img-cont-msg mr-2">
             <div
               class="profile-image d-flex align-items-center justify-content-center"
             >
@@ -39,12 +54,14 @@
             </div>
           </div>
           <div v-if="!isUser(message.userName)" class="msg-container">
-            <span class="user-name">{{ message.userName }}</span>
-            <p>{{ message.text }}</p>
+            <div class="message-content">
+              <span class="user-name">{{ message.userName }}</span>
+              <p>{{ message.text }}</p>
+            </div>
             <span class="msg-time">{{ message.time }}</span>
           </div>
           <div v-else class="msg-container-send">
-            <p style="overflow-wrap: break-word">
+            <p>
               {{ message.text }}
             </p>
             <span class="msg-time-send">{{ message.time }} </span>
@@ -107,21 +124,23 @@ export default {
         process.env.VUE_APP_MILLICAST_ACCOUNT_ID +
         '/' +
         process.env.VUE_APP_MILLICAST_STREAM_NAME,
-      pubnubSettled: PubNubCredentials
+      pubnubSettled: PubNubCredentials,
+      modalShow: false
     }
   },
   methods: {
     async publishSampleMessage() {
       if (this.textMsg !== '') {
+        const message = this.textMsg
+        this.resetInput()
         await pubnub.publish({
           channel: this.streamId,
           message: {
             userName: this.userName,
-            text: this.textMsg,
+            text: message,
             time: this.formatTime(),
           },
         })
-        this.resetInput()
       }
     },
     subscribe() {
@@ -130,14 +149,17 @@ export default {
       })
     },
     pubnubListeners() {
-      let that = this
       pubnub.addListener({
-        message: function (messageEvent) {
-          that.messages.push({
-            id: that.messages.length,
+        message: (messageEvent) => {
+          this.messages.push({
+            id: this.messages.length,
             userName: messageEvent.message.userName,
             text: messageEvent.message.text,
             time: messageEvent.message.time,
+          })
+          //I have to use waitForElm because await nextTick doesn't work
+          this.waitForElm('#m'+this.messages.length).then((elem) => {
+            elem.scrollIntoView({behaviour: 'smooth'})
           })
         },
       })
@@ -157,6 +179,25 @@ export default {
     initialUserName(name) {
       return name.charAt(0)
     },
+    waitForElm(selector) {
+      return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+          return resolve(document.querySelector(selector));
+        }
+
+        const observer = new MutationObserver(() => {
+          if (document.querySelector(selector)) {
+            resolve(document.querySelector(selector));
+            observer.disconnect();
+          }
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      });
+    },
     formatTime() {
       var date = new Date()
       var hours = date.getHours()
@@ -171,6 +212,10 @@ export default {
     toggleActionMenu() {
       this.showActionMenu = !this.showActionMenu
     },
+    changeUsername() {
+      this.modalShow = !this.modalShow
+      this.toggleActionMenu()
+    }
   },
   mounted() {
     if (this.pubnubSettled) {
@@ -198,19 +243,20 @@ html {
 #chat-container {
   background-color: rgba(34, 32, 34, 0.2);
   border-radius: 0;
+  height: 100%;
 }
 
 /* for big screens */
 @media only screen and (min-width: 990px) {
-  #chat-container {
+  #chat {
     height: 100vh;
   }
 }
 
 /* for small screens */
 @media only screen and (max-width: 990px) {
-  #chat-container {
-    max-height: 500px;
+  #chat {
+    height: 50vh;
   }
 }
 
@@ -310,9 +356,7 @@ html {
 
 .msg-container-send {
   min-width: 4rem;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right: 0;
+  overflow-wrap: anywhere;
   border-radius: 10px;
   background-color: #3a393a;
   padding: 0.6rem;
@@ -324,10 +368,14 @@ html {
   color: white;
 }
 
+.message-content {
+  overflow-wrap: anywhere;
+  border-radius: 10px;
+  background-color: #3a393a;
+  padding: 0.6rem;
+}
+
 .msg-time {
-  position: absolute;
-  left: 0;
-  bottom: -1.1rem;
   color: rgba(255, 255, 255, 0.5);
   font-size: 0.7rem;
 }
@@ -411,6 +459,27 @@ html {
   font-size: 1.5rem;
   margin-top: auto;
   margin-bottom: auto;
+}
+
+.sc1::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  margin-right: 10px;
+}
+.sc1::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+.sc1::-webkit-scrollbar-thumb {
+  background-color: #a9a9aa9e;
+  border-radius: 10px;
+}
+
+.btn-close {
+  display: none;
+}
+
+.d-block {
+  color: grey !important;
 }
 </style>
 
