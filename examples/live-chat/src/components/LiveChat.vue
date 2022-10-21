@@ -1,5 +1,21 @@
 <template>
-  <div v-if="pubnubSettled" id="chat" class="col-lg-3">
+<b-modal v-model="modalShow" title="Change username" ok-only>
+  <form ref="form" @submit.stop.prevent="handleSubmit">
+    <b-form-group
+      label="Username"
+      label-for="name-input"
+      invalid-feedback="This will only affect your messages from now on."
+    >
+      <b-form-input
+        id="name-input"
+        v-model="userName"
+        required
+      ></b-form-input>
+    </b-form-group>
+  </form>
+</b-modal>
+
+<div v-if="pubnubSettled" id="chat" class="col-lg-3">
     <div id="chat-container" class="card">
       <div class="card-header msg-head">
         <div class="d-flex bd-highlight">
@@ -15,14 +31,12 @@
             <p>{{ userName }}</p>
           </div>
         </div>
-        <!-- Uncomment to add a gear icon that displays a list of options to be implemented 
-        <span id="action-menu-btn" @click=toggleActionMenu><i class="bi bi-gear"></i></span>
+        <span id="action-menu-btn" @click="toggleActionMenu"><i class="bi bi-gear"></i></span>
         <div v-if="showActionMenu" class="action-menu">
           <ul>
-            <li><i class="bi bi-images"></i>Add photo</li>
-            <li><i class="bi bi-pen"></i>Change name</li>
+            <li @click="changeUsername"><i class="bi bi-pen"></i> Change username</li>
           </ul>
-        </div> -->
+        </div>
       </div>
       <div id="chat-list" class="card-body msg-card-body pb-0">
         <div
@@ -110,7 +124,8 @@ export default {
         process.env.VUE_APP_MILLICAST_ACCOUNT_ID +
         '/' +
         process.env.VUE_APP_MILLICAST_STREAM_NAME,
-      pubnubSettled: PubNubCredentials
+      pubnubSettled: PubNubCredentials,
+      modalShow: false
     }
   },
   methods: {
@@ -174,6 +189,10 @@ export default {
     toggleActionMenu() {
       this.showActionMenu = !this.showActionMenu
     },
+    changeUsername() {
+      this.modalShow = !this.modalShow
+      this.toggleActionMenu()
+    }
   },
   mounted() {
     if (this.pubnubSettled) {
@@ -406,6 +425,14 @@ html {
   font-size: 1.5rem;
   margin-top: auto;
   margin-bottom: auto;
+}
+
+.btn-close {
+  display: none;
+}
+
+.d-block {
+  color: grey !important;
 }
 </style>
 
