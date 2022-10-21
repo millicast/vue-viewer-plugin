@@ -33,6 +33,9 @@
       :class="{ 'display: none;': currentElementRef === 'player' }"
     ></video>
   </template>
+  <span v-if="sourceRemoteTracks.length && isSplittedView">{{
+    this.mainLabel
+  }}</span>
 </template>
 
 <script>
@@ -84,6 +87,8 @@ export default {
       selectedAudioSource: (state) => state.selectedAudioSource,
       audioSources: (state) => state.audioSources,
       videoSources: (state) => state.videoSources,
+      sourceRemoteTracks: (state) => state.sourceRemoteTracks,
+      mainLabel: (state) => state.mainLabel,
     }),
     ...mapState('Controls', {
       video: (state) => state.video,
@@ -94,6 +99,7 @@ export default {
       reconnectionStatus: (state) => state.reconnection.status,
       currentElementRef: (state) => state.currentElementRef,
       isMigrating: (state) => state.isMigrating,
+      isSplittedView: (state) => state.isSplittedView,
     }),
     ...mapState('Params', {
       queryParams: (state) => state.queryParams,
@@ -120,6 +126,7 @@ export default {
       'stopVideo',
       'setAutoPlayMuted',
       'userParamOptions',
+      'setIsSplittedView',
     ]),
     ...mapMutations('ViewConnection', ['setMillicastView']),
     ...mapActions('Sources', ['updateBroadcastState']),
@@ -137,6 +144,7 @@ export default {
       const toast = useToast()
       toast.clear()
       if (isReconnecting) {
+        this.setIsSplittedView(false)
         toast.warning(`Connection lost. Retrying...`)
       }
     },
@@ -183,5 +191,23 @@ video {
   width: 100%;
   height: 100%;
   pointer-events: none;
+}
+
+span {
+  bottom: 3rem;
+  left: 1.5rem;
+  position: absolute;
+  color: #fff;
+  background: rgba(0, 0, 0, 0.288);
+  padding: 4px 8px;
+  font-size: 0.875rem;
+  line-height: 1.15rem;
+  border-radius: 2px;
+
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: fit-content;
+  max-width: 6rem;
+  overflow: hidden;
 }
 </style>

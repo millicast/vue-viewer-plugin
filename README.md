@@ -35,6 +35,11 @@ At the end of the file `App.vue`, you must include the following dependecy:
 </style>
 ```
 
+**Optional:** If you want to use the chromecast feature you should also add the next script in your HTML:
+```html
+<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+```
+
 Once this is done, you are ready to use the plugin in any Vue file of your project as a component.
 
 ### Configuration Parameters
@@ -46,6 +51,7 @@ Once this is done, you are ready to use the plugin in any Vue file of your proje
 | `muted`       | `Boolean`        | Optional  | `false` | The streaming will start muted.                                    |
 | `autoplay`    | `Boolean`        | Optional  | `true`  | The streaming will autoplay when connected.                        |
 | `hideButtons` | `Array.<String>` | Optional  | `[]`    | The list is provided further in this document.                     |
+| `image`       | `String`         | Optional  |         | Placeholder image while stream is offline                          |
 
 To be able to use the viewer, just reference to the component `VideoPlayer`, and pass the parameters of your choice as an object in the parameter `paramsOptions`.
 

@@ -1,64 +1,86 @@
 <template>
   <div
-    id="vplayer"
-    ref="player"
-    class="player"
-    :class="{ show: show }"
+    style="height: 100%"
+    :class="{
+      'align-self-center': isSplittedView,
+    }"
     @mousemove="showControls"
-    @dblclick="toggleFullscreen"
   >
-    <div id="controls" v-if="queryParams.controls">
+    <div class="row mx-0" style="height: 100%">
       <div
-        class="container-fluid pt-3 gradient-top"
-        :class="{ show: show, 'fixed-top': fullscreen }"
-        style="margin-bottom: -55px; z-index: 1"
+        id="vplayer"
+        ref="player"
+        class="player"
+        :class="{
+          show: show,
+          'mv-col-9 limit-screen': sourceRemoteTracks.length && isSplittedView,
+        }"
+        @dblclick="toggleFullscreen"
       >
-        <div class="row">
-          <div class="col-6 text-left">
-            <VideoPlayerControlsUserCount v-if="showButton('userCount')" />
+        <div id="controls" class="controls" v-if="queryParams.controls && show">
+          <div class="container-fluid pt-3 gradient-top controls-top">
+            <div class="row">
+              <div class="col-6 text-left">
+                <VideoPlayerControlsUserCount v-if="showButton('userCount')" />
+              </div>
+
+              <div class="col-6 text-right">
+                <VideoPlayerControlsBadge v-if="showButton('liveBadge')" />
+              </div>
+            </div>
           </div>
 
-          <div class="col-6 text-right">
-            <VideoPlayerControlsBadge v-if="showButton('liveBadge')" />
+          <div class="container-fluid pb-2 gradient-bottom controls-bottom">
+            <VideoPlayerControlsContainer
+              :isConnected="cast.isConnected"
+              :showButton="showButton"
+              :currentTime="currentTime"
+              :streamId="queryParams.streamId"
+            />
+          </div>
+        </div>
+
+        <VideoPlayerMedia ref="element" />
+
+        <div
+          class="overlay d-flex justify-content-center align-items-center"
+          v-if="isLoading"
+        >
+          <div class="spinner-border text-light" role="status">
+            <span class="sr-only">Loading...</span>
+          </div>
+        </div>
+
+        <div
+          class="overlay d-flex flex-row justify-content-center align-items-center"
+          v-if="cast.device"
+        >
+          <div class="d-flex flex-column ml-3">
+            <h3>Casting to</h3>
+            <h1 class="font-weight-bold">{{ cast.device.friendlyName }}</h1>
+          </div>
+        </div>
+
+        <div
+          v-if="autoPlayMuted && isLive"
+          @click="tapUnmute"
+          class="overlay tap-unmute d-flex align-items-center justify-content-center"
+        >
+          <div>
+            <div class="d-flex justify-content-center">
+              <i class="ml-viewer-bi-volume-mute-fill pb-0"></i>
+            </div>
+            <p class="text-center tap-text">Tap to unmute</p>
           </div>
         </div>
       </div>
-
-      <VideoPlayerMedia ref="element" />
-
       <div
-        class="container-fluid pb-2 gradient-bottom"
-        :class="{ show: show, 'fixed-bottom': fullscreen }"
-        style="margin-top: -50px"
+        class="side-panel overflow-auto sc1 mv-col-3"
+        :style="'scroll-snap-type: y mandatory'"
+        v-if="sourceRemoteTracks.length && isSplittedView"
+        @mousemove="showControls"
       >
-        <VideoPlayerControlsContainer
-          :isConnected="cast.isConnected"
-          :showButton="showButton"
-          :currentTime="currentTime"
-          :streamId="queryParams.streamId"
-        />
-      </div>
-    </div>
-
-    <div
-      class="overlay d-flex justify-content-center align-items-center"
-      v-if="isLoading"
-    >
-      <div class="spinner-border text-light" role="status">
-        <span class="sr-only">Loading...</span>
-      </div>
-    </div>
-
-    <div
-      v-if="autoPlayMuted && isLive"
-      @click="tapUnmute"
-      class="overlay tap-unmute d-flex align-items-center justify-content-center"
-    >
-      <div>
-        <div class="d-flex justify-content-center">
-          <i class="ml-viewer-bi-volume-mute-fill pb-0"></i>
-        </div>
-        <p class="text-center tap-text">Tap to unmute</p>
+        <VideoPlayerSideVideoSources />
       </div>
     </div>
   </div>
@@ -66,6 +88,7 @@
 
 <script>
 import VideoPlayerMedia from './VideoPlayerMedia.vue'
+import VideoPlayerSideVideoSources from './VideoPlayerSideVideoSources.vue'
 import { mapMutations, mapState } from 'vuex'
 import {
   VideoPlayerControlsBadge,
@@ -80,6 +103,7 @@ export default {
     VideoPlayerControlsBadge,
     VideoPlayerControlsUserCount,
     VideoPlayerControlsContainer,
+    VideoPlayerSideVideoSources,
   },
   data() {
     return {
@@ -87,18 +111,12 @@ export default {
       timeInterval: 0,
       secondsElapsed: 0,
       cast: { isConnected: false },
-      windowWidth: false,
       controlsTimeout: 0,
       mobileFullscreen: false,
     }
   },
   mounted() {
-    this.windowWidth = window.innerWidth
     screen.orientation?.addEventListener('change', this.handleOrientationChange)
-
-    this.$nextTick(() => {
-      window.addEventListener('resize', this.onResize)
-    })
 
     this.controlsTimeout = setTimeout(() => {
       this.show = false
@@ -116,7 +134,6 @@ export default {
   },
   beforeUnmount() {
     clearInterval(this.timeInterval)
-    window.removeEventListener('resize', this.onResize)
   },
   computed: {
     ...mapState('Params', {
@@ -127,6 +144,7 @@ export default {
       audioSources: (state) => state.audioSources,
       selectedVideoSource: (state) => state.selectedVideoSource,
       selectedAudioSource: (state) => state.selectedAudioSource,
+      sourceRemoteTracks: (state) => state.sourceRemoteTracks,
     }),
     ...mapState('Controls', {
       video: (state) => state.video,
@@ -142,6 +160,7 @@ export default {
       srcObject: (state) => state.srcObject,
       autoPlayMuted: (state) => state.autoPlayMuted,
       isLive: (state) => state.isLive,
+      isSplittedView: (state) => state.isSplittedView,
     }),
     currentTime: function () {
       let seconds = this.secondsElapsed
@@ -157,7 +176,6 @@ export default {
     ...mapMutations('Sources', ['deleteSource']),
     ...mapMutations('Controls', [
       'setVideo',
-      'setMobile',
       'setIsLive',
       'setIsLoading',
       'setTrackWarning',
@@ -169,9 +187,6 @@ export default {
       'setAutoPlayMuted',
       'toggleFullscreen',
     ]),
-    onResize() {
-      this.windowWidth = window.innerWidth
-    },
     showControls() {
       if (this.controlsTimeout) {
         clearTimeout(this.controlsTimeout)
@@ -226,9 +241,6 @@ export default {
       } else {
         this.showControls()
       }
-    },
-    windowWidth: function (width) {
-      this.setMobile(width < 770)
     },
     fullscreen: function () {
       if (document.pictureInPictureElement) {
@@ -288,6 +300,12 @@ const getFullscreenElement = () => {
   &.show {
     cursor: auto;
   }
+}
+
+.controls {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 .gradient-top {
@@ -358,6 +376,47 @@ const getFullscreenElement = () => {
 
 :deep(.mobile-setting) {
   display: inline;
+}
+
+.controls-top {
+  position: absolute;
+  top: 0;
+  margin-bottom: -55px;
+  z-index: 1;
+}
+
+.controls-bottom {
+  position: absolute;
+  bottom: 0;
+  margin-top: -50px;
+  z-index: 1;
+}
+
+.side-panel {
+  border-radius: 0.4rem;
+  background: rgba(255, 255, 255, 0.013);
+  padding-right: 0;
+  height: fit-content;
+  width: 100%;
+}
+
+.sc1::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  margin-right: 10px;
+}
+.sc1::-webkit-scrollbar-track {
+  border-radius: 10px;
+  border: solid 3px black;
+}
+.sc1::-webkit-scrollbar-thumb {
+  background-color: #a9a9aa;
+  border-radius: 10px;
+  border: solid 3px black;
+}
+
+.tap-unmute {
+  z-index: 2;
 }
 
 .tap-text {

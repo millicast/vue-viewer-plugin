@@ -1,3 +1,4 @@
+import { nextTick } from 'vue'
 import store from '../../store'
 const { commit, state, getters } = store
 import { sendLoadRequest } from './cast'
@@ -7,6 +8,7 @@ export const getTracks = (data) => {
   const sourceId = data.sourceId || null
   data.tracks.forEach((e) => {
     if (e.media === 'video') {
+      addRemoteTracks(sourceId)
       addSource('video', sourceId, e.trackId)
       if (state.Sources.videoSources.length === 1) {
         commit('Sources/setIsAudioOnly', false)
@@ -27,6 +29,33 @@ export const getTracks = (data) => {
   } else if (state.Controls.trackWarning) {
     commit('Controls/setTrackWarning', false)
   }
+}
+
+const addRemoteTracks = async (sourceId) => {
+  if (!sourceId) return
+  const remoteTrackIndex = state.Sources.sourceRemoteTracks.findIndex(
+    (t) => t.sourceId === sourceId
+  )
+  const mediaStream = new MediaStream()
+  setTimeout(async () => {
+    const transceiver = await state.ViewConnection.millicastView.addRemoteTrack(
+      'video',
+      [mediaStream]
+    )
+    const sourceRemoteTrack = {
+      transceiver,
+      mediaStream,
+      sourceId,
+    }
+    if (remoteTrackIndex !== -1) {
+      commit('Sources/replaceSourceRemoteTrack', {
+        sourceRemoteTrack,
+        remoteTrackIndex,
+      })
+    } else {
+      commit('Sources/addSourceRemoteTrack', sourceRemoteTrack)
+    }
+  }, 50) //We have to set a timeout because it takes a while before the millicastView signaling instance changes on migrate.
 }
 
 const tracksAvailableAndMainNotExists = () => {
@@ -108,6 +137,7 @@ const deleteSource = (kind, sourceId) => {
       selectedSource = { name: 'none', sourceId: 0 }
     }
   }
+  commit('Sources/removeSourceRemoteTrack', sourceId)
   commit('Sources/setSources', { kind, sources: sourcesToUse })
   handleSelectSource({ kind, source: selectedSource })
 }
@@ -163,4 +193,38 @@ const project = async ({ kind, source }) => {
   } else {
     await handleSelectSource({ kind, source })
   }
+}
+
+export const handleProjectVideo = async (what, where, index) => {
+  let sideLabel = 'sideLabel' + where
+  document.getElementById(sideLabel).textContent = what ?? 'Main'
+  await state.ViewConnection.millicastView.project(what, [
+    {
+      trackId: state.Sources.videoSources[index].trackId,
+      mediaId: where,
+    },
+  ])
+}
+
+export const handleProjectRemoteTracks = async (index) => {
+  await nextTick()
+  const newSourceRemoteTrackIndex = index
+  const vidId =
+    index +
+    state.Sources.videoSources.length -
+    state.Sources.sourceRemoteTracks.length
+  if (newSourceRemoteTrackIndex < 0) return
+  const sidePlayerId =
+    'sidePlayer' +
+    state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].sourceId
+  document.getElementById(sidePlayerId).srcObject =
+    state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].mediaStream
+  handleProjectVideo(
+    state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].sourceId,
+    state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].transceiver
+      ?.mid ?? null,
+    vidId
+  )
+  document.getElementById(sidePlayerId).muted = true
+  document.getElementById(sidePlayerId).play()
 }

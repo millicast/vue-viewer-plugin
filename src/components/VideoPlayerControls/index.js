@@ -6,6 +6,7 @@ import VideoPlayerControlsSettings from './VideoPlayerControlsSettings'
 import VideoPlayerControlsUserCount from './VideoPlayerControlsUserCount'
 import VideoPlayerControlsVolume from './VideoPlayerControlsVolume'
 import VideoPlayerControlsContainer from './VideoPlayerControlsContainer'
+import VideoPlayerControlsCast from './VideoPlayerControlsCast'
 
 export {
   VideoPlayerControlsBadge,
@@ -16,4 +17,5 @@ export {
   VideoPlayerControlsUserCount,
   VideoPlayerControlsVolume,
   VideoPlayerControlsContainer,
+  VideoPlayerControlsCast,
 }

@@ -7,7 +7,9 @@
     aria-hidden="true"
     style="display: block"
   >
-    <div @click="toggle" class="backdrop"></div>
+    <Teleport to="#viewer-container">
+      <div @click="toggle" class="backdrop"></div>
+    </Teleport>
     <div class="modal-dialog modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header">
@@ -59,13 +61,13 @@ export default {
   animation: modal 0.3s ease-out forwards;
 }
 .backdrop {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
-  height: 100vh;
+  height: 100%;
   width: 100%;
   background-color: rgba(0, 0, 0, 0.75);
-  z-index: -2;
+  z-index: 0;
 }
 
 @keyframes modal {

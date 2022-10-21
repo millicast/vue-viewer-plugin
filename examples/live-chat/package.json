@@ -10,13 +10,16 @@
     },
     "dependencies": {
         "@faker-js/faker": "^6.0.0-alpha.5",
+        "@millicast/vue-viewer-plugin": "file://",
+        "@popperjs/core": "^2.11.6",
         "babel-eslint": "^10.1.0",
+        "bootstrap": "^5.2.2",
+        "bootstrap-vue-3": "^0.3.12",
         "core-js": "^3.8.3",
         "pubnub": "^7.2.0",
         "sass": "^1.54.0",
         "sass-loader": "^13.0.2",
-        "vue": "^3.2.13",
-        "@millicast/vue-viewer-plugin": "file://"
+        "vue": "^3.2.13"
     },
     "devDependencies": {
         "@babel/core": "^7.12.16",

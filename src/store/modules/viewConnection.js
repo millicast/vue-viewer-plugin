@@ -8,11 +8,11 @@ const defaultState = {
   trackEvent: {
     audio: {
       track: null,
-      transceiver: null,
+      transceiver: [null],
     },
     video: {
       track: null,
-      transceiver: null,
+      transceiver: [null],
     },
   },
 }
