@@ -34,7 +34,7 @@
         <span id="action-menu-btn" @click="toggleActionMenu"><i class="bi bi-gear"></i></span>
         <div v-if="showActionMenu" class="action-menu">
           <ul>
-            <li @click="modalShow = !modalShow"><i class="bi bi-pen"></i> Change name</li>
+            <li @click="changeUsername"><i class="bi bi-pen"></i> Change username</li>
           </ul>
         </div>
       </div>
@@ -186,6 +186,10 @@ export default {
     toggleActionMenu() {
       this.showActionMenu = !this.showActionMenu
     },
+    changeUsername() {
+      this.modalShow = !this.modalShow
+      this.toggleActionMenu()
+    }
   },
   mounted() {
     if (this.pubnubSettled) {
@@ -430,6 +434,10 @@ html {
 
 .btn-close {
   display: none;
+}
+
+.d-block {
+  color: grey !important;
 }
 </style>
 
