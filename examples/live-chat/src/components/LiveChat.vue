@@ -24,14 +24,15 @@
           </ul>
         </div> -->
       </div>
-      <div class="card-body msg-card-body">
+      <div id="chat-list" class="card-body msg-card-body pb-0">
         <div
           v-for="message in messages"
           :key="message.id"
+          :id="message.id"
           class="d-flex mb-4"
           :class="messageAligne(message.userName)"
         >
-          <div v-if="!isUser(message.userName)" class="img-cont-msg">
+          <div v-if="!isUser(message.userName)" class="img-cont-msg mr-2">
             <div
               class="profile-image d-flex align-items-center justify-content-center"
             >
@@ -39,12 +40,14 @@
             </div>
           </div>
           <div v-if="!isUser(message.userName)" class="msg-container">
-            <span class="user-name">{{ message.userName }}</span>
-            <p>{{ message.text }}</p>
+            <div class="message-content">
+              <span class="user-name">{{ message.userName }}</span>
+              <p>{{ message.text }}</p>
+            </div>
             <span class="msg-time">{{ message.time }}</span>
           </div>
           <div v-else class="msg-container-send">
-            <p style="overflow-wrap: break-word">
+            <p>
               {{ message.text }}
             </p>
             <span class="msg-time-send">{{ message.time }} </span>
@@ -198,19 +201,20 @@ html {
 #chat-container {
   background-color: rgba(34, 32, 34, 0.2);
   border-radius: 0;
+  height: 100%;
 }
 
 /* for big screens */
 @media only screen and (min-width: 990px) {
-  #chat-container {
+  #chat {
     height: 100vh;
   }
 }
 
 /* for small screens */
 @media only screen and (max-width: 990px) {
-  #chat-container {
-    max-height: 500px;
+  #chat {
+    height: 50vh;
   }
 }
 
@@ -288,17 +292,6 @@ html {
   margin-bottom: 0;
 }
 
-.msg-container {
-  min-width: 4rem;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-left: 0.6rem;
-  border-radius: 10px;
-  background-color: #3a393a;
-  padding: 0.6rem;
-  position: relative;
-}
-
 .msg-container p {
   margin-bottom: 0;
   color: white;
@@ -309,10 +302,8 @@ html {
 }
 
 .msg-container-send {
-  min-width: 4rem;
-  margin-top: auto;
-  margin-bottom: auto;
-  margin-right: 0;
+  min-width: 3rem;
+  overflow-wrap: anywhere;
   border-radius: 10px;
   background-color: #3a393a;
   padding: 0.6rem;
@@ -324,10 +315,14 @@ html {
   color: white;
 }
 
+.message-content {
+  overflow-wrap: anywhere;
+  border-radius: 10px;
+  background-color: #3a393a;
+  padding: 0.6rem;
+}
+
 .msg-time {
-  position: absolute;
-  left: 0;
-  bottom: -1.1rem;
   color: rgba(255, 255, 255, 0.5);
   font-size: 0.7rem;
 }
