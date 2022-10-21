@@ -24,11 +24,11 @@
           </ul>
         </div> -->
       </div>
-      <div id="chat-list" class="card-body msg-card-body pb-0">
+      <div id="chat-list" class="card-body msg-card-body pb-0 sc1">
         <div
           v-for="message in messages"
           :key="message.id"
-          :id="message.id"
+          :id="'m'+message.id"
           class="d-flex mb-4"
           :class="messageAligne(message.userName)"
         >
@@ -116,15 +116,16 @@ export default {
   methods: {
     async publishSampleMessage() {
       if (this.textMsg !== '') {
+        const message = this.textMsg
+        this.resetInput()
         await pubnub.publish({
           channel: this.streamId,
           message: {
             userName: this.userName,
-            text: this.textMsg,
+            text: message,
             time: this.formatTime(),
           },
         })
-        this.resetInput()
       }
     },
     subscribe() {
@@ -133,14 +134,17 @@ export default {
       })
     },
     pubnubListeners() {
-      let that = this
       pubnub.addListener({
-        message: function (messageEvent) {
-          that.messages.push({
-            id: that.messages.length,
+        message: (messageEvent) => {
+          this.messages.push({
+            id: this.messages.length,
             userName: messageEvent.message.userName,
             text: messageEvent.message.text,
             time: messageEvent.message.time,
+          })
+          //I have to use waitForElm because await nextTick doesn't work
+          this.waitForElm('#m'+this.messages.length).then((elem) => {
+            elem.scrollIntoView({behaviour: 'smooth'})
           })
         },
       })
@@ -159,6 +163,25 @@ export default {
     },
     initialUserName(name) {
       return name.charAt(0)
+    },
+    waitForElm(selector) {
+      return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+          return resolve(document.querySelector(selector));
+        }
+
+        const observer = new MutationObserver(() => {
+          if (document.querySelector(selector)) {
+            resolve(document.querySelector(selector));
+            observer.disconnect();
+          }
+        });
+
+        observer.observe(document.body, {
+          childList: true,
+          subtree: true
+        });
+      });
     },
     formatTime() {
       var date = new Date()
@@ -302,7 +325,7 @@ html {
 }
 
 .msg-container-send {
-  min-width: 3rem;
+  min-width: 4rem;
   overflow-wrap: anywhere;
   border-radius: 10px;
   background-color: #3a393a;
@@ -407,6 +430,20 @@ html {
   margin-top: auto;
   margin-bottom: auto;
 }
+
+.sc1::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  margin-right: 10px;
+}
+.sc1::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+.sc1::-webkit-scrollbar-thumb {
+  background-color: #a9a9aa9e;
+  border-radius: 10px;
+}
+
 </style>
 
 <style>
