@@ -1,6 +1,6 @@
 <template>
   <div id="container" class="row">
-    <div class="col d-flex align-items-center">
+    <div id="video-player" class="col d-flex align-items-center py-3">
       <template v-if="streamId.accountId && streamId.streamName">
         <VideoPlayer :paramsOptions="streamId" class="video-container" />
       </template>
@@ -41,6 +41,13 @@ export default {
   width: 100%;
   margin: 1rem 0;
 }
+
+@media only screen and (max-width: 990px) {
+  #video-player {
+    height: 50vh;
+  }
+}
+
 </style>
 
 <style>
