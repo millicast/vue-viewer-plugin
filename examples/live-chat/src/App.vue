@@ -1,5 +1,5 @@
 <template>
-  <b-modal v-model="modalShow" v-if="!pubnubSettled || !millicastSettled" ref="my-modal" title="Warning" ok-only>
+  <b-modal size="lg" v-model="modalShow" v-if="!pubnubSettled || !millicastSettled" ref="my-modal" title="Warning" ok-only>
     <ul>
       <li v-if="!pubnubSettled">You have not settled your PubNub credentials in the .ENV file.</li>
       <li v-if="!millicastSettled">You have not settled your Millicast credentials in the .ENV file.</li>
