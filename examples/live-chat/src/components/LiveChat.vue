@@ -1,21 +1,21 @@
 <template>
-<b-modal v-model="modalShow" title="Change username" ok-only>
-  <form ref="form" @submit.stop.prevent="handleSubmit">
-    <b-form-group
-      label="Username"
-      label-for="name-input"
-      invalid-feedback="This will only affect your messages from now on."
-    >
-      <b-form-input
-        id="name-input"
-        v-model="userName"
-        required
-      ></b-form-input>
-    </b-form-group>
-  </form>
-</b-modal>
+  <b-modal v-model="modalShow" title="Change username" ok-only>
+    <form ref="form" @submit.stop.prevent="handleSubmit">
+      <b-form-group
+        label="Username"
+        label-for="name-input"
+        invalid-feedback="This will only affect your messages from now on."
+      >
+        <b-form-input
+          id="name-input"
+          v-model="userName"
+          required
+        ></b-form-input>
+      </b-form-group>
+    </form>
+  </b-modal>
 
-<div v-if="pubnubSettled" id="chat" class="col-lg-3">
+  <div v-if="pubnubSettled" id="chat" class="col-lg-3">
     <div id="chat-container" class="card">
       <div class="card-header msg-head">
         <div class="d-flex bd-highlight">
@@ -95,11 +95,6 @@
           </div>
         </div>
       </div>
-    </div>
-  </div>
-  <div v-else>
-    <div class="alert alert-danger fade show">
-      You have not settled your PubNub credentials in the .ENV file.
     </div>
   </div>
 </template>
