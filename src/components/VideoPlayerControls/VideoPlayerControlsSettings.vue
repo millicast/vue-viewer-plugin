@@ -77,6 +77,8 @@ import VideoPlayerControlsSettingsSplitView from './VideoPlayerControlsSettingsS
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { useToast } from 'vue-toastification'
 
+import { version } from '../../../package.json';
+
 export default {
   name: 'VideoPlayerControlsSettings',
   components: {
@@ -176,8 +178,8 @@ export default {
     },
   },
   mounted() {
-    this.viewerVersion = process.env.PACKAGE_VERSION
-      ? 'v' + process.env.PACKAGE_VERSION
+    this.viewerVersion = version
+      ? 'v' + version
       : ''
   },
   watch: {
