@@ -4,8 +4,8 @@
     "private": false,
     "author": "Millicast, Inc.",
     "scripts": {
-        "serve": "vue-cli-service serve",
         "build": "vue-cli-service build --target lib --name millicast-vue-viewer-plugin index.js",
+        "build-legacy": "vue-cli-service build --openssl-legacy-provider --target lib --name millicast-vue-viewer-plugin index.js",
         "lint": "vue-cli-service lint",
         "pretty": "prettier --write \"./**/*.{js,json,vue}\""
     },
