@@ -104,7 +104,7 @@ export const setTrackEvent = () => {
 const setStream = async (entrySrcObject) => {
   const video = state.Controls.video
   addSignalingMigrateListener()
-  commit('Controls/setSrcObject', entrySrcObject)
+  verifyStreamWithPeer()
   //If we already had a a stream and is not migrating then we ignore it (Firefox addRemoteTrack issue)
   if (
     video.srcObject &&
@@ -126,6 +126,7 @@ const setStream = async (entrySrcObject) => {
     const opositeElementRef =
       state.Controls.currentElementRef === 'player' ? 'player2' : 'player'
     const mediaTag = document.getElementById(opositeElementRef)
+    commit('Controls/setSrcObject', entrySrcObject)
     mediaTag.srcObject = entrySrcObject
     mediaTag.autoplay = state.Controls.playing
     mediaTag.muted = state.Controls.muted
@@ -161,6 +162,17 @@ const setCanAutoPlayStream = async () => {
       : state.Params.queryParams.muted
     commit('Controls/setVideoMuted', muted)
     commit('Controls/setAutoPlayMuted', muted)
+  }
+}
+
+const verifyStreamWithPeer = () => { 
+  const millicastView = state.ViewConnection.millicastView
+  const peerVideoReceiver = millicastView.webRTCPeer.peer.getReceivers().find((r)=> r.track.kind === "video")
+  const video = state.Controls.video
+  if (peerVideoReceiver?.track.id !== video.srcObject?.getVideoTracks()[0].id) {
+    commit('Controls/setVideoSource', null)
+    commit('Controls/setSrcObject', null)
+    commit('Controls/setIsSplittedView', false)
   }
 }
 
