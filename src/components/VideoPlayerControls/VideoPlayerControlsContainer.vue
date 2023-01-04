@@ -19,7 +19,7 @@
       <VideoPlayerControlsCast v-if="showButton('cast') && castAvailable" />
       <VideoPlayerControlsPip v-if="pipEnabled" />
       <VideoPlayerControlsFullscreen
-        v-if="showFullscreen"
+        v-if="showButton('fullscreen')"
         :click="toggleFullscreen"
       />
     </div>
@@ -32,7 +32,7 @@
         v-if="
           (showButton('cast') && castAvailable) ||
           (isLive && pipEnabled && showButton('pip') && isVideoTag) ||
-          showFullscreen
+          showButton('fullscreen')
         "
         class="dropup"
       >
@@ -51,7 +51,7 @@
           <VideoPlayerControlsCast v-if="showButton('cast') && castAvailable" />
           <VideoPlayerControlsPip v-if="pipEnabled" />
           <VideoPlayerControlsFullscreen
-            v-if="showFullscreen"
+            v-if="showButton('fullscreen')"
             :click="toggleFullscreen"
           />
         </div>
@@ -99,7 +99,6 @@ export default {
       dropup: (state) => state.dropup,
       isMobile: (state) => state.isMobile,
       isLive: (state) => state.isLive,
-      fullscreen: (state) => state.fullscreen,
       castAvailable: (state) => state.castAvailable,
     }),
     isVideoTag() {
@@ -113,16 +112,6 @@ export default {
         this.isVideoTag
       )
     },
-    showFullscreen() {
-      const fullscreenEnabled = this.showButton('fullscreen')
-      if (fullscreenEnabled && !canEnableFullscreen()) {
-        console.warn(
-          'Fullscreen disabled due to incompatibility with the browser.'
-        )
-        return false
-      }
-      return fullscreenEnabled
-    },
   },
   methods: {
     ...mapMutations('Controls', ['setDropup', 'toggleFullscreen']),
@@ -130,15 +119,6 @@ export default {
   async beforeMount() {
     await setCast()
   },
-}
-
-const canEnableFullscreen = () => {
-  return (
-    document.fullscreenEnabled ||
-    document.webkitFullscreenEnabled ||
-    document.mozFullScreenEnabled ||
-    document.msFullscreenEnabled
-  )
 }
 </script>
 
