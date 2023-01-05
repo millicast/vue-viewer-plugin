@@ -5,7 +5,7 @@
     "author": "Millicast, Inc.",
     "scripts": {
         "build": "vue-cli-service build --target lib --name millicast-vue-viewer-plugin index.js",
-        "build-legacy": "vue-cli-service build --openssl-legacy-provider --target lib --name millicast-vue-viewer-plugin index.js",
+        "build-legacy": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --target lib --name millicast-vue-viewer-plugin index.js",
         "lint": "vue-cli-service lint",
         "pretty": "prettier --write \"./**/*.{js,json,vue}\""
     },
