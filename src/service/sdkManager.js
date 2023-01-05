@@ -24,7 +24,10 @@ export const setVideoPlayer = ({
     commit('Controls/setVideo', videoPlayer)
     commit('Controls/setCurrentElementRef', videoPlayer.id)
   }
-  if (srcObject) commit('Controls/setVideoSource', srcObject)
+  if (srcObject) {
+    commit('Controls/setSrcObject', srcObject)
+    commit('Controls/setVideoSource', srcObject)
+  }
   if (volume) commit('Controls/setVideoVolume', volume)
   if (muted) commit('Controls/setVideoMuted', muted)
   if (autoplay) commit('Controls/setVideoAutoplay', autoplay)
