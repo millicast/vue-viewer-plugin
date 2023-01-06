@@ -123,8 +123,10 @@ export default {
     }, 4000)
 
     this.timeInterval = setInterval(() => {
-      this.secondsElapsed = this.video.currentTime
-    }, 500)
+      if (this.playing) {
+        this.secondsElapsed++
+      }
+    }, 1000)
 
     this.setCastOptions({
       streamId: this.queryParams.streamId,
