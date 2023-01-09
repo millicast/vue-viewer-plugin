@@ -201,7 +201,23 @@ export default {
       }, 4000)
     },
     showButton(button) {
-      return !this.queryParams.hideButtons.includes(button)
+      let showButton = !this.queryParams.hideButtons.includes(button);
+      if (showButton && button === 'fullscreen') {
+        let player = document.getElementById('player') ?? document.getElementById('player2')
+        if (!player) {
+          //Temporarly create a video element to check if the browser supports fullscreen (iPhone fallback)
+          player = document.createElement('video')
+        }
+        showButton = showButton && (document.fullscreenEnabled || 
+        document.webkitFullscreenEnabled || 
+        document.mozFullScreenEnabled ||
+        document.msFullscreenEnabled ||
+        player?.webkitEnterFullscreen)
+        if(!showButton) {
+          console.warn('Fullscreen disabled due to incompatibility with the browser.')
+        }
+      }
+      return showButton
     },
     handleOrientationChange() {
       const orientation = screen.orientation.type
@@ -217,11 +233,14 @@ export default {
       }
     },
     goFullScreen() {
-      const player = this.$refs.player
-      player.requestFullscreen?.() ??
-        player.webkitRequestFullscreen?.() ??
-        player.mozRequestFullScreen?.() ??
-        player.msRequestFullscreen?.()
+      const playerDiv = document.getElementById('vplayer')
+      //Fallback for when requestFullScreen is not avaiable in a div but it is for a video tag
+      const videoPlayer = document.getElementById('player') ?? document.getElementById('player2')
+      playerDiv?.requestFullscreen?.() ??
+        playerDiv?.webkitRequestFullscreen?.() ??
+        playerDiv?.mozRequestFullScreen?.() ??
+        playerDiv?.msRequestFullscreen?.() ??
+        videoPlayer?.webkitEnterFullscreen?.();
     },
     leaveFullScreen() {
       document.exitFullscreen?.() ??
