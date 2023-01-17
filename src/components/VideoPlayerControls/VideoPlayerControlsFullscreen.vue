@@ -43,9 +43,9 @@ export default {
     }
     const player = document.getElementById('player') ?? document.getElementById('player2')
     player.onwebkitfullscreenchange = () => {
-      this.fullscreen = player.webkitDisplayingFullscreen
+      this.fullscreen = player.fullscreenElement
     }
-    this.fullscreen = (!!document.fullscreenElement) || (player.webkitDisplayingFullscreen)
+    this.fullscreen = (!!document.fullscreenElement) || (player.fullscreenElement)
   },
   computed: {
     ...mapState('Controls', {

@@ -201,17 +201,18 @@ export default {
       }, 4000)
     },
     showButton(button) {
-      let showButton = !this.queryParams.hideButtons.includes(button);
+      let showButton = !this.queryParams.hideButtons.includes(button)
       if (showButton && button === 'fullscreen') {
         let player = document.getElementById('player') ?? document.getElementById('player2')
         if (!player) {
-          //Temporarly create a video element to check if the browser supports fullscreen (iPhone fallback)
+          // Temporarly create a video element to check if the browser supports fullscreen (iPhone fallback)
           player = document.createElement('video')
         }
-        showButton = showButton && (document.fullscreenEnabled || 
+        showButton &&= (document.fullscreenEnabled || 
         document.webkitFullscreenEnabled || 
         document.mozFullScreenEnabled ||
         document.msFullscreenEnabled ||
+        player?.requestFullscreen ||
         player?.webkitEnterFullscreen)
         if(!showButton) {
           console.warn('Fullscreen disabled due to incompatibility with the browser.')
