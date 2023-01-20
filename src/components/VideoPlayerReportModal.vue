@@ -139,8 +139,8 @@ export default {
     }),
   },
   mounted() {
-    this.report.accountId = this.streamId?.match(/^(.*)\/.*$/)[1]
-    this.report.streamId = this.streamId?.match(/^.*\/(.*)$/)[1]
+    this.report.accountId = this.streamId?.match(/^(.*?)\/.*$/)[1]
+    this.report.streamId = this.streamId?.match(/^.*?\/(.*)$/)[1]
     this.report.url = window.location.href
     if (
       this.millicastView?.webRTCPeer &&
