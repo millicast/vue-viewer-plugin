@@ -17,4 +17,4 @@ Vue.use(VideoPlayer, { store })
 ```
 In this example, `store` is the name of your store.
 
-Please, be careful and do not have modules with the following names, as it might experiment weird issues: `Controls`, `Layers`, `Params`, `Sources`, `ViewConnection`.
+Please, be careful and do not have modules with the following names, as you might experiment weird issues: `Controls`, `Layers`, `Params`, `Sources`, `ViewConnection`.
