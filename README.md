@@ -71,6 +71,8 @@ In order to customize your experience using the plugin, you are able to hide the
 | `userCount`  | Hides the number of current viewers of the sreaming.                            |
 | `settings`   | Hides *settings* button.                                                        |
 
+In case you want to disable all buttons at once, you can simply pass the paremeter `controls: false`, instead of using `hideButtons`.
+
 ### Example of Use
 
 ```html
