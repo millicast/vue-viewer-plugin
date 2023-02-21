@@ -39,6 +39,8 @@ export default {
               ? this.paramsOptions?.directorUrl
               : null,
           hideButtons: this.paramsOptions.hideButtons ?? [],
+          autoplay: this.paramsOptions.autoplay,
+          muted: this.paramsOptions.muted,
         })
       }
     },
