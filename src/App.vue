@@ -8,6 +8,7 @@
 import VideoPlayerContainer from './components/VideoPlayerContainer.vue'
 import { useToast } from 'vue-toastification'
 import setUserParams from './service/userParams'
+import { availableControls } from './service/userParams'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'vue-toastification/dist/index.css'
@@ -25,8 +26,6 @@ export default {
   methods: {
     ...mapMutations('Controls', ['setMobile']),
     updateParams() {
-      const availableControls = ['play', 'volume', 'pip', 'fullscreen', 'cast', 'liveBadge', 'userCount', 'settings']
-
       if (this.paramsOptions) {
         setUserParams({
           streamId:

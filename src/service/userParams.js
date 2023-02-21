@@ -1,6 +1,6 @@
 import store from '../store'
 
-// const availableControls = ['play', 'volume', 'pip', 'fullscreen', 'cast', 'liveBadge', 'userCount', 'settings']
+export const availableControls = ['play', 'volume', 'pip', 'fullscreen', 'cast', 'liveBadge', 'userCount', 'settings']
 
 export const defaultOptions = {
   audioOnly: false,
