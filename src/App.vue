@@ -25,6 +25,8 @@ export default {
   methods: {
     ...mapMutations('Controls', ['setMobile']),
     updateParams() {
+      const availableControls = ['play', 'volume', 'pip', 'fullscreen', 'cast', 'liveBadge', 'userCount', 'settings']
+
       if (this.paramsOptions) {
         setUserParams({
           streamId:
@@ -38,9 +40,9 @@ export default {
             process.env.NODE_ENV !== 'production'
               ? this.paramsOptions?.directorUrl
               : null,
-          hideButtons: this.paramsOptions.hideButtons ?? [],
-          autoplay: this.paramsOptions.autoplay,
-          muted: this.paramsOptions.muted,
+          hideButtons: this.paramsOptions.controls === false ? availableControls : (this.paramsOptions.hideButtons ?? []),
+          autoplay: this.paramsOptions.autoplay ?? true,
+          muted: this.paramsOptions.muted ?? false,
         })
       }
     },
