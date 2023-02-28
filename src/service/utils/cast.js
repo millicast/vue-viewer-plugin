@@ -1,7 +1,7 @@
 import store from '../../store'
 import { connectToStream, stopStream } from '../sdkManager'
 const { commit, state } = store
-const receiverApplicationId = state.Params.queryParams.chromecastId
+const receiverApplicationId = 'EC3A02DA' //state.Params.queryParams.chromecastId
 
 console.log(receiverApplicationId)
 console.log(store, 'store')

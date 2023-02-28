@@ -12,7 +12,7 @@ import params from './src/store/modules/params'
 import sources from './src/store/modules/sources'
 import viewConnection from './src/store/modules/viewConnection'
 
-import setUserParams from './src/service/userParams'
+// import setUserParams from './src/service/userParams'
 
 const filterBeforeCreate = (toast, toasts) => {
   if (toasts.filter((t) => t.type === toast.type).length !== 0) {
@@ -33,6 +33,7 @@ export default {
       options.store.registerModule('ViewConnection', viewConnection)
     }
 
+    /*
     setUserParams({
       streamId: options?.accountId + '/' + options?.streamName,
       audioOnly: options.audioOnly ?? false,
@@ -46,6 +47,7 @@ export default {
       chromecastId: options?.chromecastId ?? null,
       reportUrl: options?.reportUrl ?? null
     })
+    */
 
     vue.use(toast, {
       transition: 'Vue-Toastification__fade',

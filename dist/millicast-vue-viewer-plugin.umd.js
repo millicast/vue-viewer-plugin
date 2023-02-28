@@ -11319,9 +11319,6 @@ var defaultState = {
     }
   }
 });
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.json.stringify.js
-var es_json_stringify = __webpack_require__("e9c4");
-
 // CONCATENATED MODULE: ./src/service/userParams.js
 
 
@@ -11365,7 +11362,6 @@ function setUserParams(_ref) {
 }
 // CONCATENATED MODULE: ./src/store/modules/params.js
 
-
 var params_defaulState = {
   queryParams: defaultOptions
 };
@@ -11379,7 +11375,7 @@ var params_defaulState = {
   },
   getters: {
     queryParams: function queryParams(state) {
-      return state.queryParams && JSON.parse(JSON.stringify(state.queryParams));
+      return state.queryParams;
     }
   }
 });
@@ -11901,6 +11897,9 @@ var es_array_some = __webpack_require__("45fc");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.unshift.js
 var es_array_unshift = __webpack_require__("3c65");
 
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.json.stringify.js
+var es_json_stringify = __webpack_require__("e9c4");
+
 // CONCATENATED MODULE: ./src/service/utils/cast.js
 
 
@@ -11912,7 +11911,8 @@ var _store$Params, _store$getters, _store$getters$Params, _store$Params2;
 
 var cast_commit = src_store.commit,
     cast_state = src_store.state;
-var receiverApplicationId = cast_state.Params.queryParams.chromecastId;
+var receiverApplicationId = 'EC3A02DA'; //state.Params.queryParams.chromecastId
+
 console.log(receiverApplicationId);
 console.log(src_store, 'store');
 console.log(cast_state, 'state');
@@ -17505,8 +17505,7 @@ const BaseButton_exports_ = /*#__PURE__*/exportHelper_default()(BaseButtonvue_ty
 
 
 
-
-
+ // import setUserParams from './src/service/userParams'
 
 var filterBeforeCreate = function filterBeforeCreate(toast, toasts) {
   if (toasts.filter(function (t) {
@@ -17520,8 +17519,6 @@ var filterBeforeCreate = function filterBeforeCreate(toast, toasts) {
 
 /* harmony default export */ var index_0 = ({
   install: function install(vue, options) {
-    var _options$audioOnly, _options$hideButtons, _options$autoplay, _options$muted, _options$chromecastId, _options$reportUrl;
-
     if (!options.store) {
       vue.use(src_store);
     } else {
@@ -17531,19 +17528,23 @@ var filterBeforeCreate = function filterBeforeCreate(toast, toasts) {
       options.store.registerModule('Sources', modules_sources);
       options.store.registerModule('ViewConnection', viewConnection);
     }
-
+    /*
     setUserParams({
-      streamId: (options === null || options === void 0 ? void 0 : options.accountId) + '/' + (options === null || options === void 0 ? void 0 : options.streamName),
-      audioOnly: (_options$audioOnly = options.audioOnly) !== null && _options$audioOnly !== void 0 ? _options$audioOnly : false,
-      token: options === null || options === void 0 ? void 0 : options.token,
-      image: options === null || options === void 0 ? void 0 : options.image,
-      directorUrl:  false ? undefined : null,
-      hideButtons: (_options$hideButtons = options.hideButtons) !== null && _options$hideButtons !== void 0 ? _options$hideButtons : [],
-      autoplay: (_options$autoplay = options === null || options === void 0 ? void 0 : options.autoplay) !== null && _options$autoplay !== void 0 ? _options$autoplay : true,
-      muted: (_options$muted = options === null || options === void 0 ? void 0 : options.muted) !== null && _options$muted !== void 0 ? _options$muted : false,
-      chromecastId: (_options$chromecastId = options === null || options === void 0 ? void 0 : options.chromecastId) !== null && _options$chromecastId !== void 0 ? _options$chromecastId : null,
-      reportUrl: (_options$reportUrl = options === null || options === void 0 ? void 0 : options.reportUrl) !== null && _options$reportUrl !== void 0 ? _options$reportUrl : null
-    });
+      streamId: options?.accountId + '/' + options?.streamName,
+      audioOnly: options.audioOnly ?? false,
+      token: options?.token,
+      image: options?.image,
+      directorUrl:
+        process.env.NODE_ENV !== 'production' ? options?.directorUrl : null,
+      hideButtons: options.hideButtons ?? [],
+      autoplay: options?.autoplay ?? true,
+      muted: options?.muted ?? false,
+      chromecastId: options?.chromecastId ?? null,
+      reportUrl: options?.reportUrl ?? null
+    })
+    */
+
+
     vue.use(src_default, {
       transition: 'Vue-Toastification__fade',
       maxToasts: 2,

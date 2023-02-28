@@ -13,6 +13,8 @@ export default {
     },
   },
   getters: {
-    queryParams: state => JSON.parse(JSON.stringify(state.queryParams))
+    queryParams(state) {
+      return state.queryParams
+    },
   }
 }
