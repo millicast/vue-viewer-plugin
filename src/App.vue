@@ -42,6 +42,8 @@ export default {
           hideButtons: this.paramsOptions.controls === false ? availableControls : (this.paramsOptions.hideButtons ?? []),
           autoplay: this.paramsOptions.autoplay ?? true,
           muted: this.paramsOptions.muted ?? false,
+          chromecastId: this.paramsOptions.chromecastId ?? null,
+          reportUrl: this.paramsOptions.reportUrl ?? null
         })
       }
     },

@@ -12,4 +12,7 @@ export default {
       state.queryParams = queryParams
     },
   },
+  getters: {
+    queryParams: state => JSON.parse(JSON.stringify(state.queryParams))
+  }
 }

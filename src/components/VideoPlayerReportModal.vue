@@ -107,7 +107,7 @@ export default {
           this.millicastView?.signaling?.serverId ?? 'NOT_CONNECTED'
         this.report.clusterId =
           this.millicastView?.signaling?.clusterId ?? 'NOT_CONNECTED'
-        await fetch(process.env.VUE_APP_REPORT_URL + '/reports', {
+        await fetch(this.reportUrl + '/reports', {
           method: 'POST',
           headers,
           body: JSON.stringify(this.report),
@@ -136,6 +136,9 @@ export default {
   computed: {
     ...mapState('ViewConnection', {
       millicastView: (state) => state.millicastView,
+    }),
+    ...mapState('Params', {
+      reportUrl: (state) => state.queryParams.reportUrl,
     }),
   },
   mounted() {

@@ -12,6 +12,8 @@ export const defaultOptions = {
   placeholderImg: null,
   streamId: null,
   token: null,
+  chromecastId: null,
+  reportUrl: null
 }
 
 export default function setUserParams({
@@ -23,6 +25,8 @@ export default function setUserParams({
   hideButtons,
   autoplay,
   muted,
+  chromecastId,
+  reportUrl
 }) {
   const options = {}
 
@@ -34,6 +38,8 @@ export default function setUserParams({
   options.hideButtons = hideButtons ?? []
   options.autoplay = autoplay ?? true
   options.muted = muted ?? false
+  options.chromecastId = chromecastId ?? null
+  options.reportUrl = reportUrl ?? null
 
   store.commit('Params/setQueryParams', { ...defaultOptions, ...options })
 }

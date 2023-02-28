@@ -1,7 +1,23 @@
 import store from '../../store'
 import { connectToStream, stopStream } from '../sdkManager'
 const { commit, state } = store
-const receiverApplicationId = process.env.VUE_APP_CHROMECAST_ID
+const receiverApplicationId = state.Params.queryParams.chromecastId
+
+console.log(receiverApplicationId)
+console.log(store, 'store')
+console.log(state, 'state')
+console.log(JSON.parse(JSON.stringify(state)), 'jsoneado state')
+
+console.log(state.Params.queryParams, 'state.Params.queryParams')
+console.log(store.Params?.queryParams, 'store.Params.queryParams')
+console.log(store.getters.Params, 'store.getters.Params')
+console.log(store.getters?.Params?.queryParams, 'store.getters.Params.queryParams')
+console.log(store.getters, 'store.getters')
+console.log(store.getters['Params/queryParams'], "store.getters.['Params/queryParams']")
+
+console.log(state.Params.queryParams, 'state.Params.queryParams')
+console.log(store.Params?.queryParams, 'store.Params.queryParams')
+
 let castContext = null
 let castSession = null
 
