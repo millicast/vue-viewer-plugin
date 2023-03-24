@@ -32,6 +32,7 @@ export default {
             '/' +
             this.paramsOptions?.streamName,
           audioOnly: this.paramsOptions?.audioOnly ?? false,
+          videoOnly: this.paramsOptions?.videoOnly ?? false,
           token: this.paramsOptions?.token,
           image: this.paramsOptions?.image,
           directorUrl:
@@ -39,6 +40,11 @@ export default {
               ? this.paramsOptions?.directorUrl
               : null,
           hideButtons: this.paramsOptions.hideButtons ?? [],
+          autoplay: this.paramsOptions?.autoplay ?? false,
+          muted: this.paramsOptions?.muted ?? false,
+          disableSettings: this.paramsOptions?.disableSettings ?? false,
+          noDelay: this.paramsOptions?.noDelay ?? false,
+          multisource: this.paramsOptions?.multisource ?? false
         })
       }
     },
