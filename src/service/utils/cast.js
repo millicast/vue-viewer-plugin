@@ -31,6 +31,8 @@ export const handleSetCast = async () => {
 
   if (receiverApplicationId) {
     const castStateListener = async (castState) => {
+      console.log(castState, 'castState')
+      console.log('coso')
       const { cast } = window
       switch (castState) {
         case cast.framework.CastState.NO_DEVICES_AVAILABLE:
@@ -48,11 +50,13 @@ export const handleSetCast = async () => {
     }
 
     const sessionListener = (event) => {
+      console.log(event, 'sessionListener')
       const { cast } = window
       switch (event.sessionState) {
         case cast.framework.SessionState.SESSION_ENDED:
           castSession = null
           connectToStream()
+          console.log(cast.framework.SessionState.SESSION_ENDED, 'cast.framework.SessionState.SESSION_ENDED')
           // Change to new connect
           commit('Controls/setCastIsConnected', false)
           break
@@ -61,10 +65,12 @@ export const handleSetCast = async () => {
       }
     }
 
+    console.log(window['__onGCastApiAvailable'], "window['__onGCastApiAvailable']")
     window['__onGCastApiAvailable'] = async (isAvailable) => {
+      console.log('__onGCastApiAvailablellllll', isAvailable)
       if (isAvailable) {
         setTimeout(async () => {
-          //isAvaiable is returning true but window.cast is null if we don't use a timer for some reason
+          // isAvaiable is returning true but window.cast is null if we don't use a timer for some reason
           castContext = await window.cast.framework.CastContext.getInstance()
           if (window.chrome.cast && window.chrome.cast.AutoJoinPolicy) {
             castContext.setOptions({

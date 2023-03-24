@@ -1,5 +1,4 @@
 import { defaultOptions } from '../../service/userParams'
-import { setCast } from '../../service/sdkManager'
 
 const defaulState = {
   queryParams: defaultOptions,
@@ -17,8 +16,7 @@ export default {
     queryParams(state) {
       return state.queryParams
     },
-    async chromecastId(state) {
-      setCast()
+    chromecastId(state) {
       return state.queryParams.chromecastId
     },
   }

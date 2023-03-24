@@ -4360,6 +4360,17 @@ module.exports = function (argument) {
 
 /***/ }),
 
+/***/ "8389":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsContainer_vue_vue_type_style_index_0_id_e569588a_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("9c1c");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsContainer_vue_vue_type_style_index_0_id_e569588a_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsContainer_vue_vue_type_style_index_0_id_e569588a_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
+
+/***/ }),
+
 /***/ "83ab":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4733,13 +4744,6 @@ module.exports = isForced;
 
 /***/ }),
 
-/***/ "97de":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "99af":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4891,6 +4895,13 @@ exports.f = DESCRIPTORS ? V8_PROTOTYPE_DEFINE_BUG ? function defineProperty(O, P
   return O;
 };
 
+
+/***/ }),
+
+/***/ "9c1c":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -7045,17 +7056,6 @@ module.exports = function (passed, required) {
   if (passed < required) throw $TypeError('Not enough arguments');
   return passed;
 };
-
-
-/***/ }),
-
-/***/ "d745":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsContainer_vue_vue_type_style_index_0_id_6e3117e0_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("97de");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsContainer_vue_vue_type_style_index_0_id_6e3117e0_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsContainer_vue_vue_type_style_index_0_id_6e3117e0_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
 
 
 /***/ }),
@@ -11393,9 +11393,6 @@ function setUserParams(_ref) {
 }
 // CONCATENATED MODULE: ./src/store/modules/params.js
 
-
-
-
 var params_defaulState = {
   queryParams: defaultOptions
 };
@@ -11412,18 +11409,7 @@ var params_defaulState = {
       return state.queryParams;
     },
     chromecastId: function chromecastId(state) {
-      return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-        return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              setCast();
-              return _context.abrupt("return", state.queryParams.chromecastId);
-            case 2:
-            case "end":
-              return _context.stop();
-          }
-        }, _callee);
-      }))();
+      return state.queryParams.chromecastId;
     }
   }
 });
@@ -11891,6 +11877,8 @@ var cast_commit = src_store.commit,
 // console.log(store.getters['Params/chromecastId'], "store.getters.['Params/chromecastId']")
 
 // console.log(store, 'store')
+// console.log(store.state.Params.queryParams, "store.state.Params.queryParams")
+
 // console.log(state, 'state')
 // console.log(JSON.parse(JSON.stringify(state)), 'jsoneado state')
 
@@ -11920,24 +11908,26 @@ var handleSetCast = /*#__PURE__*/function () {
                 return _regeneratorRuntime().wrap(function _callee$(_context) {
                   while (1) switch (_context.prev = _context.next) {
                     case 0:
+                      console.log(castState, 'castState');
+                      console.log('coso');
                       _window = window, cast = _window.cast;
                       _context.t0 = castState;
-                      _context.next = _context.t0 === cast.framework.CastState.NO_DEVICES_AVAILABLE ? 4 : _context.t0 === cast.framework.CastState.NOT_CONNECTED ? 6 : _context.t0 === cast.framework.CastState.CONNECTED ? 8 : 11;
+                      _context.next = _context.t0 === cast.framework.CastState.NO_DEVICES_AVAILABLE ? 6 : _context.t0 === cast.framework.CastState.NOT_CONNECTED ? 8 : _context.t0 === cast.framework.CastState.CONNECTED ? 10 : 13;
                       break;
-                    case 4:
-                      cast_commit('Controls/setCastAvailable', false);
-                      return _context.abrupt("break", 12);
                     case 6:
-                      cast_commit('Controls/setCastAvailable', true);
-                      return _context.abrupt("break", 12);
+                      cast_commit('Controls/setCastAvailable', false);
+                      return _context.abrupt("break", 14);
                     case 8:
-                      _context.next = 10;
-                      return sendLoadRequest();
+                      cast_commit('Controls/setCastAvailable', true);
+                      return _context.abrupt("break", 14);
                     case 10:
-                      return _context.abrupt("break", 12);
-                    case 11:
-                      return _context.abrupt("break", 12);
+                      _context.next = 12;
+                      return sendLoadRequest();
                     case 12:
+                      return _context.abrupt("break", 14);
+                    case 13:
+                      return _context.abrupt("break", 14);
+                    case 14:
                     case "end":
                       return _context.stop();
                   }
@@ -11948,12 +11938,14 @@ var handleSetCast = /*#__PURE__*/function () {
               };
             }();
             sessionListener = function sessionListener(event) {
+              console.log(event, 'sessionListener');
               var _window2 = window,
                 cast = _window2.cast;
               switch (event.sessionState) {
                 case cast.framework.SessionState.SESSION_ENDED:
                   castSession = null;
                   connectToStream();
+                  console.log(cast.framework.SessionState.SESSION_ENDED, 'cast.framework.SessionState.SESSION_ENDED');
                   // Change to new connect
                   cast_commit('Controls/setCastIsConnected', false);
                   break;
@@ -11961,11 +11953,13 @@ var handleSetCast = /*#__PURE__*/function () {
                   break;
               }
             };
+            console.log(window['__onGCastApiAvailable'], "window['__onGCastApiAvailable']");
             window['__onGCastApiAvailable'] = /*#__PURE__*/function () {
               var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(isAvailable) {
                 return _regeneratorRuntime().wrap(function _callee4$(_context4) {
                   while (1) switch (_context4.prev = _context4.next) {
                     case 0:
+                      console.log('__onGCastApiAvailablellllll', isAvailable);
                       if (isAvailable) {
                         setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
                           var _window$cast$framewor, CAST_STATE_CHANGED, SESSION_STATE_CHANGED;
@@ -12024,7 +12018,7 @@ var handleSetCast = /*#__PURE__*/function () {
                           }, _callee3);
                         })), 20);
                       }
-                    case 1:
+                    case 2:
                     case "end":
                       return _context4.stop();
                   }
@@ -16275,47 +16269,47 @@ var VideoPlayerControlsVolumevue_type_style_index_0_id_0cf82b5a_scoped_true_lang
 const VideoPlayerControlsVolume_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsVolumevue_type_script_lang_js, [['render',VideoPlayerControlsVolumevue_type_template_id_0cf82b5a_scoped_true_render],['__scopeId',"data-v-0cf82b5a"]])
 
 /* harmony default export */ var VideoPlayerControlsVolume = (VideoPlayerControlsVolume_exports_);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=template&id=6e3117e0&scoped=true
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=template&id=e569588a&scoped=true
 
-var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-6e3117e0"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
+var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_withScopeId = function _withScopeId(n) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-e569588a"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_1 = {
+var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_1 = {
   class: "row"
 };
-var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_2 = {
+var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_2 = {
   key: 0
 };
-var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_3 = ["textContent"];
-var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_4 = {
+var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_3 = ["textContent"];
+var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_4 = {
   key: 0,
   class: "col-6 text-right"
 };
-var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_5 = {
+var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_5 = {
   key: 1,
   class: "col-5 pl-0 pr-1 text-right"
 };
-var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_6 = {
+var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_6 = {
   key: 1,
   class: "dropup"
 };
-var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_7 = /*#__PURE__*/VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_withScopeId(function () {
+var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_7 = /*#__PURE__*/VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: "dropdown-header d-flex m-0 col-12"
   }, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h6", {
     class: "p-0 m-0"
   }, "Options")], -1);
 });
-function VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerControlsPlay = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsPlay");
   var _component_VideoPlayerControlsVolume = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsVolume");
   var _component_VideoPlayerControlsSettings = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettings");
   var _component_VideoPlayerControlsCast = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsCast");
   var _component_VideoPlayerControlsPip = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsPip");
   var _component_VideoPlayerControlsFullscreen = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsFullscreen");
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])([_ctx.isMobile ? 'col-7 text-left pr-0' : 'col-6 text-left'])
-  }, [!$props.isConnected ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_2, [$props.showButton('play') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsPlay, {
+  }, [!$props.isConnected ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_2, [$props.showButton('play') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsPlay, {
     key: 0
   })) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $props.showButton('volume') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsVolume, {
     key: 1
@@ -16323,7 +16317,7 @@ function VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_r
     key: 2,
     class: "h5 align-middle p-2",
     textContent: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($props.currentTime)
-  }, null, 8, VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 2), !_ctx.isMobile ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_4, [$props.showButton('settings') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettings, {
+  }, null, 8, VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 2), !_ctx.isMobile ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_4, [$props.showButton('settings') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettings, {
     key: 0,
     streamId: $props.streamId
   }, null, 8, ["streamId"])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $props.showButton('cast') && _ctx.castAvailable ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsCast, {
@@ -16333,10 +16327,10 @@ function VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_r
   })) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $props.showButton('fullscreen') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsFullscreen, {
     key: 3,
     click: _ctx.toggleFullscreen
-  }, null, 8, ["click"])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)])) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_5, [$props.showButton('settings') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettings, {
+  }, null, 8, ["click"])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)])) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_5, [$props.showButton('settings') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettings, {
     key: 0,
     streamId: $props.streamId
-  }, null, 8, ["streamId"])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $props.showButton('cast') && _ctx.castAvailable || _ctx.isLive && $options.pipEnabled && $props.showButton('pip') && $options.isVideoTag || $props.showButton('fullscreen') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_6, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
+  }, null, 8, ["streamId"])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $props.showButton('cast') && _ctx.castAvailable || _ctx.isLive && $options.pipEnabled && $props.showButton('pip') && $options.isVideoTag || $props.showButton('fullscreen') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_6, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "h3 align-middle control-icon bi ml-viewer-bi-three-dots-vertical",
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return _ctx.setDropup('mobile');
@@ -16348,7 +16342,7 @@ function VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_r
     style: {
       "margin-bottom": "0.9rem"
     }
-  }, [VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_7, $props.showButton('cast') && _ctx.castAvailable ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsCast, {
+  }, [VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_7, $props.showButton('cast') && _ctx.castAvailable ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsCast, {
     key: 0
   })) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $options.pipEnabled ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsPip, {
     key: 1
@@ -16357,7 +16351,7 @@ function VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_r
     click: _ctx.toggleFullscreen
   }, null, 8, ["click"])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 2)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]))]);
 }
-// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=template&id=6e3117e0&scoped=true
+// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=template&id=e569588a&scoped=true
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsCast.vue?vue&type=template&id=f9fa5040&scoped=true
 
@@ -16458,7 +16452,7 @@ const VideoPlayerControlsCast_exports_ = /*#__PURE__*/exportHelper_default()(Vid
       dropupShow: false
     };
   },
-  computed: _extends(_extends({}, mapState('Controls', {
+  computed: _extends(_extends(_extends({}, mapState('Controls', {
     video: function video(state) {
       return state.video;
     },
@@ -16474,6 +16468,10 @@ const VideoPlayerControlsCast_exports_ = /*#__PURE__*/exportHelper_default()(Vid
     castAvailable: function castAvailable(state) {
       return state.castAvailable;
     }
+  })), mapState('Params', {
+    chromecastId: function chromecastId(state) {
+      return state.queryParams.chromecastId;
+    }
   })), {}, {
     isVideoTag: function isVideoTag() {
       var _this$video;
@@ -16485,13 +16483,19 @@ const VideoPlayerControlsCast_exports_ = /*#__PURE__*/exportHelper_default()(Vid
   }),
   methods: _extends({}, mapMutations('Controls', ['setDropup', 'toggleFullscreen'])),
   beforeMount: function beforeMount() {
+    var _this = this;
     return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            _context.next = 2;
+            console.log(_this.chromecastId, 'videoplayercontrolscontainer');
+            if (!_this.chromecastId) {
+              _context.next = 4;
+              break;
+            }
+            _context.next = 4;
             return setCast();
-          case 2:
+          case 4:
           case "end":
             return _context.stop();
         }
@@ -16501,8 +16505,8 @@ const VideoPlayerControlsCast_exports_ = /*#__PURE__*/exportHelper_default()(Vid
 });
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=style&index=0&id=6e3117e0&lang=scss&scoped=true
-var VideoPlayerControlsContainervue_type_style_index_0_id_6e3117e0_lang_scss_scoped_true = __webpack_require__("d745");
+// EXTERNAL MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=style&index=0&id=e569588a&lang=scss&scoped=true
+var VideoPlayerControlsContainervue_type_style_index_0_id_e569588a_lang_scss_scoped_true = __webpack_require__("8389");
 
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue
 
@@ -16512,7 +16516,7 @@ var VideoPlayerControlsContainervue_type_style_index_0_id_6e3117e0_lang_scss_sco
 
 
 
-const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsContainervue_type_script_lang_js, [['render',VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_render],['__scopeId',"data-v-6e3117e0"]])
+const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsContainervue_type_script_lang_js, [['render',VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_render],['__scopeId',"data-v-e569588a"]])
 
 /* harmony default export */ var VideoPlayerControlsContainer = (VideoPlayerControlsContainer_exports_);
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/index.js
