@@ -176,13 +176,6 @@ module.exports = function (fn, that) {
 
 /***/ }),
 
-/***/ "040e":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "04d1":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1207,17 +1200,6 @@ var hiddenKeys = enumBugKeys.concat('length', 'prototype');
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   return internalObjectKeys(O, hiddenKeys);
 };
-
-
-/***/ }),
-
-/***/ "2510":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_9b0d6f62_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("040e");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_9b0d6f62_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_9b0d6f62_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
 
 
 /***/ }),
@@ -4369,17 +4351,6 @@ module.exports = function (argument) {
 
 /***/ }),
 
-/***/ "8389":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsContainer_vue_vue_type_style_index_0_id_e569588a_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("9c1c");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsContainer_vue_vue_type_style_index_0_id_e569588a_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsContainer_vue_vue_type_style_index_0_id_e569588a_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
-
-
-/***/ }),
-
 /***/ "83ab":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4753,6 +4724,13 @@ module.exports = isForced;
 
 /***/ }),
 
+/***/ "97de":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "99af":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4904,13 +4882,6 @@ exports.f = DESCRIPTORS ? V8_PROTOTYPE_DEFINE_BUG ? function defineProperty(O, P
   return O;
 };
 
-
-/***/ }),
-
-/***/ "9c1c":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -6949,6 +6920,13 @@ module.exports = global.Promise;
 
 /***/ }),
 
+/***/ "d264":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "d28b":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7065,6 +7043,17 @@ module.exports = function (passed, required) {
   if (passed < required) throw $TypeError('Not enough arguments');
   return passed;
 };
+
+
+/***/ }),
+
+/***/ "d745":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsContainer_vue_vue_type_style_index_0_id_6e3117e0_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("97de");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsContainer_vue_vue_type_style_index_0_id_6e3117e0_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsContainer_vue_vue_type_style_index_0_id_6e3117e0_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
 
 
 /***/ }),
@@ -8643,6 +8632,17 @@ module.exports = uncurryThis([].slice);
 
 /***/ }),
 
+/***/ "f3eb":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_1c4d6198_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("d264");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_1c4d6198_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_1c4d6198_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
+
+/***/ }),
+
 /***/ "f5b2":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8756,10 +8756,10 @@ var es_object_to_string = __webpack_require__("d3b7");
 // EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","root":"Vue"}
 var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__("8bbf");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/App.vue?vue&type=template&id=9b0d6f62&scoped=true
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/App.vue?vue&type=template&id=1c4d6198&scoped=true
 
-var Appvue_type_template_id_9b0d6f62_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-9b0d6f62"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
+var Appvue_type_template_id_1c4d6198_scoped_true_withScopeId = function _withScopeId(n) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-1c4d6198"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
 var _hoisted_1 = {
   id: "viewer-container"
@@ -8770,7 +8770,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     class: "ml-viewer"
   })]);
 }
-// CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=9b0d6f62&scoped=true
+// CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=1c4d6198&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__("a4d3");
@@ -11881,26 +11881,6 @@ var es_array_unshift = __webpack_require__("3c65");
 
 var cast_commit = src_store.commit,
   cast_state = src_store.state;
-
-// console.log(store.state.Params.queryParams, "store.state.Params.queryParams")
-// console.log(store.getters['Params/chromecastId'], "store.getters.['Params/chromecastId']")
-
-// console.log(store, 'store')
-// console.log(store.state.Params.queryParams, "store.state.Params.queryParams")
-
-// console.log(state, 'state')
-// console.log(JSON.parse(JSON.stringify(state)), 'jsoneado state')
-
-// console.log(state.Params.queryParams, 'state.Params.queryParams')
-// console.log(store.Params?.queryParams, 'store.Params.queryParams')
-// console.log(store.getters.Params, 'store.getters.Params')
-// console.log(store.getters?.Params?.queryParams, 'store.getters.Params.queryParams')
-// console.log(store.getters, 'store.getters')
-// console.log(store.getters['Params/queryParams'], "store.getters.['Params/queryParams']")
-
-// console.log(state.Params.queryParams, 'state.Params.queryParams')
-// console.log(store.Params?.queryParams, 'store.Params.queryParams')
-
 var castContext = null;
 var castSession = null;
 var handleSetCast = /*#__PURE__*/function () {
@@ -11909,136 +11889,133 @@ var handleSetCast = /*#__PURE__*/function () {
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
       while (1) switch (_context5.prev = _context5.next) {
         case 0:
-          receiverApplicationId = cast_state.Params.queryParams.chromecastId;
-          if (receiverApplicationId) {
-            castStateListener = /*#__PURE__*/function () {
-              var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(castState) {
-                var _window, cast;
-                return _regeneratorRuntime().wrap(function _callee$(_context) {
-                  while (1) switch (_context.prev = _context.next) {
-                    case 0:
-                      console.log(castState, 'castState');
-                      console.log('coso');
-                      _window = window, cast = _window.cast;
-                      _context.t0 = castState;
-                      _context.next = _context.t0 === cast.framework.CastState.NO_DEVICES_AVAILABLE ? 6 : _context.t0 === cast.framework.CastState.NOT_CONNECTED ? 8 : _context.t0 === cast.framework.CastState.CONNECTED ? 10 : 13;
-                      break;
-                    case 6:
-                      cast_commit('Controls/setCastAvailable', false);
-                      return _context.abrupt("break", 14);
-                    case 8:
-                      cast_commit('Controls/setCastAvailable', true);
-                      return _context.abrupt("break", 14);
-                    case 10:
-                      _context.next = 12;
-                      return sendLoadRequest();
-                    case 12:
-                      return _context.abrupt("break", 14);
-                    case 13:
-                      return _context.abrupt("break", 14);
-                    case 14:
-                    case "end":
-                      return _context.stop();
-                  }
-                }, _callee);
-              }));
-              return function castStateListener(_x) {
-                return _ref2.apply(this, arguments);
-              };
-            }();
-            sessionListener = function sessionListener(event) {
-              console.log(event, 'sessionListener');
-              var _window2 = window,
-                cast = _window2.cast;
-              switch (event.sessionState) {
-                case cast.framework.SessionState.SESSION_ENDED:
-                  castSession = null;
-                  connectToStream();
-                  console.log(cast.framework.SessionState.SESSION_ENDED, 'cast.framework.SessionState.SESSION_ENDED');
-                  // Change to new connect
-                  cast_commit('Controls/setCastIsConnected', false);
-                  break;
-                default:
-                  break;
-              }
+          receiverApplicationId = 'FC2130FE'; //state.Params.queryParams.chromecastId
+          console.log(receiverApplicationId);
+          castStateListener = /*#__PURE__*/function () {
+            var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(castState) {
+              var _window, cast;
+              return _regeneratorRuntime().wrap(function _callee$(_context) {
+                while (1) switch (_context.prev = _context.next) {
+                  case 0:
+                    console.log('castStateListener');
+                    _window = window, cast = _window.cast;
+                    _context.t0 = castState;
+                    _context.next = _context.t0 === cast.framework.CastState.NO_DEVICES_AVAILABLE ? 5 : _context.t0 === cast.framework.CastState.NOT_CONNECTED ? 7 : _context.t0 === cast.framework.CastState.CONNECTED ? 9 : 12;
+                    break;
+                  case 5:
+                    cast_commit('Controls/setCastAvailable', false);
+                    return _context.abrupt("break", 13);
+                  case 7:
+                    cast_commit('Controls/setCastAvailable', true);
+                    return _context.abrupt("break", 13);
+                  case 9:
+                    _context.next = 11;
+                    return sendLoadRequest();
+                  case 11:
+                    return _context.abrupt("break", 13);
+                  case 12:
+                    return _context.abrupt("break", 13);
+                  case 13:
+                  case "end":
+                    return _context.stop();
+                }
+              }, _callee);
+            }));
+            return function castStateListener(_x) {
+              return _ref2.apply(this, arguments);
             };
-            console.log(window['__onGCastApiAvailable'], "window['__onGCastApiAvailable']");
-            window['__onGCastApiAvailable'] = /*#__PURE__*/function () {
-              var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(isAvailable) {
-                return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-                  while (1) switch (_context4.prev = _context4.next) {
-                    case 0:
-                      console.log('__onGCastApiAvailablellllll', isAvailable);
-                      if (isAvailable) {
-                        setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-                          var _window$cast$framewor, CAST_STATE_CHANGED, SESSION_STATE_CHANGED;
-                          return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-                            while (1) switch (_context3.prev = _context3.next) {
-                              case 0:
-                                _context3.next = 2;
-                                return window.cast.framework.CastContext.getInstance();
-                              case 2:
-                                castContext = _context3.sent;
-                                if (!(window.chrome.cast && window.chrome.cast.AutoJoinPolicy)) {
-                                  _context3.next = 12;
-                                  break;
-                                }
-                                castContext.setOptions({
-                                  autoJoinPolicy: window.chrome.cast.AutoJoinPolicy.PAGE_SCOPED,
-                                  receiverApplicationId: receiverApplicationId
-                                });
-                                _window$cast$framewor = window.cast.framework.CastContextEventType, CAST_STATE_CHANGED = _window$cast$framewor.CAST_STATE_CHANGED, SESSION_STATE_CHANGED = _window$cast$framewor.SESSION_STATE_CHANGED;
-                                _context3.next = 8;
-                                return castContext.addEventListener(CAST_STATE_CHANGED, /*#__PURE__*/function () {
-                                  var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref5) {
-                                    var castState;
-                                    return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-                                      while (1) switch (_context2.prev = _context2.next) {
-                                        case 0:
-                                          castState = _ref5.castState;
-                                          _context2.next = 3;
-                                          return castStateListener(castState);
-                                        case 3:
-                                          return _context2.abrupt("return", _context2.sent);
-                                        case 4:
-                                        case "end":
-                                          return _context2.stop();
-                                      }
-                                    }, _callee2);
-                                  }));
-                                  return function (_x3) {
-                                    return _ref6.apply(this, arguments);
-                                  };
-                                }());
-                              case 8:
-                                _context3.next = 10;
-                                return castContext.addEventListener(SESSION_STATE_CHANGED, function (e) {
-                                  return sessionListener(e);
-                                });
-                              case 10:
-                                _context3.next = 13;
+          }();
+          sessionListener = function sessionListener(event) {
+            console.log('sessionListener');
+            var _window2 = window,
+              cast = _window2.cast;
+            switch (event.sessionState) {
+              case cast.framework.SessionState.SESSION_ENDED:
+                castSession = null;
+                connectToStream();
+                // Change to new connect
+                cast_commit('Controls/setCastIsConnected', false);
+                break;
+              default:
+                break;
+            }
+          };
+          console.log('antes de __onGCastApiAvailable');
+          window['__onGCastApiAvailable'] = /*#__PURE__*/function () {
+            var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(isAvailable) {
+              return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+                while (1) switch (_context4.prev = _context4.next) {
+                  case 0:
+                    console.log('entre a __onGCastApiAvailable');
+                    if (isAvailable) {
+                      setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+                        var _window$cast$framewor, CAST_STATE_CHANGED, SESSION_STATE_CHANGED;
+                        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+                          while (1) switch (_context3.prev = _context3.next) {
+                            case 0:
+                              _context3.next = 2;
+                              return window.cast.framework.CastContext.getInstance();
+                            case 2:
+                              castContext = _context3.sent;
+                              if (!(window.chrome.cast && window.chrome.cast.AutoJoinPolicy)) {
+                                _context3.next = 12;
                                 break;
-                              case 12:
-                                cast_commit('Controls/setCastAvailable', false);
-                              case 13:
-                              case "end":
-                                return _context3.stop();
-                            }
-                          }, _callee3);
-                        })), 20);
-                      }
-                    case 2:
-                    case "end":
-                      return _context4.stop();
-                  }
-                }, _callee4);
-              }));
-              return function (_x2) {
-                return _ref3.apply(this, arguments);
-              };
-            }();
-          }
-        case 2:
+                              }
+                              castContext.setOptions({
+                                autoJoinPolicy: window.chrome.cast.AutoJoinPolicy.PAGE_SCOPED,
+                                receiverApplicationId: receiverApplicationId
+                              });
+                              _window$cast$framewor = window.cast.framework.CastContextEventType, CAST_STATE_CHANGED = _window$cast$framewor.CAST_STATE_CHANGED, SESSION_STATE_CHANGED = _window$cast$framewor.SESSION_STATE_CHANGED;
+                              _context3.next = 8;
+                              return castContext.addEventListener(CAST_STATE_CHANGED, /*#__PURE__*/function () {
+                                var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref5) {
+                                  var castState;
+                                  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+                                    while (1) switch (_context2.prev = _context2.next) {
+                                      case 0:
+                                        castState = _ref5.castState;
+                                        _context2.next = 3;
+                                        return castStateListener(castState);
+                                      case 3:
+                                        return _context2.abrupt("return", _context2.sent);
+                                      case 4:
+                                      case "end":
+                                        return _context2.stop();
+                                    }
+                                  }, _callee2);
+                                }));
+                                return function (_x3) {
+                                  return _ref6.apply(this, arguments);
+                                };
+                              }());
+                            case 8:
+                              _context3.next = 10;
+                              return castContext.addEventListener(SESSION_STATE_CHANGED, function (e) {
+                                return sessionListener(e);
+                              });
+                            case 10:
+                              _context3.next = 13;
+                              break;
+                            case 12:
+                              cast_commit('Controls/setCastAvailable', false);
+                            case 13:
+                            case "end":
+                              return _context3.stop();
+                          }
+                        }, _callee3);
+                      })), 20);
+                    }
+                  case 2:
+                  case "end":
+                    return _context4.stop();
+                }
+              }, _callee4);
+            }));
+            return function (_x2) {
+              return _ref3.apply(this, arguments);
+            };
+          }();
+        case 6:
         case "end":
           return _context5.stop();
       }
@@ -12055,6 +12032,7 @@ var sendLoadRequest = /*#__PURE__*/function () {
     return _regeneratorRuntime().wrap(function _callee6$(_context6) {
       while (1) switch (_context6.prev = _context6.next) {
         case 0:
+          console.log('sendLoadRequest executed');
           _window3 = window, chrome = _window3.chrome;
           _state$Controls$castO = cast_state.Controls.castOptions, streamId = _state$Controls$castO.streamId, token = _state$Controls$castO.token;
           multiSourceOptions = {
@@ -12063,9 +12041,9 @@ var sendLoadRequest = /*#__PURE__*/function () {
             audioMediaId: (_state$ViewConnection = (_state$ViewConnection2 = cast_state.ViewConnection.trackEvent) === null || _state$ViewConnection2 === void 0 ? void 0 : (_state$ViewConnection3 = _state$ViewConnection2.audio) === null || _state$ViewConnection3 === void 0 ? void 0 : _state$ViewConnection3.transceiver.mid) !== null && _state$ViewConnection !== void 0 ? _state$ViewConnection : null,
             videoMediaId: (_state$ViewConnection4 = (_state$ViewConnection5 = cast_state.ViewConnection.trackEvent) === null || _state$ViewConnection5 === void 0 ? void 0 : (_state$ViewConnection6 = _state$ViewConnection5.video) === null || _state$ViewConnection6 === void 0 ? void 0 : _state$ViewConnection6.transceiver.mid) !== null && _state$ViewConnection4 !== void 0 ? _state$ViewConnection4 : null
           };
-          _context6.next = 5;
+          _context6.next = 6;
           return castContext.getCurrentSession();
-        case 5:
+        case 6:
           castSession = _context6.sent;
           mediaInfo = new chrome.cast.media.MediaInfo(streamId, '');
           mediaInfo.customData = {
@@ -12079,8 +12057,11 @@ var sendLoadRequest = /*#__PURE__*/function () {
             stopStream();
             cast_commit('Controls/setCastDevice', castSession.getCastDevice());
             cast_commit('Controls/setCastIsConnected', true);
+          }).catch(function (error) {
+            console.log(error);
           });
-        case 11:
+          console.log(mediaInfo, castSession.getCastDevice());
+        case 13:
         case "end":
           return _context6.stop();
       }
@@ -16278,47 +16259,47 @@ var VideoPlayerControlsVolumevue_type_style_index_0_id_0cf82b5a_scoped_true_lang
 const VideoPlayerControlsVolume_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsVolumevue_type_script_lang_js, [['render',VideoPlayerControlsVolumevue_type_template_id_0cf82b5a_scoped_true_render],['__scopeId',"data-v-0cf82b5a"]])
 
 /* harmony default export */ var VideoPlayerControlsVolume = (VideoPlayerControlsVolume_exports_);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=template&id=e569588a&scoped=true
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=template&id=6e3117e0&scoped=true
 
-var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-e569588a"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
+var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_withScopeId = function _withScopeId(n) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-6e3117e0"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_1 = {
+var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_1 = {
   class: "row"
 };
-var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_2 = {
+var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_2 = {
   key: 0
 };
-var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_3 = ["textContent"];
-var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_4 = {
+var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_3 = ["textContent"];
+var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_4 = {
   key: 0,
   class: "col-6 text-right"
 };
-var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_5 = {
+var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_5 = {
   key: 1,
   class: "col-5 pl-0 pr-1 text-right"
 };
-var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_6 = {
+var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_6 = {
   key: 1,
   class: "dropup"
 };
-var VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_7 = /*#__PURE__*/VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_withScopeId(function () {
+var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_7 = /*#__PURE__*/VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: "dropdown-header d-flex m-0 col-12"
   }, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h6", {
     class: "p-0 m-0"
   }, "Options")], -1);
 });
-function VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerControlsPlay = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsPlay");
   var _component_VideoPlayerControlsVolume = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsVolume");
   var _component_VideoPlayerControlsSettings = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettings");
   var _component_VideoPlayerControlsCast = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsCast");
   var _component_VideoPlayerControlsPip = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsPip");
   var _component_VideoPlayerControlsFullscreen = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsFullscreen");
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])([_ctx.isMobile ? 'col-7 text-left pr-0' : 'col-6 text-left'])
-  }, [!$props.isConnected ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_2, [$props.showButton('play') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsPlay, {
+  }, [!$props.isConnected ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_2, [$props.showButton('play') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsPlay, {
     key: 0
   })) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $props.showButton('volume') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsVolume, {
     key: 1
@@ -16326,7 +16307,7 @@ function VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_r
     key: 2,
     class: "h5 align-middle p-2",
     textContent: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($props.currentTime)
-  }, null, 8, VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 2), !_ctx.isMobile ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_4, [$props.showButton('settings') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettings, {
+  }, null, 8, VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 2), !_ctx.isMobile ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_4, [$props.showButton('settings') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettings, {
     key: 0,
     streamId: $props.streamId
   }, null, 8, ["streamId"])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $props.showButton('cast') && _ctx.castAvailable ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsCast, {
@@ -16336,10 +16317,10 @@ function VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_r
   })) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $props.showButton('fullscreen') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsFullscreen, {
     key: 3,
     click: _ctx.toggleFullscreen
-  }, null, 8, ["click"])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)])) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_5, [$props.showButton('settings') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettings, {
+  }, null, 8, ["click"])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)])) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_5, [$props.showButton('settings') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettings, {
     key: 0,
     streamId: $props.streamId
-  }, null, 8, ["streamId"])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $props.showButton('cast') && _ctx.castAvailable || _ctx.isLive && $options.pipEnabled && $props.showButton('pip') && $options.isVideoTag || $props.showButton('fullscreen') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_6, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
+  }, null, 8, ["streamId"])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $props.showButton('cast') && _ctx.castAvailable || _ctx.isLive && $options.pipEnabled && $props.showButton('pip') && $options.isVideoTag || $props.showButton('fullscreen') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_6, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "h3 align-middle control-icon bi ml-viewer-bi-three-dots-vertical",
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return _ctx.setDropup('mobile');
@@ -16351,7 +16332,7 @@ function VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_r
     style: {
       "margin-bottom": "0.9rem"
     }
-  }, [VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_hoisted_7, $props.showButton('cast') && _ctx.castAvailable ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsCast, {
+  }, [VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_7, $props.showButton('cast') && _ctx.castAvailable ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsCast, {
     key: 0
   })) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $options.pipEnabled ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsPip, {
     key: 1
@@ -16360,7 +16341,7 @@ function VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_r
     click: _ctx.toggleFullscreen
   }, null, 8, ["click"])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 2)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]))]);
 }
-// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=template&id=e569588a&scoped=true
+// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=template&id=6e3117e0&scoped=true
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsCast.vue?vue&type=template&id=f9fa5040&scoped=true
 
@@ -16368,16 +16349,18 @@ var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_withScopeId
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-f9fa5040"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
 var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_1 = {
+  ref: "cast"
+};
+var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_2 = {
   key: 0
 };
-var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_2 = /*#__PURE__*/VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_withScopeId(function () {
+var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_3 = /*#__PURE__*/VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", {
     class: "align-middle"
   }, "Cast", -1);
 });
-var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_3 = [VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_2];
+var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_4 = [VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_3];
 function VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_google_cast_launcher = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("google-cast-launcher");
   return _ctx.castAvailable && !_ctx.options.loading ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
     key: 0,
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])([_ctx.isMobile ? 'dropdown-item d-flex row mx-0' : 'mobile-setting']),
@@ -16388,9 +16371,7 @@ function VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_render
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])([_ctx.isMobile ? '' : 'mobile-setting'])
   }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["align-middle control-icon", _ctx.isMobile ? 'mobile-icon' : 'h3'])
-  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_google_cast_launcher, {
-    ref: "cast"
-  }, null, 512)], 2)], 2), _ctx.isMobile ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_1, VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 2)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true);
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("google-cast-launcher", VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_1, null, 512)], 2)], 2), _ctx.isMobile ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_2, VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_4)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 2)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true);
 }
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsCast.vue?vue&type=template&id=f9fa5040&scoped=true
 
@@ -16461,7 +16442,7 @@ const VideoPlayerControlsCast_exports_ = /*#__PURE__*/exportHelper_default()(Vid
       dropupShow: false
     };
   },
-  computed: _extends(_extends(_extends({}, mapState('Controls', {
+  computed: _extends(_extends({}, mapState('Controls', {
     video: function video(state) {
       return state.video;
     },
@@ -16477,10 +16458,6 @@ const VideoPlayerControlsCast_exports_ = /*#__PURE__*/exportHelper_default()(Vid
     castAvailable: function castAvailable(state) {
       return state.castAvailable;
     }
-  })), mapState('Params', {
-    chromecastId: function chromecastId(state) {
-      return state.queryParams.chromecastId;
-    }
   })), {}, {
     isVideoTag: function isVideoTag() {
       var _this$video;
@@ -16492,19 +16469,13 @@ const VideoPlayerControlsCast_exports_ = /*#__PURE__*/exportHelper_default()(Vid
   }),
   methods: _extends({}, mapMutations('Controls', ['setDropup', 'toggleFullscreen'])),
   beforeMount: function beforeMount() {
-    var _this = this;
     return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
-            console.log(_this.chromecastId, 'videoplayercontrolscontainer');
-            if (!_this.chromecastId) {
-              _context.next = 4;
-              break;
-            }
-            _context.next = 4;
+            _context.next = 2;
             return setCast();
-          case 4:
+          case 2:
           case "end":
             return _context.stop();
         }
@@ -16514,8 +16485,8 @@ const VideoPlayerControlsCast_exports_ = /*#__PURE__*/exportHelper_default()(Vid
 });
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=style&index=0&id=e569588a&lang=scss&scoped=true
-var VideoPlayerControlsContainervue_type_style_index_0_id_e569588a_lang_scss_scoped_true = __webpack_require__("8389");
+// EXTERNAL MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=style&index=0&id=6e3117e0&lang=scss&scoped=true
+var VideoPlayerControlsContainervue_type_style_index_0_id_6e3117e0_lang_scss_scoped_true = __webpack_require__("d745");
 
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue
 
@@ -16525,7 +16496,7 @@ var VideoPlayerControlsContainervue_type_style_index_0_id_e569588a_lang_scss_sco
 
 
 
-const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsContainervue_type_script_lang_js, [['render',VideoPlayerControlsContainervue_type_template_id_e569588a_scoped_true_render],['__scopeId',"data-v-e569588a"]])
+const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsContainervue_type_script_lang_js, [['render',VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_render],['__scopeId',"data-v-6e3117e0"]])
 
 /* harmony default export */ var VideoPlayerControlsContainer = (VideoPlayerControlsContainer_exports_);
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/index.js
@@ -16847,7 +16818,7 @@ var css_element_queries = __webpack_require__("87d4");
   mounted: function mounted() {
     var _this = this;
     return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var myContainer, toast;
+      var myContainer, toast, plugin, debuggerVar;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -16868,7 +16839,19 @@ var css_element_queries = __webpack_require__("87d4");
                 _this.setMobile(myContainer.clientWidth <= 575);
               });
             });
-          case 9:
+
+            // API for Chromecast
+            plugin = document.createElement("script");
+            plugin.setAttribute("src", "//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1");
+            plugin.async = true;
+            document.head.appendChild(plugin);
+
+            // debugging
+            debuggerVar = document.createElement("script");
+            debuggerVar.setAttribute("src", "//www.gstatic.com/cast/sdk/libs/devtools/debug_layer/caf_receiver_logger.js");
+            debuggerVar.async = true;
+            document.head.appendChild(debuggerVar);
+          case 17:
           case "end":
             return _context.stop();
         }
@@ -16883,8 +16866,8 @@ var css_element_queries = __webpack_require__("87d4");
 });
 // CONCATENATED MODULE: ./src/App.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/App.vue?vue&type=style&index=0&id=9b0d6f62&scoped=true&lang=css
-var Appvue_type_style_index_0_id_9b0d6f62_scoped_true_lang_css = __webpack_require__("2510");
+// EXTERNAL MODULE: ./src/App.vue?vue&type=style&index=0&id=1c4d6198&scoped=true&lang=css
+var Appvue_type_style_index_0_id_1c4d6198_scoped_true_lang_css = __webpack_require__("f3eb");
 
 // CONCATENATED MODULE: ./src/App.vue
 
@@ -16894,7 +16877,7 @@ var Appvue_type_style_index_0_id_9b0d6f62_scoped_true_lang_css = __webpack_requi
 
 
 
-const App_exports_ = /*#__PURE__*/exportHelper_default()(Appvue_type_script_lang_js, [['render',render],['__scopeId',"data-v-9b0d6f62"]])
+const App_exports_ = /*#__PURE__*/exportHelper_default()(Appvue_type_script_lang_js, [['render',render],['__scopeId',"data-v-1c4d6198"]])
 
 /* harmony default export */ var App = (App_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/UI/BaseModal.vue?vue&type=template&id=742b9a28&scoped=true

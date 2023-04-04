@@ -101,9 +101,6 @@ export default {
       isLive: (state) => state.isLive,
       castAvailable: (state) => state.castAvailable,
     }),
-    ...mapState('Params', {
-      chromecastId: (state) => state.queryParams.chromecastId,
-    }),
     isVideoTag() {
       return this.video?.nodeName === 'VIDEO'
     },
@@ -120,9 +117,7 @@ export default {
     ...mapMutations('Controls', ['setDropup', 'toggleFullscreen']),
   },
   async beforeMount() {
-    console.log(this.chromecastId, 'videoplayercontrolscontainer')
-    if (this.chromecastId)
-      await setCast()
+    await setCast()
   },
 }
 </script>

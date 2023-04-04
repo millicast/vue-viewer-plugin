@@ -64,6 +64,24 @@ export default {
         this.setMobile(myContainer.clientWidth <= 575)
       })
     })
+
+    // API for Chromecast
+    const plugin = document.createElement("script");
+    plugin.setAttribute(
+      "src",
+      "//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"
+    );
+    plugin.async = true;
+    document.head.appendChild(plugin);
+
+    // debugging
+    const debuggerVar = document.createElement("script");
+    debuggerVar.setAttribute(
+      "src",
+      "//www.gstatic.com/cast/sdk/libs/devtools/debug_layer/caf_receiver_logger.js"
+    );
+    debuggerVar.async = true;
+    document.head.appendChild(debuggerVar);
   },
   watch: {
     paramsOptions() {
