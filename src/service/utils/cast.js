@@ -3,13 +3,15 @@ import { connectToStream, stopStream } from '../sdkManager'
 const { commit, state } = store
 let castContext = null
 let castSession = null
+let receiverApplicationId = null
 
 export const handleSetCast = async () => {
-  const receiverApplicationId = 'CCB0A901' //state.Params.queryParams.chromecastId
-  console.log(receiverApplicationId)
+  while (!receiverApplicationId){
+    await new Promise(r => setTimeout(r, 20));
+    receiverApplicationId = state.Params.queryParams.chromecastId
+  }
 
   const castStateListener = async (castState) => {
-    console.log('castStateListener')
     const { cast } = window
     switch (castState) {
       case cast.framework.CastState.NO_DEVICES_AVAILABLE:
@@ -27,7 +29,6 @@ export const handleSetCast = async () => {
   }
 
   const sessionListener = (event) => {
-    console.log('sessionListener')
     const { cast } = window
     switch (event.sessionState) {
       case cast.framework.SessionState.SESSION_ENDED:
@@ -41,10 +42,8 @@ export const handleSetCast = async () => {
     }
   }
 
-  console.log('antes de __onGCastApiAvailable')
   window['__onGCastApiAvailable'] = async (isAvailable) => {
-    console.log('entre a __onGCastApiAvailable')
-    if (isAvailable) {
+    if (isAvailable) {  
       setTimeout(async () => {
         // isAvaiable is returning true but window.cast is null if we don't use a timer for some reason
         castContext = await window.cast.framework.CastContext.getInstance()
@@ -68,11 +67,9 @@ export const handleSetCast = async () => {
       }, 20)
     }
   }
-
 }
 
 export const sendLoadRequest = async () => {
-  console.log('sendLoadRequest executed')
   const { chrome } = window
   const { streamId, token } = state.Controls.castOptions
   const multiSourceOptions = {
@@ -97,6 +94,4 @@ export const sendLoadRequest = async () => {
   }).catch((error) => {
     console.log(error)
   })
-
-  console.log(mediaInfo, castSession.getCastDevice())
 }
