@@ -56,6 +56,8 @@ Once this is done, you are ready to use the plugin in any Vue file of your proje
 | `hideButtons` | `Array.<String>` | Optional  | `[]`    | The list is provided further in this document.                             |
 | `reportUrl` | `String` | Optional  | `null`    | The report playback URL service.                             |
 | `chromecastId` | `String` | Optional  | `null`    | The Chromecast ID of your application.                             |
+| `multisource` | `Boolean` | Optional  | `true`    | The streaming will be using multisource.                             |
+| `noDelay` | `Boolean` | Optional  | `true`    | Sets the minimum and maximum delay.                             |
 
 To be able to use the viewer, just reference to the component `VideoPlayer`, and pass the parameters of your choice as an object in the parameter `paramsOptions`. Later in this document, you will find an example of use.
 
