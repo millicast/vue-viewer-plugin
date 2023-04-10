@@ -44,7 +44,7 @@ export default {
           autoplay: this.paramsOptions.autoplay ?? true,
           muted: this.paramsOptions.muted ?? false,
           chromecastId: this.paramsOptions.chromecastId ?? null,
-          reportUrl: this.paramsOptions.reportUrl ?? null
+          reportUrl: this.paramsOptions.reportUrl ?? null,
           noDelay: this.paramsOptions?.noDelay ?? false,
           multisource: this.paramsOptions?.multisource ?? false
         })

@@ -14,7 +14,7 @@ export const defaultOptions = {
   streamId: null,
   token: null,
   forcePlayoutDelay: false,
-  multisource: false
+  multisource: false,
   chromecastId: null,
   reportUrl: null
 }
@@ -30,7 +30,7 @@ export default function setUserParams({
   autoplay,
   muted,
   noDelay,
-  multisource
+  multisource,
   chromecastId,
   reportUrl
 }) {
