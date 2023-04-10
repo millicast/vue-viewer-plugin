@@ -41,18 +41,18 @@ Once this is done, you are ready to use the plugin in any Vue file of your proje
 
 ### Configuration Parameters
 
-| Name          | Type             | Attribute | Default | Description                                                                |
-| ------------- | ---------------- | --------- | ------- | -------------------------------------------------------------------------- |
-| `accountId`   | `String`         | Mandatory |         | Millicast existing *Account ID* where you want to get the stream.          |
-| `streamName`  | `String`         | Mandatory |         | Millicast existing *Stream Name* where you want to get the stream.         |
-| `image`       | `String`         | Optional  |         | Placeholder image while stream is offline. By default it is a solid black. |
-| `muted`       | `Boolean`        | Optional  | `false` | The streaming will start muted.                                            |
-| `autoplay`    | `Boolean`        | Optional  | `true`  | The streaming will autoplay when connected.                                |
-| `hideButtons` | `Array.<String>` | Optional  | `[]`    | The list is provided further in this document.                             |
-| `reportUrl` | `String` | Optional  | `null`    | The report playback URL service.                             |
-| `chromecastId` | `String` | Optional  | `null`    | The Chromecast ID of your application.                             |
-| `multisource` | `Boolean` | Optional  | `false`    | The streaming will be using multisource.                             |
-| `noDelay` | `Boolean` | Optional  | `false`    | Sets the minimum and maximum delay (sets `forcePlayoutDelayMin` and `forcePlayoutDelayMax` to 0).                             |
+| Name           | Type             | Attribute | Default | Description                                                                                       |
+| -------------- | ---------------- | --------- | ------- | ------------------------------------------------------------------------------------------------- |
+| `accountId`    | `String`         | Mandatory |         | Millicast existing *Account ID* where you want to get the stream.                                 |
+| `streamName`   | `String`         | Mandatory |         | Millicast existing *Stream Name* where you want to get the stream.                                |
+| `image`        | `String`         | Optional  |         | Placeholder image while stream is offline. By default it is a solid black.                        |
+| `muted`        | `Boolean`        | Optional  | `false` | The streaming will start muted.                                                                   |
+| `autoplay`     | `Boolean`        | Optional  | `true`  | The streaming will autoplay when connected.                                                       |
+| `hideButtons`  | `Array.<String>` | Optional  | `[]`    | The list is provided further in this document.                                                    |
+| `reportUrl`    | `String`         | Optional  | `null`  | The report playback URL service.                                                                  |
+| `chromecastId` | `String`         | Optional  | `null`  | The Chromecast ID of your application.                                                            |
+| `multisource`  | `Boolean`        | Optional  | `false` | The streaming will start using multiview.                                                          |
+| `noDelay`      | `Boolean`        | Optional  | `false` | Sets the minimum and maximum delay (sets `forcePlayoutDelayMin` and `forcePlayoutDelayMax` to 0). |
 
 To be able to use the viewer, just reference to the component `VideoPlayer`, and pass the parameters of your choice as an object in the parameter `paramsOptions`. Later in this document, you will find an example of use.
 

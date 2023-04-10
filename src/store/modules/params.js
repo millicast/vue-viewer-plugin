@@ -12,12 +12,4 @@ export default {
       state.queryParams = queryParams
     },
   },
-  getters: {
-    queryParams(state) {
-      return state.queryParams
-    },
-    chromecastId(state) {
-      return state.queryParams.chromecastId
-    },
-  }
 }

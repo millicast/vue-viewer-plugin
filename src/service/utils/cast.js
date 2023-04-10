@@ -43,7 +43,7 @@ export const handleSetCast = async () => {
   }
 
   window['__onGCastApiAvailable'] = async (isAvailable) => {
-    if (isAvailable) {  
+    if (isAvailable) {
       setTimeout(async () => {
         // isAvaiable is returning true but window.cast is null if we don't use a timer for some reason
         castContext = await window.cast.framework.CastContext.getInstance()
