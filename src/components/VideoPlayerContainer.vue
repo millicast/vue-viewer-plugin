@@ -55,9 +55,6 @@
           class="overlay d-flex flex-row justify-content-center align-items-center"
           v-if="cast.device"
         >
-          <div>
-            <img src="../assets/cast-icon.svg" />
-          </div>
           <div class="d-flex flex-column ml-3">
             <h3>Casting to</h3>
             <h1 class="font-weight-bold">{{ cast.device.friendlyName }}</h1>
