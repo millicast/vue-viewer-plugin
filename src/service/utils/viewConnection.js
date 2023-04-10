@@ -66,10 +66,14 @@ export const handleConnectToStream = async () => {
   }
   try {
     await setCanAutoPlayStream()
-    await millicastView.connect({
+    const connectOptions = {
       events: ['active', 'inactive', 'layers', 'viewercount'],
       absCaptureTime: true,
-    })
+    }
+    if (state.Params.queryParams.audioOnly) connectOptions.disableVideo = true
+    if (state.Params.queryParams.videoOnly) connectOptions.disableAudio = true
+    if (state.Params.queryParams.forcePlayoutDelay) connectOptions.forcePlayoutDelay = state.Params.queryParams.forcePlayoutDelay
+    await millicastView.connect(connectOptions)
     addSignalingMigrateListener()
   } catch (e) {
     const message = e.response?.data?.data?.message
@@ -104,7 +108,7 @@ export const setTrackEvent = () => {
 const setStream = async (entrySrcObject) => {
   const video = state.Controls.video
   addSignalingMigrateListener()
-  verifyStreamWithPeer()
+  commit('Controls/setSrcObject', entrySrcObject)
   //If we already had a a stream and is not migrating then we ignore it (Firefox addRemoteTrack issue)
   if (
     video.srcObject &&
@@ -126,7 +130,6 @@ const setStream = async (entrySrcObject) => {
     const opositeElementRef =
       state.Controls.currentElementRef === 'player' ? 'player2' : 'player'
     const mediaTag = document.getElementById(opositeElementRef)
-    commit('Controls/setSrcObject', entrySrcObject)
     mediaTag.srcObject = entrySrcObject
     mediaTag.autoplay = state.Controls.playing
     mediaTag.muted = state.Controls.muted
@@ -165,28 +168,19 @@ const setCanAutoPlayStream = async () => {
   }
 }
 
-const verifyStreamWithPeer = () => { 
-  const millicastView = state.ViewConnection.millicastView
-  const peerVideoReceiver = millicastView.webRTCPeer.peer.getReceivers().find((r)=> r.track.kind === "video")
-  const video = state.Controls.video
-  if (peerVideoReceiver?.track.id !== video.srcObject?.getVideoTracks()[0].id) {
-    commit('Controls/setVideoSource', null)
-    commit('Controls/setSrcObject', null)
-    commit('Controls/setIsSplittedView', false)
-  }
-}
-
 export const setReconnect = () => {
   state.ViewConnection.eventListeners.reconnect =
     state.ViewConnection.eventListeners.reconnect ??
     state.ViewConnection.millicastView.on('reconnect', ({ timeout, error }) => {
-      const errorMessage = error.response?.data?.data?.message?.toLowerCase()
+      const errorMessage = error?.toString().toLowerCase()
       if (errorMessage?.toLowerCase().includes('stream not being published')) {
         commit('Controls/setIsLoading', false)
         commit('Controls/setIsLive', false)
       } else {
+        commit('Controls/setPreviousSplitState', state.Controls.isSplittedView)
         commit('Controls/setVideoSource', null)
         commit('Controls/setSrcObject', null)
+        commit('Controls/setIsSplittedView', false)
         commit('Controls/setViewerMigratingEvent', false)
         commit('Controls/setMigrateListenerIsSet', false)
         commit('Controls/handleReconnection', { timeout, error })

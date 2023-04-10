@@ -33,6 +33,7 @@ export default {
             '/' +
             this.paramsOptions?.streamName,
           audioOnly: this.paramsOptions?.audioOnly ?? false,
+          videoOnly: this.paramsOptions?.videoOnly ?? false,
           token: this.paramsOptions?.token,
           image: this.paramsOptions?.image,
           directorUrl:
@@ -44,6 +45,8 @@ export default {
           muted: this.paramsOptions.muted ?? false,
           chromecastId: this.paramsOptions.chromecastId ?? null,
           reportUrl: this.paramsOptions.reportUrl ?? null
+          noDelay: this.paramsOptions?.noDelay ?? false,
+          multisource: this.paramsOptions?.multisource ?? false
         })
       }
     },
