@@ -76,15 +76,6 @@ export default {
     );
     plugin.async = true;
     document.head.appendChild(plugin);
-
-    // debugging
-    const debuggerVar = document.createElement("script");
-    debuggerVar.setAttribute(
-      "src",
-      "//www.gstatic.com/cast/sdk/libs/devtools/debug_layer/caf_receiver_logger.js"
-    );
-    debuggerVar.async = true;
-    document.head.appendChild(debuggerVar);
   },
   watch: {
     paramsOptions() {
