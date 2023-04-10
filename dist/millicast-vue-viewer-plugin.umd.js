@@ -129,15 +129,16 @@ var Queue = function () {
 Queue.prototype = {
   add: function (item) {
     var entry = { item: item, next: null };
-    if (this.head) this.tail.next = entry;
+    var tail = this.tail;
+    if (tail) tail.next = entry;
     else this.head = entry;
     this.tail = entry;
   },
   get: function () {
     var entry = this.head;
     if (entry) {
-      this.head = entry.next;
-      if (this.tail === entry) this.tail = null;
+      var next = this.head = entry.next;
+      if (next === null) this.tail = null;
       return entry.item;
     }
   }
@@ -155,10 +156,17 @@ module.exports = Queue;
 
 /***/ }),
 
+/***/ "0334":
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__.p + "img/cast-icon.66db68c4.svg";
+
+/***/ }),
+
 /***/ "0366":
 /***/ (function(module, exports, __webpack_require__) {
 
-var uncurryThis = __webpack_require__("e330");
+var uncurryThis = __webpack_require__("4625");
 var aCallable = __webpack_require__("59ed");
 var NATIVE_BIND = __webpack_require__("40d5");
 
@@ -190,11 +198,11 @@ module.exports = !!firefox && +firefox[1];
 /***/ "04f8":
 /***/ (function(module, exports, __webpack_require__) {
 
-/* eslint-disable es-x/no-symbol -- required for testing */
+/* eslint-disable es/no-symbol -- required for testing */
 var V8_VERSION = __webpack_require__("2d00");
 var fails = __webpack_require__("d039");
 
-// eslint-disable-next-line es-x/no-object-getownpropertysymbols -- required for testing
+// eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
 module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
   var symbol = Symbol();
   // Chrome 38 Symbol has incorrect toString conversion
@@ -210,7 +218,7 @@ module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
 /***/ "057f":
 /***/ (function(module, exports, __webpack_require__) {
 
-/* eslint-disable es-x/no-object-getownpropertynames -- safe */
+/* eslint-disable es/no-object-getownpropertynames -- safe */
 var classof = __webpack_require__("c6b6");
 var toIndexedObject = __webpack_require__("fc6a");
 var $getOwnPropertyNames = __webpack_require__("241c").f;
@@ -249,7 +257,7 @@ var toPropertyKey = __webpack_require__("a04b");
 var hasOwn = __webpack_require__("1a2d");
 var IE8_DOM_DEFINE = __webpack_require__("0cfb");
 
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // `Object.getOwnPropertyDescriptor` method
@@ -354,7 +362,7 @@ module.exports = function (originalArray) {
 
 var NATIVE_SYMBOL = __webpack_require__("04f8");
 
-/* eslint-disable es-x/no-symbol -- safe */
+/* eslint-disable es/no-symbol -- safe */
 module.exports = NATIVE_SYMBOL && !!Symbol['for'] && !!Symbol.keyFor;
 
 
@@ -383,6 +391,7 @@ var floor = Math.floor;
 var charAt = uncurryThis(''.charAt);
 var replace = uncurryThis(''.replace);
 var stringSlice = uncurryThis(''.slice);
+// eslint-disable-next-line redos/no-vulnerable -- safe
 var SUBSTITUTION_SYMBOLS = /\$([$&'`]|\d{1,2}|<[^>]*>)/g;
 var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&'`]|\d{1,2})/g;
 
@@ -475,7 +484,7 @@ var createElement = __webpack_require__("cc12");
 
 // Thanks to IE8 for its funny defineProperty
 module.exports = !DESCRIPTORS && !fails(function () {
-  // eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
+  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty(createElement('div'), 'a', {
     get: function () { return 7; }
   }).a != 7;
@@ -493,6 +502,7 @@ var $Error = Error;
 var replace = uncurryThis(''.replace);
 
 var TEST = (function (arg) { return String($Error(arg).stack); })('zxcasd');
+// eslint-disable-next-line redos/no-vulnerable -- safe
 var V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/;
 var IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
 
@@ -607,6 +617,7 @@ $({ target: 'Object', stat: true }, {
 /***/ "13d2":
 /***/ (function(module, exports, __webpack_require__) {
 
+var uncurryThis = __webpack_require__("e330");
 var fails = __webpack_require__("d039");
 var isCallable = __webpack_require__("1626");
 var hasOwn = __webpack_require__("1a2d");
@@ -617,8 +628,12 @@ var InternalStateModule = __webpack_require__("69f3");
 
 var enforceInternalState = InternalStateModule.enforce;
 var getInternalState = InternalStateModule.get;
-// eslint-disable-next-line es-x/no-object-defineproperty -- safe
+var $String = String;
+// eslint-disable-next-line es/no-object-defineproperty -- safe
 var defineProperty = Object.defineProperty;
+var stringSlice = uncurryThis(''.slice);
+var replace = uncurryThis(''.replace);
+var join = uncurryThis([].join);
 
 var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
   return defineProperty(function () { /* empty */ }, 'length', { value: 8 }).length !== 8;
@@ -627,8 +642,8 @@ var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
 var TEMPLATE = String(String).split('String');
 
 var makeBuiltIn = module.exports = function (value, name, options) {
-  if (String(name).slice(0, 7) === 'Symbol(') {
-    name = '[' + String(name).replace(/^Symbol\(([^)]*)\)/, '$1') + ']';
+  if (stringSlice($String(name), 0, 7) === 'Symbol(') {
+    name = '[' + replace($String(name), /^Symbol\(([^)]*)\)/, '$1') + ']';
   }
   if (options && options.getter) name = 'get ' + name;
   if (options && options.setter) name = 'set ' + name;
@@ -647,7 +662,7 @@ var makeBuiltIn = module.exports = function (value, name, options) {
   } catch (error) { /* empty */ }
   var state = enforceInternalState(value);
   if (!hasOwn(state, 'source')) {
-    state.source = TEMPLATE.join(typeof name == 'string' ? name : '');
+    state.source = join(TEMPLATE, typeof name == 'string' ? name : '');
   } return value;
 };
 
@@ -705,18 +720,20 @@ var INCORRECT_TO_LENGTH = fails(function () {
 
 // V8 and Safari <= 15.4, FF < 23 throws InternalError
 // https://bugs.chromium.org/p/v8/issues/detail?id=12681
-var SILENT_ON_NON_WRITABLE_LENGTH = !function () {
+var properErrorOnNonWritableLength = function () {
   try {
-    // eslint-disable-next-line es-x/no-object-defineproperty -- safe
+    // eslint-disable-next-line es/no-object-defineproperty -- safe
     Object.defineProperty([], 'length', { writable: false }).push();
   } catch (error) {
     return error instanceof TypeError;
   }
-}();
+};
+
+var FORCED = INCORRECT_TO_LENGTH || !properErrorOnNonWritableLength();
 
 // `Array.prototype.push` method
 // https://tc39.es/ecma262/#sec-array.prototype.push
-$({ target: 'Array', proto: true, arity: 1, forced: INCORRECT_TO_LENGTH || SILENT_ON_NON_WRITABLE_LENGTH }, {
+$({ target: 'Array', proto: true, arity: 1, forced: FORCED }, {
   // eslint-disable-next-line no-unused-vars -- required for `.length`
   push: function push(item) {
     var O = toObject(this);
@@ -854,7 +871,7 @@ var STRICT_METHOD = arrayMethodIsStrict('forEach');
 // https://tc39.es/ecma262/#sec-array.prototype.foreach
 module.exports = !STRICT_METHOD ? function forEach(callbackfn /* , thisArg */) {
   return $forEach(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
-// eslint-disable-next-line es-x/no-array-prototype-foreach -- safe
+// eslint-disable-next-line es/no-array-prototype-foreach -- safe
 } : [].forEach;
 
 
@@ -885,7 +902,7 @@ var hasOwnProperty = uncurryThis({}.hasOwnProperty);
 
 // `HasOwnProperty` abstract operation
 // https://tc39.es/ecma262/#sec-hasownproperty
-// eslint-disable-next-line es-x/no-object-hasown -- safe
+// eslint-disable-next-line es/no-object-hasown -- safe
 module.exports = Object.hasOwn || function hasOwn(it, key) {
   return hasOwnProperty(toObject(it), key);
 };
@@ -924,7 +941,7 @@ try {
   iteratorWithReturn[ITERATOR] = function () {
     return this;
   };
-  // eslint-disable-next-line es-x/no-array-from, no-throw-literal -- required for testing
+  // eslint-disable-next-line es/no-array-from, no-throw-literal -- required for testing
   Array.from(iteratorWithReturn, function () { throw 2; });
 } catch (error) { /* empty */ }
 
@@ -953,6 +970,7 @@ module.exports = function (exec, SKIP_CLOSING) {
 
 var userAgent = __webpack_require__("342f");
 
+// eslint-disable-next-line redos/no-vulnerable -- safe
 module.exports = /(?:ipad|iphone|ipod).*applewebkit/i.test(userAgent);
 
 
@@ -998,13 +1016,6 @@ module.exports = function (METHOD_NAME) {
   });
 };
 
-
-/***/ }),
-
-/***/ "1e82":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -1185,7 +1196,7 @@ var hiddenKeys = enumBugKeys.concat('length', 'prototype');
 
 // `Object.getOwnPropertyNames` method
 // https://tc39.es/ecma262/#sec-object.getownpropertynames
-// eslint-disable-next-line es-x/no-object-getownpropertynames -- safe
+// eslint-disable-next-line es/no-object-getownpropertynames -- safe
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   return internalObjectKeys(O, hiddenKeys);
 };
@@ -1228,7 +1239,7 @@ $({ target: 'String', proto: true, forced: !correctIsRegExpLogic('includes') }, 
 "use strict";
 
 var getBuiltIn = __webpack_require__("d066");
-var definePropertyModule = __webpack_require__("9bf2");
+var defineBuiltInAccessor = __webpack_require__("edd0");
 var wellKnownSymbol = __webpack_require__("b622");
 var DESCRIPTORS = __webpack_require__("83ab");
 
@@ -1236,10 +1247,9 @@ var SPECIES = wellKnownSymbol('species');
 
 module.exports = function (CONSTRUCTOR_NAME) {
   var Constructor = getBuiltIn(CONSTRUCTOR_NAME);
-  var defineProperty = definePropertyModule.f;
 
   if (DESCRIPTORS && Constructor && !Constructor[SPECIES]) {
-    defineProperty(Constructor, SPECIES, {
+    defineBuiltInAccessor(Constructor, SPECIES, {
       configurable: true,
       get: function () { return this; }
     });
@@ -1690,7 +1700,7 @@ var FunctionPrototype = Function.prototype;
 var apply = FunctionPrototype.apply;
 var call = FunctionPrototype.call;
 
-// eslint-disable-next-line es-x/no-reflect -- safe
+// eslint-disable-next-line es/no-reflect -- safe
 module.exports = typeof Reflect == 'object' && Reflect.apply || (NATIVE_BIND ? call.bind(apply) : function () {
   return call.apply(apply, arguments);
 });
@@ -1724,12 +1734,12 @@ var String = global.String;
 var counter = 0;
 var queue = {};
 var ONREADYSTATECHANGE = 'onreadystatechange';
-var location, defer, channel, port;
+var $location, defer, channel, port;
 
-try {
+fails(function () {
   // Deno throws a ReferenceError on `location` access without `--location` flag
-  location = global.location;
-} catch (error) { /* empty */ }
+  $location = global.location;
+});
 
 var run = function (id) {
   if (hasOwn(queue, id)) {
@@ -1745,13 +1755,13 @@ var runner = function (id) {
   };
 };
 
-var listener = function (event) {
+var eventListener = function (event) {
   run(event.data);
 };
 
-var post = function (id) {
+var globalPostMessageDefer = function (id) {
   // old engines have not location.origin
-  global.postMessage(String(id), location.protocol + '//' + location.host);
+  global.postMessage(String(id), $location.protocol + '//' + $location.host);
 };
 
 // Node.js 0.9+ & IE10+ has setImmediate, otherwise:
@@ -1784,7 +1794,7 @@ if (!set || !clear) {
   } else if (MessageChannel && !IS_IOS) {
     channel = new MessageChannel();
     port = channel.port2;
-    channel.port1.onmessage = listener;
+    channel.port1.onmessage = eventListener;
     defer = bind(port.postMessage, port);
   // Browsers with postMessage, skip WebWorkers
   // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
@@ -1792,11 +1802,11 @@ if (!set || !clear) {
     global.addEventListener &&
     isCallable(global.postMessage) &&
     !global.importScripts &&
-    location && location.protocol !== 'file:' &&
-    !fails(post)
+    $location && $location.protocol !== 'file:' &&
+    !fails(globalPostMessageDefer)
   ) {
-    defer = post;
-    global.addEventListener('message', listener, false);
+    defer = globalPostMessageDefer;
+    global.addEventListener('message', eventListener, false);
   // IE8-
   } else if (ONREADYSTATECHANGE in createElement('script')) {
     defer = function (id) {
@@ -1877,17 +1887,6 @@ module.exports = version;
 
 /***/ }),
 
-/***/ "3300":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerReportModal_vue_vue_type_style_index_0_id_5f453960_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("4dba");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerReportModal_vue_vue_type_style_index_0_id_5f453960_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerReportModal_vue_vue_type_style_index_0_id_5f453960_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
-
-
-/***/ }),
-
 /***/ "3410":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -1912,11 +1911,9 @@ $({ target: 'Object', stat: true, forced: FAILS_ON_PRIMITIVES, sham: !CORRECT_PR
 /***/ }),
 
 /***/ "342f":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-var getBuiltIn = __webpack_require__("d066");
-
-module.exports = getBuiltIn('navigator', 'userAgent') || '';
+module.exports = typeof navigator != 'undefined' && String(navigator.userAgent) || '';
 
 
 /***/ }),
@@ -1989,6 +1986,17 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ "363c":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerReportModal_vue_vue_type_style_index_0_id_2c22aaec_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("6066");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerReportModal_vue_vue_type_style_index_0_id_2c22aaec_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerReportModal_vue_vue_type_style_index_0_id_2c22aaec_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
+
+/***/ }),
+
 /***/ "37e8":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2001,7 +2009,7 @@ var objectKeys = __webpack_require__("df75");
 
 // `Object.defineProperties` method
 // https://tc39.es/ecma262/#sec-object.defineproperties
-// eslint-disable-next-line es-x/no-object-defineproperties -- safe
+// eslint-disable-next-line es/no-object-defineproperties -- safe
 exports.f = DESCRIPTORS && !V8_PROTOTYPE_DEFINE_BUG ? Object.defineProperties : function defineProperties(O, Properties) {
   anObject(O);
   var props = toIndexedObject(Properties);
@@ -2025,7 +2033,7 @@ var DESCRIPTORS = __webpack_require__("83ab");
 var isArray = __webpack_require__("e8b5");
 
 var $TypeError = TypeError;
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // Safari < 13 does not throw an error in this case
@@ -2033,7 +2041,7 @@ var SILENT_ON_NON_WRITABLE_LENGTH_SET = DESCRIPTORS && !function () {
   // makes no sense without proper strict mode support
   if (this !== undefined) return true;
   try {
-    // eslint-disable-next-line es-x/no-object-defineproperty -- safe
+    // eslint-disable-next-line es/no-object-defineproperty -- safe
     Object.defineProperty([], 'length', { writable: false }).length = 1;
   } catch (error) {
     return error instanceof TypeError;
@@ -2100,18 +2108,20 @@ var doesNotExceedSafeInteger = __webpack_require__("3511");
 var INCORRECT_RESULT = [].unshift(0) !== 1;
 
 // V8 ~ Chrome < 71 and Safari <= 15.4, FF < 23 throws InternalError
-var SILENT_ON_NON_WRITABLE_LENGTH = !function () {
+var properErrorOnNonWritableLength = function () {
   try {
-    // eslint-disable-next-line es-x/no-object-defineproperty -- safe
+    // eslint-disable-next-line es/no-object-defineproperty -- safe
     Object.defineProperty([], 'length', { writable: false }).unshift();
   } catch (error) {
     return error instanceof TypeError;
   }
-}();
+};
+
+var FORCED = INCORRECT_RESULT || !properErrorOnNonWritableLength();
 
 // `Array.prototype.unshift` method
 // https://tc39.es/ecma262/#sec-array.prototype.unshift
-$({ target: 'Array', proto: true, arity: 1, forced: INCORRECT_RESULT || SILENT_ON_NON_WRITABLE_LENGTH }, {
+$({ target: 'Array', proto: true, arity: 1, forced: FORCED }, {
   // eslint-disable-next-line no-unused-vars -- required for `.length`
   unshift: function unshift(item) {
     var O = toObject(this);
@@ -2188,7 +2198,7 @@ module.exports = {};
 var fails = __webpack_require__("d039");
 
 module.exports = !fails(function () {
-  // eslint-disable-next-line es-x/no-function-prototype-bind -- safe
+  // eslint-disable-next-line es/no-function-prototype-bind -- safe
   var test = (function () { /* empty */ }).bind();
   // eslint-disable-next-line no-prototype-builtins -- safe
   return typeof test != 'function' || test.hasOwnProperty('prototype');
@@ -2207,7 +2217,7 @@ var forEach = __webpack_require__("17c2");
 
 // `Array.prototype.forEach` method
 // https://tc39.es/ecma262/#sec-array.prototype.foreach
-// eslint-disable-next-line es-x/no-array-prototype-foreach -- safe
+// eslint-disable-next-line es/no-array-prototype-foreach -- safe
 $({ target: 'Array', proto: true, forced: [].forEach != forEach }, {
   forEach: forEach
 });
@@ -2316,15 +2326,13 @@ module.exports = function (key) {
 /***/ }),
 
 /***/ "44de":
-/***/ (function(module, exports, __webpack_require__) {
-
-var global = __webpack_require__("da84");
+/***/ (function(module, exports) {
 
 module.exports = function (a, b) {
-  var console = global.console;
-  if (console && console.error) {
+  try {
+    // eslint-disable-next-line no-console -- safe
     arguments.length == 1 ? console.error(a) : console.error(a, b);
-  }
+  } catch (error) { /* empty */ }
 };
 
 
@@ -2367,6 +2375,22 @@ $({ target: 'Array', proto: true, forced: !STRICT_METHOD }, {
     return $some(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
+
+
+/***/ }),
+
+/***/ "4625":
+/***/ (function(module, exports, __webpack_require__) {
+
+var classofRaw = __webpack_require__("c6b6");
+var uncurryThis = __webpack_require__("e330");
+
+module.exports = function (fn) {
+  // Nashorn bug:
+  //   https://github.com/zloirock/core-js/issues/1128
+  //   https://github.com/zloirock/core-js/issues/1130
+  if (classofRaw(fn) === 'Function') return uncurryThis(fn);
+};
 
 
 /***/ }),
@@ -2595,13 +2619,6 @@ module.exports = function (O, start, end) {
   return result;
 };
 
-
-/***/ }),
-
-/***/ "4dba":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -3036,10 +3053,10 @@ var store = __webpack_require__("c6cd");
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.25.2',
+  version: '3.29.1',
   mode: IS_PURE ? 'pure' : 'global',
-  copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.25.2/LICENSE',
+  copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
+  license: 'https://github.com/zloirock/core-js/blob/v3.29.1/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3128,16 +3145,15 @@ var toString = __webpack_require__("577e");
 var whitespaces = __webpack_require__("5899");
 
 var replace = uncurryThis(''.replace);
-var whitespace = '[' + whitespaces + ']';
-var ltrim = RegExp('^' + whitespace + whitespace + '*');
-var rtrim = RegExp(whitespace + whitespace + '*$');
+var ltrim = RegExp('^[' + whitespaces + ']+');
+var rtrim = RegExp('(^|[^' + whitespaces + '])[' + whitespaces + ']+$');
 
 // `String.prototype.{ trim, trimStart, trimEnd, trimLeft, trimRight }` methods implementation
 var createMethod = function (TYPE) {
   return function ($this) {
     var string = toString(requireObjectCoercible($this));
     if (TYPE & 1) string = replace(string, ltrim, '');
-    if (TYPE & 2) string = replace(string, rtrim, '');
+    if (TYPE & 2) string = replace(string, rtrim, '$1');
     return string;
   };
 };
@@ -3253,7 +3269,7 @@ var DESCRIPTORS = __webpack_require__("83ab");
 var hasOwn = __webpack_require__("1a2d");
 
 var FunctionPrototype = Function.prototype;
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor;
 
 var EXISTS = hasOwn(FunctionPrototype, 'name');
@@ -3580,14 +3596,32 @@ module.exports = FORCED_PROMISE_CONSTRUCTOR || !checkCorrectnessOfIteration(func
 
 /***/ }),
 
+/***/ "5fae":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerContainer_vue_vue_type_style_index_0_id_573bd532_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("d97a");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerContainer_vue_vue_type_style_index_0_id_573bd532_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerContainer_vue_vue_type_style_index_0_id_573bd532_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
+
+/***/ }),
+
 /***/ "605d":
 /***/ (function(module, exports, __webpack_require__) {
 
-var classof = __webpack_require__("c6b6");
-var global = __webpack_require__("da84");
+/* WEBPACK VAR INJECTION */(function(process) {var classof = __webpack_require__("c6b6");
 
-module.exports = classof(global.process) == 'process';
+module.exports = typeof process != 'undefined' && classof(process) == 'process';
 
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("4362")))
+
+/***/ }),
+
+/***/ "6066":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -3619,9 +3653,9 @@ var propertyIsEnumerableModule = __webpack_require__("d1e7");
 var toObject = __webpack_require__("7b0b");
 var IndexedObject = __webpack_require__("44ad");
 
-// eslint-disable-next-line es-x/no-object-assign -- safe
+// eslint-disable-next-line es/no-object-assign -- safe
 var $assign = Object.assign;
-// eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
+// eslint-disable-next-line es/no-object-defineproperty -- required for testing
 var defineProperty = Object.defineProperty;
 var concat = uncurryThis([].concat);
 
@@ -3641,7 +3675,7 @@ module.exports = !$assign || fails(function () {
   // should work with symbols and should have deterministic property order (V8 bug)
   var A = {};
   var B = {};
-  // eslint-disable-next-line es-x/no-symbol -- safe
+  // eslint-disable-next-line es/no-symbol -- safe
   var symbol = Symbol();
   var alphabet = 'abcdefghijklmnopqrst';
   A[symbol] = 7;
@@ -3674,7 +3708,7 @@ module.exports = !$assign || fails(function () {
 
 var global = __webpack_require__("da84");
 
-// eslint-disable-next-line es-x/no-object-defineproperty -- safe
+// eslint-disable-next-line es/no-object-defineproperty -- safe
 var defineProperty = Object.defineProperty;
 
 module.exports = function (key, value) {
@@ -3858,7 +3892,6 @@ module.exports = !construct || fails(function () {
 
 var NATIVE_WEAK_MAP = __webpack_require__("cdce");
 var global = __webpack_require__("da84");
-var uncurryThis = __webpack_require__("e330");
 var isObject = __webpack_require__("861d");
 var createNonEnumerableProperty = __webpack_require__("9112");
 var hasOwn = __webpack_require__("1a2d");
@@ -3886,20 +3919,22 @@ var getterFor = function (TYPE) {
 
 if (NATIVE_WEAK_MAP || shared.state) {
   var store = shared.state || (shared.state = new WeakMap());
-  var wmget = uncurryThis(store.get);
-  var wmhas = uncurryThis(store.has);
-  var wmset = uncurryThis(store.set);
+  /* eslint-disable no-self-assign -- prototype methods protection */
+  store.get = store.get;
+  store.has = store.has;
+  store.set = store.set;
+  /* eslint-enable no-self-assign -- prototype methods protection */
   set = function (it, metadata) {
-    if (wmhas(store, it)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (store.has(it)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
-    wmset(store, it, metadata);
+    store.set(it, metadata);
     return metadata;
   };
   get = function (it) {
-    return wmget(store, it) || {};
+    return store.get(it) || {};
   };
   has = function (it) {
-    return wmhas(store, it);
+    return store.has(it);
   };
 } else {
   var STATE = sharedKey('state');
@@ -3940,13 +3975,6 @@ module.exports = {
 
 /***/ }),
 
-/***/ "6ae8":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "6b0d":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3971,6 +3999,26 @@ exports.default = (sfc, props) => {
 
 /* global Deno -- Deno case */
 module.exports = typeof Deno == 'object' && Deno && typeof Deno.version == 'object';
+
+
+/***/ }),
+
+/***/ "6f19":
+/***/ (function(module, exports, __webpack_require__) {
+
+var createNonEnumerableProperty = __webpack_require__("9112");
+var clearErrorStack = __webpack_require__("0d26");
+var ERROR_STACK_INSTALLABLE = __webpack_require__("b980");
+
+// non-standard V8
+var captureStackTrace = Error.captureStackTrace;
+
+module.exports = function (error, C, stack, dropEntries) {
+  if (ERROR_STACK_INSTALLABLE) {
+    if (captureStackTrace) captureStackTrace(error, C);
+    else createNonEnumerableProperty(error, 'stack', clearErrorStack(stack, dropEntries));
+  }
+};
 
 
 /***/ }),
@@ -4088,10 +4136,26 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ "7282":
+/***/ (function(module, exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__("e330");
+var aCallable = __webpack_require__("59ed");
+
+module.exports = function (object, key, method) {
+  try {
+    // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+    return uncurryThis(aCallable(Object.getOwnPropertyDescriptor(object, key)[method]));
+  } catch (error) { /* empty */ }
+};
+
+
+/***/ }),
+
 /***/ "7418":
 /***/ (function(module, exports) {
 
-// eslint-disable-next-line es-x/no-object-getownpropertysymbols -- safe
+// eslint-disable-next-line es/no-object-getownpropertysymbols -- safe
 exports.f = Object.getOwnPropertySymbols;
 
 
@@ -4236,7 +4300,7 @@ hiddenKeys[IE_PROTO] = true;
 
 // `Object.create` method
 // https://tc39.es/ecma262/#sec-object.create
-// eslint-disable-next-line es-x/no-object-create -- safe
+// eslint-disable-next-line es/no-object-create -- safe
 module.exports = Object.create || function create(O, Properties) {
   var result;
   if (O !== null) {
@@ -4305,7 +4369,7 @@ var fails = __webpack_require__("d039");
 
 // Detect IE8's incomplete defineProperty implementation
 module.exports = !fails(function () {
-  // eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
+  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] != 7;
 });
 
@@ -4426,23 +4490,13 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__8bbf__;
 var documentAll = typeof document == 'object' && document.all;
 
 // https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
+// eslint-disable-next-line unicorn/no-typeof-undefined -- required for testing
 var IS_HTMLDDA = typeof documentAll == 'undefined' && documentAll !== undefined;
 
 module.exports = {
   all: documentAll,
   IS_HTMLDDA: IS_HTMLDDA
 };
-
-
-/***/ }),
-
-/***/ "8f10":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerContainer_vue_vue_type_style_index_0_id_a613ee1c_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("1e82");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerContainer_vue_vue_type_style_index_0_id_a613ee1c_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerContainer_vue_vue_type_style_index_0_id_a613ee1c_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
 
 
 /***/ }),
@@ -4706,15 +4760,13 @@ var IS_CONCAT_SPREADABLE_SUPPORT = V8_VERSION >= 51 || !fails(function () {
   return array.concat()[0] !== array;
 });
 
-var SPECIES_SUPPORT = arrayMethodHasSpeciesSupport('concat');
-
 var isConcatSpreadable = function (O) {
   if (!isObject(O)) return false;
   var spreadable = O[IS_CONCAT_SPREADABLE];
   return spreadable !== undefined ? !!spreadable : isArray(O);
 };
 
-var FORCED = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
+var FORCED = !IS_CONCAT_SPREADABLE_SUPPORT || !arrayMethodHasSpeciesSupport('concat');
 
 // `Array.prototype.concat` method
 // https://tc39.es/ecma262/#sec-array.prototype.concat
@@ -4793,9 +4845,9 @@ var anObject = __webpack_require__("825a");
 var toPropertyKey = __webpack_require__("a04b");
 
 var $TypeError = TypeError;
-// eslint-disable-next-line es-x/no-object-defineproperty -- safe
+// eslint-disable-next-line es/no-object-defineproperty -- safe
 var $defineProperty = Object.defineProperty;
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 var ENUMERABLE = 'enumerable';
 var CONFIGURABLE = 'configurable';
@@ -4907,11 +4959,11 @@ var arrayMethodIsStrict = __webpack_require__("a640");
 var nativeJoin = uncurryThis([].join);
 
 var ES3_STRINGS = IndexedObject != Object;
-var STRICT_METHOD = arrayMethodIsStrict('join', ',');
+var FORCED = ES3_STRINGS || !arrayMethodIsStrict('join', ',');
 
 // `Array.prototype.join` method
 // https://tc39.es/ecma262/#sec-array.prototype.join
-$({ target: 'Array', proto: true, forced: ES3_STRINGS || !STRICT_METHOD }, {
+$({ target: 'Array', proto: true, forced: FORCED }, {
   join: function join(separator) {
     return nativeJoin(toIndexedObject(this), separator === undefined ? ',' : separator);
   }
@@ -5026,7 +5078,7 @@ var from = __webpack_require__("4df4");
 var checkCorrectnessOfIteration = __webpack_require__("1c7e");
 
 var INCORRECT_ITERATION = !checkCorrectnessOfIteration(function (iterable) {
-  // eslint-disable-next-line es-x/no-array-from -- required for testing
+  // eslint-disable-next-line es/no-array-from -- required for testing
   Array.from(iterable);
 });
 
@@ -5084,7 +5136,7 @@ var nativeErrorToString = Error.prototype.toString;
 var INCORRECT_TO_STRING = fails(function () {
   if (DESCRIPTORS) {
     // Chrome 32- incorrectly call accessor
-    // eslint-disable-next-line es-x/no-object-defineproperty -- safe
+    // eslint-disable-next-line es/no-object-defineproperty -- safe
     var object = create(Object.defineProperty({}, 'name', { get: function () {
       return this === object;
     } }));
@@ -5843,7 +5895,7 @@ var BUGGY_SAFARI_ITERATORS = false;
 // https://tc39.es/ecma262/#sec-%iteratorprototype%-object
 var IteratorPrototype, PrototypeOfArrayIteratorPrototype, arrayIterator;
 
-/* eslint-disable es-x/no-array-prototype-keys -- safe */
+/* eslint-disable es/no-array-prototype-keys -- safe */
 if ([].keys) {
   arrayIterator = [].keys();
   // Safari 8 has buggy iterators w/o `next`
@@ -5904,7 +5956,7 @@ var fails = __webpack_require__("d039");
 // V8 ~ Chrome 36-
 // https://bugs.chromium.org/p/v8/issues/detail?id=3334
 module.exports = DESCRIPTORS && fails(function () {
-  // eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
+  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty(function () { /* empty */ }, 'prototype', {
     value: 42,
     writable: false
@@ -5950,7 +6002,7 @@ var floor = Math.floor;
 
 // `Math.trunc` method
 // https://tc39.es/ecma262/#sec-math.trunc
-// eslint-disable-next-line es-x/no-math-trunc -- safe
+// eslint-disable-next-line es/no-math-trunc -- safe
 module.exports = Math.trunc || function trunc(x) {
   var n = +x;
   return (n > 0 ? floor : ceil)(n);
@@ -5995,6 +6047,7 @@ var global = __webpack_require__("da84");
 var bind = __webpack_require__("0366");
 var getOwnPropertyDescriptor = __webpack_require__("06cf").f;
 var macrotask = __webpack_require__("2cf4").set;
+var Queue = __webpack_require__("01b4");
 var IS_IOS = __webpack_require__("1cdc");
 var IS_IOS_PEBBLE = __webpack_require__("d4c3");
 var IS_WEBOS_WEBKIT = __webpack_require__("a4b4");
@@ -6006,26 +6059,22 @@ var process = global.process;
 var Promise = global.Promise;
 // Node.js 11 shows ExperimentalWarning on getting `queueMicrotask`
 var queueMicrotaskDescriptor = getOwnPropertyDescriptor(global, 'queueMicrotask');
-var queueMicrotask = queueMicrotaskDescriptor && queueMicrotaskDescriptor.value;
-
-var flush, head, last, notify, toggle, node, promise, then;
+var microtask = queueMicrotaskDescriptor && queueMicrotaskDescriptor.value;
+var notify, toggle, node, promise, then;
 
 // modern engines have queueMicrotask method
-if (!queueMicrotask) {
-  flush = function () {
+if (!microtask) {
+  var queue = new Queue();
+
+  var flush = function () {
     var parent, fn;
     if (IS_NODE && (parent = process.domain)) parent.exit();
-    while (head) {
-      fn = head.fn;
-      head = head.next;
-      try {
-        fn();
-      } catch (error) {
-        if (head) notify();
-        else last = undefined;
-        throw error;
-      }
-    } last = undefined;
+    while (fn = queue.get()) try {
+      fn();
+    } catch (error) {
+      if (queue.head) notify();
+      throw error;
+    }
     if (parent) parent.enter();
   };
 
@@ -6060,22 +6109,20 @@ if (!queueMicrotask) {
   // - onreadystatechange
   // - setTimeout
   } else {
-    // strange IE + webpack dev server bug - use .bind(global)
+    // `webpack` dev server bug on IE global methods - use bind(fn, global)
     macrotask = bind(macrotask, global);
     notify = function () {
       macrotask(flush);
     };
   }
+
+  microtask = function (fn) {
+    if (!queue.head) notify();
+    queue.add(fn);
+  };
 }
 
-module.exports = queueMicrotask || function (fn) {
-  var task = { fn: fn, next: undefined };
-  if (last) last.next = task;
-  if (!head) {
-    head = task;
-    notify();
-  } last = task;
-};
+module.exports = microtask;
 
 
 /***/ }),
@@ -6090,21 +6137,15 @@ var uid = __webpack_require__("90e3");
 var NATIVE_SYMBOL = __webpack_require__("04f8");
 var USE_SYMBOL_AS_UID = __webpack_require__("fdbf");
 
-var WellKnownSymbolsStore = shared('wks');
 var Symbol = global.Symbol;
-var symbolFor = Symbol && Symbol['for'];
-var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol : Symbol && Symbol.withoutSetter || uid;
+var WellKnownSymbolsStore = shared('wks');
+var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol['for'] || Symbol : Symbol && Symbol.withoutSetter || uid;
 
 module.exports = function (name) {
-  if (!hasOwn(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == 'string')) {
-    var description = 'Symbol.' + name;
-    if (NATIVE_SYMBOL && hasOwn(Symbol, name)) {
-      WellKnownSymbolsStore[name] = Symbol[name];
-    } else if (USE_SYMBOL_AS_UID && symbolFor) {
-      WellKnownSymbolsStore[name] = symbolFor(description);
-    } else {
-      WellKnownSymbolsStore[name] = createWellKnownSymbol(description);
-    }
+  if (!hasOwn(WellKnownSymbolsStore, name)) {
+    WellKnownSymbolsStore[name] = NATIVE_SYMBOL && hasOwn(Symbol, name)
+      ? Symbol[name]
+      : createWellKnownSymbol('Symbol.' + name);
   } return WellKnownSymbolsStore[name];
 };
 
@@ -6240,7 +6281,7 @@ var createPropertyDescriptor = __webpack_require__("5c6c");
 module.exports = !fails(function () {
   var error = Error('a');
   if (!('stack' in error)) return true;
-  // eslint-disable-next-line es-x/no-object-defineproperty -- safe
+  // eslint-disable-next-line es/no-object-defineproperty -- safe
   Object.defineProperty(error, 'stack', createPropertyDescriptor(1, 7));
   return error.stack !== 7;
 });
@@ -6287,17 +6328,6 @@ module.exports = function (input, pref) {
   if (pref === undefined) pref = 'number';
   return ordinaryToPrimitive(input, pref);
 };
-
-
-/***/ }),
-
-/***/ "c13f":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_5c2a5d4d_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("6ae8");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_5c2a5d4d_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_5c2a5d4d_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
 
 
 /***/ }),
@@ -6596,20 +6626,20 @@ module.exports = g;
 
 "use strict";
 
-/* eslint-disable es-x/no-array-prototype-indexof -- required for testing */
+/* eslint-disable es/no-array-prototype-indexof -- required for testing */
 var $ = __webpack_require__("23e7");
-var uncurryThis = __webpack_require__("e330");
+var uncurryThis = __webpack_require__("4625");
 var $indexOf = __webpack_require__("4d64").indexOf;
 var arrayMethodIsStrict = __webpack_require__("a640");
 
 var nativeIndexOf = uncurryThis([].indexOf);
 
 var NEGATIVE_ZERO = !!nativeIndexOf && 1 / nativeIndexOf([1], 1, -0) < 0;
-var STRICT_METHOD = arrayMethodIsStrict('indexOf');
+var FORCED = NEGATIVE_ZERO || !arrayMethodIsStrict('indexOf');
 
 // `Array.prototype.indexOf` method
 // https://tc39.es/ecma262/#sec-array.prototype.indexof
-$({ target: 'Array', proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD }, {
+$({ target: 'Array', proto: true, forced: FORCED }, {
   indexOf: function indexOf(searchElement /* , fromIndex = 0 */) {
     var fromIndex = arguments.length > 1 ? arguments[1] : undefined;
     return NEGATIVE_ZERO
@@ -6661,6 +6691,7 @@ var addToUnscopables = __webpack_require__("44d2");
 
 // FF99+ bug
 var BROKEN_ON_SPARSE = fails(function () {
+  // eslint-disable-next-line es/no-array-prototype-includes -- detection
   return !Array(1).includes();
 });
 
@@ -6771,7 +6802,7 @@ var assign = __webpack_require__("60da");
 
 // `Object.assign` method
 // https://tc39.es/ecma262/#sec-object.assign
-// eslint-disable-next-line es-x/no-object-assign -- required for testing
+// eslint-disable-next-line es/no-object-assign -- required for testing
 $({ target: 'Object', stat: true, arity: 2, forced: Object.assign !== assign }, {
   assign: assign
 });
@@ -6863,7 +6894,7 @@ module.exports = function (namespace, method) {
 "use strict";
 
 var $propertyIsEnumerable = {}.propertyIsEnumerable;
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // Nashorn ~ JDK8 bug
@@ -6889,6 +6920,13 @@ module.exports = global.Promise;
 
 /***/ }),
 
+/***/ "d264":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "d28b":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -6905,21 +6943,20 @@ defineWellKnownSymbol('iterator');
 /***/ (function(module, exports, __webpack_require__) {
 
 /* eslint-disable no-proto -- safe */
-var uncurryThis = __webpack_require__("e330");
+var uncurryThisAccessor = __webpack_require__("7282");
 var anObject = __webpack_require__("825a");
 var aPossiblePrototype = __webpack_require__("3bbe");
 
 // `Object.setPrototypeOf` method
 // https://tc39.es/ecma262/#sec-object.setprototypeof
 // Works with __proto__ only. Old v8 can't work with null proto objects.
-// eslint-disable-next-line es-x/no-object-setprototypeof -- safe
+// eslint-disable-next-line es/no-object-setprototypeof -- safe
 module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
   var CORRECT_SETTER = false;
   var test = {};
   var setter;
   try {
-    // eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
-    setter = uncurryThis(Object.getOwnPropertyDescriptor(Object.prototype, '__proto__').set);
+    setter = uncurryThisAccessor(Object.prototype, '__proto__', 'set');
     setter(test, []);
     CORRECT_SETTER = test instanceof Array;
   } catch (error) { /* empty */ }
@@ -6991,9 +7028,8 @@ module.exports = function (target, TAG, STATIC) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var userAgent = __webpack_require__("342f");
-var global = __webpack_require__("da84");
 
-module.exports = /ipad|iphone|ipod/i.test(userAgent) && global.Pebble !== undefined;
+module.exports = /ipad|iphone|ipod/i.test(userAgent) && typeof Pebble != 'undefined';
 
 
 /***/ }),
@@ -7029,7 +7065,7 @@ module.exports = function (passed, required) {
 
 // TODO: Remove from `core-js@4` since it's moved to entry points
 __webpack_require__("ac1f");
-var uncurryThis = __webpack_require__("e330");
+var uncurryThis = __webpack_require__("4625");
 var defineBuiltIn = __webpack_require__("cb2d");
 var regexpExec = __webpack_require__("9263");
 var fails = __webpack_require__("d039");
@@ -7138,6 +7174,13 @@ $({ target: 'Array', proto: true, forced: !HAS_SPECIES_SUPPORT }, {
 
 /***/ }),
 
+/***/ "d97a":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "d998":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -7196,6 +7239,7 @@ var exportWebAssemblyErrorCauseWrapper = function (ERROR_NAME, wrapper) {
   }
 };
 
+// https://tc39.es/ecma262/#sec-nativeerror
 // https://github.com/tc39/proposal-error-cause
 exportGlobalErrorCauseWrapper('Error', function (init) {
   return function Error(message) { return apply(init, this, arguments); };
@@ -7261,6 +7305,7 @@ var definePropertyModule = __webpack_require__("9bf2");
 var definePropertiesModule = __webpack_require__("37e8");
 var propertyIsEnumerableModule = __webpack_require__("d1e7");
 var defineBuiltIn = __webpack_require__("cb2d");
+var defineBuiltInAccessor = __webpack_require__("edd0");
 var shared = __webpack_require__("5692");
 var sharedKey = __webpack_require__("f772");
 var hiddenKeys = __webpack_require__("d012");
@@ -7432,7 +7477,7 @@ if (!NATIVE_SYMBOL) {
 
   if (DESCRIPTORS) {
     // https://github.com/tc39/proposal-Symbol-description
-    nativeDefineProperty(SymbolPrototype, 'description', {
+    defineBuiltInAccessor(SymbolPrototype, 'description', {
       configurable: true,
       get: function description() {
         return getInternalState(this).description;
@@ -7500,7 +7545,7 @@ hiddenKeys[HIDDEN] = true;
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 module.exports =
-  // eslint-disable-next-line es-x/no-global-this -- safe
+  // eslint-disable-next-line es/no-global-this -- safe
   check(typeof globalThis == 'object' && globalThis) ||
   check(typeof window == 'object' && window) ||
   // eslint-disable-next-line no-restricted-globals -- safe
@@ -7620,7 +7665,7 @@ var enumBugKeys = __webpack_require__("7839");
 
 // `Object.keys` method
 // https://tc39.es/ecma262/#sec-object.keys
-// eslint-disable-next-line es-x/no-object-keys -- safe
+// eslint-disable-next-line es/no-object-keys -- safe
 module.exports = Object.keys || function keys(O) {
   return internalObjectKeys(O, enumBugKeys);
 };
@@ -7941,7 +7986,7 @@ var substr = 'ab'.substr(-1) === 'b'
 /***/ "e014":
 /***/ (function(module, exports, __webpack_require__) {
 
-/* WEBPACK VAR INJECTION */(function(global, process) {!function(e,t){ true?t(exports):undefined}(this,(function(e){"use strict";function t(e){return t="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},t(e)}function r(e){var r=function(e,r){if("object"!==t(e)||null===e)return e;var n=e[Symbol.toPrimitive];if(void 0!==n){var i=n.call(e,r||"default");if("object"!==t(i))return i;throw new TypeError("@@toPrimitive must return a primitive value.")}return("string"===r?String:Number)(e)}(e,"string");return"symbol"===t(r)?r:String(r)}function n(e,t,n){return(t=r(t))in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}var i="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{};function o(e){var t={exports:{}};return e(t,t.exports),t.exports}var s,a,c=function(e){return e&&e.Math==Math&&e},u=c("object"==typeof globalThis&&globalThis)||c("object"==typeof window&&window)||c("object"==typeof self&&self)||c("object"==typeof i&&i)||function(){return this}()||Function("return this")(),l=function(e){try{return!!e()}catch(e){return!0}},d=!l((function(){return 7!=Object.defineProperty({},1,{get:function(){return 7}})[1]})),f=!l((function(){var e=function(){}.bind();return"function"!=typeof e||e.hasOwnProperty("prototype")})),p=Function.prototype.call,h=f?p.bind(p):function(){return p.apply(p,arguments)},g={}.propertyIsEnumerable,m=Object.getOwnPropertyDescriptor,v=m&&!g.call({1:2},1)?function(e){var t=m(this,e);return!!t&&t.enumerable}:g,y={f:v},b=function(e,t){return{enumerable:!(1&e),configurable:!(2&e),writable:!(4&e),value:t}},w=Function.prototype,S=w.call,C=f&&w.bind.bind(S,S),E=f?C:function(e){return function(){return S.apply(e,arguments)}},x=E({}.toString),T=E("".slice),I=function(e){return T(x(e),8,-1)},P=Object,R=E("".split),k=l((function(){return!P("z").propertyIsEnumerable(0)}))?function(e){return"String"==I(e)?R(e,""):P(e)}:P,O=function(e){return null==e},A=TypeError,D=function(e){if(O(e))throw A("Can't call method on "+e);return e},L=function(e){return k(D(e))},j="object"==typeof document&&document.all,M={all:j,IS_HTMLDDA:void 0===j&&void 0!==j},N=M.all,B=M.IS_HTMLDDA?function(e){return"function"==typeof e||e===N}:function(e){return"function"==typeof e},_=M.all,U=M.IS_HTMLDDA?function(e){return"object"==typeof e?null!==e:B(e)||e===_}:function(e){return"object"==typeof e?null!==e:B(e)},F=function(e){return B(e)?e:void 0},V=function(e,t){return arguments.length<2?F(u[e]):u[e]&&u[e][t]},z=E({}.isPrototypeOf),G=V("navigator","userAgent")||"",q=u.process,X=u.Deno,W=q&&q.versions||X&&X.version,H=W&&W.v8;H&&(a=(s=H.split("."))[0]>0&&s[0]<4?1:+(s[0]+s[1])),!a&&G&&(!(s=G.match(/Edge\/(\d+)/))||s[1]>=74)&&(s=G.match(/Chrome\/(\d+)/))&&(a=+s[1]);var Y=a,J=!!Object.getOwnPropertySymbols&&!l((function(){var e=Symbol();return!String(e)||!(Object(e)instanceof Symbol)||!Symbol.sham&&Y&&Y<41})),K=J&&!Symbol.sham&&"symbol"==typeof Symbol.iterator,Z=Object,Q=K?function(e){return"symbol"==typeof e}:function(e){var t=V("Symbol");return B(t)&&z(t.prototype,Z(e))},ee=String,te=function(e){try{return ee(e)}catch(e){return"Object"}},re=TypeError,ne=function(e){if(B(e))return e;throw re(te(e)+" is not a function")},ie=function(e,t){var r=e[t];return O(r)?void 0:ne(r)},oe=TypeError,se=Object.defineProperty,ae=function(e,t){try{se(u,e,{value:t,configurable:!0,writable:!0})}catch(r){u[e]=t}return t},ce="__core-js_shared__",ue=u[ce]||ae(ce,{}),le=o((function(e){(e.exports=function(e,t){return ue[e]||(ue[e]=void 0!==t?t:{})})("versions",[]).push({version:"3.26.1",mode:"global",copyright:"© 2014-2022 Denis Pushkarev (zloirock.ru)",license:"https://github.com/zloirock/core-js/blob/v3.26.1/LICENSE",source:"https://github.com/zloirock/core-js"})})),de=Object,fe=function(e){return de(D(e))},pe=E({}.hasOwnProperty),he=Object.hasOwn||function(e,t){return pe(fe(e),t)},ge=0,me=Math.random(),ve=E(1..toString),ye=function(e){return"Symbol("+(void 0===e?"":e)+")_"+ve(++ge+me,36)},be=le("wks"),we=u.Symbol,Se=we&&we.for,Ce=K?we:we&&we.withoutSetter||ye,Ee=function(e){if(!he(be,e)||!J&&"string"!=typeof be[e]){var t="Symbol."+e;J&&he(we,e)?be[e]=we[e]:be[e]=K&&Se?Se(t):Ce(t)}return be[e]},xe=TypeError,Te=Ee("toPrimitive"),Ie=function(e,t){if(!U(e)||Q(e))return e;var r,n=ie(e,Te);if(n){if(void 0===t&&(t="default"),r=h(n,e,t),!U(r)||Q(r))return r;throw xe("Can't convert object to primitive value")}return void 0===t&&(t="number"),function(e,t){var r,n;if("string"===t&&B(r=e.toString)&&!U(n=h(r,e)))return n;if(B(r=e.valueOf)&&!U(n=h(r,e)))return n;if("string"!==t&&B(r=e.toString)&&!U(n=h(r,e)))return n;throw oe("Can't convert object to primitive value")}(e,t)},Pe=function(e){var t=Ie(e,"string");return Q(t)?t:t+""},Re=u.document,ke=U(Re)&&U(Re.createElement),Oe=function(e){return ke?Re.createElement(e):{}},Ae=!d&&!l((function(){return 7!=Object.defineProperty(Oe("div"),"a",{get:function(){return 7}}).a})),De=Object.getOwnPropertyDescriptor,Le={f:d?De:function(e,t){if(e=L(e),t=Pe(t),Ae)try{return De(e,t)}catch(e){}if(he(e,t))return b(!h(y.f,e,t),e[t])}},je=d&&l((function(){return 42!=Object.defineProperty((function(){}),"prototype",{value:42,writable:!1}).prototype})),Me=String,Ne=TypeError,Be=function(e){if(U(e))return e;throw Ne(Me(e)+" is not an object")},_e=TypeError,Ue=Object.defineProperty,Fe=Object.getOwnPropertyDescriptor,Ve="enumerable",ze="configurable",Ge="writable",$e={f:d?je?function(e,t,r){if(Be(e),t=Pe(t),Be(r),"function"==typeof e&&"prototype"===t&&"value"in r&&Ge in r&&!r[Ge]){var n=Fe(e,t);n&&n[Ge]&&(e[t]=r.value,r={configurable:ze in r?r[ze]:n[ze],enumerable:Ve in r?r[Ve]:n[Ve],writable:!1})}return Ue(e,t,r)}:Ue:function(e,t,r){if(Be(e),t=Pe(t),Be(r),Ae)try{return Ue(e,t,r)}catch(e){}if("get"in r||"set"in r)throw _e("Accessors not supported");return"value"in r&&(e[t]=r.value),e}},qe=d?function(e,t,r){return $e.f(e,t,b(1,r))}:function(e,t,r){return e[t]=r,e},Xe=Function.prototype,We=d&&Object.getOwnPropertyDescriptor,He=he(Xe,"name"),Ye={EXISTS:He,PROPER:He&&"something"===function(){}.name,CONFIGURABLE:He&&(!d||d&&We(Xe,"name").configurable)},Je=E(Function.toString);B(ue.inspectSource)||(ue.inspectSource=function(e){return Je(e)});var Ke,Ze,Qe,et=ue.inspectSource,tt=u.WeakMap,rt=B(tt)&&/native code/.test(String(tt)),nt=le("keys"),it=function(e){return nt[e]||(nt[e]=ye(e))},ot={},st="Object already initialized",at=u.TypeError,ct=u.WeakMap;if(rt||ue.state){var ut=ue.state||(ue.state=new ct);ut.get=ut.get,ut.has=ut.has,ut.set=ut.set,Ke=function(e,t){if(ut.has(e))throw at(st);return t.facade=e,ut.set(e,t),t},Ze=function(e){return ut.get(e)||{}},Qe=function(e){return ut.has(e)}}else{var lt=it("state");ot[lt]=!0,Ke=function(e,t){if(he(e,lt))throw at(st);return t.facade=e,qe(e,lt,t),t},Ze=function(e){return he(e,lt)?e[lt]:{}},Qe=function(e){return he(e,lt)}}var dt={set:Ke,get:Ze,has:Qe,enforce:function(e){return Qe(e)?Ze(e):Ke(e,{})},getterFor:function(e){return function(t){var r;if(!U(t)||(r=Ze(t)).type!==e)throw at("Incompatible receiver, "+e+" required");return r}}},ft=o((function(e){var t=Ye.CONFIGURABLE,r=dt.enforce,n=dt.get,i=Object.defineProperty,o=d&&!l((function(){return 8!==i((function(){}),"length",{value:8}).length})),s=String(String).split("String"),a=e.exports=function(e,n,a){"Symbol("===String(n).slice(0,7)&&(n="["+String(n).replace(/^Symbol\(([^)]*)\)/,"$1")+"]"),a&&a.getter&&(n="get "+n),a&&a.setter&&(n="set "+n),(!he(e,"name")||t&&e.name!==n)&&(d?i(e,"name",{value:n,configurable:!0}):e.name=n),o&&a&&he(a,"arity")&&e.length!==a.arity&&i(e,"length",{value:a.arity});try{a&&he(a,"constructor")&&a.constructor?d&&i(e,"prototype",{writable:!1}):e.prototype&&(e.prototype=void 0)}catch(e){}var c=r(e);return he(c,"source")||(c.source=s.join("string"==typeof n?n:"")),e};Function.prototype.toString=a((function(){return B(this)&&n(this).source||et(this)}),"toString")})),pt=function(e,t,r,n){n||(n={});var i=n.enumerable,o=void 0!==n.name?n.name:t;if(B(r)&&ft(r,o,n),n.global)i?e[t]=r:ae(t,r);else{try{n.unsafe?e[t]&&(i=!0):delete e[t]}catch(e){}i?e[t]=r:$e.f(e,t,{value:r,enumerable:!1,configurable:!n.nonConfigurable,writable:!n.nonWritable})}return e},ht=Math.ceil,gt=Math.floor,mt=Math.trunc||function(e){var t=+e;return(t>0?gt:ht)(t)},vt=function(e){var t=+e;return t!=t||0===t?0:mt(t)},yt=Math.max,bt=Math.min,wt=Math.min,St=function(e){return e>0?wt(vt(e),9007199254740991):0},Ct=function(e){return St(e.length)},Et=function(e){return function(t,r,n){var i,o=L(t),s=Ct(o),a=function(e,t){var r=vt(e);return r<0?yt(r+t,0):bt(r,t)}(n,s);if(e&&r!=r){for(;s>a;)if((i=o[a++])!=i)return!0}else for(;s>a;a++)if((e||a in o)&&o[a]===r)return e||a||0;return!e&&-1}},xt={includes:Et(!0),indexOf:Et(!1)},Tt=xt.indexOf,It=E([].push),Pt=function(e,t){var r,n=L(e),i=0,o=[];for(r in n)!he(ot,r)&&he(n,r)&&It(o,r);for(;t.length>i;)he(n,r=t[i++])&&(~Tt(o,r)||It(o,r));return o},Rt=["constructor","hasOwnProperty","isPrototypeOf","propertyIsEnumerable","toLocaleString","toString","valueOf"],kt=Rt.concat("length","prototype"),Ot={f:Object.getOwnPropertyNames||function(e){return Pt(e,kt)}},At={f:Object.getOwnPropertySymbols},Dt=E([].concat),Lt=V("Reflect","ownKeys")||function(e){var t=Ot.f(Be(e)),r=At.f;return r?Dt(t,r(e)):t},jt=function(e,t,r){for(var n=Lt(t),i=$e.f,o=Le.f,s=0;s<n.length;s++){var a=n[s];he(e,a)||r&&he(r,a)||i(e,a,o(t,a))}},Mt=/#|\.prototype\./,Nt=function(e,t){var r=_t[Bt(e)];return r==Ft||r!=Ut&&(B(t)?l(t):!!t)},Bt=Nt.normalize=function(e){return String(e).replace(Mt,".").toLowerCase()},_t=Nt.data={},Ut=Nt.NATIVE="N",Ft=Nt.POLYFILL="P",Vt=Nt,zt=Le.f,Gt=function(e,t){var r,n,i,o,s,a=e.target,c=e.global,l=e.stat;if(r=c?u:l?u[a]||ae(a,{}):(u[a]||{}).prototype)for(n in t){if(o=t[n],i=e.dontCallGetSet?(s=zt(r,n))&&s.value:r[n],!Vt(c?n:a+(l?".":"#")+n,e.forced)&&void 0!==i){if(typeof o==typeof i)continue;jt(o,i)}(e.sham||i&&i.sham)&&qe(o,"sham",!0),pt(r,n,o,e)}},$t=Function.prototype,qt=$t.apply,Xt=$t.call,Wt="object"==typeof Reflect&&Reflect.apply||(f?Xt.bind(qt):function(){return Xt.apply(qt,arguments)}),Ht=Array.isArray||function(e){return"Array"==I(e)},Yt=E([].slice),Jt=V("JSON","stringify"),Kt=E(/./.exec),Zt=E("".charAt),Qt=E("".charCodeAt),er=E("".replace),tr=E(1..toString),rr=/[\uD800-\uDFFF]/g,nr=/^[\uD800-\uDBFF]$/,ir=/^[\uDC00-\uDFFF]$/,or=!J||l((function(){var e=V("Symbol")();return"[null]"!=Jt([e])||"{}"!=Jt({a:e})||"{}"!=Jt(Object(e))})),sr=l((function(){return'"\\udf06\\ud834"'!==Jt("\udf06\ud834")||'"\\udead"'!==Jt("\udead")})),ar=function(e,t){var r=Yt(arguments),n=t;if((U(t)||void 0!==e)&&!Q(e))return Ht(t)||(t=function(e,t){if(B(n)&&(t=h(n,this,e,t)),!Q(t))return t}),r[1]=t,Wt(Jt,null,r)},cr=function(e,t,r){var n=Zt(r,t-1),i=Zt(r,t+1);return Kt(nr,e)&&!Kt(ir,i)||Kt(ir,e)&&!Kt(nr,n)?"\\u"+tr(Qt(e,0),16):e};Jt&&Gt({target:"JSON",stat:!0,arity:3,forced:or||sr},{stringify:function(e,t,r){var n=Yt(arguments),i=Wt(or?ar:Jt,null,n);return sr&&"string"==typeof i?er(i,rr,cr):i}});var ur,lr={CSSRuleList:0,CSSStyleDeclaration:0,CSSValueList:0,ClientRectList:0,DOMRectList:0,DOMStringList:0,DOMTokenList:1,DataTransferItemList:0,FileList:0,HTMLAllCollection:0,HTMLCollection:0,HTMLFormElement:0,HTMLSelectElement:0,MediaList:0,MimeTypeArray:0,NamedNodeMap:0,NodeList:1,PaintRequestList:0,Plugin:0,PluginArray:0,SVGLengthList:0,SVGNumberList:0,SVGPathSegList:0,SVGPointList:0,SVGStringList:0,SVGTransformList:0,SourceBufferList:0,StyleSheetList:0,TextTrackCueList:0,TextTrackList:0,TouchList:0},dr=Oe("span").classList,fr=dr&&dr.constructor&&dr.constructor.prototype,pr=fr===Object.prototype?void 0:fr,hr=Object.keys||function(e){return Pt(e,Rt)},gr=d&&!je?Object.defineProperties:function(e,t){Be(e);for(var r,n=L(t),i=hr(t),o=i.length,s=0;o>s;)$e.f(e,r=i[s++],n[r]);return e},mr={f:gr},vr=V("document","documentElement"),yr="prototype",br="script",wr=it("IE_PROTO"),Sr=function(){},Cr=function(e){return"<"+br+">"+e+"</"+br+">"},Er=function(e){e.write(Cr("")),e.close();var t=e.parentWindow.Object;return e=null,t},xr=function(){try{ur=new ActiveXObject("htmlfile")}catch(e){}var e,t,r;xr="undefined"!=typeof document?document.domain&&ur?Er(ur):(t=Oe("iframe"),r="java"+br+":",t.style.display="none",vr.appendChild(t),t.src=String(r),(e=t.contentWindow.document).open(),e.write(Cr("document.F=Object")),e.close(),e.F):Er(ur);for(var n=Rt.length;n--;)delete xr[yr][Rt[n]];return xr()};ot[wr]=!0;var Tr=Object.create||function(e,t){var r;return null!==e?(Sr[yr]=Be(e),r=new Sr,Sr[yr]=null,r[wr]=e):r=xr(),void 0===t?r:mr.f(r,t)},Ir=$e.f,Pr=Ee("unscopables"),Rr=Array.prototype;null==Rr[Pr]&&Ir(Rr,Pr,{configurable:!0,value:Tr(null)});var kr,Or,Ar,Dr=function(e){Rr[Pr][e]=!0},Lr={},jr=!l((function(){function e(){}return e.prototype.constructor=null,Object.getPrototypeOf(new e)!==e.prototype})),Mr=it("IE_PROTO"),Nr=Object,Br=Nr.prototype,_r=jr?Nr.getPrototypeOf:function(e){var t=fe(e);if(he(t,Mr))return t[Mr];var r=t.constructor;return B(r)&&t instanceof r?r.prototype:t instanceof Nr?Br:null},Ur=Ee("iterator"),Fr=!1;[].keys&&("next"in(Ar=[].keys())?(Or=_r(_r(Ar)))!==Object.prototype&&(kr=Or):Fr=!0);var Vr=!U(kr)||l((function(){var e={};return kr[Ur].call(e)!==e}));Vr&&(kr={}),B(kr[Ur])||pt(kr,Ur,(function(){return this}));var zr={IteratorPrototype:kr,BUGGY_SAFARI_ITERATORS:Fr},Gr=$e.f,$r=Ee("toStringTag"),qr=function(e,t,r){e&&!r&&(e=e.prototype),e&&!he(e,$r)&&Gr(e,$r,{configurable:!0,value:t})},Xr=zr.IteratorPrototype,Wr=function(){return this},Hr=function(e,t,r,n){var i=t+" Iterator";return e.prototype=Tr(Xr,{next:b(+!n,r)}),qr(e,i,!1),Lr[i]=Wr,e},Yr=String,Jr=TypeError,Kr=Object.setPrototypeOf||("__proto__"in{}?function(){var e,t=!1,r={};try{(e=E(Object.getOwnPropertyDescriptor(Object.prototype,"__proto__").set))(r,[]),t=r instanceof Array}catch(e){}return function(r,n){return Be(r),function(e){if("object"==typeof e||B(e))return e;throw Jr("Can't set "+Yr(e)+" as a prototype")}(n),t?e(r,n):r.__proto__=n,r}}():void 0),Zr=Ye.PROPER,Qr=Ye.CONFIGURABLE,en=zr.IteratorPrototype,tn=zr.BUGGY_SAFARI_ITERATORS,rn=Ee("iterator"),nn="keys",on="values",sn="entries",an=function(){return this},cn=function(e,t){return{value:e,done:t}},un=$e.f,ln="Array Iterator",dn=dt.set,fn=dt.getterFor(ln),pn=function(e,t,r,n,i,o,s){Hr(r,t,n);var a,c,u,l=function(e){if(e===i&&m)return m;if(!tn&&e in p)return p[e];switch(e){case nn:case on:case sn:return function(){return new r(this,e)}}return function(){return new r(this)}},d=t+" Iterator",f=!1,p=e.prototype,g=p[rn]||p["@@iterator"]||i&&p[i],m=!tn&&g||l(i),v="Array"==t&&p.entries||g;if(v&&(a=_r(v.call(new e)))!==Object.prototype&&a.next&&(_r(a)!==en&&(Kr?Kr(a,en):B(a[rn])||pt(a,rn,an)),qr(a,d,!0)),Zr&&i==on&&g&&g.name!==on&&(Qr?qe(p,"name",on):(f=!0,m=function(){return h(g,this)})),i)if(c={values:l(on),keys:o?m:l(nn),entries:l(sn)},s)for(u in c)(tn||f||!(u in p))&&pt(p,u,c[u]);else Gt({target:t,proto:!0,forced:tn||f},c);return p[rn]!==m&&pt(p,rn,m,{name:i}),Lr[t]=m,c}(Array,"Array",(function(e,t){dn(this,{type:ln,target:L(e),index:0,kind:t})}),(function(){var e=fn(this),t=e.target,r=e.kind,n=e.index++;return!t||n>=t.length?(e.target=void 0,cn(void 0,!0)):cn("keys"==r?n:"values"==r?t[n]:[n,t[n]],!1)}),"values"),hn=Lr.Arguments=Lr.Array;if(Dr("keys"),Dr("values"),Dr("entries"),d&&"values"!==hn.name)try{un(hn,"name",{value:"values"})}catch(e){}var gn=Ee("iterator"),mn=Ee("toStringTag"),vn=pn.values,yn=function(e,t){if(e){if(e[gn]!==vn)try{qe(e,gn,vn)}catch(t){e[gn]=vn}if(e[mn]||qe(e,mn,t),lr[t])for(var r in pn)if(e[r]!==pn[r])try{qe(e,r,pn[r])}catch(t){e[r]=pn[r]}}};for(var bn in lr)yn(u[bn]&&u[bn].prototype,bn);yn(pr,"DOMTokenList");var wn=o((function(e){!function(t){var r,n={};n.VERSION="1.6.1";var i={},o=function(e,t){return function(){return t.apply(e,arguments)}},s=function(){var e,t,r=arguments,n=r[0];for(t=1;t<r.length;t++)for(e in r[t])!(e in n)&&r[t].hasOwnProperty(e)&&(n[e]=r[t][e]);return n},a=function(e,t){return{value:e,name:t}};n.TRACE=a(1,"TRACE"),n.DEBUG=a(2,"DEBUG"),n.INFO=a(3,"INFO"),n.TIME=a(4,"TIME"),n.WARN=a(5,"WARN"),n.ERROR=a(8,"ERROR"),n.OFF=a(99,"OFF");var c=function(e){this.context=e,this.setLevel(e.filterLevel),this.log=this.info};c.prototype={setLevel:function(e){e&&"value"in e&&(this.context.filterLevel=e)},getLevel:function(){return this.context.filterLevel},enabledFor:function(e){var t=this.context.filterLevel;return e.value>=t.value},trace:function(){this.invoke(n.TRACE,arguments)},debug:function(){this.invoke(n.DEBUG,arguments)},info:function(){this.invoke(n.INFO,arguments)},warn:function(){this.invoke(n.WARN,arguments)},error:function(){this.invoke(n.ERROR,arguments)},time:function(e){"string"==typeof e&&e.length>0&&this.invoke(n.TIME,[e,"start"])},timeEnd:function(e){"string"==typeof e&&e.length>0&&this.invoke(n.TIME,[e,"end"])},invoke:function(e,t){r&&this.enabledFor(e)&&r(t,s({level:e},this.context))}};var u,l=new c({filterLevel:n.OFF});(u=n).enabledFor=o(l,l.enabledFor),u.trace=o(l,l.trace),u.debug=o(l,l.debug),u.time=o(l,l.time),u.timeEnd=o(l,l.timeEnd),u.info=o(l,l.info),u.warn=o(l,l.warn),u.error=o(l,l.error),u.log=u.info,n.setHandler=function(e){r=e},n.setLevel=function(e){for(var t in l.setLevel(e),i)i.hasOwnProperty(t)&&i[t].setLevel(e)},n.getLevel=function(){return l.getLevel()},n.get=function(e){return i[e]||(i[e]=new c(s({name:e},l.context)))},n.createDefaultHandler=function(e){(e=e||{}).formatter=e.formatter||function(e,t){t.name&&e.unshift("["+t.name+"]")};var t={},r=function(e,t){Function.prototype.apply.call(e,console,t)};return"undefined"==typeof console?function(){}:function(i,o){i=Array.prototype.slice.call(i);var s,a=console.log;o.level===n.TIME?(s=(o.name?"["+o.name+"] ":"")+i[0],"start"===i[1]?console.time?console.time(s):t[s]=(new Date).getTime():console.timeEnd?console.timeEnd(s):r(a,[s+": "+((new Date).getTime()-t[s])+"ms"])):(o.level===n.WARN&&console.warn?a=console.warn:o.level===n.ERROR&&console.error?a=console.error:o.level===n.INFO&&console.info?a=console.info:o.level===n.DEBUG&&console.debug?a=console.debug:o.level===n.TRACE&&console.trace&&(a=console.trace),e.formatter(i,o),r(a,i))}},n.useDefaults=function(e){n.setLevel(e&&e.defaultLevel||n.DEBUG),n.setHandler(n.createDefaultHandler(e))},n.setDefaults=n.useDefaults,e.exports?e.exports=n:(n._prevLogger=t.Logger,n.noConflict=function(){return t.Logger=n._prevLogger,n},t.Logger=n)}(i)}));function Sn(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,n)}return r}function Cn(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?Sn(Object(r),!0).forEach((function(t){n(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):Sn(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}wn.useDefaults({defaultLevel:wn.TRACE});const En=(e,t)=>{e.unshift("[".concat(t.name||"Global","] ").concat((new Date).toISOString()," - ").concat(t.level.name," -"))},xn=(e,t)=>t?e.value>=kn[t].value:e.value>=Rn.value,Tn=wn.createDefaultHandler({formatter:En});wn.setHandler(((e,t)=>{((e,t)=>{e=(e=Array.prototype.slice.call(e)).map((e=>"object"==typeof e?JSON.stringify(e):e)),En(e,t),0!==In?(Pn.push(e.join(" ")),Pn.length>=In&&(Pn=Pn.slice(-In))):Pn=[]})(e,t),xn(t.level,t.name)&&Tn(e,t);for(const{handler:r,level:n}of On)t.level.value>=n.value&&r(e,t)}));let In=1e4,Pn=[],Rn=wn.OFF;const kn={},On=[],An=Cn(Cn({},wn),{},{enabledFor:xn,getHistory:()=>Pn,getHistoryMaxSize:()=>In,setHistoryMaxSize:e=>{In=e},setLevel:e=>{Rn=e;for(const t in kn)kn[t]=e},getLevel:()=>Rn,get:e=>{kn[e]||(kn[e]=Rn);const t=wn.get(e);return t.setLevel=t=>{kn[e]=t},t.getLevel=()=>kn[e],t},setHandler:(e,t)=>{On.push({handler:e,level:t})}});var Dn="process"==I(u.process),Ln=Ee("species"),jn=function(e){var t=V(e),r=$e.f;d&&t&&!t[Ln]&&r(t,Ln,{configurable:!0,get:function(){return this}})},Mn=TypeError,Nn={};Nn[Ee("toStringTag")]="z";var Bn="[object z]"===String(Nn),_n=Ee("toStringTag"),Un=Object,Fn="Arguments"==I(function(){return arguments}()),Vn=Bn?I:function(e){var t,r,n;return void 0===e?"Undefined":null===e?"Null":"string"==typeof(r=function(e,t){try{return e[t]}catch(e){}}(t=Un(e),_n))?r:Fn?I(t):"Object"==(n=I(t))&&B(t.callee)?"Arguments":n},zn=function(){},Gn=[],$n=V("Reflect","construct"),qn=/^\s*(?:class|function)\b/,Xn=E(qn.exec),Wn=!qn.exec(zn),Hn=function(e){if(!B(e))return!1;try{return $n(zn,Gn,e),!0}catch(e){return!1}},Yn=function(e){if(!B(e))return!1;switch(Vn(e)){case"AsyncFunction":case"GeneratorFunction":case"AsyncGeneratorFunction":return!1}try{return Wn||!!Xn(qn,et(e))}catch(e){return!0}};Yn.sham=!0;var Jn,Kn,Zn,Qn,ei=!$n||l((function(){var e;return Hn(Hn.call)||!Hn(Object)||!Hn((function(){e=!0}))||e}))?Yn:Hn,ti=TypeError,ri=Ee("species"),ni=function(e,t){var r,n=Be(e).constructor;return void 0===n||O(r=Be(n)[ri])?t:function(e){if(ei(e))return e;throw ti(te(e)+" is not a constructor")}(r)},ii=function(e){if("Function"===I(e))return E(e)},oi=ii(ii.bind),si=function(e,t){return ne(e),void 0===t?e:f?oi(e,t):function(){return e.apply(t,arguments)}},ai=TypeError,ci=function(e,t){if(e<t)throw ai("Not enough arguments");return e},ui=/(?:ipad|iphone|ipod).*applewebkit/i.test(G),li=u.setImmediate,di=u.clearImmediate,fi=u.process,pi=u.Dispatch,hi=u.Function,gi=u.MessageChannel,mi=u.String,vi=0,yi={},bi="onreadystatechange";try{Jn=u.location}catch(e){}var wi=function(e){if(he(yi,e)){var t=yi[e];delete yi[e],t()}},Si=function(e){return function(){wi(e)}},Ci=function(e){wi(e.data)},Ei=function(e){u.postMessage(mi(e),Jn.protocol+"//"+Jn.host)};li&&di||(li=function(e){ci(arguments.length,1);var t=B(e)?e:hi(e),r=Yt(arguments,1);return yi[++vi]=function(){Wt(t,void 0,r)},Kn(vi),vi},di=function(e){delete yi[e]},Dn?Kn=function(e){fi.nextTick(Si(e))}:pi&&pi.now?Kn=function(e){pi.now(Si(e))}:gi&&!ui?(Qn=(Zn=new gi).port2,Zn.port1.onmessage=Ci,Kn=si(Qn.postMessage,Qn)):u.addEventListener&&B(u.postMessage)&&!u.importScripts&&Jn&&"file:"!==Jn.protocol&&!l(Ei)?(Kn=Ei,u.addEventListener("message",Ci,!1)):Kn=bi in Oe("script")?function(e){vr.appendChild(Oe("script"))[bi]=function(){vr.removeChild(this),wi(e)}}:function(e){setTimeout(Si(e),0)});var xi,Ti,Ii,Pi,Ri,ki,Oi,Ai,Di={set:li,clear:di},Li=/ipad|iphone|ipod/i.test(G)&&void 0!==u.Pebble,ji=/web0s(?!.*chrome)/i.test(G),Mi=Le.f,Ni=Di.set,Bi=u.MutationObserver||u.WebKitMutationObserver,_i=u.document,Ui=u.process,Fi=u.Promise,Vi=Mi(u,"queueMicrotask"),zi=Vi&&Vi.value;zi||(xi=function(){var e,t;for(Dn&&(e=Ui.domain)&&e.exit();Ti;){t=Ti.fn,Ti=Ti.next;try{t()}catch(e){throw Ti?Pi():Ii=void 0,e}}Ii=void 0,e&&e.enter()},ui||Dn||ji||!Bi||!_i?!Li&&Fi&&Fi.resolve?((Oi=Fi.resolve(void 0)).constructor=Fi,Ai=si(Oi.then,Oi),Pi=function(){Ai(xi)}):Dn?Pi=function(){Ui.nextTick(xi)}:(Ni=si(Ni,u),Pi=function(){Ni(xi)}):(Ri=!0,ki=_i.createTextNode(""),new Bi(xi).observe(ki,{characterData:!0}),Pi=function(){ki.data=Ri=!Ri}));var Gi=zi||function(e){var t={fn:e,next:void 0};Ii&&(Ii.next=t),Ti||(Ti=t,Pi()),Ii=t},$i=function(e){try{return{error:!1,value:e()}}catch(e){return{error:!0,value:e}}},qi=function(){this.head=null,this.tail=null};qi.prototype={add:function(e){var t={item:e,next:null};this.head?this.tail.next=t:this.head=t,this.tail=t},get:function(){var e=this.head;if(e)return this.head=e.next,this.tail===e&&(this.tail=null),e.item}};var Xi=qi,Wi=u.Promise,Hi="object"==typeof Deno&&Deno&&"object"==typeof Deno.version,Yi=!Hi&&!Dn&&"object"==typeof window&&"object"==typeof document;Wi&&Wi.prototype;var Ji,Ki,Zi,Qi=Ee("species"),eo=!1,to=B(u.PromiseRejectionEvent),ro=Vt("Promise",(function(){var e=et(Wi),t=e!==String(Wi);if(!t&&66===Y)return!0;if(!Y||Y<51||!/native code/.test(e)){var r=new Wi((function(e){e(1)})),n=function(e){e((function(){}),(function(){}))};if((r.constructor={})[Qi]=n,!(eo=r.then((function(){}))instanceof n))return!0}return!t&&(Yi||Hi)&&!to})),no={CONSTRUCTOR:ro,REJECTION_EVENT:to,SUBCLASSING:eo},io=TypeError,oo=function(e){var t,r;this.promise=new e((function(e,n){if(void 0!==t||void 0!==r)throw io("Bad Promise constructor");t=e,r=n})),this.resolve=ne(t),this.reject=ne(r)},so={f:function(e){return new oo(e)}},ao=Di.set,co="Promise",uo=no.CONSTRUCTOR,lo=no.REJECTION_EVENT,fo=no.SUBCLASSING,po=dt.getterFor(co),ho=dt.set,go=Wi&&Wi.prototype,mo=Wi,vo=go,yo=u.TypeError,bo=u.document,wo=u.process,So=so.f,Co=So,Eo=!!(bo&&bo.createEvent&&u.dispatchEvent),xo="unhandledrejection",To=function(e){var t;return!(!U(e)||!B(t=e.then))&&t},Io=function(e,t){var r,n,i,o=t.value,s=1==t.state,a=s?e.ok:e.fail,c=e.resolve,u=e.reject,l=e.domain;try{a?(s||(2===t.rejection&&Ao(t),t.rejection=1),!0===a?r=o:(l&&l.enter(),r=a(o),l&&(l.exit(),i=!0)),r===e.promise?u(yo("Promise-chain cycle")):(n=To(r))?h(n,r,c,u):c(r)):u(o)}catch(e){l&&!i&&l.exit(),u(e)}},Po=function(e,t){e.notified||(e.notified=!0,Gi((function(){for(var r,n=e.reactions;r=n.get();)Io(r,e);e.notified=!1,t&&!e.rejection&&ko(e)})))},Ro=function(e,t,r){var n,i;Eo?((n=bo.createEvent("Event")).promise=t,n.reason=r,n.initEvent(e,!1,!0),u.dispatchEvent(n)):n={promise:t,reason:r},!lo&&(i=u["on"+e])?i(n):e===xo&&function(e,t){var r=u.console;r&&r.error&&(1==arguments.length?r.error(e):r.error(e,t))}("Unhandled promise rejection",r)},ko=function(e){h(ao,u,(function(){var t,r=e.facade,n=e.value;if(Oo(e)&&(t=$i((function(){Dn?wo.emit("unhandledRejection",n,r):Ro(xo,r,n)})),e.rejection=Dn||Oo(e)?2:1,t.error))throw t.value}))},Oo=function(e){return 1!==e.rejection&&!e.parent},Ao=function(e){h(ao,u,(function(){var t=e.facade;Dn?wo.emit("rejectionHandled",t):Ro("rejectionhandled",t,e.value)}))},Do=function(e,t,r){return function(n){e(t,n,r)}},Lo=function(e,t,r){e.done||(e.done=!0,r&&(e=r),e.value=t,e.state=2,Po(e,!0))},jo=function(e,t,r){if(!e.done){e.done=!0,r&&(e=r);try{if(e.facade===t)throw yo("Promise can't be resolved itself");var n=To(t);n?Gi((function(){var r={done:!1};try{h(n,t,Do(jo,r,e),Do(Lo,r,e))}catch(t){Lo(r,t,e)}})):(e.value=t,e.state=1,Po(e,!1))}catch(t){Lo({done:!1},t,e)}}};if(uo&&(vo=(mo=function(e){!function(e,t){if(z(t,e))return e;throw Mn("Incorrect invocation")}(this,vo),ne(e),h(Ji,this);var t=po(this);try{e(Do(jo,t),Do(Lo,t))}catch(e){Lo(t,e)}}).prototype,(Ji=function(e){ho(this,{type:co,done:!1,notified:!1,parent:!1,reactions:new Xi,rejection:!1,state:0,value:void 0})}).prototype=pt(vo,"then",(function(e,t){var r=po(this),n=So(ni(this,mo));return r.parent=!0,n.ok=!B(e)||e,n.fail=B(t)&&t,n.domain=Dn?wo.domain:void 0,0==r.state?r.reactions.add(n):Gi((function(){Io(n,r)})),n.promise})),Ki=function(){var e=new Ji,t=po(e);this.promise=e,this.resolve=Do(jo,t),this.reject=Do(Lo,t)},so.f=So=function(e){return e===mo||undefined===e?new Ki(e):Co(e)},B(Wi)&&go!==Object.prototype)){Zi=go.then,fo||pt(go,"then",(function(e,t){var r=this;return new mo((function(e,t){h(Zi,r,e,t)})).then(e,t)}),{unsafe:!0});try{delete go.constructor}catch(e){}Kr&&Kr(go,vo)}Gt({global:!0,constructor:!0,wrap:!0,forced:uo},{Promise:mo}),qr(mo,co,!1),jn(co);var Mo=Ee("iterator"),No=Array.prototype,Bo=Ee("iterator"),_o=function(e){if(!O(e))return ie(e,Bo)||ie(e,"@@iterator")||Lr[Vn(e)]},Uo=TypeError,Fo=function(e,t,r){var n,i;Be(e);try{if(!(n=ie(e,"return"))){if("throw"===t)throw r;return r}n=h(n,e)}catch(e){i=!0,n=e}if("throw"===t)throw r;if(i)throw n;return Be(n),r},Vo=TypeError,zo=function(e,t){this.stopped=e,this.result=t},Go=zo.prototype,$o=function(e,t,r){var n,i,o,s,a,c,u,l,d=r&&r.that,f=!(!r||!r.AS_ENTRIES),p=!(!r||!r.IS_RECORD),g=!(!r||!r.IS_ITERATOR),m=!(!r||!r.INTERRUPTED),v=si(t,d),y=function(e){return n&&Fo(n,"normal",e),new zo(!0,e)},b=function(e){return f?(Be(e),m?v(e[0],e[1],y):v(e[0],e[1])):m?v(e,y):v(e)};if(p)n=e.iterator;else if(g)n=e;else{if(!(i=_o(e)))throw Vo(te(e)+" is not iterable");if(void 0!==(l=i)&&(Lr.Array===l||No[Mo]===l)){for(o=0,s=Ct(e);s>o;o++)if((a=b(e[o]))&&z(Go,a))return a;return new zo(!1)}n=function(e,t){var r=arguments.length<2?_o(e):t;if(ne(r))return Be(h(r,e));throw Uo(te(e)+" is not iterable")}(e,i)}for(c=p?e.next:n.next;!(u=h(c,n)).done;){try{a=b(u.value)}catch(e){Fo(n,"throw",e)}if("object"==typeof a&&a&&z(Go,a))return a}return new zo(!1)},qo=Ee("iterator"),Xo=!1;try{var Wo=0,Ho={next:function(){return{done:!!Wo++}},return:function(){Xo=!0}};Ho[qo]=function(){return this},Array.from(Ho,(function(){throw 2}))}catch(e){}var Yo=no.CONSTRUCTOR||!function(e,t){if(!t&&!Xo)return!1;var r=!1;try{var n={};n[qo]=function(){return{next:function(){return{done:r=!0}}}},e(n)}catch(e){}return r}((function(e){Wi.all(e).then(void 0,(function(){}))}));Gt({target:"Promise",stat:!0,forced:Yo},{all:function(e){var t=this,r=so.f(t),n=r.resolve,i=r.reject,o=$i((function(){var r=ne(t.resolve),o=[],s=0,a=1;$o(e,(function(e){var c=s++,u=!1;a++,h(r,t,e).then((function(e){u||(u=!0,o[c]=e,--a||n(o))}),i)})),--a||n(o)}));return o.error&&i(o.value),r.promise}});var Jo=no.CONSTRUCTOR,Ko=Wi&&Wi.prototype;if(Gt({target:"Promise",proto:!0,forced:Jo,real:!0},{catch:function(e){return this.then(void 0,e)}}),B(Wi)){var Zo=V("Promise").prototype.catch;Ko.catch!==Zo&&pt(Ko,"catch",Zo,{unsafe:!0})}Gt({target:"Promise",stat:!0,forced:Yo},{race:function(e){var t=this,r=so.f(t),n=r.reject,i=$i((function(){var i=ne(t.resolve);$o(e,(function(e){h(i,t,e).then(r.resolve,n)}))}));return i.error&&n(i.value),r.promise}}),Gt({target:"Promise",stat:!0,forced:no.CONSTRUCTOR},{reject:function(e){var t=so.f(this);return h(t.reject,void 0,e),t.promise}});var Qo=no.CONSTRUCTOR;V("Promise"),Gt({target:"Promise",stat:!0,forced:Qo},{resolve:function(e){return function(e,t){if(Be(e),U(t)&&t.constructor===e)return t;var r=so.f(e);return(0,r.resolve)(t),r.promise}(this,e)}});var es=$e.f,ts=function(e,t,r){r in e||es(e,r,{configurable:!0,get:function(){return t[r]},set:function(e){t[r]=e}})},rs=function(e,t,r){var n,i;return Kr&&B(n=t.constructor)&&n!==r&&U(i=n.prototype)&&i!==r.prototype&&Kr(e,i),e},ns=String,is=function(e){if("Symbol"===Vn(e))throw TypeError("Cannot convert a Symbol value to a string");return ns(e)},os=function(e,t){return void 0===e?arguments.length<2?"":t:is(e)},ss=function(e,t){U(t)&&"cause"in t&&qe(e,"cause",t.cause)},as=Error,cs=E("".replace),us=String(as("zxcasd").stack),ls=/\n\s*at [^:]*:[^\n]*/,ds=ls.test(us),fs=function(e,t){if(ds&&"string"==typeof e&&!as.prepareStackTrace)for(;t--;)e=cs(e,ls,"");return e},ps=!l((function(){var e=Error("a");return!("stack"in e)||(Object.defineProperty(e,"stack",b(1,7)),7!==e.stack)})),hs=function(e,t,r,n){var i="stackTraceLimit",o=n?2:1,s=e.split("."),a=s[s.length-1],c=V.apply(null,s);if(c){var u=c.prototype;if(he(u,"cause")&&delete u.cause,!r)return c;var l=V("Error"),f=t((function(e,t){var r=os(n?t:e,void 0),i=n?new c(e):new c;return void 0!==r&&qe(i,"message",r),ps&&qe(i,"stack",fs(i.stack,2)),this&&z(u,this)&&rs(i,this,f),arguments.length>o&&ss(i,arguments[o]),i}));f.prototype=u,"Error"!==a?Kr?Kr(f,l):jt(f,l,{name:!0}):d&&i in c&&(ts(f,c,i),ts(f,c,"prepareStackTrace")),jt(f,c);try{u.name!==a&&qe(u,"name",a),u.constructor=f}catch(e){}return f}},gs="WebAssembly",ms=u[gs],vs=7!==Error("e",{cause:7}).cause,ys=function(e,t){var r={};r[e]=hs(e,t,vs),Gt({global:!0,constructor:!0,arity:1,forced:vs},r)},bs=function(e,t){if(ms&&ms[e]){var r={};r[e]=hs(gs+"."+e,t,vs),Gt({target:gs,stat:!0,constructor:!0,arity:1,forced:vs},r)}};ys("Error",(function(e){return function(t){return Wt(e,this,arguments)}})),ys("EvalError",(function(e){return function(t){return Wt(e,this,arguments)}})),ys("RangeError",(function(e){return function(t){return Wt(e,this,arguments)}})),ys("ReferenceError",(function(e){return function(t){return Wt(e,this,arguments)}})),ys("SyntaxError",(function(e){return function(t){return Wt(e,this,arguments)}})),ys("TypeError",(function(e){return function(t){return Wt(e,this,arguments)}})),ys("URIError",(function(e){return function(t){return Wt(e,this,arguments)}})),bs("CompileError",(function(e){return function(t){return Wt(e,this,arguments)}})),bs("LinkError",(function(e){return function(t){return Wt(e,this,arguments)}})),bs("RuntimeError",(function(e){return function(t){return Wt(e,this,arguments)}}));var ws=Ee("match"),Ss=function(e){var t;return U(e)&&(void 0!==(t=e[ws])?!!t:"RegExp"==I(e))},Cs=function(){var e=Be(this),t="";return e.hasIndices&&(t+="d"),e.global&&(t+="g"),e.ignoreCase&&(t+="i"),e.multiline&&(t+="m"),e.dotAll&&(t+="s"),e.unicode&&(t+="u"),e.unicodeSets&&(t+="v"),e.sticky&&(t+="y"),t},Es=RegExp.prototype,xs=function(e){var t=e.flags;return void 0!==t||"flags"in Es||he(e,"flags")||!z(Es,e)?t:h(Cs,e)},Ts=u.RegExp,Is=l((function(){var e=Ts("a","y");return e.lastIndex=2,null!=e.exec("abcd")})),Ps=Is||l((function(){return!Ts("a","y").sticky})),Rs={BROKEN_CARET:Is||l((function(){var e=Ts("^r","gy");return e.lastIndex=2,null!=e.exec("str")})),MISSED_STICKY:Ps,UNSUPPORTED_Y:Is},ks=u.RegExp,Os=l((function(){var e=ks(".","s");return!(e.dotAll&&e.exec("\n")&&"s"===e.flags)})),As=u.RegExp,Ds=l((function(){var e=As("(?<a>b)","g");return"b"!==e.exec("b").groups.a||"bc"!=="b".replace(e,"$<a>c")})),Ls=Ot.f,js=dt.enforce,Ms=Ee("match"),Ns=u.RegExp,Bs=Ns.prototype,_s=u.SyntaxError,Us=E(Bs.exec),Fs=E("".charAt),Vs=E("".replace),zs=E("".indexOf),Gs=E("".slice),$s=/^\?<[^\s\d!#%&*+<=>@^][^\s!#%&*+<=>@^]*>/,qs=/a/g,Xs=/a/g,Ws=new Ns(qs)!==qs,Hs=Rs.MISSED_STICKY,Ys=Rs.UNSUPPORTED_Y,Js=d&&(!Ws||Hs||Os||Ds||l((function(){return Xs[Ms]=!1,Ns(qs)!=qs||Ns(Xs)==Xs||"/a/i"!=Ns(qs,"i")})));if(Vt("RegExp",Js)){for(var Ks=function(e,t){var r,n,i,o,s,a,c=z(Bs,this),u=Ss(e),l=void 0===t,d=[],f=e;if(!c&&u&&l&&e.constructor===Ks)return e;if((u||z(Bs,e))&&(e=e.source,l&&(t=xs(f))),e=void 0===e?"":is(e),t=void 0===t?"":is(t),f=e,Os&&"dotAll"in qs&&(n=!!t&&zs(t,"s")>-1)&&(t=Vs(t,/s/g,"")),r=t,Hs&&"sticky"in qs&&(i=!!t&&zs(t,"y")>-1)&&Ys&&(t=Vs(t,/y/g,"")),Ds&&(o=function(e){for(var t,r=e.length,n=0,i="",o=[],s={},a=!1,c=!1,u=0,l="";n<=r;n++){if("\\"===(t=Fs(e,n)))t+=Fs(e,++n);else if("]"===t)a=!1;else if(!a)switch(!0){case"["===t:a=!0;break;case"("===t:Us($s,Gs(e,n+1))&&(n+=2,c=!0),i+=t,u++;continue;case">"===t&&c:if(""===l||he(s,l))throw new _s("Invalid capture group name");s[l]=!0,o[o.length]=[l,u],c=!1,l="";continue}c?l+=t:i+=t}return[i,o]}(e),e=o[0],d=o[1]),s=rs(Ns(e,t),c?this:Bs,Ks),(n||i||d.length)&&(a=js(s),n&&(a.dotAll=!0,a.raw=Ks(function(e){for(var t,r=e.length,n=0,i="",o=!1;n<=r;n++)"\\"!==(t=Fs(e,n))?o||"."!==t?("["===t?o=!0:"]"===t&&(o=!1),i+=t):i+="[\\s\\S]":i+=t+Fs(e,++n);return i}(e),r)),i&&(a.sticky=!0),d.length&&(a.groups=d)),e!==f)try{qe(s,"source",""===f?"(?:)":f)}catch(e){}return s},Zs=Ls(Ns),Qs=0;Zs.length>Qs;)ts(Ks,Ns,Zs[Qs++]);Bs.constructor=Ks,Ks.prototype=Bs,pt(u,"RegExp",Ks,{constructor:!0})}jn("RegExp");var ea,ta,ra,na=dt.get,ia=RegExp.prototype,oa=TypeError;d&&Os&&(ea=ia,ta="dotAll",(ra={configurable:!0,get:function(){if(this!==ia){if("RegExp"===I(this))return!!na(this).dotAll;throw oa("Incompatible receiver, RegExp required")}}}).get&&ft(ra.get,ta,{getter:!0}),ra.set&&ft(ra.set,ta,{setter:!0}),$e.f(ea,ta,ra));var sa=dt.get,aa=le("native-string-replace",String.prototype.replace),ca=RegExp.prototype.exec,ua=ca,la=E("".charAt),da=E("".indexOf),fa=E("".replace),pa=E("".slice),ha=function(){var e=/a/,t=/b*/g;return h(ca,e,"a"),h(ca,t,"a"),0!==e.lastIndex||0!==t.lastIndex}(),ga=Rs.BROKEN_CARET,ma=void 0!==/()??/.exec("")[1];(ha||ma||ga||Os||Ds)&&(ua=function(e){var t,r,n,i,o,s,a,c=this,u=sa(c),l=is(e),d=u.raw;if(d)return d.lastIndex=c.lastIndex,t=h(ua,d,l),c.lastIndex=d.lastIndex,t;var f=u.groups,p=ga&&c.sticky,g=h(Cs,c),m=c.source,v=0,y=l;if(p&&(g=fa(g,"y",""),-1===da(g,"g")&&(g+="g"),y=pa(l,c.lastIndex),c.lastIndex>0&&(!c.multiline||c.multiline&&"\n"!==la(l,c.lastIndex-1))&&(m="(?: "+m+")",y=" "+y,v++),r=new RegExp("^(?:"+m+")",g)),ma&&(r=new RegExp("^"+m+"$(?!\\s)",g)),ha&&(n=c.lastIndex),i=h(ca,p?r:c,y),p?i?(i.input=pa(i.input,v),i[0]=pa(i[0],v),i.index=c.lastIndex,c.lastIndex+=i[0].length):c.lastIndex=0:ha&&i&&(c.lastIndex=c.global?i.index+i[0].length:n),ma&&i&&i.length>1&&h(aa,i[0],r,(function(){for(o=1;o<arguments.length-2;o++)void 0===arguments[o]&&(i[o]=void 0)})),i&&f)for(i.groups=s=Tr(null),o=0;o<f.length;o++)s[(a=f[o])[0]]=i[a[1]];return i});var va=ua;Gt({target:"RegExp",proto:!0,forced:/./.exec!==va},{exec:va});var ya=xt.includes,ba=l((function(){return!Array(1).includes()}));Gt({target:"Array",proto:!0,forced:ba},{includes:function(e){return ya(this,e,arguments.length>1?arguments[1]:void 0)}}),Dr("includes");var wa,Sa="object"==typeof Reflect?Reflect:null,Ca=Sa&&"function"==typeof Sa.apply?Sa.apply:function(e,t,r){return Function.prototype.apply.call(e,t,r)};wa=Sa&&"function"==typeof Sa.ownKeys?Sa.ownKeys:Object.getOwnPropertySymbols?function(e){return Object.getOwnPropertyNames(e).concat(Object.getOwnPropertySymbols(e))}:function(e){return Object.getOwnPropertyNames(e)};var Ea=Number.isNaN||function(e){return e!=e};function xa(){xa.init.call(this)}var Ta=xa,Ia=function(e,t){return new Promise((function(r,n){function i(r){e.removeListener(t,o),n(r)}function o(){"function"==typeof e.removeListener&&e.removeListener("error",i),r([].slice.call(arguments))}Na(e,t,o,{once:!0}),"error"!==t&&function(e,t,r){"function"==typeof e.on&&Na(e,"error",t,r)}(e,i,{once:!0})}))};xa.EventEmitter=xa,xa.prototype._events=void 0,xa.prototype._eventsCount=0,xa.prototype._maxListeners=void 0;var Pa=10;function Ra(e){if("function"!=typeof e)throw new TypeError('The "listener" argument must be of type Function. Received type '+typeof e)}function ka(e){return void 0===e._maxListeners?xa.defaultMaxListeners:e._maxListeners}function Oa(e,t,r,n){var i,o,s,a;if(Ra(r),void 0===(o=e._events)?(o=e._events=Object.create(null),e._eventsCount=0):(void 0!==o.newListener&&(e.emit("newListener",t,r.listener?r.listener:r),o=e._events),s=o[t]),void 0===s)s=o[t]=r,++e._eventsCount;else if("function"==typeof s?s=o[t]=n?[r,s]:[s,r]:n?s.unshift(r):s.push(r),(i=ka(e))>0&&s.length>i&&!s.warned){s.warned=!0;var c=new Error("Possible EventEmitter memory leak detected. "+s.length+" "+String(t)+" listeners added. Use emitter.setMaxListeners() to increase limit");c.name="MaxListenersExceededWarning",c.emitter=e,c.type=t,c.count=s.length,a=c,console&&console.warn&&console.warn(a)}return e}function Aa(){if(!this.fired)return this.target.removeListener(this.type,this.wrapFn),this.fired=!0,0===arguments.length?this.listener.call(this.target):this.listener.apply(this.target,arguments)}function Da(e,t,r){var n={fired:!1,wrapFn:void 0,target:e,type:t,listener:r},i=Aa.bind(n);return i.listener=r,n.wrapFn=i,i}function La(e,t,r){var n=e._events;if(void 0===n)return[];var i=n[t];return void 0===i?[]:"function"==typeof i?r?[i.listener||i]:[i]:r?function(e){for(var t=new Array(e.length),r=0;r<t.length;++r)t[r]=e[r].listener||e[r];return t}(i):Ma(i,i.length)}function ja(e){var t=this._events;if(void 0!==t){var r=t[e];if("function"==typeof r)return 1;if(void 0!==r)return r.length}return 0}function Ma(e,t){for(var r=new Array(t),n=0;n<t;++n)r[n]=e[n];return r}function Na(e,t,r,n){if("function"==typeof e.on)n.once?e.once(t,r):e.on(t,r);else{if("function"!=typeof e.addEventListener)throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type '+typeof e);e.addEventListener(t,(function i(o){n.once&&e.removeEventListener(t,i),r(o)}))}}Object.defineProperty(xa,"defaultMaxListeners",{enumerable:!0,get:function(){return Pa},set:function(e){if("number"!=typeof e||e<0||Ea(e))throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received '+e+".");Pa=e}}),xa.init=function(){void 0!==this._events&&this._events!==Object.getPrototypeOf(this)._events||(this._events=Object.create(null),this._eventsCount=0),this._maxListeners=this._maxListeners||void 0},xa.prototype.setMaxListeners=function(e){if("number"!=typeof e||e<0||Ea(e))throw new RangeError('The value of "n" is out of range. It must be a non-negative number. Received '+e+".");return this._maxListeners=e,this},xa.prototype.getMaxListeners=function(){return ka(this)},xa.prototype.emit=function(e){for(var t=[],r=1;r<arguments.length;r++)t.push(arguments[r]);var n="error"===e,i=this._events;if(void 0!==i)n=n&&void 0===i.error;else if(!n)return!1;if(n){var o;if(t.length>0&&(o=t[0]),o instanceof Error)throw o;var s=new Error("Unhandled error."+(o?" ("+o.message+")":""));throw s.context=o,s}var a=i[e];if(void 0===a)return!1;if("function"==typeof a)Ca(a,this,t);else{var c=a.length,u=Ma(a,c);for(r=0;r<c;++r)Ca(u[r],this,t)}return!0},xa.prototype.addListener=function(e,t){return Oa(this,e,t,!1)},xa.prototype.on=xa.prototype.addListener,xa.prototype.prependListener=function(e,t){return Oa(this,e,t,!0)},xa.prototype.once=function(e,t){return Ra(t),this.on(e,Da(this,e,t)),this},xa.prototype.prependOnceListener=function(e,t){return Ra(t),this.prependListener(e,Da(this,e,t)),this},xa.prototype.removeListener=function(e,t){var r,n,i,o,s;if(Ra(t),void 0===(n=this._events))return this;if(void 0===(r=n[e]))return this;if(r===t||r.listener===t)0==--this._eventsCount?this._events=Object.create(null):(delete n[e],n.removeListener&&this.emit("removeListener",e,r.listener||t));else if("function"!=typeof r){for(i=-1,o=r.length-1;o>=0;o--)if(r[o]===t||r[o].listener===t){s=r[o].listener,i=o;break}if(i<0)return this;0===i?r.shift():function(e,t){for(;t+1<e.length;t++)e[t]=e[t+1];e.pop()}(r,i),1===r.length&&(n[e]=r[0]),void 0!==n.removeListener&&this.emit("removeListener",e,s||t)}return this},xa.prototype.off=xa.prototype.removeListener,xa.prototype.removeAllListeners=function(e){var t,r,n;if(void 0===(r=this._events))return this;if(void 0===r.removeListener)return 0===arguments.length?(this._events=Object.create(null),this._eventsCount=0):void 0!==r[e]&&(0==--this._eventsCount?this._events=Object.create(null):delete r[e]),this;if(0===arguments.length){var i,o=Object.keys(r);for(n=0;n<o.length;++n)"removeListener"!==(i=o[n])&&this.removeAllListeners(i);return this.removeAllListeners("removeListener"),this._events=Object.create(null),this._eventsCount=0,this}if("function"==typeof(t=r[e]))this.removeListener(e,t);else if(void 0!==t)for(n=t.length-1;n>=0;n--)this.removeListener(e,t[n]);return this},xa.prototype.listeners=function(e){return La(this,e,!0)},xa.prototype.rawListeners=function(e){return La(this,e,!1)},xa.listenerCount=function(e,t){return"function"==typeof e.listenerCount?e.listenerCount(t):ja.call(e,t)},xa.prototype.listenerCount=ja,xa.prototype.eventNames=function(){return this._eventsCount>0?wa(this._events):[]},Ta.once=Ia;var Ba=Fa,_a=function(e,t){var r=new Ua;return Fa(e,r,t),r},Ua=Ta.EventEmitter;function Fa(e,t,r){Array.isArray(r)||(r=[r]);var n=[];return r.forEach((function(r){var i=function(){var e=[].slice.call(arguments);e.unshift(r),t.emit.apply(t,e)};n.push(i),e.on(r,i)})),function(){r.forEach((function(t,r){e.removeListener(t,n[r])}))}}function Va(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,n)}return r}function za(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?Va(Object(r),!0).forEach((function(t){n(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):Va(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}Ba.filter=_a;const Ga=An.get("PeerConnectionStats"),$a="stats";class qa extends Ta{constructor(e){super(),this.peer=e,this.stats=null,this.emitInterval=null,this.previousStats=null}init(){Ga.info("Initializing peer connection stats"),this.emitInterval=setInterval((async()=>{const e=await this.peer.getStats();this.parseStats(e),this.emit($a,this.stats)}),1e3)}parseStats(e){this.previousStats=this.stats;const t={audio:{inbounds:[],outbounds:[]},video:{inbounds:[],outbounds:[]},raw:e};for(const r of e.values())switch(r.type){case"outbound-rtp":Xa(r,this.previousStats,t);break;case"inbound-rtp":Wa(r,this.previousStats,t);break;case"candidate-pair":r.nominated&&Ha(r,t)}this.stats=t}stop(){Ga.info("Stopping peer connection stats"),clearInterval(this.emitInterval)}}const Xa=(e,t,r)=>{var n,i;const o=Ya(e),s=Ja(e.codecId,r.raw),a=Ka(e,o);a.totalBytesSent=e.bytesSent,a.id=e.id,a.mid=e.mid;const c=t?null!==(n=null===(i=t[o].outbounds.find((e=>e.id===a.id)))||void 0===i?void 0:i.totalBytesSent)&&void 0!==n?n:0:null;a.bitrate=c?8*(e.bytesSent-c):0,"video"===o&&(a.qualityLimitationReason=e.qualityLimitationReason),r[o].outbounds.push(za(za({},s),a))},Wa=(e,t,r)=>{let n=Ya(e);const i=Ja(e.codecId,r.raw);["audio","video"].includes(n)||(n=e.id.includes("Video")?"video":"audio");const o=Ka(e,n);if(o.totalBytesReceived=e.bytesReceived,o.totalPacketsReceived=e.packetsReceived,o.totalPacketsLost=e.packetsLost,o.jitter=e.jitter,o.id=e.id,o.mid=e.mid,o.bitrate=0,o.packetsLostRatioPerSecond=0,o.packetsLostDeltaPerSecond=0,t){const r=t[n].inbounds.find((e=>e.id===o.id));if(r){const t=r.totalBytesReceived;o.bitrate=8*(e.bytesReceived-t),o.packetsLostRatioPerSecond=Za(o,r),o.packetsLostDeltaPerSecond=Qa(o,r)}}r[n].inbounds.push(za(za({},i),o))},Ha=(e,t)=>{t.totalRoundTripTime=e.totalRoundTripTime,t.currentRoundTripTime=e.currentRoundTripTime,t.availableOutgoingBitrate=e.availableOutgoingBitrate,t.candidateType=t.raw.get(e.localCandidateId).candidateType},Ya=e=>e.mediaType||e.kind,Ja=(e,t)=>{var r;const{mimeType:n}=e&&null!==(r=t.get(e))&&void 0!==r?r:{};return{mimeType:n}},Ka=(e,t)=>{const r={};return"video"===t&&(r.framesPerSecond=e.framesPerSecond,r.frameHeight=e.frameHeight,r.frameWidth=e.frameWidth),r.timestamp=e.timestamp,r},Za=(e,t)=>Qa(e,t)/(e.totalPacketsReceived-t.totalPacketsReceived),Qa=(e,t)=>e.totalPacketsLost-t.totalPacketsLost;var ec=Ee("species"),tc=RegExp.prototype,rc=E("".charAt),nc=E("".charCodeAt),ic=E("".slice),oc=function(e){return function(t,r){var n,i,o=is(D(t)),s=vt(r),a=o.length;return s<0||s>=a?e?"":void 0:(n=nc(o,s))<55296||n>56319||s+1===a||(i=nc(o,s+1))<56320||i>57343?e?rc(o,s):n:e?ic(o,s,s+2):i-56320+(n-55296<<10)+65536}},sc={codeAt:oc(!1),charAt:oc(!0)}.charAt,ac=function(e,t,r){return t+(r?sc(e,t).length:1)},cc=Math.floor,uc=E("".charAt),lc=E("".replace),dc=E("".slice),fc=/\$([$&'`]|\d{1,2}|<[^>]*>)/g,pc=/\$([$&'`]|\d{1,2})/g,hc=function(e,t,r,n,i,o){var s=r+e.length,a=n.length,c=pc;return void 0!==i&&(i=fe(i),c=fc),lc(o,c,(function(o,c){var u;switch(uc(c,0)){case"$":return"$";case"&":return e;case"`":return dc(t,0,r);case"'":return dc(t,s);case"<":u=i[dc(c,1,-1)];break;default:var l=+c;if(0===l)return o;if(l>a){var d=cc(l/10);return 0===d?o:d<=a?void 0===n[d-1]?uc(c,1):n[d-1]+uc(c,1):o}u=n[l-1]}return void 0===u?"":u}))},gc=TypeError,mc=function(e,t){var r=e.exec;if(B(r)){var n=h(r,e,t);return null!==n&&Be(n),n}if("RegExp"===I(e))return h(va,e,t);throw gc("RegExp#exec called on incompatible receiver")},vc=Ee("replace"),yc=Math.max,bc=Math.min,wc=E([].concat),Sc=E([].push),Cc=E("".indexOf),Ec=E("".slice),xc="$0"==="a".replace(/./,"$0"),Tc=!!/./[vc]&&""===/./[vc]("a","$0");!function(e,t,r,n){var i=Ee(e),o=!l((function(){var t={};return t[i]=function(){return 7},7!=""[e](t)})),s=o&&!l((function(){var t=!1,r=/a/;return"split"===e&&((r={}).constructor={},r.constructor[ec]=function(){return r},r.flags="",r[i]=/./[i]),r.exec=function(){return t=!0,null},r[i](""),!t}));if(!o||!s||r){var a=ii(/./[i]),c=t(i,""[e],(function(e,t,r,n,i){var s=ii(e),c=t.exec;return c===va||c===tc.exec?o&&!i?{done:!0,value:a(t,r,n)}:{done:!0,value:s(r,t,n)}:{done:!1}}));pt(String.prototype,e,c[0]),pt(tc,i,c[1])}n&&qe(tc[i],"sham",!0)}("replace",(function(e,t,r){var n=Tc?"$":"$0";return[function(e,r){var n=D(this),i=O(e)?void 0:ie(e,vc);return i?h(i,e,n,r):h(t,is(n),e,r)},function(e,i){var o=Be(this),s=is(e);if("string"==typeof i&&-1===Cc(i,n)&&-1===Cc(i,"$<")){var a=r(t,o,s,i);if(a.done)return a.value}var c=B(i);c||(i=is(i));var u=o.global;if(u){var l=o.unicode;o.lastIndex=0}for(var d=[];;){var f=mc(o,s);if(null===f)break;if(Sc(d,f),!u)break;""===is(f[0])&&(o.lastIndex=ac(s,St(o.lastIndex),l))}for(var p,h="",g=0,m=0;m<d.length;m++){for(var v=is((f=d[m])[0]),y=yc(bc(vt(f.index),s.length),0),b=[],w=1;w<f.length;w++)Sc(b,void 0===(p=f[w])?p:String(p));var S=f.groups;if(c){var C=wc([v],b,y,s);void 0!==S&&Sc(C,S);var E=is(Wt(i,void 0,C))}else E=hc(v,s,y,b,S,i);y>=g&&(h+=Ec(s,g,y)+E,g=y+v.length)}return h+Ec(s,g)}]}),!!l((function(){var e=/./;return e.exec=function(){var e=[];return e.groups={a:"7"},e},"7"!=="".replace(e,"$<a>")}))||!xc||Tc);var Ic,Pc="\t\n\v\f\r                　\u2028\u2029\ufeff",Rc=E("".replace),kc="["+Pc+"]",Oc=RegExp("^"+kc+kc+"*"),Ac=RegExp(kc+kc+"*$"),Dc=function(e){return function(t){var r=is(D(t));return 1&e&&(r=Rc(r,Oc,"")),2&e&&(r=Rc(r,Ac,"")),r}},Lc={start:Dc(1),end:Dc(2),trim:Dc(3)},jc=Ye.PROPER,Mc=Lc.trim;Gt({target:"String",proto:!0,forced:(Ic="trim",l((function(){return!!Pc[Ic]()||"​᠎"!=="​᠎"[Ic]()||jc&&Pc[Ic].name!==Ic})))},{trim:function(){return Mc(this)}});var Nc=Ee("matchAll"),Bc="RegExp String",_c=Bc+" Iterator",Uc=dt.set,Fc=dt.getterFor(_c),Vc=RegExp.prototype,zc=TypeError,Gc=ii("".indexOf),$c=ii("".matchAll),qc=!!$c&&!l((function(){$c("a",/./)})),Xc=Hr((function(e,t,r,n){Uc(this,{type:_c,regexp:e,string:t,global:r,unicode:n,done:!1})}),Bc,(function(){var e=Fc(this);if(e.done)return cn(void 0,!0);var t=e.regexp,r=e.string,n=mc(t,r);return null===n?(e.done=!0,cn(void 0,!0)):e.global?(""===is(n[0])&&(t.lastIndex=ac(r,St(t.lastIndex),e.unicode)),cn(n,!1)):(e.done=!0,cn(n,!1))})),Wc=function(e){var t,r,n,i=Be(this),o=is(e),s=ni(i,RegExp),a=is(xs(i));return t=new s(s===RegExp?i.source:i,a),r=!!~Gc(a,"g"),n=!!~Gc(a,"u"),t.lastIndex=St(i.lastIndex),new Xc(t,o,r,n)};Gt({target:"String",proto:!0,forced:qc},{matchAll:function(e){var t,r,n,i=D(this);if(O(e)){if(qc)return $c(i,e)}else{if(Ss(e)&&(t=is(D(xs(e))),!~Gc(t,"g")))throw zc("`.matchAll` does not allow non-global regexes");if(qc)return $c(i,e);if(n=ie(e,Nc))return h(n,e,i)}return r=is(i),new RegExp(e,"g")[Nc](r)}}),Nc in Vc||pt(Vc,Nc,Wc);var Hc=E([].reverse),Yc=[1,2];Gt({target:"Array",proto:!0,forced:String(Yc)===String(Yc.reverse())},{reverse:function(){return Ht(this)&&(this.length=this.length),Hc(this)}});var Jc=o((function(e){var t=e.exports={v:[{name:"version",reg:/^(\d*)$/}],o:[{name:"origin",reg:/^(\S*) (\d*) (\d*) (\S*) IP(\d) (\S*)/,names:["username","sessionId","sessionVersion","netType","ipVer","address"],format:"%s %s %d %s IP%d %s"}],s:[{name:"name"}],i:[{name:"description"}],u:[{name:"uri"}],e:[{name:"email"}],p:[{name:"phone"}],z:[{name:"timezones"}],r:[{name:"repeats"}],t:[{name:"timing",reg:/^(\d*) (\d*)/,names:["start","stop"],format:"%d %d"}],c:[{name:"connection",reg:/^IN IP(\d) (\S*)/,names:["version","ip"],format:"IN IP%d %s"}],b:[{push:"bandwidth",reg:/^(TIAS|AS|CT|RR|RS):(\d*)/,names:["type","limit"],format:"%s:%s"}],m:[{reg:/^(\w*) (\d*) ([\w/]*)(?: (.*))?/,names:["type","port","protocol","payloads"],format:"%s %d %s %s"}],a:[{push:"rtp",reg:/^rtpmap:(\d*) ([\w\-.]*)(?:\s*\/(\d*)(?:\s*\/(\S*))?)?/,names:["payload","codec","rate","encoding"],format:function(e){return e.encoding?"rtpmap:%d %s/%s/%s":e.rate?"rtpmap:%d %s/%s":"rtpmap:%d %s"}},{push:"fmtp",reg:/^fmtp:(\d*) ([\S| ]*)/,names:["payload","config"],format:"fmtp:%d %s"},{name:"control",reg:/^control:(.*)/,format:"control:%s"},{name:"rtcp",reg:/^rtcp:(\d*)(?: (\S*) IP(\d) (\S*))?/,names:["port","netType","ipVer","address"],format:function(e){return null!=e.address?"rtcp:%d %s IP%d %s":"rtcp:%d"}},{push:"rtcpFbTrrInt",reg:/^rtcp-fb:(\*|\d*) trr-int (\d*)/,names:["payload","value"],format:"rtcp-fb:%s trr-int %d"},{push:"rtcpFb",reg:/^rtcp-fb:(\*|\d*) ([\w-_]*)(?: ([\w-_]*))?/,names:["payload","type","subtype"],format:function(e){return null!=e.subtype?"rtcp-fb:%s %s %s":"rtcp-fb:%s %s"}},{push:"ext",reg:/^extmap:(\d+)(?:\/(\w+))?(?: (urn:ietf:params:rtp-hdrext:encrypt))? (\S*)(?: (\S*))?/,names:["value","direction","encrypt-uri","uri","config"],format:function(e){return"extmap:%d"+(e.direction?"/%s":"%v")+(e["encrypt-uri"]?" %s":"%v")+" %s"+(e.config?" %s":"")}},{name:"extmapAllowMixed",reg:/^(extmap-allow-mixed)/},{push:"crypto",reg:/^crypto:(\d*) ([\w_]*) (\S*)(?: (\S*))?/,names:["id","suite","config","sessionConfig"],format:function(e){return null!=e.sessionConfig?"crypto:%d %s %s %s":"crypto:%d %s %s"}},{name:"setup",reg:/^setup:(\w*)/,format:"setup:%s"},{name:"connectionType",reg:/^connection:(new|existing)/,format:"connection:%s"},{name:"mid",reg:/^mid:([^\s]*)/,format:"mid:%s"},{name:"msid",reg:/^msid:(.*)/,format:"msid:%s"},{name:"ptime",reg:/^ptime:(\d*(?:\.\d*)*)/,format:"ptime:%d"},{name:"maxptime",reg:/^maxptime:(\d*(?:\.\d*)*)/,format:"maxptime:%d"},{name:"direction",reg:/^(sendrecv|recvonly|sendonly|inactive)/},{name:"icelite",reg:/^(ice-lite)/},{name:"iceUfrag",reg:/^ice-ufrag:(\S*)/,format:"ice-ufrag:%s"},{name:"icePwd",reg:/^ice-pwd:(\S*)/,format:"ice-pwd:%s"},{name:"fingerprint",reg:/^fingerprint:(\S*) (\S*)/,names:["type","hash"],format:"fingerprint:%s %s"},{push:"candidates",reg:/^candidate:(\S*) (\d*) (\S*) (\d*) (\S*) (\d*) typ (\S*)(?: raddr (\S*) rport (\d*))?(?: tcptype (\S*))?(?: generation (\d*))?(?: network-id (\d*))?(?: network-cost (\d*))?/,names:["foundation","component","transport","priority","ip","port","type","raddr","rport","tcptype","generation","network-id","network-cost"],format:function(e){var t="candidate:%s %d %s %d %s %d typ %s";return t+=null!=e.raddr?" raddr %s rport %d":"%v%v",t+=null!=e.tcptype?" tcptype %s":"%v",null!=e.generation&&(t+=" generation %d"),t+=null!=e["network-id"]?" network-id %d":"%v",t+=null!=e["network-cost"]?" network-cost %d":"%v"}},{name:"endOfCandidates",reg:/^(end-of-candidates)/},{name:"remoteCandidates",reg:/^remote-candidates:(.*)/,format:"remote-candidates:%s"},{name:"iceOptions",reg:/^ice-options:(\S*)/,format:"ice-options:%s"},{push:"ssrcs",reg:/^ssrc:(\d*) ([\w_-]*)(?::(.*))?/,names:["id","attribute","value"],format:function(e){var t="ssrc:%d";return null!=e.attribute&&(t+=" %s",null!=e.value&&(t+=":%s")),t}},{push:"ssrcGroups",reg:/^ssrc-group:([\x21\x23\x24\x25\x26\x27\x2A\x2B\x2D\x2E\w]*) (.*)/,names:["semantics","ssrcs"],format:"ssrc-group:%s %s"},{name:"msidSemantic",reg:/^msid-semantic:\s?(\w*) (\S*)/,names:["semantic","token"],format:"msid-semantic: %s %s"},{push:"groups",reg:/^group:(\w*) (.*)/,names:["type","mids"],format:"group:%s %s"},{name:"rtcpMux",reg:/^(rtcp-mux)/},{name:"rtcpRsize",reg:/^(rtcp-rsize)/},{name:"sctpmap",reg:/^sctpmap:([\w_/]*) (\S*)(?: (\S*))?/,names:["sctpmapNumber","app","maxMessageSize"],format:function(e){return null!=e.maxMessageSize?"sctpmap:%s %s %s":"sctpmap:%s %s"}},{name:"xGoogleFlag",reg:/^x-google-flag:([^\s]*)/,format:"x-google-flag:%s"},{push:"rids",reg:/^rid:([\d\w]+) (\w+)(?: ([\S| ]*))?/,names:["id","direction","params"],format:function(e){return e.params?"rid:%s %s %s":"rid:%s %s"}},{push:"imageattrs",reg:new RegExp("^imageattr:(\\d+|\\*)[\\s\\t]+(send|recv)[\\s\\t]+(\\*|\\[\\S+\\](?:[\\s\\t]+\\[\\S+\\])*)(?:[\\s\\t]+(recv|send)[\\s\\t]+(\\*|\\[\\S+\\](?:[\\s\\t]+\\[\\S+\\])*))?"),names:["pt","dir1","attrs1","dir2","attrs2"],format:function(e){return"imageattr:%s %s %s"+(e.dir2?" %s %s":"")}},{name:"simulcast",reg:new RegExp("^simulcast:(send|recv) ([a-zA-Z0-9\\-_~;,]+)(?:\\s?(send|recv) ([a-zA-Z0-9\\-_~;,]+))?$"),names:["dir1","list1","dir2","list2"],format:function(e){return"simulcast:%s %s"+(e.dir2?" %s %s":"")}},{name:"simulcast_03",reg:/^simulcast:[\s\t]+([\S+\s\t]+)$/,names:["value"],format:"simulcast: %s"},{name:"framerate",reg:/^framerate:(\d+(?:$|\.\d+))/,format:"framerate:%s"},{name:"sourceFilter",reg:/^source-filter: *(excl|incl) (\S*) (IP4|IP6|\*) (\S*) (.*)/,names:["filterMode","netType","addressTypes","destAddress","srcList"],format:"source-filter: %s %s %s %s %s"},{name:"bundleOnly",reg:/^(bundle-only)/},{name:"label",reg:/^label:(.+)/,format:"label:%s"},{name:"sctpPort",reg:/^sctp-port:(\d+)$/,format:"sctp-port:%s"},{name:"maxMessageSize",reg:/^max-message-size:(\d+)$/,format:"max-message-size:%s"},{push:"tsRefClocks",reg:/^ts-refclk:([^\s=]*)(?:=(\S*))?/,names:["clksrc","clksrcExt"],format:function(e){return"ts-refclk:%s"+(null!=e.clksrcExt?"=%s":"")}},{name:"mediaClk",reg:/^mediaclk:(?:id=(\S*))? *([^\s=]*)(?:=(\S*))?(?: *rate=(\d+)\/(\d+))?/,names:["id","mediaClockName","mediaClockValue","rateNumerator","rateDenominator"],format:function(e){var t="mediaclk:";return t+=null!=e.id?"id=%s %s":"%v%s",t+=null!=e.mediaClockValue?"=%s":"",t+=null!=e.rateNumerator?" rate=%s":"",t+=null!=e.rateDenominator?"/%s":""}},{name:"keywords",reg:/^keywds:(.+)$/,format:"keywds:%s"},{name:"content",reg:/^content:(.+)/,format:"content:%s"},{name:"bfcpFloorCtrl",reg:/^floorctrl:(c-only|s-only|c-s)/,format:"floorctrl:%s"},{name:"bfcpConfId",reg:/^confid:(\d+)/,format:"confid:%s"},{name:"bfcpUserId",reg:/^userid:(\d+)/,format:"userid:%s"},{name:"bfcpFloorId",reg:/^floorid:(.+) (?:m-stream|mstrm):(.+)/,names:["id","mStream"],format:"floorid:%s mstrm:%s"},{push:"invalid",names:["value"]}]};Object.keys(t).forEach((function(e){t[e].forEach((function(e){e.reg||(e.reg=/(.*)/),e.format||(e.format="%s")}))}))})),Kc=o((function(e,t){var r=function(e){return String(Number(e))===e?Number(e):e},n=function(e,t,n){var i=e.name&&e.names;e.push&&!t[e.push]?t[e.push]=[]:i&&!t[e.name]&&(t[e.name]={});var o=e.push?{}:i?t[e.name]:t;!function(e,t,n,i){if(i&&!n)t[i]=r(e[1]);else for(var o=0;o<n.length;o+=1)null!=e[o+1]&&(t[n[o]]=r(e[o+1]))}(n.match(e.reg),o,e.names,e.name),e.push&&t[e.push].push(o)},i=RegExp.prototype.test.bind(/^([a-z])=(.*)/);t.parse=function(e){var t={},r=[],o=t;return e.split(/(\r\n|\r|\n)/).filter(i).forEach((function(e){var t=e[0],i=e.slice(2);"m"===t&&(r.push({rtp:[],fmtp:[]}),o=r[r.length-1]);for(var s=0;s<(Jc[t]||[]).length;s+=1){var a=Jc[t][s];if(a.reg.test(i))return n(a,o,i)}})),t.media=r,t};var o=function(e,t){var n=t.split(/=(.+)/,2);return 2===n.length?e[n[0]]=r(n[1]):1===n.length&&t.length>1&&(e[n[0]]=void 0),e};t.parseParams=function(e){return e.split(/;\s?/).reduce(o,{})},t.parseFmtpConfig=t.parseParams,t.parsePayloads=function(e){return e.toString().split(" ").map(Number)},t.parseRemoteCandidates=function(e){for(var t=[],n=e.split(" ").map(r),i=0;i<n.length;i+=3)t.push({component:n[i],ip:n[i+1],port:n[i+2]});return t},t.parseImageAttributes=function(e){return e.split(" ").map((function(e){return e.substring(1,e.length-1).split(",").reduce(o,{})}))},t.parseSimulcastStreamList=function(e){return e.split(";").map((function(e){return e.split(",").map((function(e){var t,n=!1;return"~"!==e[0]?t=r(e):(t=r(e.substring(1,e.length)),n=!0),{scid:t,paused:n}}))}))}})),Zc=/%[sdv%]/g,Qc=function(e){var t=1,r=arguments,n=r.length;return e.replace(Zc,(function(e){if(t>=n)return e;var i=r[t];switch(t+=1,e){case"%%":return"%";case"%s":return String(i);case"%d":return Number(i);case"%v":return""}}))},eu=function(e,t,r){var n=[e+"="+(t.format instanceof Function?t.format(t.push?r:r[t.name]):t.format)];if(t.names)for(var i=0;i<t.names.length;i+=1){var o=t.names[i];t.name?n.push(r[t.name][o]):n.push(r[t.names[i]])}else n.push(r[t.name]);return Qc.apply(null,n)},tu=["v","o","s","i","u","e","p","c","b","t","r","z","a"],ru=["i","c","b","a"],nu={write:function(e,t){t=t||{},null==e.version&&(e.version=0),null==e.name&&(e.name=" "),e.media.forEach((function(e){null==e.payloads&&(e.payloads="")}));var r=t.outerOrder||tu,n=t.innerOrder||ru,i=[];return r.forEach((function(t){Jc[t].forEach((function(r){r.name in e&&null!=e[r.name]?i.push(eu(t,r,e)):r.push in e&&null!=e[r.push]&&e[r.push].forEach((function(e){i.push(eu(t,r,e))}))}))})),e.media.forEach((function(e){i.push(eu("m",Jc.m[0],e)),n.forEach((function(t){Jc[t].forEach((function(r){r.name in e&&null!=e[r.name]?i.push(eu(t,r,e)):r.push in e&&null!=e[r.push]&&e[r.push].forEach((function(e){i.push(eu(t,r,e))}))}))}))})),i.join("\r\n")+"\r\n"},parse:Kc.parse,parseParams:Kc.parseParams,parseFmtpConfig:Kc.parseFmtpConfig,parsePayloads:Kc.parsePayloads,parseRemoteCandidates:Kc.parseRemoteCandidates,parseImageAttributes:Kc.parseImageAttributes,parseSimulcastStreamList:Kc.parseSimulcastStreamList};class iu{constructor(e,t,r,n,i,o,s,a,c){this.foundation=e,this.componentId=t,this.transport=r,this.priority=n,this.address=i,this.port=o,this.type=s,this.relAddr=a,this.relPort=c}equals(e){return e.foundation===this.foundation&&e.componentId===this.componentId&&e.transport===this.transport&&e.priority===this.priority&&e.address===this.address&&e.port===this.port&&e.type===this.type&&e.relAddr===this.relAddr&&e.relPort===this.relPort}clone(){return new iu(this.foundation,this.componentId,this.transport,this.priority,this.address,this.port,this.type,this.relAddr,this.relPort)}plain(){const e={foundation:this.foundation,componentId:this.componentId,transport:this.transport,priority:this.priority,address:this.address,port:this.port,type:this.type};return this.relAddr&&(e.relAddr=this.relAddr),this.relPort&&(e.relPort=this.relPort),e}getFoundation(){return this.foundation}getComponentId(){return this.componentId}getTransport(){return this.transport}getPriority(){return this.priority}getAddress(){return this.address}getPort(){return this.port}getType(){return this.type}getRelAddr(){return this.relAddr}getRelPort(){return this.relPort}}iu.expand=function(e){return new iu(e.foundation,e.componentId,e.transport,e.priority,e.address,e.port,e.type,e.relAddr,e.relPort)};var ou=iu;class su{constructor(e,t){this.id=e,this.params=t||[]}clone(){return new su(this.id,this.params)}plain(){return this.params.length?{id:this.id,params:this.params}:{id:this.id}}getId(){return this.id}getParams(){return this.params}}su.expand=function(e){return new su(e.id,e.params)};var au=su;class cu{constructor(e,t,r){this.codec=e,this.type=t,this.params={},this.rtcpfbs=new Set,r&&this.addParams(r)}clone(){const e=new cu(this.codec,this.type,this.params);this.hasRTX()&&e.setRTX(this.getRTX());for(const t of this.rtcpfbs)e.addRTCPFeedback(t.clone());return this.hasChannels()&&e.setChannels(this.getChannels()),e}plain(){const e={codec:this.codec,type:this.type};this.rtx&&(e.rtx=this.rtx),this.channels&&(e.channels=this.channels),Object.keys(this.params).length&&(e.params=this.params);for(const t of this.rtcpfbs)e.rtcpfbs||(e.rtcpfbs=[]),e.rtcpfbs.push(t.plain());return e}setRTX(e){this.rtx=e}getType(){return this.type}setType(e){this.type=e}getCodec(){return this.codec}getParams(){return this.params}addParams(e){for(const t in e)this.params[t]=e[t]}addParam(e,t){this.params[e]=t}hasParam(e){return this.params.hasOwnProperty(e)}getParam(e,t){return this.hasParam(e)?this.params[e]:""+t}hasRTX(){return this.rtx}getRTX(){return this.rtx}hasChannels(){return this.channels}getChannels(){return this.channels}setChannels(e){this.channels=e}addRTCPFeedback(e){this.rtcpfbs.add(e)}getRTCPFeedbacks(){return this.rtcpfbs}}cu.expand=function(e){const t=new cu(e.codec,e.type,e.params);e.rtx&&t.setRTX(e.rtx),e.channels&&t.setChannels(e.channels);for(let r=0;e.rtcpfbs&&r<e.rtcpfbs.length;++r){const n=au.expand(e.rtcpfbs[r]);t.addRTCPFeedback(n)}return t},cu.MapFromNames=function(e,t,r){const n=new Map;let i=96;for(let o=0;o<e.length;++o){let s;const a=e[o].split(";"),c=a[0].toLowerCase().trim();s="pcmu"===c?0:"pcma"===c?8:++i;const u=new cu(c,s);"opus"===c?u.setChannels(2):"multiopus"===c&&u.setChannels(6),t&&"ulpfec"!==c&&"flexfec-03"!==c&&"red"!==c&&u.setRTX(++i);for(let e=0;r&&e<r.length;++e)u.addRTCPFeedback(new au(r[e].id,r[e].params));for(let e=1;e<a.length;++e){let t=a[e].split("=");u.addParam(t[0].trim(),t[1].trim())}n.set(u.getCodec().toLowerCase(),u)}return n};var uu=cu;var lu=function e(){var t=this;if(!(this instanceof e))return new(Function.prototype.bind.apply(e,[null].concat(Array.prototype.slice.call(arguments))));Array.from(arguments).forEach((function(e){t[e]=Symbol.for("MEDOOZE_SEMANTIC_SDP_"+e)}))};const du=lu("ACTIVE","PASSIVE","ACTPASS","INACTIVE");du.byValue=function(e){switch(e){case du.ACTIVE:case du.PASSIVE:case du.ACTPASS:case du.INACTIVE:return e}return du[e.toUpperCase()]},du.toString=function(e){switch(e){case du.ACTIVE:return"active";case du.PASSIVE:return"passive";case du.ACTPASS:return"actpass";case du.INACTIVE:return"inactive"}},du.reverse=function(e){switch(e){case du.ACTIVE:return du.PASSIVE;case du.PASSIVE:return du.ACTIVE;case du.ACTPASS:return du.PASSIVE;case du.INACTIVE:return du.INACTIVE}};var fu=du;class pu{constructor(e,t,r){this.setup=e,this.hash=t,this.fingerprint=r}clone(){return new pu(this.setup,this.hash,this.fingerprint)}plain(){return{setup:fu.toString(this.setup),hash:this.hash,fingerprint:this.fingerprint}}getFingerprint(){return this.fingerprint}getHash(){return this.hash}getSetup(){return this.setup}setSetup(e){this.setup=e}}pu.expand=function(e){return new pu(e.setup?fu.byValue(e.setup):fu.ACTPASS,e.hash,e.fingerprint)};var hu=pu;class gu{constructor(e,t,r,n){this.tag=e,this.suite=t,this.keyParams=r,this.sessionParams=n}clone(){return new gu(this.tag,this.suite,this.keyParams,this.sessionParams)}plain(){return{tag:this.tag,suite:this.suite,keyParams:this.keyParams,sessionParams:this.sessionParams}}getSessionParams(){return this.sessionParams}getKeyParams(){return this.keyParams}getSuite(){return this.suite}getTag(){return this.tag}}gu.expand=function(e){return new gu(e.tag,e.suite,e.keyParams,e.sessionParams)};for(var mu=gu,vu=function(e){var t=Iu(e),r=t[0],n=t[1];return 3*(r+n)/4-n},yu=function(e){var t,r,n=Iu(e),i=n[0],o=n[1],s=new Cu(function(e,t,r){return 3*(t+r)/4-r}(0,i,o)),a=0,c=o>0?i-4:i;for(r=0;r<c;r+=4)t=Su[e.charCodeAt(r)]<<18|Su[e.charCodeAt(r+1)]<<12|Su[e.charCodeAt(r+2)]<<6|Su[e.charCodeAt(r+3)],s[a++]=t>>16&255,s[a++]=t>>8&255,s[a++]=255&t;2===o&&(t=Su[e.charCodeAt(r)]<<2|Su[e.charCodeAt(r+1)]>>4,s[a++]=255&t);1===o&&(t=Su[e.charCodeAt(r)]<<10|Su[e.charCodeAt(r+1)]<<4|Su[e.charCodeAt(r+2)]>>2,s[a++]=t>>8&255,s[a++]=255&t);return s},bu=function(e){for(var t,r=e.length,n=r%3,i=[],o=16383,s=0,a=r-n;s<a;s+=o)i.push(Pu(e,s,s+o>a?a:s+o));1===n?(t=e[r-1],i.push(wu[t>>2]+wu[t<<4&63]+"==")):2===n&&(t=(e[r-2]<<8)+e[r-1],i.push(wu[t>>10]+wu[t>>4&63]+wu[t<<2&63]+"="));return i.join("")},wu=[],Su=[],Cu="undefined"!=typeof Uint8Array?Uint8Array:Array,Eu="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",xu=0,Tu=Eu.length;xu<Tu;++xu)wu[xu]=Eu[xu],Su[Eu.charCodeAt(xu)]=xu;function Iu(e){var t=e.length;if(t%4>0)throw new Error("Invalid string. Length must be a multiple of 4");var r=e.indexOf("=");return-1===r&&(r=t),[r,r===t?0:4-r%4]}function Pu(e,t,r){for(var n,i,o=[],s=t;s<r;s+=3)n=(e[s]<<16&16711680)+(e[s+1]<<8&65280)+(255&e[s+2]),o.push(wu[(i=n)>>18&63]+wu[i>>12&63]+wu[i>>6&63]+wu[63&i]);return o.join("")}Su["-".charCodeAt(0)]=62,Su["_".charCodeAt(0)]=63;var Ru={byteLength:vu,toByteArray:yu,fromByteArray:bu},ku=function(e,t,r,n,i){var o,s,a=8*i-n-1,c=(1<<a)-1,u=c>>1,l=-7,d=r?i-1:0,f=r?-1:1,p=e[t+d];for(d+=f,o=p&(1<<-l)-1,p>>=-l,l+=a;l>0;o=256*o+e[t+d],d+=f,l-=8);for(s=o&(1<<-l)-1,o>>=-l,l+=n;l>0;s=256*s+e[t+d],d+=f,l-=8);if(0===o)o=1-u;else{if(o===c)return s?NaN:1/0*(p?-1:1);s+=Math.pow(2,n),o-=u}return(p?-1:1)*s*Math.pow(2,o-n)},Ou=function(e,t,r,n,i,o){var s,a,c,u=8*o-i-1,l=(1<<u)-1,d=l>>1,f=23===i?Math.pow(2,-24)-Math.pow(2,-77):0,p=n?0:o-1,h=n?1:-1,g=t<0||0===t&&1/t<0?1:0;for(t=Math.abs(t),isNaN(t)||t===1/0?(a=isNaN(t)?1:0,s=l):(s=Math.floor(Math.log(t)/Math.LN2),t*(c=Math.pow(2,-s))<1&&(s--,c*=2),(t+=s+d>=1?f/c:f*Math.pow(2,1-d))*c>=2&&(s++,c/=2),s+d>=l?(a=0,s=l):s+d>=1?(a=(t*c-1)*Math.pow(2,i),s+=d):(a=t*Math.pow(2,d-1)*Math.pow(2,i),s=0));i>=8;e[r+p]=255&a,p+=h,a/=256,i-=8);for(s=s<<i|a,u+=i;u>0;e[r+p]=255&s,p+=h,s/=256,u-=8);e[r+p-h]|=128*g},Au=o((function(e,t){const r="function"==typeof Symbol&&"function"==typeof Symbol.for?Symbol.for("nodejs.util.inspect.custom"):null;t.Buffer=o,t.SlowBuffer=function(e){+e!=e&&(e=0);return o.alloc(+e)},t.INSPECT_MAX_BYTES=50;const n=2147483647;function i(e){if(e>n)throw new RangeError('The value "'+e+'" is invalid for option "size"');const t=new Uint8Array(e);return Object.setPrototypeOf(t,o.prototype),t}function o(e,t,r){if("number"==typeof e){if("string"==typeof t)throw new TypeError('The "string" argument must be of type string. Received type number');return c(e)}return s(e,t,r)}function s(e,t,r){if("string"==typeof e)return function(e,t){"string"==typeof t&&""!==t||(t="utf8");if(!o.isEncoding(t))throw new TypeError("Unknown encoding: "+t);const r=0|f(e,t);let n=i(r);const s=n.write(e,t);s!==r&&(n=n.slice(0,s));return n}(e,t);if(ArrayBuffer.isView(e))return function(e){if(X(e,Uint8Array)){const t=new Uint8Array(e);return l(t.buffer,t.byteOffset,t.byteLength)}return u(e)}(e);if(null==e)throw new TypeError("The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type "+typeof e);if(X(e,ArrayBuffer)||e&&X(e.buffer,ArrayBuffer))return l(e,t,r);if("undefined"!=typeof SharedArrayBuffer&&(X(e,SharedArrayBuffer)||e&&X(e.buffer,SharedArrayBuffer)))return l(e,t,r);if("number"==typeof e)throw new TypeError('The "value" argument must not be of type number. Received type number');const n=e.valueOf&&e.valueOf();if(null!=n&&n!==e)return o.from(n,t,r);const s=function(e){if(o.isBuffer(e)){const t=0|d(e.length),r=i(t);return 0===r.length||e.copy(r,0,0,t),r}if(void 0!==e.length)return"number"!=typeof e.length||W(e.length)?i(0):u(e);if("Buffer"===e.type&&Array.isArray(e.data))return u(e.data)}(e);if(s)return s;if("undefined"!=typeof Symbol&&null!=Symbol.toPrimitive&&"function"==typeof e[Symbol.toPrimitive])return o.from(e[Symbol.toPrimitive]("string"),t,r);throw new TypeError("The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type "+typeof e)}function a(e){if("number"!=typeof e)throw new TypeError('"size" argument must be of type number');if(e<0)throw new RangeError('The value "'+e+'" is invalid for option "size"')}function c(e){return a(e),i(e<0?0:0|d(e))}function u(e){const t=e.length<0?0:0|d(e.length),r=i(t);for(let n=0;n<t;n+=1)r[n]=255&e[n];return r}function l(e,t,r){if(t<0||e.byteLength<t)throw new RangeError('"offset" is outside of buffer bounds');if(e.byteLength<t+(r||0))throw new RangeError('"length" is outside of buffer bounds');let n;return n=void 0===t&&void 0===r?new Uint8Array(e):void 0===r?new Uint8Array(e,t):new Uint8Array(e,t,r),Object.setPrototypeOf(n,o.prototype),n}function d(e){if(e>=n)throw new RangeError("Attempt to allocate Buffer larger than maximum size: 0x"+n.toString(16)+" bytes");return 0|e}function f(e,t){if(o.isBuffer(e))return e.length;if(ArrayBuffer.isView(e)||X(e,ArrayBuffer))return e.byteLength;if("string"!=typeof e)throw new TypeError('The "string" argument must be one of type string, Buffer, or ArrayBuffer. Received type '+typeof e);const r=e.length,n=arguments.length>2&&!0===arguments[2];if(!n&&0===r)return 0;let i=!1;for(;;)switch(t){case"ascii":case"latin1":case"binary":return r;case"utf8":case"utf-8":return G(e).length;case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return 2*r;case"hex":return r>>>1;case"base64":return $(e).length;default:if(i)return n?-1:G(e).length;t=(""+t).toLowerCase(),i=!0}}function p(e,t,r){let n=!1;if((void 0===t||t<0)&&(t=0),t>this.length)return"";if((void 0===r||r>this.length)&&(r=this.length),r<=0)return"";if((r>>>=0)<=(t>>>=0))return"";for(e||(e="utf8");;)switch(e){case"hex":return P(this,t,r);case"utf8":case"utf-8":return E(this,t,r);case"ascii":return T(this,t,r);case"latin1":case"binary":return I(this,t,r);case"base64":return C(this,t,r);case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return R(this,t,r);default:if(n)throw new TypeError("Unknown encoding: "+e);e=(e+"").toLowerCase(),n=!0}}function h(e,t,r){const n=e[t];e[t]=e[r],e[r]=n}function g(e,t,r,n,i){if(0===e.length)return-1;if("string"==typeof r?(n=r,r=0):r>2147483647?r=2147483647:r<-2147483648&&(r=-2147483648),W(r=+r)&&(r=i?0:e.length-1),r<0&&(r=e.length+r),r>=e.length){if(i)return-1;r=e.length-1}else if(r<0){if(!i)return-1;r=0}if("string"==typeof t&&(t=o.from(t,n)),o.isBuffer(t))return 0===t.length?-1:m(e,t,r,n,i);if("number"==typeof t)return t&=255,"function"==typeof Uint8Array.prototype.indexOf?i?Uint8Array.prototype.indexOf.call(e,t,r):Uint8Array.prototype.lastIndexOf.call(e,t,r):m(e,[t],r,n,i);throw new TypeError("val must be string, number or Buffer")}function m(e,t,r,n,i){let o,s=1,a=e.length,c=t.length;if(void 0!==n&&("ucs2"===(n=String(n).toLowerCase())||"ucs-2"===n||"utf16le"===n||"utf-16le"===n)){if(e.length<2||t.length<2)return-1;s=2,a/=2,c/=2,r/=2}function u(e,t){return 1===s?e[t]:e.readUInt16BE(t*s)}if(i){let n=-1;for(o=r;o<a;o++)if(u(e,o)===u(t,-1===n?0:o-n)){if(-1===n&&(n=o),o-n+1===c)return n*s}else-1!==n&&(o-=o-n),n=-1}else for(r+c>a&&(r=a-c),o=r;o>=0;o--){let r=!0;for(let n=0;n<c;n++)if(u(e,o+n)!==u(t,n)){r=!1;break}if(r)return o}return-1}function v(e,t,r,n){r=Number(r)||0;const i=e.length-r;n?(n=Number(n))>i&&(n=i):n=i;const o=t.length;let s;for(n>o/2&&(n=o/2),s=0;s<n;++s){const n=parseInt(t.substr(2*s,2),16);if(W(n))return s;e[r+s]=n}return s}function y(e,t,r,n){return q(G(t,e.length-r),e,r,n)}function b(e,t,r,n){return q(function(e){const t=[];for(let r=0;r<e.length;++r)t.push(255&e.charCodeAt(r));return t}(t),e,r,n)}function w(e,t,r,n){return q($(t),e,r,n)}function S(e,t,r,n){return q(function(e,t){let r,n,i;const o=[];for(let s=0;s<e.length&&!((t-=2)<0);++s)r=e.charCodeAt(s),n=r>>8,i=r%256,o.push(i),o.push(n);return o}(t,e.length-r),e,r,n)}function C(e,t,r){return 0===t&&r===e.length?Ru.fromByteArray(e):Ru.fromByteArray(e.slice(t,r))}function E(e,t,r){r=Math.min(e.length,r);const n=[];let i=t;for(;i<r;){const t=e[i];let o=null,s=t>239?4:t>223?3:t>191?2:1;if(i+s<=r){let r,n,a,c;switch(s){case 1:t<128&&(o=t);break;case 2:r=e[i+1],128==(192&r)&&(c=(31&t)<<6|63&r,c>127&&(o=c));break;case 3:r=e[i+1],n=e[i+2],128==(192&r)&&128==(192&n)&&(c=(15&t)<<12|(63&r)<<6|63&n,c>2047&&(c<55296||c>57343)&&(o=c));break;case 4:r=e[i+1],n=e[i+2],a=e[i+3],128==(192&r)&&128==(192&n)&&128==(192&a)&&(c=(15&t)<<18|(63&r)<<12|(63&n)<<6|63&a,c>65535&&c<1114112&&(o=c))}}null===o?(o=65533,s=1):o>65535&&(o-=65536,n.push(o>>>10&1023|55296),o=56320|1023&o),n.push(o),i+=s}return function(e){const t=e.length;if(t<=x)return String.fromCharCode.apply(String,e);let r="",n=0;for(;n<t;)r+=String.fromCharCode.apply(String,e.slice(n,n+=x));return r}(n)}t.kMaxLength=n,o.TYPED_ARRAY_SUPPORT=function(){try{const e=new Uint8Array(1),t={foo:function(){return 42}};return Object.setPrototypeOf(t,Uint8Array.prototype),Object.setPrototypeOf(e,t),42===e.foo()}catch(e){return!1}}(),o.TYPED_ARRAY_SUPPORT||"undefined"==typeof console||"function"!=typeof console.error||console.error("This browser lacks typed array (Uint8Array) support which is required by `buffer` v5.x. Use `buffer` v4.x if you require old browser support."),Object.defineProperty(o.prototype,"parent",{enumerable:!0,get:function(){if(o.isBuffer(this))return this.buffer}}),Object.defineProperty(o.prototype,"offset",{enumerable:!0,get:function(){if(o.isBuffer(this))return this.byteOffset}}),o.poolSize=8192,o.from=function(e,t,r){return s(e,t,r)},Object.setPrototypeOf(o.prototype,Uint8Array.prototype),Object.setPrototypeOf(o,Uint8Array),o.alloc=function(e,t,r){return function(e,t,r){return a(e),e<=0?i(e):void 0!==t?"string"==typeof r?i(e).fill(t,r):i(e).fill(t):i(e)}(e,t,r)},o.allocUnsafe=function(e){return c(e)},o.allocUnsafeSlow=function(e){return c(e)},o.isBuffer=function(e){return null!=e&&!0===e._isBuffer&&e!==o.prototype},o.compare=function(e,t){if(X(e,Uint8Array)&&(e=o.from(e,e.offset,e.byteLength)),X(t,Uint8Array)&&(t=o.from(t,t.offset,t.byteLength)),!o.isBuffer(e)||!o.isBuffer(t))throw new TypeError('The "buf1", "buf2" arguments must be one of type Buffer or Uint8Array');if(e===t)return 0;let r=e.length,n=t.length;for(let i=0,o=Math.min(r,n);i<o;++i)if(e[i]!==t[i]){r=e[i],n=t[i];break}return r<n?-1:n<r?1:0},o.isEncoding=function(e){switch(String(e).toLowerCase()){case"hex":case"utf8":case"utf-8":case"ascii":case"latin1":case"binary":case"base64":case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return!0;default:return!1}},o.concat=function(e,t){if(!Array.isArray(e))throw new TypeError('"list" argument must be an Array of Buffers');if(0===e.length)return o.alloc(0);let r;if(void 0===t)for(t=0,r=0;r<e.length;++r)t+=e[r].length;const n=o.allocUnsafe(t);let i=0;for(r=0;r<e.length;++r){let t=e[r];if(X(t,Uint8Array))i+t.length>n.length?(o.isBuffer(t)||(t=o.from(t)),t.copy(n,i)):Uint8Array.prototype.set.call(n,t,i);else{if(!o.isBuffer(t))throw new TypeError('"list" argument must be an Array of Buffers');t.copy(n,i)}i+=t.length}return n},o.byteLength=f,o.prototype._isBuffer=!0,o.prototype.swap16=function(){const e=this.length;if(e%2!=0)throw new RangeError("Buffer size must be a multiple of 16-bits");for(let t=0;t<e;t+=2)h(this,t,t+1);return this},o.prototype.swap32=function(){const e=this.length;if(e%4!=0)throw new RangeError("Buffer size must be a multiple of 32-bits");for(let t=0;t<e;t+=4)h(this,t,t+3),h(this,t+1,t+2);return this},o.prototype.swap64=function(){const e=this.length;if(e%8!=0)throw new RangeError("Buffer size must be a multiple of 64-bits");for(let t=0;t<e;t+=8)h(this,t,t+7),h(this,t+1,t+6),h(this,t+2,t+5),h(this,t+3,t+4);return this},o.prototype.toString=function(){const e=this.length;return 0===e?"":0===arguments.length?E(this,0,e):p.apply(this,arguments)},o.prototype.toLocaleString=o.prototype.toString,o.prototype.equals=function(e){if(!o.isBuffer(e))throw new TypeError("Argument must be a Buffer");return this===e||0===o.compare(this,e)},o.prototype.inspect=function(){let e="";const r=t.INSPECT_MAX_BYTES;return e=this.toString("hex",0,r).replace(/(.{2})/g,"$1 ").trim(),this.length>r&&(e+=" ... "),"<Buffer "+e+">"},r&&(o.prototype[r]=o.prototype.inspect),o.prototype.compare=function(e,t,r,n,i){if(X(e,Uint8Array)&&(e=o.from(e,e.offset,e.byteLength)),!o.isBuffer(e))throw new TypeError('The "target" argument must be one of type Buffer or Uint8Array. Received type '+typeof e);if(void 0===t&&(t=0),void 0===r&&(r=e?e.length:0),void 0===n&&(n=0),void 0===i&&(i=this.length),t<0||r>e.length||n<0||i>this.length)throw new RangeError("out of range index");if(n>=i&&t>=r)return 0;if(n>=i)return-1;if(t>=r)return 1;if(this===e)return 0;let s=(i>>>=0)-(n>>>=0),a=(r>>>=0)-(t>>>=0);const c=Math.min(s,a),u=this.slice(n,i),l=e.slice(t,r);for(let e=0;e<c;++e)if(u[e]!==l[e]){s=u[e],a=l[e];break}return s<a?-1:a<s?1:0},o.prototype.includes=function(e,t,r){return-1!==this.indexOf(e,t,r)},o.prototype.indexOf=function(e,t,r){return g(this,e,t,r,!0)},o.prototype.lastIndexOf=function(e,t,r){return g(this,e,t,r,!1)},o.prototype.write=function(e,t,r,n){if(void 0===t)n="utf8",r=this.length,t=0;else if(void 0===r&&"string"==typeof t)n=t,r=this.length,t=0;else{if(!isFinite(t))throw new Error("Buffer.write(string, encoding, offset[, length]) is no longer supported");t>>>=0,isFinite(r)?(r>>>=0,void 0===n&&(n="utf8")):(n=r,r=void 0)}const i=this.length-t;if((void 0===r||r>i)&&(r=i),e.length>0&&(r<0||t<0)||t>this.length)throw new RangeError("Attempt to write outside buffer bounds");n||(n="utf8");let o=!1;for(;;)switch(n){case"hex":return v(this,e,t,r);case"utf8":case"utf-8":return y(this,e,t,r);case"ascii":case"latin1":case"binary":return b(this,e,t,r);case"base64":return w(this,e,t,r);case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return S(this,e,t,r);default:if(o)throw new TypeError("Unknown encoding: "+n);n=(""+n).toLowerCase(),o=!0}},o.prototype.toJSON=function(){return{type:"Buffer",data:Array.prototype.slice.call(this._arr||this,0)}};const x=4096;function T(e,t,r){let n="";r=Math.min(e.length,r);for(let i=t;i<r;++i)n+=String.fromCharCode(127&e[i]);return n}function I(e,t,r){let n="";r=Math.min(e.length,r);for(let i=t;i<r;++i)n+=String.fromCharCode(e[i]);return n}function P(e,t,r){const n=e.length;(!t||t<0)&&(t=0),(!r||r<0||r>n)&&(r=n);let i="";for(let n=t;n<r;++n)i+=H[e[n]];return i}function R(e,t,r){const n=e.slice(t,r);let i="";for(let e=0;e<n.length-1;e+=2)i+=String.fromCharCode(n[e]+256*n[e+1]);return i}function k(e,t,r){if(e%1!=0||e<0)throw new RangeError("offset is not uint");if(e+t>r)throw new RangeError("Trying to access beyond buffer length")}function O(e,t,r,n,i,s){if(!o.isBuffer(e))throw new TypeError('"buffer" argument must be a Buffer instance');if(t>i||t<s)throw new RangeError('"value" argument is out of bounds');if(r+n>e.length)throw new RangeError("Index out of range")}function A(e,t,r,n,i){U(t,n,i,e,r,7);let o=Number(t&BigInt(4294967295));e[r++]=o,o>>=8,e[r++]=o,o>>=8,e[r++]=o,o>>=8,e[r++]=o;let s=Number(t>>BigInt(32)&BigInt(4294967295));return e[r++]=s,s>>=8,e[r++]=s,s>>=8,e[r++]=s,s>>=8,e[r++]=s,r}function D(e,t,r,n,i){U(t,n,i,e,r,7);let o=Number(t&BigInt(4294967295));e[r+7]=o,o>>=8,e[r+6]=o,o>>=8,e[r+5]=o,o>>=8,e[r+4]=o;let s=Number(t>>BigInt(32)&BigInt(4294967295));return e[r+3]=s,s>>=8,e[r+2]=s,s>>=8,e[r+1]=s,s>>=8,e[r]=s,r+8}function L(e,t,r,n,i,o){if(r+n>e.length)throw new RangeError("Index out of range");if(r<0)throw new RangeError("Index out of range")}function j(e,t,r,n,i){return t=+t,r>>>=0,i||L(e,0,r,4),Ou(e,t,r,n,23,4),r+4}function M(e,t,r,n,i){return t=+t,r>>>=0,i||L(e,0,r,8),Ou(e,t,r,n,52,8),r+8}o.prototype.slice=function(e,t){const r=this.length;(e=~~e)<0?(e+=r)<0&&(e=0):e>r&&(e=r),(t=void 0===t?r:~~t)<0?(t+=r)<0&&(t=0):t>r&&(t=r),t<e&&(t=e);const n=this.subarray(e,t);return Object.setPrototypeOf(n,o.prototype),n},o.prototype.readUintLE=o.prototype.readUIntLE=function(e,t,r){e>>>=0,t>>>=0,r||k(e,t,this.length);let n=this[e],i=1,o=0;for(;++o<t&&(i*=256);)n+=this[e+o]*i;return n},o.prototype.readUintBE=o.prototype.readUIntBE=function(e,t,r){e>>>=0,t>>>=0,r||k(e,t,this.length);let n=this[e+--t],i=1;for(;t>0&&(i*=256);)n+=this[e+--t]*i;return n},o.prototype.readUint8=o.prototype.readUInt8=function(e,t){return e>>>=0,t||k(e,1,this.length),this[e]},o.prototype.readUint16LE=o.prototype.readUInt16LE=function(e,t){return e>>>=0,t||k(e,2,this.length),this[e]|this[e+1]<<8},o.prototype.readUint16BE=o.prototype.readUInt16BE=function(e,t){return e>>>=0,t||k(e,2,this.length),this[e]<<8|this[e+1]},o.prototype.readUint32LE=o.prototype.readUInt32LE=function(e,t){return e>>>=0,t||k(e,4,this.length),(this[e]|this[e+1]<<8|this[e+2]<<16)+16777216*this[e+3]},o.prototype.readUint32BE=o.prototype.readUInt32BE=function(e,t){return e>>>=0,t||k(e,4,this.length),16777216*this[e]+(this[e+1]<<16|this[e+2]<<8|this[e+3])},o.prototype.readBigUInt64LE=Y((function(e){F(e>>>=0,"offset");const t=this[e],r=this[e+7];void 0!==t&&void 0!==r||V(e,this.length-8);const n=t+256*this[++e]+65536*this[++e]+this[++e]*2**24,i=this[++e]+256*this[++e]+65536*this[++e]+r*2**24;return BigInt(n)+(BigInt(i)<<BigInt(32))})),o.prototype.readBigUInt64BE=Y((function(e){F(e>>>=0,"offset");const t=this[e],r=this[e+7];void 0!==t&&void 0!==r||V(e,this.length-8);const n=t*2**24+65536*this[++e]+256*this[++e]+this[++e],i=this[++e]*2**24+65536*this[++e]+256*this[++e]+r;return(BigInt(n)<<BigInt(32))+BigInt(i)})),o.prototype.readIntLE=function(e,t,r){e>>>=0,t>>>=0,r||k(e,t,this.length);let n=this[e],i=1,o=0;for(;++o<t&&(i*=256);)n+=this[e+o]*i;return i*=128,n>=i&&(n-=Math.pow(2,8*t)),n},o.prototype.readIntBE=function(e,t,r){e>>>=0,t>>>=0,r||k(e,t,this.length);let n=t,i=1,o=this[e+--n];for(;n>0&&(i*=256);)o+=this[e+--n]*i;return i*=128,o>=i&&(o-=Math.pow(2,8*t)),o},o.prototype.readInt8=function(e,t){return e>>>=0,t||k(e,1,this.length),128&this[e]?-1*(255-this[e]+1):this[e]},o.prototype.readInt16LE=function(e,t){e>>>=0,t||k(e,2,this.length);const r=this[e]|this[e+1]<<8;return 32768&r?4294901760|r:r},o.prototype.readInt16BE=function(e,t){e>>>=0,t||k(e,2,this.length);const r=this[e+1]|this[e]<<8;return 32768&r?4294901760|r:r},o.prototype.readInt32LE=function(e,t){return e>>>=0,t||k(e,4,this.length),this[e]|this[e+1]<<8|this[e+2]<<16|this[e+3]<<24},o.prototype.readInt32BE=function(e,t){return e>>>=0,t||k(e,4,this.length),this[e]<<24|this[e+1]<<16|this[e+2]<<8|this[e+3]},o.prototype.readBigInt64LE=Y((function(e){F(e>>>=0,"offset");const t=this[e],r=this[e+7];void 0!==t&&void 0!==r||V(e,this.length-8);const n=this[e+4]+256*this[e+5]+65536*this[e+6]+(r<<24);return(BigInt(n)<<BigInt(32))+BigInt(t+256*this[++e]+65536*this[++e]+this[++e]*2**24)})),o.prototype.readBigInt64BE=Y((function(e){F(e>>>=0,"offset");const t=this[e],r=this[e+7];void 0!==t&&void 0!==r||V(e,this.length-8);const n=(t<<24)+65536*this[++e]+256*this[++e]+this[++e];return(BigInt(n)<<BigInt(32))+BigInt(this[++e]*2**24+65536*this[++e]+256*this[++e]+r)})),o.prototype.readFloatLE=function(e,t){return e>>>=0,t||k(e,4,this.length),ku(this,e,!0,23,4)},o.prototype.readFloatBE=function(e,t){return e>>>=0,t||k(e,4,this.length),ku(this,e,!1,23,4)},o.prototype.readDoubleLE=function(e,t){return e>>>=0,t||k(e,8,this.length),ku(this,e,!0,52,8)},o.prototype.readDoubleBE=function(e,t){return e>>>=0,t||k(e,8,this.length),ku(this,e,!1,52,8)},o.prototype.writeUintLE=o.prototype.writeUIntLE=function(e,t,r,n){if(e=+e,t>>>=0,r>>>=0,!n){O(this,e,t,r,Math.pow(2,8*r)-1,0)}let i=1,o=0;for(this[t]=255&e;++o<r&&(i*=256);)this[t+o]=e/i&255;return t+r},o.prototype.writeUintBE=o.prototype.writeUIntBE=function(e,t,r,n){if(e=+e,t>>>=0,r>>>=0,!n){O(this,e,t,r,Math.pow(2,8*r)-1,0)}let i=r-1,o=1;for(this[t+i]=255&e;--i>=0&&(o*=256);)this[t+i]=e/o&255;return t+r},o.prototype.writeUint8=o.prototype.writeUInt8=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,1,255,0),this[t]=255&e,t+1},o.prototype.writeUint16LE=o.prototype.writeUInt16LE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,2,65535,0),this[t]=255&e,this[t+1]=e>>>8,t+2},o.prototype.writeUint16BE=o.prototype.writeUInt16BE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,2,65535,0),this[t]=e>>>8,this[t+1]=255&e,t+2},o.prototype.writeUint32LE=o.prototype.writeUInt32LE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,4,4294967295,0),this[t+3]=e>>>24,this[t+2]=e>>>16,this[t+1]=e>>>8,this[t]=255&e,t+4},o.prototype.writeUint32BE=o.prototype.writeUInt32BE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,4,4294967295,0),this[t]=e>>>24,this[t+1]=e>>>16,this[t+2]=e>>>8,this[t+3]=255&e,t+4},o.prototype.writeBigUInt64LE=Y((function(e,t=0){return A(this,e,t,BigInt(0),BigInt("0xffffffffffffffff"))})),o.prototype.writeBigUInt64BE=Y((function(e,t=0){return D(this,e,t,BigInt(0),BigInt("0xffffffffffffffff"))})),o.prototype.writeIntLE=function(e,t,r,n){if(e=+e,t>>>=0,!n){const n=Math.pow(2,8*r-1);O(this,e,t,r,n-1,-n)}let i=0,o=1,s=0;for(this[t]=255&e;++i<r&&(o*=256);)e<0&&0===s&&0!==this[t+i-1]&&(s=1),this[t+i]=(e/o>>0)-s&255;return t+r},o.prototype.writeIntBE=function(e,t,r,n){if(e=+e,t>>>=0,!n){const n=Math.pow(2,8*r-1);O(this,e,t,r,n-1,-n)}let i=r-1,o=1,s=0;for(this[t+i]=255&e;--i>=0&&(o*=256);)e<0&&0===s&&0!==this[t+i+1]&&(s=1),this[t+i]=(e/o>>0)-s&255;return t+r},o.prototype.writeInt8=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,1,127,-128),e<0&&(e=255+e+1),this[t]=255&e,t+1},o.prototype.writeInt16LE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,2,32767,-32768),this[t]=255&e,this[t+1]=e>>>8,t+2},o.prototype.writeInt16BE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,2,32767,-32768),this[t]=e>>>8,this[t+1]=255&e,t+2},o.prototype.writeInt32LE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,4,2147483647,-2147483648),this[t]=255&e,this[t+1]=e>>>8,this[t+2]=e>>>16,this[t+3]=e>>>24,t+4},o.prototype.writeInt32BE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,4,2147483647,-2147483648),e<0&&(e=4294967295+e+1),this[t]=e>>>24,this[t+1]=e>>>16,this[t+2]=e>>>8,this[t+3]=255&e,t+4},o.prototype.writeBigInt64LE=Y((function(e,t=0){return A(this,e,t,-BigInt("0x8000000000000000"),BigInt("0x7fffffffffffffff"))})),o.prototype.writeBigInt64BE=Y((function(e,t=0){return D(this,e,t,-BigInt("0x8000000000000000"),BigInt("0x7fffffffffffffff"))})),o.prototype.writeFloatLE=function(e,t,r){return j(this,e,t,!0,r)},o.prototype.writeFloatBE=function(e,t,r){return j(this,e,t,!1,r)},o.prototype.writeDoubleLE=function(e,t,r){return M(this,e,t,!0,r)},o.prototype.writeDoubleBE=function(e,t,r){return M(this,e,t,!1,r)},o.prototype.copy=function(e,t,r,n){if(!o.isBuffer(e))throw new TypeError("argument should be a Buffer");if(r||(r=0),n||0===n||(n=this.length),t>=e.length&&(t=e.length),t||(t=0),n>0&&n<r&&(n=r),n===r)return 0;if(0===e.length||0===this.length)return 0;if(t<0)throw new RangeError("targetStart out of bounds");if(r<0||r>=this.length)throw new RangeError("Index out of range");if(n<0)throw new RangeError("sourceEnd out of bounds");n>this.length&&(n=this.length),e.length-t<n-r&&(n=e.length-t+r);const i=n-r;return this===e&&"function"==typeof Uint8Array.prototype.copyWithin?this.copyWithin(t,r,n):Uint8Array.prototype.set.call(e,this.subarray(r,n),t),i},o.prototype.fill=function(e,t,r,n){if("string"==typeof e){if("string"==typeof t?(n=t,t=0,r=this.length):"string"==typeof r&&(n=r,r=this.length),void 0!==n&&"string"!=typeof n)throw new TypeError("encoding must be a string");if("string"==typeof n&&!o.isEncoding(n))throw new TypeError("Unknown encoding: "+n);if(1===e.length){const t=e.charCodeAt(0);("utf8"===n&&t<128||"latin1"===n)&&(e=t)}}else"number"==typeof e?e&=255:"boolean"==typeof e&&(e=Number(e));if(t<0||this.length<t||this.length<r)throw new RangeError("Out of range index");if(r<=t)return this;let i;if(t>>>=0,r=void 0===r?this.length:r>>>0,e||(e=0),"number"==typeof e)for(i=t;i<r;++i)this[i]=e;else{const s=o.isBuffer(e)?e:o.from(e,n),a=s.length;if(0===a)throw new TypeError('The value "'+e+'" is invalid for argument "value"');for(i=0;i<r-t;++i)this[i+t]=s[i%a]}return this};const N={};function B(e,t,r){N[e]=class extends r{constructor(){super(),Object.defineProperty(this,"message",{value:t.apply(this,arguments),writable:!0,configurable:!0}),this.name=`${this.name} [${e}]`,this.stack,delete this.name}get code(){return e}set code(e){Object.defineProperty(this,"code",{configurable:!0,enumerable:!0,value:e,writable:!0})}toString(){return`${this.name} [${e}]: ${this.message}`}}}function _(e){let t="",r=e.length;const n="-"===e[0]?1:0;for(;r>=n+4;r-=3)t=`_${e.slice(r-3,r)}${t}`;return`${e.slice(0,r)}${t}`}function U(e,t,r,n,i,o){if(e>r||e<t){const n="bigint"==typeof t?"n":"";let i;throw i=o>3?0===t||t===BigInt(0)?`>= 0${n} and < 2${n} ** ${8*(o+1)}${n}`:`>= -(2${n} ** ${8*(o+1)-1}${n}) and < 2 ** ${8*(o+1)-1}${n}`:`>= ${t}${n} and <= ${r}${n}`,new N.ERR_OUT_OF_RANGE("value",i,e)}!function(e,t,r){F(t,"offset"),void 0!==e[t]&&void 0!==e[t+r]||V(t,e.length-(r+1))}(n,i,o)}function F(e,t){if("number"!=typeof e)throw new N.ERR_INVALID_ARG_TYPE(t,"number",e)}function V(e,t,r){if(Math.floor(e)!==e)throw F(e,r),new N.ERR_OUT_OF_RANGE(r||"offset","an integer",e);if(t<0)throw new N.ERR_BUFFER_OUT_OF_BOUNDS;throw new N.ERR_OUT_OF_RANGE(r||"offset",`>= ${r?1:0} and <= ${t}`,e)}B("ERR_BUFFER_OUT_OF_BOUNDS",(function(e){return e?`${e} is outside of buffer bounds`:"Attempt to access memory outside buffer bounds"}),RangeError),B("ERR_INVALID_ARG_TYPE",(function(e,t){return`The "${e}" argument must be of type number. Received type ${typeof t}`}),TypeError),B("ERR_OUT_OF_RANGE",(function(e,t,r){let n=`The value of "${e}" is out of range.`,i=r;return Number.isInteger(r)&&Math.abs(r)>2**32?i=_(String(r)):"bigint"==typeof r&&(i=String(r),(r>BigInt(2)**BigInt(32)||r<-(BigInt(2)**BigInt(32)))&&(i=_(i)),i+="n"),n+=` It must be ${t}. Received ${i}`,n}),RangeError);const z=/[^+/0-9A-Za-z-_]/g;function G(e,t){let r;t=t||1/0;const n=e.length;let i=null;const o=[];for(let s=0;s<n;++s){if(r=e.charCodeAt(s),r>55295&&r<57344){if(!i){if(r>56319){(t-=3)>-1&&o.push(239,191,189);continue}if(s+1===n){(t-=3)>-1&&o.push(239,191,189);continue}i=r;continue}if(r<56320){(t-=3)>-1&&o.push(239,191,189),i=r;continue}r=65536+(i-55296<<10|r-56320)}else i&&(t-=3)>-1&&o.push(239,191,189);if(i=null,r<128){if((t-=1)<0)break;o.push(r)}else if(r<2048){if((t-=2)<0)break;o.push(r>>6|192,63&r|128)}else if(r<65536){if((t-=3)<0)break;o.push(r>>12|224,r>>6&63|128,63&r|128)}else{if(!(r<1114112))throw new Error("Invalid code point");if((t-=4)<0)break;o.push(r>>18|240,r>>12&63|128,r>>6&63|128,63&r|128)}}return o}function $(e){return Ru.toByteArray(function(e){if((e=(e=e.split("=")[0]).trim().replace(z,"")).length<2)return"";for(;e.length%4!=0;)e+="=";return e}(e))}function q(e,t,r,n){let i;for(i=0;i<n&&!(i+r>=t.length||i>=e.length);++i)t[i+r]=e[i];return i}function X(e,t){return e instanceof t||null!=e&&null!=e.constructor&&null!=e.constructor.name&&e.constructor.name===t.name}function W(e){return e!=e}const H=function(){const e="0123456789abcdef",t=new Array(256);for(let r=0;r<16;++r){const n=16*r;for(let i=0;i<16;++i)t[n+i]=e[r]+e[i]}return t}();function Y(e){return"undefined"==typeof BigInt?J:e}function J(){throw new Error("BigInt not supported")}})),Du=o((function(e,t){var r=Au.Buffer;function n(e,t){for(var r in e)t[r]=e[r]}function i(e,t,n){return r(e,t,n)}r.from&&r.alloc&&r.allocUnsafe&&r.allocUnsafeSlow?e.exports=Au:(n(Au,t),t.Buffer=i),n(r,i),i.from=function(e,t,n){if("number"==typeof e)throw new TypeError("Argument must not be a number");return r(e,t,n)},i.alloc=function(e,t,n){if("number"!=typeof e)throw new TypeError("Argument must be a number");var i=r(e);return void 0!==t?"string"==typeof n?i.fill(t,n):i.fill(t):i.fill(0),i},i.allocUnsafe=function(e){if("number"!=typeof e)throw new TypeError("Argument must be a number");return r(e)},i.allocUnsafeSlow=function(e){if("number"!=typeof e)throw new TypeError("Argument must be a number");return Au.SlowBuffer(e)}})),Lu=o((function(e){var t=65536,r=4294967295;var n=Du.Buffer,o=i.crypto||i.msCrypto;o&&o.getRandomValues?e.exports=function(e,i){if(e>r)throw new RangeError("requested too many random bytes");var s=n.allocUnsafe(e);if(e>0)if(e>t)for(var a=0;a<e;a+=t)o.getRandomValues(s.slice(a,a+t));else o.getRandomValues(s);if("function"==typeof i)return process.nextTick((function(){i(null,s)}));return s}:e.exports=function(){throw new Error("Secure random number generation is not supported by this browser.\nUse Chrome, Firefox or Internet Explorer 11")}}));class ju{constructor(e,t){this.ufrag=e,this.pwd=t,this.lite=!1,this.endOfCandidates=!1}clone(){const e=new ju(this.ufrag,this.pwd);return e.setLite(this.lite),e.setEndOfCandidates(this.endOfCandidates),e}plain(){const e={ufrag:this.ufrag,pwd:this.pwd};return this.lite&&(e.lite=this.lite),this.endOfCandidates&&(e.endOfCandidates=this.endOfCandidates),e}getUfrag(){return this.ufrag}getPwd(){return this.pwd}isLite(){return this.lite}setLite(e){this.lite=e}isEndOfCandidates(){return this.endOfCandidates}setEndOfCandidates(e){this.endOfCandidates=e}}ju.generate=function(e){const t=new ju,r=Lu(8),n=Lu(24);return t.ufrag=r.toString("hex"),t.pwd=n.toString("hex"),t.lite=e,t},ju.expand=function(e){const t=new ju(e.ufrag,e.pwd);return t.setLite(e.lite),t.setEndOfCandidates(e.endOfCandidates),t};var Mu=ju;const Nu=lu("SEND","RECV");Nu.byValue=function(e){return Nu[e.toUpperCase()]},Nu.toString=function(e){switch(e){case Nu.SEND:return"send";case Nu.RECV:return"recv"}},Nu.reverse=function(e){switch(e){case Nu.SEND:return Nu.RECV;case Nu.RECV:return Nu.SEND}};var Bu=Nu;class _u{constructor(e,t){this.id=e,this.direction=t,this.formats=[],this.params=new Map}clone(){var e=new _u(this.id,this.direction);return e.setFormats(this.formats),e.setParams(this.params),e}plain(){var e={id:this.id,direction:Bu.toString(this.direction)};for(var[t,r]of(this.formats&&(e.formats=this.formats),this.params.entries()))e.params||(e.params={}),e.params[t]=r;return e}getId(){return this.id}getDirection(){return this.direction}setDirection(e){this.direction=e}getFormats(){return this.formats}setFormats(e){this.formats=[];for(let t=0;t<e.length;++t)this.formats.push(parseInt(e[t]))}getParams(){return this.params}setParams(e){this.params=new Map(e)}addParam(e,t){this.params.set(e,t)}getDirection(){return this.direction}setDirection(e){this.direction=e}}_u.expand=function(e){const t=new _u(e.id,Bu.byValue(e.direction));for(let r in e.params)t.addParam(r,e.params[r]);return e.formats&&t.setFormats(e.formats),t};var Uu=_u;class Fu{constructor(e,t){this.paused=t,this.id=e}clone(){return new Fu(this.id,this.paused)}plain(){return{id:this.id,paused:this.paused}}isPaused(){return this.paused}getId(){return this.id}}Fu.expand=function(e){return new Fu(e.id,e.paused)};var Vu=Fu;class zu{constructor(){this.send=[],this.recv=[]}clone(){const e=new zu;for(let t=0;t<this.send.length;++t){let r=[];for(let e=0;t<this.send[e].length;++t)r.push(this.send[t][e].clone());e.addSimulcastAlternativeStreams(Bu.SEND,r)}for(let t=0;t<this.recv.length;++t){let r=[];for(let e=0;t<this.recv[e].length;++t)r.push(this.recv[t][e].clone());e.addSimulcastAlternativeStreams(Bu.RECV,r)}return e}plain(){const e={send:[],recv:[]};for(let t=0;t<this.send.length;++t){let r=[];for(let e=0;e<this.send[t].length;++e)r.push(this.send[t][e].plain());e.send.push(r)}for(let t=0;t<this.recv.length;++t){let r=[];for(let e=0;e<this.recv[t].length;++e)r.push(this.recv[t][e].plain());e.recv.push(r)}return e}addSimulcastAlternativeStreams(e,t){return e===Bu.SEND?this.send.push(t):this.recv.push(t)}addSimulcastStream(e,t){return e===Bu.SEND?this.send.push([t]):this.recv.push([t])}getSimulcastStreams(e){return e===Bu.SEND?this.send:this.recv}}zu.expand=function(e){const t=new zu;for(let r=0;r<e.send.length;++r){let n=[];for(let t=0;t<e.send[r].length;++t)n.push(Vu.expand(e.send[r][t]));t.addSimulcastAlternativeStreams(Bu.SEND,n)}for(let r=0;r<e.recv.length;++r){let n=[];for(let t=0;t<e.recv[r].length;++t)n.push(Vu.expand(e.recv[r][t]));t.addSimulcastAlternativeStreams(Bu.RECV,n)}return t};var Gu=zu;const $u=lu("SENDRECV","SENDONLY","RECVONLY","INACTIVE");$u.byValue=function(e){return $u[e.toUpperCase()]},$u.toString=function(e){switch(e){case $u.SENDRECV:return"sendrecv";case $u.SENDONLY:return"sendonly";case $u.RECVONLY:return"recvonly";case $u.INACTIVE:return"inactive"}},$u.reverse=function(e){switch(e){case $u.SENDRECV:return $u.SENDRECV;case $u.SENDONLY:return $u.RECVONLY;case $u.RECVONLY:return $u.SENDONLY;case $u.INACTIVE:return $u.INACTIVE}};var qu=$u;class Xu{constructor(e,t){this.port=e,this.maxMessageSize=t}clone(){return new Xu(this.port,this.maxMessageSize)}plain(){return{port:this.port,maxMessageSize:this.maxMessageSize}}getPort(){return this.port}getMaxMessageSize(){return this.maxMessageSize}}Xu.expand=function(e){return new Xu(e.port,e.maxMessageSize)};var Wu=Xu;class Hu{constructor(e,t){this.id=e,this.type=t,this.direction=qu.SENDRECV,this.extensions=new Map,this.codecs=new Map,this.rids=new Map,this.simulcast=null,this.bitrate=0,this.control=null,this.dataChannel=null}clone(){const e=new Hu(this.id,this.type);e.setDirection(this.direction),e.setBitrate(this.bitrate);for(const t of this.codecs.values())e.addCodec(t.clone());for(const[t,r]of this.extensions.entries())e.addExtension(t,r);for(const t of this.rids.values())e.addRID(t.clone());return this.simulcast&&e.setSimulcast(this.simulcast.clone()),this.control&&e.setControl(this.control),this.dataChannel&&e.setDatachannel(this.dataChannel.clone()),e}plain(){const e={id:this.id,type:this.type,direction:qu.toString(this.direction),codecs:[]};this.dataChannel&&(e.dataChannel=this.dataChannel.plain()),this.bitrate&&(e.bitrate=this.bitrate);for(const t of this.codecs.values())e.codecs.push(t.plain());for(const[t,r]of this.extensions.entries())e.extensions||(e.extensions={}),e.extensions[t]=r;for(const t of this.rids.values())e.rids||(e.rids=[]),e.rids.push(t.plain());return this.simulcast&&(e.simulcast=this.simulcast.plain()),this.control&&(e.control=this.control),e}getType(){return this.type}getId(){return this.id}setId(e){this.id=e}addExtension(e,t){this.extensions.set(e,t)}addRID(e){this.rids.set(e.getId(),e)}addCodec(e){this.codecs.set(e.getType(),e)}setCodecs(e){this.codecs=e}getCodecForType(e){return this.codecs.get(e)}getCodec(e){for(const t of this.codecs.values())if(t.getCodec().toLowerCase()===e.toLowerCase())return t;return null}hasCodec(e){return null!==this.getCodec(e)}getCodecs(){return this.codecs}hasRTX(){for(const e of this.codecs.values())if(e.hasRTX())return!0;return!1}getExtensions(){return this.extensions}getRIDs(){return this.rids}getRID(e){return this.rids.get(e)}getBitrate(){return this.bitrate}setBitrate(e){this.bitrate=e}getDirection(){return this.direction}setDirection(e){this.direction=e}hasControl(){return!!this.control}getControl(){return this.control}setControl(e){this.control=e}hasDataChannel(){return!!this.dataChannel}getDataChannel(){return this.dataChannel}setDataChannel(e){this.dataChannel=e}answer(e){const t=new Hu(this.id,this.type);if(e){if(t.setDirection(qu.reverse(this.direction)),e.codecs){let r;r=Array.isArray(e.codecs)?uu.MapFromNames(e.codecs,e.rtx,e.rtcpfbs):e.codecs;for(let e of this.codecs.values())if(r.has(e.getCodec().toLowerCase())){const n=r.get(e.getCodec().toLowerCase());if("h264"===n.getCodec()&&n.hasParam("packetization-mode")&&n.getParam("packetization-mode")!=e.getParam("packetization-mode","0"))continue;if("h264"===n.getCodec()&&n.hasParam("profile-level-id")&&e.hasParam("profile-level-id")&&n.getParam("profile-level-id")!=e.getParam("profile-level-id"))continue;if("multiopus"===n.getCodec()&&n.hasParam("num_streams")&&e.hasParam("num_streams")&&n.getParam("num_streams")!=e.getParam("num_streams"))continue;const i=n.clone();i.setType(e.getType()),i.hasRTX()&&i.setRTX(e.getRTX()),e.hasChannels()&&i.setChannels(e.getChannels()),i.addParams(e.getParams()),t.addCodec(i)}}const n=new Set(e.extensions);for(let[e,r]of this.extensions)n.has(r)&&t.addExtension(e,r);if(e.simulcast&&this.simulcast){const e=new Gu,n=this.simulcast.getSimulcastStreams(Bu.SEND);if(n)for(let t=0;t<n.length;++t){var r=[];for(let e=0;e<n[t].length;++e)r.push(n[t][e].clone());e.addSimulcastAlternativeStreams(Bu.RECV,r)}const i=this.simulcast.getSimulcastStreams(Bu.RECV);if(i)for(let t=0;t<i.length;++t){r=[];for(let e=0;e<i[t].length;++e)r.push(i[t][e].clone());e.addSimulcastAlternativeStreams(Bu.SEND,r)}for(const e of this.rids.values()){const r=e.clone();r.setDirection(Bu.reverse(e.getDirection())),t.addRID(r)}t.setSimulcast(e)}if(e.dataChannel&&this.dataChannel){const r=new Wu(this.dataChannel.getPort(),e.dataChannel.maxMessageSize?e.dataChannel.maxMessageSize:this.dataChannel.getMaxMessageSize());t.setDataChannel(r)}}else t.setDirection(qu.INACTIVE);return t}getSimulcast(){return this.simulcast}setSimulcast(e){this.simulcast=e}}Hu.create=function(e,t){const r=new Hu(e,e);return t?t.codecs&&(Array.isArray(t.codecs)?r.setCodecs(uu.MapFromNames(t.codecs,t.rtx,t.rtcpfbs)):r.setCodecs(t.codecs)):r.setDirection(qu.INACTIVE),r},Hu.expand=function(e){const t=new Hu(e.id,e.type);if(e.direction&&t.setDirection(qu.byValue(e.direction)),t.setBitrate(e.bitrate),e.dataChannel){const r=Wu.expand(e.dataChannel);r&&t.setDataChannel(r)}for(let r in e.extensions)t.addExtension(r,e.extensions[r]);for(let r=0;e.codecs&&r<e.codecs.length;++r){const n=uu.expand(e.codecs[r]);n&&t.addCodec(n)}for(let r=0;e.rids&&r<e.rids.length;++r){const n=Uu.expand(e.rids[r]);t.addRID(n)}return e.simulcast&&t.setSimulcast(Gu.expand(e.simulcast)),e.control&&t.setControl(e.control),t};var Yu=Hu;class Ju{constructor(e,t){this.semantics=e,this.ssrcs=[];for(let e=0;e<t.length;++e)this.ssrcs.push(parseInt(t[e]))}clone(){return new Ju(this.semantics,this.ssrcs)}plain(){const e={semantics:this.semantics,ssrcs:[]};for(let t=0;t<this.ssrcs.length;++t)e.ssrcs.push(this.ssrcs[t]);return e}getSemantics(){return this.semantics}getSSRCs(){return this.ssrcs}}Ju.expand=function(e){return new Ju(e.semantics,e.ssrcs)};var Ku=Ju;class Zu{constructor(e){this.ssrc=e}clone(){const e=new Zu(this.ssrc);e.setCName(this.cname),e.setStreamId(this.streamId),e.setTrackId(this.trackId)}plain(){const e={ssrc:this.ssrc};return this.cname&&(e.cname=this.cname),this.streamId&&(e.streamId=this.streamId),this.trackId&&(e.trackid=this.trackId),e}getCName(){return this.cname}setCName(e){this.cname=e}getStreamId(){return this.streamId}setStreamId(e){this.streamId=e}getTrackId(){return this.trackId}setTrackId(e){this.trackId=e}getSSRC(){return this.ssrc}}Zu.expand=function(e){const t=new Zu(e.ssrc);return t.setCName(e.cname),t.setStreamId(e.streamId),t.setTrackId(e.trackId),t};var Qu=Zu;class el{constructor(e,t){this.id=e,this.paused=t,this.codecs=new Map,this.params=new Map}clone(){var e=new el(this.id,this.paused);for(let t of this.codecs.values())e.addCodec(t.clone());return e.setParams(this.params),e}plain(){var e={id:this.id,paused:this.paused,codecs:{},params:{}};for(var[t,r]of this.codecs.entries())e.codecs[t]=r.plain();for(var[t,n]of this.params.entries())e.params[t]=n;return e}getId(){return this.id}getCodecs(){return this.codecs}addCodec(e){this.codecs.set(e.getType(),e)}getParams(){return this.params}setParams(e){this.params=new Map(e)}addParam(e,t){this.params.set(e,t)}isPaused(){return this.paused}}el.expand=function(e){const t=new el(e.id,e.paused);for(let r in e.codecs)t.addCodec(uu.expand(e.codecs[r]));for(let r in e.params)t.addParam(r,e.params[r]);return t};var tl=el;class rl{constructor(e,t){this.media=e,this.id=t,this.ssrcs=[],this.groups=[],this.encodings=[]}clone(){const e=new rl(this.media,this.id);this.mediaId&&e.setMediaId(this.mediaId);for(let t=0;t<this.ssrcs.length;++t)e.addSSRC(this.ssrcs[t]);for(let t=0;t<this.groups.length;++t)e.addSourceGroup(this.groups[t].clone());for(let t=0;t<this.encodings.length;++t){const r=[];for(let e=0;e<this.encodings[t].length;++e)r.push(this.encodings[t][e].clone());e.addAlternativeEncodings(r)}return e}plain(){const e={media:this.media,id:this.id,ssrcs:[]};this.mediaId&&(e.mediaId=this.mediaId);for(let t=0;t<this.ssrcs.length;++t)e.ssrcs.push(this.ssrcs[t]);for(let t=0;t<this.groups.length;++t)e.groups||(e.groups=[]),e.groups.push(this.groups[t].plain());for(let t=0;t<this.encodings.length;++t){const r=[];for(let e=0;e<this.encodings[t].length;++e)r.push(this.encodings[t][e].plain());r.length&&(e.encodings||(e.encodings=[]),e.encodings.push(r))}return e}getMedia(){return this.media}setMediaId(e){this.mediaId=e}getMediaId(){return this.mediaId}getId(){return this.id}addSSRC(e){this.ssrcs.push(e)}getSSRCs(){return this.ssrcs}addSourceGroup(e){this.groups.push(e)}getSourceGroup(e){for(const t of this.groups)if(t.getSemantics().toLowerCase()===e.toLowerCase())return t;return null}getSourceGroups(){return this.groups}hasSourceGroup(e){for(const t of this.groups)if(t.getSemantics().toLowerCase()===e.toLowerCase())return!0;return!1}getEncodings(){return this.encodings}addEncoding(e){this.encodings.push([e])}addAlternativeEncodings(e){this.encodings.push(e)}setEncodings(e){this.encodings=e}}rl.expand=function(e){const t=new rl(e.media,e.id);e.mediaId&&t.setMediaId(e.mediaId);for(let r=0;e.ssrcs&&r<e.ssrcs.length;++r)t.addSSRC(e.ssrcs[r]);for(let r=0;e.groups&&r<e.groups.length;++r)t.addSourceGroup(Ku.expand(e.groups[r]));for(let r=0;e.encodings&&r<e.encodings.length;++r){const n=[];for(let t=0;t<e.encodings[r].length;++t)n.push(tl.expand(e.encodings[r][t]));t.addAlternativeEncodings(n)}return t};var nl=rl;class il{constructor(e){this.id=e,this.tracks=new Map}clone(){const e=new il(this.id);for(const t of this.tracks.values())e.addTrack(t.clone());return e}plain(){const e={id:this.id,tracks:[]};for(const t of this.tracks.values())e.tracks.push(t.plain());return e}getId(){return this.id}addTrack(e){this.tracks.set(e.getId(),e)}removeTrack(e){return this.tracks.delete(e.getId())}removeTrackById(e){return this.tracks.delete(e)}getFirstTrack(e){for(let t of this.tracks.values())if(t.getMedia().toLowerCase()===e.toLowerCase())return t;return null}getTracks(){return this.tracks}removeAllTracks(){this.tracks.clear()}getTrack(e){return this.tracks.get(e)}}il.expand=function(e){const t=new il(e.id,e.paused);for(let r=0;r<e.tracks.length;++r){const n=nl.expand(e.tracks[r]);n&&t.addTrack(n)}return t};var ol=il;class sl{constructor(e){this.version=e||1,this.streams=new Map,this.medias=new Array,this.candidates=new Array,this.ice=null,this.dtls=null,this.crypto=null,this.extmapAllowMixed=!0}clone(){const e=new sl(this.version);for(let t=0;t<this.medias.length;++t)e.addMedia(this.medias[t].clone());for(const t of this.streams.values())e.addStream(t.clone());for(let t=0;t<this.candidates.length;++t)e.addCandidate(this.candidates[t].clone());return e.setICE(this.ice.clone()),this.dtls&&e.setDTLS(this.dtls.clone()),this.crypto&&e.setCrypto(this.crypto.clone()),e.setExmapAllowMixed(this.extmapAllowMixed),e}plain(){const e={version:this.version,streams:[],medias:[],candidates:[]};for(let t=0;t<this.medias.length;++t)e.medias.push(this.medias[t].plain());for(const t of this.streams.values())e.streams.push(t.plain());for(let t=0;t<this.candidates.length;++t)e.candidates.push(this.candidates[t].plain());return this.ice&&(e.ice=this.ice.plain()),this.dtls&&(e.dtls=this.dtls.plain()),this.crypto&&(e.crypto=this.crypto.plain()),this.extmapAllowMixed||(e.extmapAllowMixedNotSupported=!this.extmapAllowMixed),e}unify(){const e=new sl(this.version);for(let t=0;t<this.medias.length;++t)e.addMedia(this.medias[t].clone());const t={audio:e.getMediasByType("audio"),video:e.getMediasByType("video")};for(const r of this.streams.values()){const n=r.clone();for(const r of n.getTracks().values()){let n=t[r.getMedia()].pop();if(!n){n=this.getMedia(r.getMedia()).clone(),n.setId(r.getId()),e.addMedia(n)}r.setMediaId(n.getId())}e.addStream(n)}for(let t=0;t<this.candidates.length;++t)e.addCandidate(this.candidates[t].clone());return this.ice&&e.setICE(this.ice.clone()),this.dtls&&e.setDTLS(this.dtls.clone()),this.crypto&&e.setCrypto(this.crypto.clone()),e}setVersion(e){this.version=e}addMedia(e){this.medias.push(e)}getMedia(e){for(let t in this.medias){let r=this.medias[t];if(r.getType().toLowerCase()===e.toLowerCase())return r}return null}getMediasByType(e){var t=[];for(let r in this.medias){let n=this.medias[r];n.getType().toLowerCase()===e.toLowerCase()&&t.push(n)}return t}getMediaById(e){for(let t in this.medias){let r=this.medias[t];if(r.getId().toLowerCase()===e.toLowerCase())return r}return null}replaceMedia(e){for(let t in this.medias)if(this.medias[t].getId()==e.getId())return this.medias[t]=e,!0;return!1}getMedias(){return this.medias}getVersion(){return this.version}getDTLS(){return this.dtls}setDTLS(e){this.dtls=e}hasCrypto(){return!!this.crypto}getCrypto(){return this.crypto}setCrypto(e){this.crypto=e}hasICE(){return!!this.ice}getICE(){return this.ice}setICE(e){this.ice=e}addCandidate(e){for(let t=0;t<this.candidates.length;++t)if(this.candidates[t].equals(e))return;this.candidates.push(e)}addCandidates(e){for(let t=0;t<e.length;++t)this.addCandidate(e[t])}getCandidates(){return this.candidates}getStream(e){return this.streams.get(e)}getStreams(){return this.streams}getFirstStream(){for(let e of this.streams.values())return e;return null}addStream(e){this.streams.set(e.getId(),e)}removeStream(e){return this.streams.delete(e.getId())}removeAllStreams(){this.streams.clear()}getTrackByMediaId(e){for(let t of this.streams.values())for(let[r,n]of t.getTracks())if(n.getMediaId()==e)return n;return null}getStreamByMediaId(e){for(let t of this.streams.values())for(let[r,n]of t.getTracks())if(n.getMediaId()==e)return t;return null}getExtmapAllowMixed(){return this.extmapAllowMixed}setExtmapAllowMixed(e){this.extmapAllowMixed=e}answer(e){const t=new sl;e.ice&&(e.ice instanceof Mu?t.setICE(e.ice.clone()):t.setICE(Mu.expand(e.ice))),e.dtls&&(e.dtls instanceof hu?t.setDTLS(e.dtls):t.setDTLS(hu.expand(e.dtls))),e.crypto&&(e.crypto instanceof mu?t.setCrypto(e.crypto):t.setCrypto(mu.expand(e.crypto)));for(let r=0;e.candidates&&r<e.candidates.length;++r)e.candidates[r]instanceof ou?t.addCandidate(e.candidates[r].clone()):t.addCandidate(ou.expand(e.candidates[r]));for(const r of this.medias){const n=e&&e.capabilities&&e.capabilities[r.getType()];t.addMedia(r.answer(n))}return t.setExtmapAllowMixed(this.extmapAllowMixed),t}toString(){let e={version:0,media:[]};e.version=0,e.origin={username:"-",sessionId:(new Date).getTime(),sessionVersion:this.version,netType:"IN",ipVer:4,address:"127.0.0.1"},e.name="semantic-sdp",e.connection={version:4,ip:"0.0.0.0"},e.timing={start:0,stop:0},this.hasICE()&&this.getICE().isLite()&&(e.icelite="ice-lite"),e.msidSemantic={semantic:"WMS",token:"*"},e.groups=[],this.extmapAllowMixed&&(e.extmapAllowMixed="extmap-allow-mixed");let t={type:"BUNDLE",mids:[]};for(let r in this.medias){let n=this.medias[r],i={type:n.getType(),port:9,protocol:"",fmtp:[],rtp:[],rtcpFb:[],ext:[],bandwidth:[],candidates:[],ssrcGroups:[],ssrcs:[],rids:[]};i.direction=qu.toString(n.getDirection()),this.extmapAllowMixed&&(i.extmapAllowMixed="extmap-allow-mixed"),i.mid=n.getId(),t.mids.push(n.getId()),n.hasControl()&&(i.control=n.getControl()),n.getBitrate()>0&&(i.bandwidth.push({type:"AS",limit:n.getBitrate()}),i.bandwidth.push({type:"TIAS",limit:1e3*n.getBitrate()}));let o=this.getCandidates();for(let e=0;e<o.length;++e){let t=o[e];i.candidates.push({foundation:t.getFoundation(),component:t.getComponentId(),transport:t.getTransport(),priority:t.getPriority(),ip:t.getAddress(),port:t.getPort(),type:t.getType(),raddr:t.getRelAddr(),rport:t.getRelPort()})}if(this.getICE()&&(i.iceUfrag=this.getICE().getUfrag(),i.icePwd=this.getICE().getPwd()),["audio","video"].includes(n.getType().toLowerCase())){i.rtcpMux="rtcp-mux",i.rtcpRsize="rtcp-rsize",this.getDTLS()?(i.protocol="UDP/TLS/RTP/SAVPF",i.fingerprint={type:this.getDTLS().getHash(),hash:this.getDTLS().getFingerprint()},i.setup=fu.toString(this.getDTLS().getSetup())):this.getCrypto()?(i.protocol="RTP/SAVPF",i.crypto=[{id:this.getCrypto().getTag(),suite:this.getCrypto().getSuite(),config:this.getCrypto().getKeyParams()}]):i.protocol="RTP/AVP";for(let e of n.getCodecs().values()){"video"===n.getType().toLowerCase()?i.rtp.push({payload:e.getType(),codec:e.getCodec().toUpperCase(),rate:9e4}):"opus"===e.getCodec().toLowerCase()||"multiopus"===e.getCodec().toLowerCase()?i.rtp.push({payload:e.getType(),codec:e.getCodec(),rate:48e3,encoding:e.getChannels()}):i.rtp.push({payload:e.getType(),codec:e.getCodec(),rate:8e3});for(const t of e.getRTCPFeedbacks())i.rtcpFb.push({payload:e.getType(),type:t.getId(),subtype:t.getParams().join(" ")});e.hasRTX()&&(i.rtp.push({payload:e.getRTX(),codec:"rtx",rate:9e4}),i.fmtp.push({payload:e.getRTX(),config:"apt="+e.getType()}));const t=e.getParams();if(Object.keys(t).length){const r={payload:e.getType(),config:""};for(const e in t)r.config.length&&(r.config+=";"),t.hasOwnProperty(e)?r.config+=e+"="+t[e]:r.config+=e;i.fmtp.push(r)}}const e=[];for(let t=0;t<i.rtp.length;++t)e.push(i.rtp[t].payload);i.payloads=e.join(" ");for(let[e,t]of n.getExtensions().entries())i.ext.push({value:e,uri:t});for(let e of n.getRIDs().values()){let t={id:e.getId(),direction:Bu.toString(e.getDirection()),params:""};e.getFormats().length&&(t.params="pt="+e.getFormats().join(","));for(let[r,n]of e.getParams().entries())t.params+=(t.params.length?";":"")+r+"="+n;i.rids.push(t)}const t=n.getSimulcast();if(t){let e=1;i.simulcast={};const r=t.getSimulcastStreams(Bu.SEND),n=t.getSimulcastStreams(Bu.RECV);if(r&&r.length){let t="";for(let e=0;e<r.length;++e){let n="";for(let t=0;t<r[e].length;++t)n+=(n.length?",":"")+(r[e][t].isPaused()?"~":"")+r[e][t].getId();t+=(t.length?";":"")+n}i.simulcast["dir"+e]="send",i.simulcast["list"+e]=t,e++}if(n&&n.length){let t=[];for(let e=0;e<n.length;++e){let r="";for(let t=0;t<n[e].length;++t)r+=(r.length?",":"")+(n[e][t].isPaused()?"~":"")+n[e][t].getId();t+=(t.length?";":"")+r}i.simulcast["dir"+e]="recv",i.simulcast["list"+e]=t,e++}}}else if(n.hasDataChannel()){i.protocol="UDP/DTLS/SCTP",i.payloads="webrtc-datachannel";const e=n.getDataChannel();i.sctpPort=e.getPort(),i.maxMessageSize=e.getMaxMessageSize()}e.media.push(i)}for(let t of this.streams.values())for(let r of t.getTracks().values())for(let n in e.media){let i=e.media[n];if(r.getMediaId()){if(r.getMediaId()==i.mid){let e=r.getSourceGroups();for(let t in e){let r=e[t];i.ssrcGroups.push({semantics:r.getSemantics(),ssrcs:r.getSSRCs().join(" ")})}let n=r.getSSRCs();for(let e in n)i.ssrcs.push({id:n[e],attribute:"cname",value:t.getId()}),i.ssrcs.push({id:n[e],attribute:"msid",value:t.getId()+" "+r.getId()});i.msid=t.getId()+" "+r.getId();break}}else if(i.type.toLowerCase()===r.getMedia().toLowerCase()){let e=r.getSourceGroups();for(let t in e){let r=e[t];i.ssrcGroups.push({semantics:r.getSemantics(),ssrcs:r.getSSRCs().join(" ")})}let n=r.getSSRCs();for(let e in n)i.ssrcs.push({id:n[e],attribute:"cname",value:t.getId()}),i.ssrcs.push({id:n[e],attribute:"msid",value:t.getId()+" "+r.getId()});break}}return t.mids=t.mids.join(" "),e.groups.push(t),nu.write(e)}toIceFragmentString(){let e={version:0,media:[],candidates:[]};this.hasICE()&&this.getICE().isLite()&&(e.icelite="ice-lite"),this.getICE()&&(e.iceUfrag=this.getICE().getUfrag(),e.icePwd=this.getICE().getPwd());for(const t of this.getCandidates())e.candidates.push({foundation:t.getFoundation(),component:t.getComponentId(),transport:t.getTransport(),priority:t.getPriority(),ip:t.getAddress(),port:t.getPort(),type:t.getType(),raddr:t.getRelAddr(),rport:t.getRelPort()});return nu.write(e).slice(10)}}sl.create=function(e){const t=new sl;e.ice&&(e.ice instanceof Mu?t.setICE(e.ice.clone()):t.setICE(Mu.expand(e.ice))),e.dtls&&(e.dtls instanceof hu?t.setDTLS(e.dtls):t.setDTLS(hu.expand(e.dtls))),e.crypto&&(e.crypto instanceof mu?t.setCrypto(e.crypto):t.setCrypto(mu.expand(e.crypto)));for(let r=0;e.candidates&&r<e.candidates.length;++r)e.candidates[r]instanceof ou?t.addCandidate(e.candidates[r].clone()):t.addCandidate(ou.expand(e.candidates[r]));let r=96,n=1;for(let i in e.capabilities){const o=Yu.create(i,e.capabilities[i]);for(const[e,t]of o.getCodecs())t.getType()>=96&&t.setType(r++),t.getRTX()&&t.setRTX(r++);if(e.capabilities[i].extensions)for(let t of e.capabilities[i].extensions)15===n&&n++,o.addExtension(n++,t);t.addMedia(o)}return t},sl.expand=function(e){const t=new sl(e.version);for(let r=0;e.medias&&r<e.medias.length;++r){const n=Yu.expand(e.medias[r]);n&&t.addMedia(n)}for(let r=0;e.streams&&r<e.streams.length;++r){const n=ol.expand(e.streams[r]);n&&t.addStream(n)}for(let r=0;e.candidates&&r<e.candidates.length;++r){const n=ou.expand(e.candidates[r]);n&&t.addCandidate(n)}return e.ice&&t.setICE(Mu.expand(e.ice)),e.dtls&&t.setDTLS(hu.expand(e.dtls)),e.crypto&&t.setCrypto(hu.expand(e.crypto)),e.extmapAllowMixedNotSupported&&(this.extmapAllowMixed=!e.extmapAllowMixedNotSupported),t},sl.process=function(e){return sl.parse(e)},sl.parse=function(e){const t=nu.parse(e),r=new sl;if(r.setVersion(t.version),t.iceUfrag&&t.icePwd){const e=String(t.iceUfrag),n=String(t.icePwd),i=new Mu(e,n);i.setLite("ice-lite"==t.icelite),i.setEndOfCandidates("end-of-candidates"==t.endOfCandidates),r.setICE(i)}for(let e in t.media){const n=t.media[e],i=n.type,o=n.mid?n.mid.toString():e,s=new Yu(o,i);if(n.iceUfrag&&n.icePwd){const e=String(n.iceUfrag),i=String(n.icePwd),o=new Mu(e,i);o.setLite("ice-lite"==t.icelite),o.setEndOfCandidates("end-of-candidates"==n.endOfCandidates),r.setICE(o)}for(let e=0;n.candidates&&e<n.candidates.length;++e){const t=n.candidates[e],i=new ou(t.foundation,t.component,t.transport,t.priority,t.ip,t.port,t.type,t.raddr,t.rport);r.addCandidate(i)}const a=n.fingerprint||t.fingerprint;if(a){const e=a.type,t=a.hash;let i=fu.ACTPASS;n.setup&&(i=fu.byValue(n.setup)),r.setDTLS(new hu(i,e,t))}if(n.crypto){const e=n.crypto[0];r.setCrypto(new mu(e.id,e.suite,e.config,e.sessionConfig))}let c=qu.SENDRECV;n.direction&&(c=qu.byValue(n.direction),s.setDirection(c)),n.control&&s.setControl(n.control),r.setExtmapAllowMixed("extmap-allow-mixed"==n.extmapAllowMixed||"extmap-allow-mixed"==t.extmapAllowMixed);const u=new Map;for(let e in n.rtp){const t=n.rtp[e],r=t.payload,i=t.codec;if("RED"===i.toUpperCase()||"ULPFEC"===i.toUpperCase())continue;let o={};for(let e in n.fmtp){const t=n.fmtp[e];if(t.payload===r){const e=t.config.split(";");for(let t in e){const r=e[t].split("="),n=r[0].trim(),i=r.splice(1).join("=").trim();o[n]=i}}}if("RTX"===i.toUpperCase())u.set(parseInt(o.apt),r);else{const e=new uu(i,r,o);t.encoding>1&&e.setChannels(t.encoding),s.addCodec(e)}}for(let e of u.entries()){const t=s.getCodecForType(e[0]);t&&t.setRTX(e[1])}for(let e=0;n.rtcpFb&&e<n.rtcpFb.length;++e){const t=s.getCodecForType(n.rtcpFb[e].payload);if(t){const r=n.rtcpFb[e].type,i=n.rtcpFb[e].subtype?n.rtcpFb[e].subtype.split(" "):null;t.addRTCPFeedback(new au(r,i))}}const l=n.ext;for(let e in l){const t=l[e];s.addExtension(t.value,t.uri)}const d=n.rids;for(let e in d){const t=d[e],r=new Uu(t.id,Bu.byValue(t.direction));let n=[];const i=new Map;if(t.params){const e=nu.parseParams(t.params);for(let t in e)"pt"===t?n=e[t].split(","):i.set(t,e[t]);r.setFormats(n),r.setParams(i)}s.addRID(r)}const f=[];if(n.simulcast){const e=new Gu;if(n.simulcast.dir1){const t=Bu.byValue(n.simulcast.dir1),r=nu.parseSimulcastStreamList(n.simulcast.list1);for(let n=0;n<r.length;++n){const i=[];for(let e=0;e<r[n].length;++e)i.push(new Vu(r[n][e].scid,r[n][e].paused));e.addSimulcastAlternativeStreams(t,i)}}if(n.simulcast.dir2){const t=Bu.byValue(n.simulcast.dir2),r=nu.parseSimulcastStreamList(n.simulcast.list2);for(let n=0;n<r.length;++n){const i=[];for(let e=0;e<r[n].length;++e)i.push(new Vu(r[n][e].scid,r[n][e].paused));e.addSimulcastAlternativeStreams(t,i)}}for(let t of e.getSimulcastStreams(Bu.SEND)){const e=[];for(let r=0;r<t.length;r++){const n=new tl(t[r].getId(),t[r].isPaused()),i=s.getRID(n.getId());if(i){const t=i.getFormats();for(let e=0;t&&e<t.length;++e){const r=s.getCodecForType(t[e]);r&&n.addCodec(r)}n.setParams(i.getParams()),e.push(n)}}e.length&&f.push(e)}s.setSimulcast(e)}const p=new Map;if(n.ssrcs)for(let e in n.ssrcs){let t=n.ssrcs[e],s=t.id,a=t.attribute,c=t.value,u=p.get(s);if(u||(u=new Qu(s),p.set(u.getSSRC(),u)),"cname"===a.toLowerCase())u.setCName(c);else if("msid"===a.toLowerCase()){let e=c.split(" "),t=e[0],n=e[1];u.setStreamId(t),u.setTrackId(n);let a=r.getStream(t);a||(a=new ol(t),r.addStream(a));let l=a.getTrack(n);l||(l=new nl(i,n),l.setMediaId(o),l.setEncodings(f),a.addTrack(l)),l.addSSRC(s)}}if(n.msid){let e=n.msid.split(" "),t=e[0],s=e[1],a=r.getStream(t);a||(a=new ol(t),r.addStream(a));let c=a.getTrack(s);c||(c=new nl(i,s),c.setMediaId(o),c.setEncodings(f),a.addTrack(c));for(let[e,r]of p.entries())r.getStreamId()||(r.setStreamId(t),r.setTrackId(s),c.addSSRC(e))}for(let[e,t]of p.entries())if(!t.getStreamId()){let n=t.getCName(),s=o;t.setStreamId(n),t.setTrackId(s);let a=r.getStream(n);a||(a=new ol(n),r.addStream(a));let c=a.getTrack(s);c||(c=new nl(i,s),c.setMediaId(o),c.setEncodings(f),a.addTrack(c)),c.addSSRC(e)}if(n.ssrcGroups)for(let e in n.ssrcGroups){let t=n.ssrcGroups[e],i=t.ssrcs.split(" "),o=new Ku(t.semantics,i),s=p.get(parseInt(i[0]));s&&r.getStream(s.getStreamId()).getTrack(s.getTrackId()).addSourceGroup(o)}if("application"==n.type&&"webrtc-datachannel"==n.payloads){const e=new Wu(n.sctpPort,n.maxMessageSize);s.setDataChannel(e)}r.addMedia(s)}return r};var al={SDPInfo:sl,CandidateInfo:ou,CodecInfo:uu,DTLSInfo:hu,CryptoInfo:mu,ICEInfo:Mu,MediaInfo:Yu,Setup:fu,SourceGroupInfo:Ku,SourceInfo:Qu,StreamInfo:ol,TrackInfo:nl,RTCPFeedbackInfo:au,TrackEncodingInfo:tl,Direction:qu},cl=o((function(e,t){!function(r,n){var i="function",o="undefined",s="object",a="string",c="model",u="name",l="type",d="vendor",f="version",p="architecture",h="console",g="mobile",m="tablet",v="smarttv",y="wearable",b="embedded",w="Amazon",S="Apple",C="ASUS",E="BlackBerry",x="Browser",T="Chrome",I="Firefox",P="Google",R="Huawei",k="LG",O="Microsoft",A="Motorola",D="Opera",L="Samsung",j="Sharp",M="Sony",N="Xiaomi",B="Zebra",_="Facebook",U=function(e){for(var t={},r=0;r<e.length;r++)t[e[r].toUpperCase()]=e[r];return t},F=function(e,t){return typeof e===a&&-1!==V(t).indexOf(V(e))},V=function(e){return e.toLowerCase()},z=function(e,t){if(typeof e===a)return e=e.replace(/^\s\s*/,"").replace(/\s\s*$/,""),typeof t===o?e:e.substring(0,350)},G=function(e,t){for(var r,o,a,c,u,l,d=0;d<t.length&&!u;){var f=t[d],p=t[d+1];for(r=o=0;r<f.length&&!u;)if(u=f[r++].exec(e))for(a=0;a<p.length;a++)l=u[++o],typeof(c=p[a])===s&&c.length>0?2===c.length?typeof c[1]==i?this[c[0]]=c[1].call(this,l):this[c[0]]=c[1]:3===c.length?typeof c[1]!==i||c[1].exec&&c[1].test?this[c[0]]=l?l.replace(c[1],c[2]):n:this[c[0]]=l?c[1].call(this,l,c[2]):n:4===c.length&&(this[c[0]]=l?c[3].call(this,l.replace(c[1],c[2])):n):this[c]=l||n;d+=2}},$=function(e,t){for(var r in t)if(typeof t[r]===s&&t[r].length>0){for(var i=0;i<t[r].length;i++)if(F(t[r][i],e))return"?"===r?n:r}else if(F(t[r],e))return"?"===r?n:r;return e},q={ME:"4.90","NT 3.11":"NT3.51","NT 4.0":"NT4.0",2e3:"NT 5.0",XP:["NT 5.1","NT 5.2"],Vista:"NT 6.0",7:"NT 6.1",8:"NT 6.2",8.1:"NT 6.3",10:["NT 6.4","NT 10.0"],RT:"ARM"},X={browser:[[/\b(?:crmo|crios)\/([\w\.]+)/i],[f,[u,"Chrome"]],[/edg(?:e|ios|a)?\/([\w\.]+)/i],[f,[u,"Edge"]],[/(opera mini)\/([-\w\.]+)/i,/(opera [mobiletab]{3,6})\b.+version\/([-\w\.]+)/i,/(opera)(?:.+version\/|[\/ ]+)([\w\.]+)/i],[u,f],[/opios[\/ ]+([\w\.]+)/i],[f,[u,D+" Mini"]],[/\bopr\/([\w\.]+)/i],[f,[u,D]],[/(kindle)\/([\w\.]+)/i,/(lunascape|maxthon|netfront|jasmine|blazer)[\/ ]?([\w\.]*)/i,/(avant |iemobile|slim)(?:browser)?[\/ ]?([\w\.]*)/i,/(ba?idubrowser)[\/ ]?([\w\.]+)/i,/(?:ms|\()(ie) ([\w\.]+)/i,/(flock|rockmelt|midori|epiphany|silk|skyfire|ovibrowser|bolt|iron|vivaldi|iridium|phantomjs|bowser|quark|qupzilla|falkon|rekonq|puffin|brave|whale|qqbrowserlite|qq|duckduckgo)\/([-\w\.]+)/i,/(weibo)__([\d\.]+)/i],[u,f],[/(?:\buc? ?browser|(?:juc.+)ucweb)[\/ ]?([\w\.]+)/i],[f,[u,"UC"+x]],[/microm.+\bqbcore\/([\w\.]+)/i,/\bqbcore\/([\w\.]+).+microm/i],[f,[u,"WeChat(Win) Desktop"]],[/micromessenger\/([\w\.]+)/i],[f,[u,"WeChat"]],[/konqueror\/([\w\.]+)/i],[f,[u,"Konqueror"]],[/trident.+rv[: ]([\w\.]{1,9})\b.+like gecko/i],[f,[u,"IE"]],[/yabrowser\/([\w\.]+)/i],[f,[u,"Yandex"]],[/(avast|avg)\/([\w\.]+)/i],[[u,/(.+)/,"$1 Secure "+x],f],[/\bfocus\/([\w\.]+)/i],[f,[u,I+" Focus"]],[/\bopt\/([\w\.]+)/i],[f,[u,D+" Touch"]],[/coc_coc\w+\/([\w\.]+)/i],[f,[u,"Coc Coc"]],[/dolfin\/([\w\.]+)/i],[f,[u,"Dolphin"]],[/coast\/([\w\.]+)/i],[f,[u,D+" Coast"]],[/miuibrowser\/([\w\.]+)/i],[f,[u,"MIUI "+x]],[/fxios\/([-\w\.]+)/i],[f,[u,I]],[/\bqihu|(qi?ho?o?|360)browser/i],[[u,"360 "+x]],[/(oculus|samsung|sailfish|huawei)browser\/([\w\.]+)/i],[[u,/(.+)/,"$1 "+x],f],[/(comodo_dragon)\/([\w\.]+)/i],[[u,/_/g," "],f],[/(electron)\/([\w\.]+) safari/i,/(tesla)(?: qtcarbrowser|\/(20\d\d\.[-\w\.]+))/i,/m?(qqbrowser|baiduboxapp|2345Explorer)[\/ ]?([\w\.]+)/i],[u,f],[/(metasr)[\/ ]?([\w\.]+)/i,/(lbbrowser)/i,/\[(linkedin)app\]/i],[u],[/((?:fban\/fbios|fb_iab\/fb4a)(?!.+fbav)|;fbav\/([\w\.]+);)/i],[[u,_],f],[/safari (line)\/([\w\.]+)/i,/\b(line)\/([\w\.]+)\/iab/i,/(chromium|instagram)[\/ ]([-\w\.]+)/i],[u,f],[/\bgsa\/([\w\.]+) .*safari\//i],[f,[u,"GSA"]],[/headlesschrome(?:\/([\w\.]+)| )/i],[f,[u,T+" Headless"]],[/ wv\).+(chrome)\/([\w\.]+)/i],[[u,T+" WebView"],f],[/droid.+ version\/([\w\.]+)\b.+(?:mobile safari|safari)/i],[f,[u,"Android "+x]],[/(chrome|omniweb|arora|[tizenoka]{5} ?browser)\/v?([\w\.]+)/i],[u,f],[/version\/([\w\.\,]+) .*mobile\/\w+ (safari)/i],[f,[u,"Mobile Safari"]],[/version\/([\w(\.|\,)]+) .*(mobile ?safari|safari)/i],[f,u],[/webkit.+?(mobile ?safari|safari)(\/[\w\.]+)/i],[u,[f,$,{"1.0":"/8",1.2:"/1",1.3:"/3","2.0":"/412","2.0.2":"/416","2.0.3":"/417","2.0.4":"/419","?":"/"}]],[/(webkit|khtml)\/([\w\.]+)/i],[u,f],[/(navigator|netscape\d?)\/([-\w\.]+)/i],[[u,"Netscape"],f],[/mobile vr; rv:([\w\.]+)\).+firefox/i],[f,[u,I+" Reality"]],[/ekiohf.+(flow)\/([\w\.]+)/i,/(swiftfox)/i,/(icedragon|iceweasel|camino|chimera|fennec|maemo browser|minimo|conkeror|klar)[\/ ]?([\w\.\+]+)/i,/(seamonkey|k-meleon|icecat|iceape|firebird|phoenix|palemoon|basilisk|waterfox)\/([-\w\.]+)$/i,/(firefox)\/([\w\.]+)/i,/(mozilla)\/([\w\.]+) .+rv\:.+gecko\/\d+/i,/(polaris|lynx|dillo|icab|doris|amaya|w3m|netsurf|sleipnir|obigo|mosaic|(?:go|ice|up)[\. ]?browser)[-\/ ]?v?([\w\.]+)/i,/(links) \(([\w\.]+)/i],[u,f]],cpu:[[/(?:(amd|x(?:(?:86|64)[-_])?|wow|win)64)[;\)]/i],[[p,"amd64"]],[/(ia32(?=;))/i],[[p,V]],[/((?:i[346]|x)86)[;\)]/i],[[p,"ia32"]],[/\b(aarch64|arm(v?8e?l?|_?64))\b/i],[[p,"arm64"]],[/\b(arm(?:v[67])?ht?n?[fl]p?)\b/i],[[p,"armhf"]],[/windows (ce|mobile); ppc;/i],[[p,"arm"]],[/((?:ppc|powerpc)(?:64)?)(?: mac|;|\))/i],[[p,/ower/,"",V]],[/(sun4\w)[;\)]/i],[[p,"sparc"]],[/((?:avr32|ia64(?=;))|68k(?=\))|\barm(?=v(?:[1-7]|[5-7]1)l?|;|eabi)|(?=atmel )avr|(?:irix|mips|sparc)(?:64)?\b|pa-risc)/i],[[p,V]]],device:[[/\b(sch-i[89]0\d|shw-m380s|sm-[ptx]\w{2,4}|gt-[pn]\d{2,4}|sgh-t8[56]9|nexus 10)/i],[c,[d,L],[l,m]],[/\b((?:s[cgp]h|gt|sm)-\w+|galaxy nexus)/i,/samsung[- ]([-\w]+)/i,/sec-(sgh\w+)/i],[c,[d,L],[l,g]],[/\((ip(?:hone|od)[\w ]*);/i],[c,[d,S],[l,g]],[/\((ipad);[-\w\),; ]+apple/i,/applecoremedia\/[\w\.]+ \((ipad)/i,/\b(ipad)\d\d?,\d\d?[;\]].+ios/i],[c,[d,S],[l,m]],[/\b((?:ag[rs][23]?|bah2?|sht?|btv)-a?[lw]\d{2})\b(?!.+d\/s)/i],[c,[d,R],[l,m]],[/(?:huawei|honor)([-\w ]+)[;\)]/i,/\b(nexus 6p|\w{2,4}e?-[atu]?[ln][\dx][012359c][adn]?)\b(?!.+d\/s)/i],[c,[d,R],[l,g]],[/\b(poco[\w ]+)(?: bui|\))/i,/\b; (\w+) build\/hm\1/i,/\b(hm[-_ ]?note?[_ ]?(?:\d\w)?) bui/i,/\b(redmi[\-_ ]?(?:note|k)?[\w_ ]+)(?: bui|\))/i,/\b(mi[-_ ]?(?:a\d|one|one[_ ]plus|note lte|max|cc)?[_ ]?(?:\d?\w?)[_ ]?(?:plus|se|lite)?)(?: bui|\))/i],[[c,/_/g," "],[d,N],[l,g]],[/\b(mi[-_ ]?(?:pad)(?:[\w_ ]+))(?: bui|\))/i],[[c,/_/g," "],[d,N],[l,m]],[/; (\w+) bui.+ oppo/i,/\b(cph[12]\d{3}|p(?:af|c[al]|d\w|e[ar])[mt]\d0|x9007|a101op)\b/i],[c,[d,"OPPO"],[l,g]],[/vivo (\w+)(?: bui|\))/i,/\b(v[12]\d{3}\w?[at])(?: bui|;)/i],[c,[d,"Vivo"],[l,g]],[/\b(rmx[12]\d{3})(?: bui|;|\))/i],[c,[d,"Realme"],[l,g]],[/\b(milestone|droid(?:[2-4x]| (?:bionic|x2|pro|razr))?:?( 4g)?)\b[\w ]+build\//i,/\bmot(?:orola)?[- ](\w*)/i,/((?:moto[\w\(\) ]+|xt\d{3,4}|nexus 6)(?= bui|\)))/i],[c,[d,A],[l,g]],[/\b(mz60\d|xoom[2 ]{0,2}) build\//i],[c,[d,A],[l,m]],[/((?=lg)?[vl]k\-?\d{3}) bui| 3\.[-\w; ]{10}lg?-([06cv9]{3,4})/i],[c,[d,k],[l,m]],[/(lm(?:-?f100[nv]?|-[\w\.]+)(?= bui|\))|nexus [45])/i,/\blg[-e;\/ ]+((?!browser|netcast|android tv)\w+)/i,/\blg-?([\d\w]+) bui/i],[c,[d,k],[l,g]],[/(ideatab[-\w ]+)/i,/lenovo ?(s[56]000[-\w]+|tab(?:[\w ]+)|yt[-\d\w]{6}|tb[-\d\w]{6})/i],[c,[d,"Lenovo"],[l,m]],[/(?:maemo|nokia).*(n900|lumia \d+)/i,/nokia[-_ ]?([-\w\.]*)/i],[[c,/_/g," "],[d,"Nokia"],[l,g]],[/(pixel c)\b/i],[c,[d,P],[l,m]],[/droid.+; (pixel[\daxl ]{0,6})(?: bui|\))/i],[c,[d,P],[l,g]],[/droid.+ (a?\d[0-2]{2}so|[c-g]\d{4}|so[-gl]\w+|xq-a\w[4-7][12])(?= bui|\).+chrome\/(?![1-6]{0,1}\d\.))/i],[c,[d,M],[l,g]],[/sony tablet [ps]/i,/\b(?:sony)?sgp\w+(?: bui|\))/i],[[c,"Xperia Tablet"],[d,M],[l,m]],[/ (kb2005|in20[12]5|be20[12][59])\b/i,/(?:one)?(?:plus)? (a\d0\d\d)(?: b|\))/i],[c,[d,"OnePlus"],[l,g]],[/(alexa)webm/i,/(kf[a-z]{2}wi)( bui|\))/i,/(kf[a-z]+)( bui|\)).+silk\//i],[c,[d,w],[l,m]],[/((?:sd|kf)[0349hijorstuw]+)( bui|\)).+silk\//i],[[c,/(.+)/g,"Fire Phone $1"],[d,w],[l,g]],[/(playbook);[-\w\),; ]+(rim)/i],[c,d,[l,m]],[/\b((?:bb[a-f]|st[hv])100-\d)/i,/\(bb10; (\w+)/i],[c,[d,E],[l,g]],[/(?:\b|asus_)(transfo[prime ]{4,10} \w+|eeepc|slider \w+|nexus 7|padfone|p00[cj])/i],[c,[d,C],[l,m]],[/ (z[bes]6[027][012][km][ls]|zenfone \d\w?)\b/i],[c,[d,C],[l,g]],[/(nexus 9)/i],[c,[d,"HTC"],[l,m]],[/(htc)[-;_ ]{1,2}([\w ]+(?=\)| bui)|\w+)/i,/(zte)[- ]([\w ]+?)(?: bui|\/|\))/i,/(alcatel|geeksphone|nexian|panasonic|sony(?!-bra))[-_ ]?([-\w]*)/i],[d,[c,/_/g," "],[l,g]],[/droid.+; ([ab][1-7]-?[0178a]\d\d?)/i],[c,[d,"Acer"],[l,m]],[/droid.+; (m[1-5] note) bui/i,/\bmz-([-\w]{2,})/i],[c,[d,"Meizu"],[l,g]],[/\b(sh-?[altvz]?\d\d[a-ekm]?)/i],[c,[d,j],[l,g]],[/(blackberry|benq|palm(?=\-)|sonyericsson|acer|asus|dell|meizu|motorola|polytron)[-_ ]?([-\w]*)/i,/(hp) ([\w ]+\w)/i,/(asus)-?(\w+)/i,/(microsoft); (lumia[\w ]+)/i,/(lenovo)[-_ ]?([-\w]+)/i,/(jolla)/i,/(oppo) ?([\w ]+) bui/i],[d,c,[l,g]],[/(archos) (gamepad2?)/i,/(hp).+(touchpad(?!.+tablet)|tablet)/i,/(kindle)\/([\w\.]+)/i,/(nook)[\w ]+build\/(\w+)/i,/(dell) (strea[kpr\d ]*[\dko])/i,/(le[- ]+pan)[- ]+(\w{1,9}) bui/i,/(trinity)[- ]*(t\d{3}) bui/i,/(gigaset)[- ]+(q\w{1,9}) bui/i,/(vodafone) ([\w ]+)(?:\)| bui)/i],[d,c,[l,m]],[/(surface duo)/i],[c,[d,O],[l,m]],[/droid [\d\.]+; (fp\du?)(?: b|\))/i],[c,[d,"Fairphone"],[l,g]],[/(u304aa)/i],[c,[d,"AT&T"],[l,g]],[/\bsie-(\w*)/i],[c,[d,"Siemens"],[l,g]],[/\b(rct\w+) b/i],[c,[d,"RCA"],[l,m]],[/\b(venue[\d ]{2,7}) b/i],[c,[d,"Dell"],[l,m]],[/\b(q(?:mv|ta)\w+) b/i],[c,[d,"Verizon"],[l,m]],[/\b(?:barnes[& ]+noble |bn[rt])([\w\+ ]*) b/i],[c,[d,"Barnes & Noble"],[l,m]],[/\b(tm\d{3}\w+) b/i],[c,[d,"NuVision"],[l,m]],[/\b(k88) b/i],[c,[d,"ZTE"],[l,m]],[/\b(nx\d{3}j) b/i],[c,[d,"ZTE"],[l,g]],[/\b(gen\d{3}) b.+49h/i],[c,[d,"Swiss"],[l,g]],[/\b(zur\d{3}) b/i],[c,[d,"Swiss"],[l,m]],[/\b((zeki)?tb.*\b) b/i],[c,[d,"Zeki"],[l,m]],[/\b([yr]\d{2}) b/i,/\b(dragon[- ]+touch |dt)(\w{5}) b/i],[[d,"Dragon Touch"],c,[l,m]],[/\b(ns-?\w{0,9}) b/i],[c,[d,"Insignia"],[l,m]],[/\b((nxa|next)-?\w{0,9}) b/i],[c,[d,"NextBook"],[l,m]],[/\b(xtreme\_)?(v(1[045]|2[015]|[3469]0|7[05])) b/i],[[d,"Voice"],c,[l,g]],[/\b(lvtel\-)?(v1[12]) b/i],[[d,"LvTel"],c,[l,g]],[/\b(ph-1) /i],[c,[d,"Essential"],[l,g]],[/\b(v(100md|700na|7011|917g).*\b) b/i],[c,[d,"Envizen"],[l,m]],[/\b(trio[-\w\. ]+) b/i],[c,[d,"MachSpeed"],[l,m]],[/\btu_(1491) b/i],[c,[d,"Rotor"],[l,m]],[/(shield[\w ]+) b/i],[c,[d,"Nvidia"],[l,m]],[/(sprint) (\w+)/i],[d,c,[l,g]],[/(kin\.[onetw]{3})/i],[[c,/\./g," "],[d,O],[l,g]],[/droid.+; (cc6666?|et5[16]|mc[239][23]x?|vc8[03]x?)\)/i],[c,[d,B],[l,m]],[/droid.+; (ec30|ps20|tc[2-8]\d[kx])\)/i],[c,[d,B],[l,g]],[/(ouya)/i,/(nintendo) ([wids3utch]+)/i],[d,c,[l,h]],[/droid.+; (shield) bui/i],[c,[d,"Nvidia"],[l,h]],[/(playstation [345portablevi]+)/i],[c,[d,M],[l,h]],[/\b(xbox(?: one)?(?!; xbox))[\); ]/i],[c,[d,O],[l,h]],[/smart-tv.+(samsung)/i],[d,[l,v]],[/hbbtv.+maple;(\d+)/i],[[c,/^/,"SmartTV"],[d,L],[l,v]],[/(nux; netcast.+smarttv|lg (netcast\.tv-201\d|android tv))/i],[[d,k],[l,v]],[/(apple) ?tv/i],[d,[c,S+" TV"],[l,v]],[/crkey/i],[[c,T+"cast"],[d,P],[l,v]],[/droid.+aft(\w)( bui|\))/i],[c,[d,w],[l,v]],[/\(dtv[\);].+(aquos)/i,/(aquos-tv[\w ]+)\)/i],[c,[d,j],[l,v]],[/(bravia[\w ]+)( bui|\))/i],[c,[d,M],[l,v]],[/(mitv-\w{5}) bui/i],[c,[d,N],[l,v]],[/\b(roku)[\dx]*[\)\/]((?:dvp-)?[\d\.]*)/i,/hbbtv\/\d+\.\d+\.\d+ +\([\w ]*; *(\w[^;]*);([^;]*)/i],[[d,z],[c,z],[l,v]],[/\b(android tv|smart[- ]?tv|opera tv|tv; rv:)\b/i],[[l,v]],[/((pebble))app/i],[d,c,[l,y]],[/droid.+; (glass) \d/i],[c,[d,P],[l,y]],[/droid.+; (wt63?0{2,3})\)/i],[c,[d,B],[l,y]],[/(quest( 2)?)/i],[c,[d,_],[l,y]],[/(tesla)(?: qtcarbrowser|\/[-\w\.]+)/i],[d,[l,b]],[/droid .+?; ([^;]+?)(?: bui|\) applew).+? mobile safari/i],[c,[l,g]],[/droid .+?; ([^;]+?)(?: bui|\) applew).+?(?! mobile) safari/i],[c,[l,m]],[/\b((tablet|tab)[;\/]|focus\/\d(?!.+mobile))/i],[[l,m]],[/(phone|mobile(?:[;\/]| [ \w\/\.]*safari)|pda(?=.+windows ce))/i],[[l,g]],[/(android[-\w\. ]{0,9});.+buil/i],[c,[d,"Generic"]]],engine:[[/windows.+ edge\/([\w\.]+)/i],[f,[u,"EdgeHTML"]],[/webkit\/537\.36.+chrome\/(?!27)([\w\.]+)/i],[f,[u,"Blink"]],[/(presto)\/([\w\.]+)/i,/(webkit|trident|netfront|netsurf|amaya|lynx|w3m|goanna)\/([\w\.]+)/i,/ekioh(flow)\/([\w\.]+)/i,/(khtml|tasman|links)[\/ ]\(?([\w\.]+)/i,/(icab)[\/ ]([23]\.[\d\.]+)/i],[u,f],[/rv\:([\w\.]{1,9})\b.+(gecko)/i],[f,u]],os:[[/microsoft (windows) (vista|xp)/i],[u,f],[/(windows) nt 6\.2; (arm)/i,/(windows (?:phone(?: os)?|mobile))[\/ ]?([\d\.\w ]*)/i,/(windows)[\/ ]?([ntce\d\. ]+\w)(?!.+xbox)/i],[u,[f,$,q]],[/(win(?=3|9|n)|win 9x )([nt\d\.]+)/i],[[u,"Windows"],[f,$,q]],[/ip[honead]{2,4}\b(?:.*os ([\w]+) like mac|; opera)/i,/cfnetwork\/.+darwin/i],[[f,/_/g,"."],[u,"iOS"]],[/(mac os x) ?([\w\. ]*)/i,/(macintosh|mac_powerpc\b)(?!.+haiku)/i],[[u,"Mac OS"],[f,/_/g,"."]],[/droid ([\w\.]+)\b.+(android[- ]x86|harmonyos)/i],[f,u],[/(android|webos|qnx|bada|rim tablet os|maemo|meego|sailfish)[-\/ ]?([\w\.]*)/i,/(blackberry)\w*\/([\w\.]*)/i,/(tizen|kaios)[\/ ]([\w\.]+)/i,/\((series40);/i],[u,f],[/\(bb(10);/i],[f,[u,E]],[/(?:symbian ?os|symbos|s60(?=;)|series60)[-\/ ]?([\w\.]*)/i],[f,[u,"Symbian"]],[/mozilla\/[\d\.]+ \((?:mobile|tablet|tv|mobile; [\w ]+); rv:.+ gecko\/([\w\.]+)/i],[f,[u,I+" OS"]],[/web0s;.+rt(tv)/i,/\b(?:hp)?wos(?:browser)?\/([\w\.]+)/i],[f,[u,"webOS"]],[/crkey\/([\d\.]+)/i],[f,[u,T+"cast"]],[/(cros) [\w]+ ([\w\.]+\w)/i],[[u,"Chromium OS"],f],[/(nintendo|playstation) ([wids345portablevuch]+)/i,/(xbox); +xbox ([^\);]+)/i,/\b(joli|palm)\b ?(?:os)?\/?([\w\.]*)/i,/(mint)[\/\(\) ]?(\w*)/i,/(mageia|vectorlinux)[; ]/i,/([kxln]?ubuntu|debian|suse|opensuse|gentoo|arch(?= linux)|slackware|fedora|mandriva|centos|pclinuxos|red ?hat|zenwalk|linpus|raspbian|plan 9|minix|risc os|contiki|deepin|manjaro|elementary os|sabayon|linspire)(?: gnu\/linux)?(?: enterprise)?(?:[- ]linux)?(?:-gnu)?[-\/ ]?(?!chrom|package)([-\w\.]*)/i,/(hurd|linux) ?([\w\.]*)/i,/(gnu) ?([\w\.]*)/i,/\b([-frentopcghs]{0,5}bsd|dragonfly)[\/ ]?(?!amd|[ix346]{1,2}86)([\w\.]*)/i,/(haiku) (\w+)/i],[u,f],[/(sunos) ?([\w\.\d]*)/i],[[u,"Solaris"],f],[/((?:open)?solaris)[-\/ ]?([\w\.]*)/i,/(aix) ((\d)(?=\.|\)| )[\w\.])*/i,/\b(beos|os\/2|amigaos|morphos|openvms|fuchsia|hp-ux)/i,/(unix) ?([\w\.]*)/i],[u,f]]},W=function(e,t){if(typeof e===s&&(t=e,e=n),!(this instanceof W))return new W(e,t).getResult();var i=e||(typeof r!==o&&r.navigator&&r.navigator.userAgent?r.navigator.userAgent:""),h=t?function(e,t){var r={};for(var n in e)t[n]&&t[n].length%2==0?r[n]=t[n].concat(e[n]):r[n]=e[n];return r}(X,t):X;return this.getBrowser=function(){var e={};return e[u]=n,e[f]=n,G.call(e,i,h.browser),e.major=function(e){return typeof e===a?e.replace(/[^\d\.]/g,"").split(".")[0]:n}(e.version),e},this.getCPU=function(){var e={};return e[p]=n,G.call(e,i,h.cpu),e},this.getDevice=function(){var e={};return e[d]=n,e[c]=n,e[l]=n,G.call(e,i,h.device),e},this.getEngine=function(){var e={};return e[u]=n,e[f]=n,G.call(e,i,h.engine),e},this.getOS=function(){var e={};return e[u]=n,e[f]=n,G.call(e,i,h.os),e},this.getResult=function(){return{ua:this.getUA(),browser:this.getBrowser(),engine:this.getEngine(),os:this.getOS(),device:this.getDevice(),cpu:this.getCPU()}},this.getUA=function(){return i},this.setUA=function(e){return i=typeof e===a&&e.length>350?z(e,350):e,this},this.setUA(i),this};W.VERSION="0.7.32",W.BROWSER=U([u,f,"major"]),W.CPU=U([p]),W.DEVICE=U([c,d,l,h,g,v,m,y,b]),W.ENGINE=W.OS=U([u,f]),e.exports&&(t=e.exports=W),t.UAParser=W;var H=typeof r!==o&&(r.jQuery||r.Zepto);if(H&&!H.ua){var Y=new W;H.ua=Y.getResult(),H.ua.get=function(){return Y.getUA()},H.ua.set=function(e){Y.setUA(e);var t=Y.getResult();for(var r in t)H.ua[r]=t[r]}}}("object"==typeof window?window:i)}));const ul=["iOS"];class ll extends cl{constructor(){super(window.navigator.userAgent)}isChrome(){const e=this.getBrowser();if(!e.name)return!1;const t=this.getOS();let r=!0;return r=!new RegExp(ul.join("|"),"i").test(t.name),e.name.match(/Chrome/i)&&r}isFirefox(){const e=this.getBrowser();return!!e.name&&e.name.match(/Firefox/i)}isOpera(){const e=this.getBrowser();return!!e.name&&e.name.match(/Opera/i)}}const dl=An.get("SdpParser"),fl=Array.from({length:31},((e,t)=>t+35)),pl=Array.from({length:32},((e,t)=>t+96)),hl=Array.from({length:14},((e,t)=>t+1)),gl=Array.from({length:240},((e,t)=>t+16));class ml{static setSimulcast(e,t){dl.info("Setting simulcast. Codec: ",t);if(!(new ll).isChrome())return dl.warn("Simulcast is only available in Google Chrome browser"),e;if("h264"!==t&&"vp8"!==t)return dl.warn("Simulcast is only available in h264 and vp8 codecs"),e;try{const t=/m=video[\s\S]*?a=ssrc:(\d*) msid:([\s\S]+?)\r\n/,r=/m=video[\s\S]*?a=ssrc:(\d*) cname:([\s\S]+?)\r\n/.exec(e),n=r[1],i=r[2],o=t.exec(e)[2],s=2,a=[n];for(let t=0;t<s;++t){const r=100+2*t,n=r+1;a.push(r),e+="a=ssrc-group:FID "+r+" "+n+"\r\na=ssrc:"+r+" cname:"+i+"\r\na=ssrc:"+r+" msid:"+o+"\r\na=ssrc:"+n+" cname:"+i+"\r\na=ssrc:"+n+" msid:"+o+"\r\n"}return e+="a=ssrc-group:SIM "+a.join(" ")+"\r\n",dl.info("Simulcast setted"),dl.debug("Simulcast SDP: ",e),e}catch(e){throw dl.error("Error setting SDP for simulcast: ",e),e}}static setStereo(e){return dl.info("Replacing SDP response for support stereo"),e=e.replace(/useinbandfec=1/g,"useinbandfec=1; stereo=1"),dl.info("Replaced SDP response for support stereo"),dl.debug("New SDP value: ",e),e}static setDTX(e){return dl.info("Replacing SDP response for support dtx"),e=e.replace("useinbandfec=1","useinbandfec=1; usedtx=1"),dl.info("Replaced SDP response for support dtx"),dl.debug("New SDP value: ",e),e}static setAbsoluteCaptureTime(e){const t="a=extmap:"+ml.getAvailableHeaderExtensionIdRange(e)[0]+" http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time\r\n";return e=e.replace(/(m=.*\r\n(?:.*\r\n)*?)(a=extmap.*\r\n)/gm,((e,r,n)=>r+t+n)),dl.info("Replaced SDP response for setting absolute capture time"),dl.debug("New SDP value: ",e),e}static setDependencyDescriptor(e){const t="a=extmap:"+ml.getAvailableHeaderExtensionIdRange(e)[0]+" https://aomediacodec.github.io/av1-rtp-spec/#dependency-descriptor-rtp-header-extension\r\n";return e=e.replace(/(m=.*\r\n(?:.*\r\n)*?)(a=extmap.*\r\n)/gm,((e,r,n)=>r+t+n)),dl.info("Replaced SDP response for setting depency descriptor"),dl.debug("New SDP value: ",e),e}static setVideoBitrate(e,t){if(t<1)dl.info("Remove bitrate restrictions"),e=e.replace(/b=AS:.*\r\n/,"").replace(/b=TIAS:.*\r\n/,"");else{const r=al.SDPInfo.parse(e),n=r.getMedia("video");dl.info("Setting video bitrate"),n.setBitrate(t),e=r.toString()}return e}static removeSdpLine(e,t){return dl.debug("SDP before trimming: ",e),e=e.split("\n").filter((e=>e.trim()!==t)).join("\n"),dl.debug("SDP trimmed result: ",e),e}static adaptCodecName(e,t,r){if(!e)return e;const n=new RegExp("".concat(t),"i");return e.replace(n,r)}static setMultiopus(e,t){if(!(new ll).isFirefox()&&(!t||vl(t)))if(e.includes("multiopus/48000/6"))dl.info("Multiopus already setted");else{dl.info("Setting multiopus");const t=/m=audio 9 UDP\/TLS\/RTP\/SAVPF (.*)\r\n/.exec(e)[0],r=ml.getAvailablePayloadTypeRange(e)[0],n=t.replace("\r\n"," ")+r+"\r\na=rtpmap:"+r+" multiopus/48000/6\r\na=fmtp:"+r+" channel_mapping=0,4,1,2,3,5;coupled_streams=2;minptime=10;num_streams=4;useinbandfec=1\r\n";e=e.replace(t,n),dl.info("Multiopus offer created"),dl.debug("SDP parsed for multioups: ",e)}return e}static getAvailablePayloadTypeRange(e){const t=e.matchAll(/m=(?:.*) (?:.*) UDP\/TLS\/RTP\/SAVPF (.*)\r\n/gm);let r=pl.concat(fl);for(const e of t){const t=e[1].split(" ").map((e=>parseInt(e)));r=r.filter((e=>!t.includes(e)))}return r}static getAvailableHeaderExtensionIdRange(e){const t=e.matchAll(/a=extmap:(\d+)(?:.*)\r\n/gm);let r=hl.concat(gl);for(const e of t){const t=e[1].split(" ").map((e=>parseInt(e)));r=r.filter((e=>!t.includes(e)))}return r}static renegotiate(e,t){const r=al.SDPInfo.parse(e),n=al.SDPInfo.parse(t);for(const e of r.getMedias()){let t=n.getMediaById(e.getId());if(!t){t=new al.MediaInfo(e.getId(),e.getType()),t.setDirection(al.Direction.reverse(e.getDirection()));const r=n.getMedia(e.getType());if(r){t.setCodecs(r.getCodecs());for(const[e,n]of r.getExtensions())t.addExtension(e,n)}n.addMedia(t)}}return n.toString()}static updateMissingVideoExtensions(e,t){var r;const n=al.SDPInfo.parse(e),i=null===(r=al.SDPInfo.parse(t).getMediasByType("video")[0])||void 0===r?void 0:r.getExtensions();if(i||i.length){for(const t of n.getMediasByType("video")){const r=t.getExtensions();i.forEach(((n,i)=>{if(!r.get(i)){const r=t.getId(),o="a=extmap:"+i+" "+n+"\r\n",s=new RegExp("(a=mid:"+r+"\r\n(?:.*\r\n)*?)","g");e=e.replace(s,((e,t,r)=>t+o))}}))}return e}}}const vl=e=>e.getAudioTracks().some((e=>e.getSettings().channelCount>2));class yl extends Ta{constructor(e,t){super(),this.namespace=e,this.tm=t}cmd(e,t){return this.tm.cmd(e,t,this.namespace)}event(e,t){return this.tm.event(e,t,this.namespace)}close(){return this.tm.namespaces.delete(this.namespace)}}var bl=class extends Ta{constructor(e){super(),this.maxId=0,this.namespaces=new Map,this.transactions=new Map,this.transport=e,this.listener=t=>{let r;try{r=JSON.parse(t.utf8Data||t.data||t)}catch(e){return}switch(r.type){case"cmd":const t={name:r.name,data:r.data,namespace:r.namespace,accept:t=>{e.send(JSON.stringify({type:"response",transId:r.transId,data:t}))},reject:t=>{e.send(JSON.stringify({type:"error",transId:r.transId,data:t}))}};if(t.namespace){const e=this.namespaces.get(t.namespace);e?e.emit("cmd",t):this.emit("cmd",t)}else this.emit("cmd",t);break;case"response":{const e=this.transactions.get(r.transId);if(!e)return;this.transactions.delete(r.transId),e.resolve(r.data);break}case"error":{const e=this.transactions.get(r.transId);if(!e)return;this.transactions.delete(r.transId),e.reject(r.data);break}case"event":const i={name:r.name,data:r.data,namespace:r.namespace};if(i.namespace){var n=this.namespaces.get(i.namespace);n?n.emit("event",i):this.emit("event",i)}else this.emit("event",i)}},this.transport.addListener?this.transport.addListener("message",this.listener):this.transport.addEventListener("message",this.listener)}cmd(e,t,r){return new Promise(((n,i)=>{if(!e||0===e.length)throw new Error("Bad command name");const o={type:"cmd",transId:this.maxId++,name:e,data:t};r&&(o.namespace=r);const s=JSON.stringify(o);o.resolve=n,o.reject=i,this.transactions.set(o.transId,o);try{this.transport.send(s)}catch(e){throw this.transactions.delete(o.transId),e}}))}event(e,t,r){if(!e||0===e.length)throw new Error("Bad event name");const n={type:"event",name:e,data:t};r&&(n.namespace=r);const i=JSON.stringify(n);this.transport.send(i)}namespace(e){let t=this.namespaces.get(e);return t||(t=new yl(e,this),this.namespaces.set(e,t),t)}close(){for(const e of this.namespaces.values())e.close();this.transport.removeListener?this.transport.removeListener("message",this.listener):this.transport.removeEventListener("message",this.listener)}};const wl=An.get("Signaling"),Sl="wsConnectionSuccess",Cl="wsConnectionError",El="wsConnectionClose",xl="broadcastEvent",Tl={VP8:"vp8",VP9:"vp9",H264:"h264",AV1:"av1"},Il={OPUS:"opus",MULTIOPUS:"multiopus"};class Pl extends Ta{constructor(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{streamName:null,url:"ws://localhost:8080/"};super(),this.streamName=e.streamName,this.wsUrl=e.url,this.webSocket=null,this.transactionManager=null,this.serverId=null,this.clusterId=null}async connect(){var e;return wl.info("Connecting to Signaling Server"),this.transactionManager&&(null===(e=this.webSocket)||void 0===e?void 0:e.readyState)===WebSocket.OPEN?(wl.info("Connected to server: ",this.webSocket.url),wl.debug("WebSocket value: ",{url:this.webSocket.url,protocol:this.webSocket.protocol,readyState:this.webSocket.readyState,binaryType:this.webSocket.binaryType,extensions:this.webSocket.extensions}),this.emit(Sl,{ws:this.webSocket,tm:this.transactionManager}),this.webSocket):new Promise(((e,t)=>{this.webSocket=new WebSocket(this.wsUrl),this.transactionManager=new bl(this.webSocket),this.webSocket.onopen=()=>{wl.info("WebSocket opened"),this.transactionManager.on("event",(e=>{this.emit(xl,e)})),wl.info("Connected to server: ",this.webSocket.url),wl.debug("WebSocket value: ",{url:this.webSocket.url,protocol:this.webSocket.protocol,readyState:this.webSocket.readyState,binaryType:this.webSocket.binaryType,extensions:this.webSocket.extensions}),this.emit(Sl,{ws:this.webSocket,tm:this.transactionManager}),e(this.webSocket)},this.webSocket.onerror=()=>{wl.error("WebSocket not connected: ",this.webSocket.url),this.emit(Cl,this.webSocket.url),t(this.webSocket.url)},this.webSocket.onclose=()=>{this.webSocket=null,this.transactionManager=null,wl.info("Connection closed with Signaling Server."),this.emit(El)}}))}close(){var e;wl.info("Closing connection with Signaling Server."),null===(e=this.webSocket)||void 0===e||e.close()}async subscribe(e,t){let r=arguments.length>2&&void 0!==arguments[2]?arguments[2]:null,n=arguments.length>3&&void 0!==arguments[3]?arguments[3]:null;wl.info("Starting subscription to streamName: ",this.streamName),wl.debug("Subcription local description: ",e);const i=Rl(t,r,n),o={sdp:e=ml.adaptCodecName(e,"AV1X",Tl.AV1),streamId:this.streamName,pinnedSourceId:i.pinnedSourceId,excludedSourceIds:i.excludedSourceIds};i.vad&&(o.vad=!0),Array.isArray(i.events)&&(o.events=i.events);try{var s,a,c,u,l;await this.connect(),wl.info("Sending view command");const e=await this.transactionManager.cmd("view",o),t=null===(s=(a=RTCRtpReceiver).getCapabilities)||void 0===s||null===(c=s.call(a,"video"))||void 0===c||null===(u=c.codecs)||void 0===u||null===(l=u.find)||void 0===l?void 0:l.call(u,(e=>"video/AV1X"===e.mimeType));return e.sdp=t?ml.adaptCodecName(e.sdp,Tl.AV1,"AV1X"):e.sdp,wl.info("Command sent, subscriberId: ",e.subscriberId),wl.debug("Command result: ",e),this.serverId=e.subscriberId,this.clusterId=e.clusterId,e.sdp}catch(e){throw wl.error("Error sending view command, error: ",e),e}}async publish(e,t){const r=kl(t,arguments.length>2&&void 0!==arguments[2]?arguments[2]:null,arguments.length>3&&void 0!==arguments[3]?arguments[3]:null);wl.info("Starting publishing to streamName: ".concat(this.streamName,", codec: ").concat(r.codec)),wl.debug("Publishing local description: ",e);const n=Object.values(Tl);if(-1===n.indexOf(r.codec))throw wl.error("Invalid codec. Possible values are: ",n),new Error("Invalid codec. Possible values are: ".concat(n));r.codec===Tl.AV1&&(e=ml.adaptCodecName(e,"AV1X",Tl.AV1));const i={name:this.streamName,sdp:e,codec:r.codec,sourceId:r.sourceId};null!==r.record&&(i.record=r.record),Array.isArray(r.events)&&(i.events=r.events);try{await this.connect(),wl.info("Sending publish command");const e=await this.transactionManager.cmd("publish",i);if(r.codec===Tl.AV1){var o,s,a,c,u;const t=null===(o=(s=RTCRtpSender).getCapabilities)||void 0===o||null===(a=o.call(s,"video"))||void 0===a||null===(c=a.codecs)||void 0===c||null===(u=c.find)||void 0===u?void 0:u.call(c,(e=>"video/AV1X"===e.mimeType));e.sdp=t?ml.adaptCodecName(e.sdp,Tl.AV1,"AV1X"):e.sdp}return wl.info("Command sent, publisherId: ",e.publisherId),wl.debug("Command result: ",e),this.serverId=e.publisherId,this.clusterId=e.clusterId,e.sdp}catch(e){throw wl.error("Error sending publish command, error: ",e),e}}async cmd(e,t){return wl.info("Sending cmd: ".concat(e)),this.transactionManager.cmd(e,t)}}const Rl=(e,t,r)=>{let n="object"==typeof e?e:{};return 0===Object.keys(n).length&&(n={vad:e,pinnedSourceId:t,excludedSourceIds:r}),n},kl=(e,t,r)=>{let n="object"==typeof e?e:{};if(0===Object.keys(n).length){n={codec:null!=e?e:Tl.H264,record:t,sourceId:r}}return n};function Ol(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,n)}return r}function Al(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?Ol(Object(r),!0).forEach((function(t){n(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):Ol(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}const Dl=An.get("PeerConnection"),Ll={track:"track",connectionStateChange:"connectionStateChange"},jl={stereo:!1,mediaStream:null,codec:"h264",simulcast:!1,scalabilityMode:null,disableAudio:!1,disableVideo:!1,setSDPToPeer:!0};class Ml extends Ta{constructor(){super(),this.sessionDescription=null,this.peer=null,this.peerConnectionStats=null}async createRTCPeer(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:null;Dl.info("Creating new RTCPeerConnection"),Dl.debug("RTC configuration provided by user: ",e),this.peer=_l(this,e)}getRTCPeer(){return Dl.info("Getting RTC Peer"),this.peer}async closeRTCPeer(){var e;Dl.info("Closing RTCPeerConnection"),null===(e=this.peer)||void 0===e||e.close(),this.peer=null,this.stopStats(),this.emit(Ll.connectionStateChange,"closed")}async setRTCRemoteSDP(e){Dl.info("Setting RTC Remote SDP");const t={type:"answer",sdp:e};try{await this.peer.setRemoteDescription(t),Dl.info("RTC Remote SDP was set successfully."),Dl.debug("RTC Remote SDP new value: ",e)}catch(e){throw Dl.error("Error while setting RTC Remote SDP: ",e),e}}async getRTCLocalSDP(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:jl;Dl.info("Getting RTC Local SDP"),e=Al(Al({},jl),e),Dl.debug("Options: ",e);const t=Bl(e.mediaStream);t?Fl(this.peer,t,e):Vl(this.peer,e),Dl.info("Creating peer offer");const r=await this.peer.createOffer();return Dl.info("Peer offer created"),Dl.debug("Peer offer response: ",r.sdp),this.sessionDescription=r,e.disableAudio||(e.stereo&&(this.sessionDescription.sdp=ml.setStereo(this.sessionDescription.sdp)),e.dtx&&(this.sessionDescription.sdp=ml.setDTX(this.sessionDescription.sdp)),this.sessionDescription.sdp=ml.setMultiopus(this.sessionDescription.sdp,t)),!e.disableVideo&&e.simulcast&&(this.sessionDescription.sdp=ml.setSimulcast(this.sessionDescription.sdp,e.codec)),e.absCaptureTime&&(this.sessionDescription.sdp=ml.setAbsoluteCaptureTime(this.sessionDescription.sdp)),e.dependencyDescriptor&&(this.sessionDescription.sdp=ml.setDependencyDescriptor(this.sessionDescription.sdp)),e.setSDPToPeer&&(await this.peer.setLocalDescription(this.sessionDescription),Dl.info("Peer local description set")),this.sessionDescription.sdp}async addRemoteTrack(e,t){const r=await new Promise(((r,n)=>{try{const n=this.peer.addTransceiver(e,{direction:"recvonly"});n.resolve=r,n.streams=t}catch(e){n(e)}}));for(const e of t)e.addTrack(r.receiver.track);return r}updateBandwidthRestriction(e,t){return Dl.info("Updating bandwidth restriction, bitrate value: ",t),Dl.debug("SDP value: ",e),ml.setVideoBitrate(e,t)}async updateBitrate(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:0;if(!this.peer)throw Dl.error("Cannot update bitrate. No peer found."),new Error("Cannot update bitrate. No peer found.");Dl.info("Updating bitrate to value: ",e),this.sessionDescription=await this.peer.createOffer(),await this.peer.setLocalDescription(this.sessionDescription);const t=this.updateBandwidthRestriction(this.peer.remoteDescription.sdp,e);await this.setRTCRemoteSDP(t),Dl.info("Bitrate restirctions updated: ","".concat(e>0?e:"unlimited"," kbps"))}getRTCPeerStatus(){if(Dl.info("Getting RTC peer status"),!this.peer)return null;const e=zl(this.peer);return Dl.info("RTC peer status getted, value: ",e),e}replaceTrack(e){if(!this.peer)return void Dl.error("Could not change track if there is not an active connection.");const t=this.peer.getSenders().find((t=>t.track.kind===e.kind));t?t.replaceTrack(e):Dl.error("There is no ".concat(e.kind," track in active broadcast."))}static getCapabilities(e){const t=new ll;if(t.isFirefox())return(e=>"video"===e?{codecs:[{codec:"vp8",mimeType:"video/VP8"},{codec:"vp9",mimeType:"video/VP9"},{codec:"h264",mimeType:"video/H264"}],headerExtensions:[]}:"audio"===e?{codecs:[{codec:"opus",mimeType:"audio/opus",channels:2}],headerExtensions:[]}:null)(e);const r=RTCRtpSender.getCapabilities(e);if(r){const n={};let i=new RegExp("^video/(".concat(Object.values(Tl).join("|"),")x?$"),"i");"audio"===e&&(i=new RegExp("^audio/(".concat(Object.values(Il).join("|"),")$"),"i"),t.isChrome()&&(n.multiopus={mimeType:"audio/multiopus",channels:6}));for(const e of r.codecs){const t=e.mimeType.match(i);if(t){const r=t[1].toLowerCase();if(n[r]=Al(Al({},n[r]),{},{mimeType:e.mimeType}),e.scalabilityModes){let t=n[r].scalabilityModes||[];t=[...t,...e.scalabilityModes],n[r].scalabilityModes=[...new Set(t)]}e.channels&&(n[r].channels=e.channels)}}r.codecs=Object.keys(n).map((e=>Al({codec:e},n[e])))}return r}getTracks(){var e,t;return null===(e=this.peer)||void 0===e||null===(t=e.getSenders())||void 0===t?void 0:t.map((e=>e.track))}initStats(){this.peerConnectionStats?Dl.warn("Cannot init peer stats: Already initialized"):this.peer?(this.peerConnectionStats=new qa(this.peer),this.peerConnectionStats.init(),Ba(this.peerConnectionStats,this,[$a])):Dl.warn("Cannot init peer stats: RTCPeerConnection not initialized")}stopStats(){var e;null===(e=this.peerConnectionStats)||void 0===e||e.stop(),this.peerConnectionStats=null}}const Nl=e=>(null==e?void 0:e.getAudioTracks().length)<=1&&(null==e?void 0:e.getVideoTracks().length)<=1,Bl=e=>{if(!e)return null;if(e instanceof MediaStream&&Nl(e))return e;if(!(e instanceof MediaStream)){Dl.info("Creating MediaStream to add received tracks.");const t=new MediaStream;for(const r of e)t.addTrack(r);if(Nl(t))return t}throw Dl.error("MediaStream must have 1 audio track and 1 video track, or at least one of them."),new Error("MediaStream must have 1 audio track and 1 video track, or at least one of them.")},_l=(e,t)=>{const r=new RTCPeerConnection(t);return Ul(e,r),r},Ul=(e,t)=>{t.ontrack=t=>{var r;if(Dl.info("New track from peer."),Dl.debug("Track event value: ",t),null!=t&&null!==(r=t.transceiver)&&void 0!==r&&r.resolve){const e=t.transceiver.resolve;delete t.transceiver.resolve,e(t.transceiver)}e.emit(Ll.track,t)},t.connectionState?t.onconnectionstatechange=r=>{Dl.info("Peer connection state change: ",t.connectionState),e.emit(Ll.connectionStateChange,t.connectionState)}:t.oniceconnectionstatechange=r=>{Dl.info("Peer ICE connection state change: ",t.iceConnectionState),e.emit(Ll.connectionStateChange,t.iceConnectionState)},t.onnegotiationneeded=async e=>{if(!t.remoteDescription)return;Dl.info("Peer onnegotiationneeded, updating local description");const r=await t.createOffer();Dl.info("Peer onnegotiationneeded, got local offer",r.sdp),r.sdp=ml.updateMissingVideoExtensions(r.sdp,t.remoteDescription.sdp),await t.setLocalDescription(r);const n=ml.renegotiate(r.sdp,t.remoteDescription.sdp);Dl.info("Peer onnegotiationneeded, updating remote description",n),await t.setRemoteDescription({type:"answer",sdp:n}),Dl.info("Peer onnegotiationneeded, renegotiation done")}},Fl=(e,t,r)=>{Dl.info("Adding mediaStream tracks to RTCPeerConnection");for(const n of t.getTracks()){const i={streams:[t]};"audio"===n.kind&&(i.direction=r.disableAudio?"inactive":"sendonly"),"video"===n.kind&&(i.direction=r.disableVideo?"inactive":"sendonly",r.scalabilityMode&&(new ll).isChrome()?(Dl.debug("Video track with scalability mode: ".concat(r.scalabilityMode,".")),i.sendEncodings=[{scalabilityMode:r.scalabilityMode}]):r.scalabilityMode&&Dl.warn("SVC is only supported in Google Chrome")),e.addTransceiver(n,i),Dl.info("Track '".concat(n.label,"' added: "),"id: ".concat(n.id),"kind: ".concat(n.kind))}},Vl=(e,t)=>{const r=new ll;if(!t.disableVideo){const t=e.addTransceiver("video",{direction:"recvonly"});r.isOpera()&&t.setCodecPreferences(RTCRtpReceiver.getCapabilities("video").codecs.filter((e=>"video/H264"!==e.mimeType||e.sdpFmtpLine.includes("profile-level-id=4"))))}t.disableAudio||e.addTransceiver("audio",{direction:"recvonly"});for(let r=0;r<t.multiplexedAudioTracks;r++)e.addTransceiver("audio",{direction:"recvonly"})},zl=e=>{var t;const r=null!==(t=e.connectionState)&&void 0!==t?t:e.iceConnectionState;switch(r){case"checking":return"connecting";case"completed":return"connected";default:return r}};function Gl(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,n)}return r}function $l(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?Gl(Object(r),!0).forEach((function(t){n(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):Gl(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}const ql=An.get("Director"),Xl="WebRtc";let Wl="";let Hl="https://director.millicast.com";class Yl{static setEndpoint(e){Hl=e.replace(/\/$/,"")}static getEndpoint(){return Hl}static setLiveDomain(e){Wl=e.replace(/\/$/,"")}static getLiveDomain(){return Wl}static async getPublisher(e){const t=Jl(e,arguments.length>1&&void 0!==arguments[1]?arguments[1]:null,arguments.length>2&&void 0!==arguments[2]?arguments[2]:Xl);ql.info("Getting publisher connection path for stream name: ",t.streamName);const r={streamName:t.streamName,streamType:t.streamType},n={"Content-Type":"application/json",Authorization:"Bearer ".concat(t.token)},i="".concat(this.getEndpoint(),"/api/director/publish");try{let e=await fetch(i,{method:"POST",headers:n,body:JSON.stringify(r)});if(e=await e.json(),"fail"===e.status){throw new Error(e.data.message)}return e=Zl(e),ql.debug("Getting publisher response: ",e),e.data}catch(e){throw ql.error("Error while getting publisher connection path. ",e),e}}static async getSubscriber(e){const t=Kl(e,arguments.length>1&&void 0!==arguments[1]?arguments[1]:null,arguments.length>2&&void 0!==arguments[2]?arguments[2]:null);ql.info("Getting subscriber connection data for stream name: ".concat(t.streamName," and account id: ").concat(t.streamAccountId));const r={streamAccountId:t.streamAccountId,streamName:t.streamName};let n={"Content-Type":"application/json"};t.subscriberToken&&(n=$l($l({},n),{},{Authorization:"Bearer ".concat(t.subscriberToken)}));const i="".concat(this.getEndpoint(),"/api/director/subscribe");try{let e=await fetch(i,{method:"POST",headers:n,body:JSON.stringify(r)});if(e=await e.json(),"fail"===e.status){throw new Error(e.data.message)}return e=Zl(e),ql.debug("Getting subscriber response: ",e),e.data}catch(e){throw ql.error("Error while getting subscriber connection path. ",e),e}}}const Jl=(e,t,r)=>{let n="object"==typeof e?e:{};return 0===Object.keys(n).length&&(n={token:e,streamName:t,streamType:r}),n},Kl=(e,t,r)=>{let n="object"==typeof e?e:{};return 0===Object.keys(n).length&&(n={streamName:e,streamAccountId:t,subscriberToken:r}),n},Zl=e=>{if(Yl.getLiveDomain()){const t=/\/\/(.*?)\//,r=e.data.urls.map((e=>{const r=t.exec(e);return e.replace(r[1],Yl.getLiveDomain())}));e.data.urls=r}return e};function Ql(e){this.message=e}Ql.prototype=new Error,Ql.prototype.name="InvalidCharacterError";var ed="undefined"!=typeof window&&window.atob&&window.atob.bind(window)||function(e){var t=String(e).replace(/=+$/,"");if(t.length%4==1)throw new Ql("'atob' failed: The string to be decoded is not correctly encoded.");for(var r,n,i=0,o=0,s="";n=t.charAt(o++);~n&&(r=i%4?64*r+n:n,i++%4)?s+=String.fromCharCode(255&r>>(-2*i&6)):0)n="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(n);return s};function td(e){var t=e.replace(/-/g,"+").replace(/_/g,"/");switch(t.length%4){case 0:break;case 2:t+="==";break;case 3:t+="=";break;default:throw"Illegal base64url string!"}try{return function(e){return decodeURIComponent(ed(e).replace(/(.)/g,(function(e,t){var r=t.charCodeAt(0).toString(16).toUpperCase();return r.length<2&&(r="0"+r),"%"+r})))}(t)}catch(e){return ed(t)}}function rd(e){this.message=e}rd.prototype=new Error,rd.prototype.name="InvalidTokenError";var nd=o((function(e,t){!function(r){if(null!=t&&"number"!=typeof t.nodeType)e.exports=r();else{var n=r(),i="undefined"!=typeof self?self:$.global;"function"!=typeof i.btoa&&(i.btoa=n.btoa),"function"!=typeof i.atob&&(i.atob=n.atob)}}((function(){var e="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";function t(e){this.message=e}return t.prototype=new Error,t.prototype.name="InvalidCharacterError",{btoa:function(r){for(var n,i,o=String(r),s=0,a=e,c="";o.charAt(0|s)||(a="=",s%1);c+=a.charAt(63&n>>8-s%1*8)){if((i=o.charCodeAt(s+=3/4))>255)throw new t("'btoa' failed: The string to be encoded contains characters outside of the Latin1 range.");n=n<<8|i}return c},atob:function(r){var n=String(r).replace(/[=]+$/,"");if(n.length%4==1)throw new t("'atob' failed: The string to be decoded is not correctly encoded.");for(var i,o,s=0,a=0,c="";o=n.charAt(a++);~o&&(i=s%4?64*i+o:o,s++%4)?c+=String.fromCharCode(255&i>>(-2*s&6)):0)o=e.indexOf(o);return c}}}))}));let id;class od extends Ta{constructor(e,t,r,n){if(super(),id=r,!e)throw id.error("Stream Name is required to construct this module."),new Error("Stream Name is required to construct this module.");if(!t)throw id.error("Token generator is required to construct this module."),new Error("Token generator is required to construct this module.");this.webRTCPeer=new Ml,this.signaling=null,this.streamName=e,this.autoReconnect=n,this.reconnectionInterval=1e3,this.alreadyDisconnected=!1,this.firstReconnection=!0,this.stopReconnection=!1,this.tokenGenerator=t,this.options=null}getRTCPeerConnection(){return this.webRTCPeer?this.webRTCPeer.getRTCPeer():null}stop(){var e;id.info("Stopping"),this.webRTCPeer.closeRTCPeer(),null===(e=this.signaling)||void 0===e||e.close(),this.signaling=null,this.stopReconnection=!0,this.webRTCPeer=new Ml}isActive(){const e=this.webRTCPeer.getRTCPeerStatus();return id.info("Broadcast status: ",e||"not_established"),"connected"===e}setReconnect(){this.signaling.on("migrate",(()=>this.replaceConnection())),this.autoReconnect&&(this.signaling.on(Cl,(()=>{!this.firstReconnection&&this.alreadyDisconnected||(this.firstReconnection=!1,this.reconnect())})),this.webRTCPeer.on(Ll.connectionStateChange,(e=>{("failed"===e||"disconnected"===e&&this.alreadyDisconnected)&&this.firstReconnection?(this.firstReconnection=!1,this.reconnect()):"disconnected"===e?(this.alreadyDisconnected=!0,setTimeout((()=>this.reconnect()),1500)):this.alreadyDisconnected=!1})))}async reconnect(){try{this.isActive()||this.stopReconnection||(this.stop(),await this.connect(this.options),this.alreadyDisconnected=!1,this.reconnectionInterval=1e3,this.firstReconnection=!0)}catch(e){this.reconnectionInterval=sd(this.reconnectionInterval),id.error("Reconnection failed, retrying in ".concat(this.reconnectionInterval,"ms. "),e),this.emit("reconnect",{timeout:this.reconnectionInterval,error:e}),setTimeout((()=>this.reconnect()),this.reconnectionInterval)}}}const sd=e=>e<32e3?2*e:e;function ad(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,n)}return r}function cd(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?ad(Object(r),!0).forEach((function(t){n(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):ad(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}const ud=An.get("Publish"),ld={mediaStream:null,bandwidth:0,disableVideo:!1,disableAudio:!1,codec:Tl.H264,simulcast:!1,scalabilityMode:null,peerConfig:{}};function dd(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,n)}return r}function fd(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?dd(Object(r),!0).forEach((function(t){n(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):dd(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}const pd=An.get("View"),hd={disableVideo:!1,disableAudio:!1,peerConfig:{}};e.Director=Yl,e.Logger=An,e.PeerConnection=Ml,e.Publish=class extends od{constructor(e,t){super(e,t,ud,!(arguments.length>2&&void 0!==arguments[2])||arguments[2])}async connect(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:ld;this.options=cd(cd(cd({},ld),e),{},{setSDPToPeer:!1}),await this.initConnection({migrate:!1})}async reconnect(){var e,t;this.options.mediaStream=null!==(e=null===(t=this.webRTCPeer)||void 0===t?void 0:t.getTracks())&&void 0!==e?e:this.options.mediaStream,super.reconnect()}async replaceConnection(){var e,t;ud.info("Migrating current connection"),this.options.mediaStream=null!==(e=null===(t=this.webRTCPeer)||void 0===t?void 0:t.getTracks())&&void 0!==e?e:this.options.mediaStream,await this.initConnection({migrate:!0})}async record(){var e;this.recordingAvailable?(this.options.record=!0,await(null===(e=this.signaling)||void 0===e?void 0:e.cmd("record")),ud.info("Broadcaster start recording")):ud.error("Record not available")}async unrecord(){var e;this.recordingAvailable?(this.options.record=!1,await(null===(e=this.signaling)||void 0===e?void 0:e.cmd("unrecord")),ud.info("Broadcaster stop recording")):ud.error("Unrecord not available")}async initConnection(e){var t,r;let n,i;if(ud.debug("Broadcast option values: ",this.options),this.stopReconnection=!1,!this.options.mediaStream)throw ud.error("Error while broadcasting. MediaStream required"),new Error("MediaStream required");if(!e.migrate&&this.isActive())throw ud.warn("Broadcast currently working"),new Error("Broadcast currently working");try{var o;i=await this.tokenGenerator(),this.options.peerConfig.iceServers=null===(o=i)||void 0===o?void 0:o.iceServers}catch(e){throw ud.error("Error generating token."),e}if(!i)throw ud.error("Error while broadcasting. Publisher data required"),new Error("Publisher data required");if(this.recordingAvailable=function(e,t){if("string"!=typeof e)throw new rd("Invalid token specified");var r=!0===(t=t||{}).header?0:1;try{return JSON.parse(td(e.split(".")[r]))}catch(e){throw new rd("Invalid token specified: "+e.message)}}(i.jwt)[nd.atob("bWlsbGljYXN0")].record,this.options.record&&!this.recordingAvailable)throw ud.error("Error while broadcasting. Record option detected but recording is not available"),new Error("Record option detected but recording is not available");const s=new Pl({streamName:this.streamName,url:"".concat(i.urls[0],"?token=").concat(i.jwt)}),a=e.migrate?new Ml:this.webRTCPeer;await a.createRTCPeer(this.options.peerConfig),null===(t=this.stopReemitingWebRTCPeerInstanceEvents)||void 0===t||t.call(this),null===(r=this.stopReemitingSignalingInstanceEvents)||void 0===r||r.call(this),this.stopReemitingWebRTCPeerInstanceEvents=Ba(a,this,[Ll.connectionStateChange]),this.stopReemitingSignalingInstanceEvents=Ba(s,this,[xl]);const c=a.getRTCLocalSDP(this.options),u=s.connect();n=await Promise.all([c,u]);const l=n[0];let d=this.signaling;this.signaling=s;const f=this.signaling.publish(l,this.options),p=a.peer.setLocalDescription(a.sessionDescription);n=await Promise.all([f,p]);let h=n[0];!this.options.disableVideo&&this.options.bandwidth>0&&(h=a.updateBandwidthRestriction(h,this.options.bandwidth)),await a.setRTCRemoteSDP(h),ud.info("Broadcasting to streamName: ",this.streamName);let g=this.webRTCPeer;this.webRTCPeer=a,this.setReconnect(),e.migrate&&this.webRTCPeer.on(Ll.connectionStateChange,(e=>{var t,r,n,i;["connected","disconnected","failed","closed"].includes(e)&&(null===(t=d)||void 0===t||null===(r=t.close)||void 0===r||r.call(t),null===(n=g)||void 0===n||null===(i=n.closeRTCPeer)||void 0===i||i.call(n),d=g=null)}))}},e.Signaling=Pl,e.View=class extends od{constructor(e,t){let r=arguments.length>2&&void 0!==arguments[2]?arguments[2]:null;super(e,t,pd,!(arguments.length>3&&void 0!==arguments[3])||arguments[3]),r&&this.on(Ll.track,(e=>{r.srcObject=e.streams[0]}))}async connect(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:hd;this.options=fd(fd(fd({},hd),e),{},{setSDPToPeer:!1}),await this.initConnection({migrate:!1})}async select(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{};pd.debug("Viewer select layer values: ",e),await this.signaling.cmd("select",{layer:e}),pd.info("Connected to streamName: ",this.streamName)}async addRemoteTrack(e,t){return pd.info("Viewer adding remote % track",e),this.webRTCPeer.addRemoteTrack(e,t)}async project(e,t){for(const e of t){if(!e.trackId&&!e.media)throw pd.error("Error in projection mapping, trackId or mediaId must be set"),new Error("Error in projection mapping, trackId or mediaId must be set");const t=this.webRTCPeer.getRTCPeer();if(e.mediaId&&!t.getTransceivers().find((t=>t.mid===e.mediaId.toString())))throw pd.error("Error in projection mapping, ".concat(e.mediaId," mid not found in local transceivers")),new Error("Error in projection mapping, ".concat(e.mediaId," mid not found in local transceivers"))}pd.debug("Viewer project source: layer mappings: ",e,t),await this.signaling.cmd("project",{sourceId:e,mapping:t}),pd.info("Projection done")}async unproject(e){pd.debug("Viewer unproject mediaIds: ",e),await this.signaling.cmd("unproject",{mediaIds:e}),pd.info("Unprojection done")}async replaceConnection(){pd.info("Migrating current connection"),await this.initConnection({migrate:!0})}async initConnection(e){var t,r;let n,i;if(pd.debug("Viewer connect options values: ",this.options),this.stopReconnection=!1,!e.migrate&&this.isActive())throw pd.warn("Viewer currently subscribed"),new Error("Viewer currently subscribed");try{var o;i=await this.tokenGenerator(),this.options.peerConfig.iceServers=null===(o=i)||void 0===o?void 0:o.iceServers}catch(e){throw pd.error("Error generating token."),e}if(!i)throw pd.error("Error while subscribing. Subscriber data required"),new Error("Subscriber data required");const s=new Pl({streamName:this.streamName,url:"".concat(i.urls[0],"?token=").concat(i.jwt)}),a=e.migrate?new Ml:this.webRTCPeer;await a.createRTCPeer(this.options.peerConfig),null===(t=this.stopReemitingWebRTCPeerInstanceEvents)||void 0===t||t.call(this),null===(r=this.stopReemitingSignalingInstanceEvents)||void 0===r||r.call(this),this.stopReemitingWebRTCPeerInstanceEvents=Ba(a,this,Object.values(Ll)),this.stopReemitingSignalingInstanceEvents=Ba(s,this,[xl]);const c=a.getRTCLocalSDP(fd(fd({},this.options),{},{stereo:!0})),u=s.connect();n=await Promise.all([c,u]);const l=n[0];let d=this.signaling;this.signaling=s;const f=this.signaling.subscribe(l,fd(fd({},this.options),{},{vad:this.options.multiplexedAudioTracks>0})),p=a.peer.setLocalDescription(a.sessionDescription);n=await Promise.all([f,p]);const h=n[0];await a.setRTCRemoteSDP(h),pd.info("Connected to streamName: ",this.streamName);let g=this.webRTCPeer;this.webRTCPeer=a,this.setReconnect(),e.migrate&&this.webRTCPeer.on(Ll.connectionStateChange,(e=>{if("connected"===e)setTimeout((()=>{var e,t,r,n;null===(e=d)||void 0===e||null===(t=e.close)||void 0===t||t.call(e),null===(r=g)||void 0===r||null===(n=r.closeRTCPeer)||void 0===n||n.call(r),d=g=null,pd.info("Current connection migrated")}),1e3);else if(["disconnected","failed","closed"].includes(e)){var t,r,n,i;null===(t=d)||void 0===t||null===(r=t.close)||void 0===r||r.call(t),null===(n=g)||void 0===n||null===(i=n.closeRTCPeer)||void 0===i||i.call(n),d=g=null}}))}},Object.defineProperty(e,"__esModule",{value:!0})}));
+/* WEBPACK VAR INJECTION */(function(global, process) {!function(e,t){ true?t(exports):undefined}(this,(function(e){"use strict";function t(e){return t="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(e){return typeof e}:function(e){return e&&"function"==typeof Symbol&&e.constructor===Symbol&&e!==Symbol.prototype?"symbol":typeof e},t(e)}function r(e){var r=function(e,r){if("object"!==t(e)||null===e)return e;var n=e[Symbol.toPrimitive];if(void 0!==n){var i=n.call(e,r||"default");if("object"!==t(i))return i;throw new TypeError("@@toPrimitive must return a primitive value.")}return("string"===r?String:Number)(e)}(e,"string");return"symbol"===t(r)?r:String(r)}function n(e,t,n){return(t=r(t))in e?Object.defineProperty(e,t,{value:n,enumerable:!0,configurable:!0,writable:!0}):e[t]=n,e}var i="undefined"!=typeof globalThis?globalThis:"undefined"!=typeof window?window:"undefined"!=typeof global?global:"undefined"!=typeof self?self:{};function o(e){var t={exports:{}};return e(t,t.exports),t.exports}var s,a,c=function(e){return e&&e.Math==Math&&e},u=c("object"==typeof globalThis&&globalThis)||c("object"==typeof window&&window)||c("object"==typeof self&&self)||c("object"==typeof i&&i)||function(){return this}()||Function("return this")(),l=function(e){try{return!!e()}catch(e){return!0}},d=!l((function(){return 7!=Object.defineProperty({},1,{get:function(){return 7}})[1]})),f=!l((function(){var e=function(){}.bind();return"function"!=typeof e||e.hasOwnProperty("prototype")})),p=Function.prototype.call,h=f?p.bind(p):function(){return p.apply(p,arguments)},g={}.propertyIsEnumerable,m=Object.getOwnPropertyDescriptor,v=m&&!g.call({1:2},1)?function(e){var t=m(this,e);return!!t&&t.enumerable}:g,y={f:v},b=function(e,t){return{enumerable:!(1&e),configurable:!(2&e),writable:!(4&e),value:t}},w=Function.prototype,S=w.call,C=f&&w.bind.bind(S,S),E=f?C:function(e){return function(){return S.apply(e,arguments)}},x=E({}.toString),T=E("".slice),I=function(e){return T(x(e),8,-1)},P=Object,R=E("".split),k=l((function(){return!P("z").propertyIsEnumerable(0)}))?function(e){return"String"==I(e)?R(e,""):P(e)}:P,O=function(e){return null==e},A=TypeError,D=function(e){if(O(e))throw A("Can't call method on "+e);return e},L=function(e){return k(D(e))},j="object"==typeof document&&document.all,M={all:j,IS_HTMLDDA:void 0===j&&void 0!==j},N=M.all,B=M.IS_HTMLDDA?function(e){return"function"==typeof e||e===N}:function(e){return"function"==typeof e},_=M.all,U=M.IS_HTMLDDA?function(e){return"object"==typeof e?null!==e:B(e)||e===_}:function(e){return"object"==typeof e?null!==e:B(e)},F=function(e){return B(e)?e:void 0},V=function(e,t){return arguments.length<2?F(u[e]):u[e]&&u[e][t]},z=E({}.isPrototypeOf),G=V("navigator","userAgent")||"",q=u.process,X=u.Deno,H=q&&q.versions||X&&X.version,W=H&&H.v8;W&&(a=(s=W.split("."))[0]>0&&s[0]<4?1:+(s[0]+s[1])),!a&&G&&(!(s=G.match(/Edge\/(\d+)/))||s[1]>=74)&&(s=G.match(/Chrome\/(\d+)/))&&(a=+s[1]);var Y=a,J=!!Object.getOwnPropertySymbols&&!l((function(){var e=Symbol();return!String(e)||!(Object(e)instanceof Symbol)||!Symbol.sham&&Y&&Y<41})),K=J&&!Symbol.sham&&"symbol"==typeof Symbol.iterator,Z=Object,Q=K?function(e){return"symbol"==typeof e}:function(e){var t=V("Symbol");return B(t)&&z(t.prototype,Z(e))},ee=String,te=function(e){try{return ee(e)}catch(e){return"Object"}},re=TypeError,ne=function(e){if(B(e))return e;throw re(te(e)+" is not a function")},ie=function(e,t){var r=e[t];return O(r)?void 0:ne(r)},oe=TypeError,se=Object.defineProperty,ae=function(e,t){try{se(u,e,{value:t,configurable:!0,writable:!0})}catch(r){u[e]=t}return t},ce="__core-js_shared__",ue=u[ce]||ae(ce,{}),le=o((function(e){(e.exports=function(e,t){return ue[e]||(ue[e]=void 0!==t?t:{})})("versions",[]).push({version:"3.26.1",mode:"global",copyright:"© 2014-2022 Denis Pushkarev (zloirock.ru)",license:"https://github.com/zloirock/core-js/blob/v3.26.1/LICENSE",source:"https://github.com/zloirock/core-js"})})),de=Object,fe=function(e){return de(D(e))},pe=E({}.hasOwnProperty),he=Object.hasOwn||function(e,t){return pe(fe(e),t)},ge=0,me=Math.random(),ve=E(1..toString),ye=function(e){return"Symbol("+(void 0===e?"":e)+")_"+ve(++ge+me,36)},be=le("wks"),we=u.Symbol,Se=we&&we.for,Ce=K?we:we&&we.withoutSetter||ye,Ee=function(e){if(!he(be,e)||!J&&"string"!=typeof be[e]){var t="Symbol."+e;J&&he(we,e)?be[e]=we[e]:be[e]=K&&Se?Se(t):Ce(t)}return be[e]},xe=TypeError,Te=Ee("toPrimitive"),Ie=function(e,t){if(!U(e)||Q(e))return e;var r,n=ie(e,Te);if(n){if(void 0===t&&(t="default"),r=h(n,e,t),!U(r)||Q(r))return r;throw xe("Can't convert object to primitive value")}return void 0===t&&(t="number"),function(e,t){var r,n;if("string"===t&&B(r=e.toString)&&!U(n=h(r,e)))return n;if(B(r=e.valueOf)&&!U(n=h(r,e)))return n;if("string"!==t&&B(r=e.toString)&&!U(n=h(r,e)))return n;throw oe("Can't convert object to primitive value")}(e,t)},Pe=function(e){var t=Ie(e,"string");return Q(t)?t:t+""},Re=u.document,ke=U(Re)&&U(Re.createElement),Oe=function(e){return ke?Re.createElement(e):{}},Ae=!d&&!l((function(){return 7!=Object.defineProperty(Oe("div"),"a",{get:function(){return 7}}).a})),De=Object.getOwnPropertyDescriptor,Le={f:d?De:function(e,t){if(e=L(e),t=Pe(t),Ae)try{return De(e,t)}catch(e){}if(he(e,t))return b(!h(y.f,e,t),e[t])}},je=d&&l((function(){return 42!=Object.defineProperty((function(){}),"prototype",{value:42,writable:!1}).prototype})),Me=String,Ne=TypeError,Be=function(e){if(U(e))return e;throw Ne(Me(e)+" is not an object")},_e=TypeError,Ue=Object.defineProperty,Fe=Object.getOwnPropertyDescriptor,Ve="enumerable",ze="configurable",Ge="writable",$e={f:d?je?function(e,t,r){if(Be(e),t=Pe(t),Be(r),"function"==typeof e&&"prototype"===t&&"value"in r&&Ge in r&&!r[Ge]){var n=Fe(e,t);n&&n[Ge]&&(e[t]=r.value,r={configurable:ze in r?r[ze]:n[ze],enumerable:Ve in r?r[Ve]:n[Ve],writable:!1})}return Ue(e,t,r)}:Ue:function(e,t,r){if(Be(e),t=Pe(t),Be(r),Ae)try{return Ue(e,t,r)}catch(e){}if("get"in r||"set"in r)throw _e("Accessors not supported");return"value"in r&&(e[t]=r.value),e}},qe=d?function(e,t,r){return $e.f(e,t,b(1,r))}:function(e,t,r){return e[t]=r,e},Xe=Function.prototype,He=d&&Object.getOwnPropertyDescriptor,We=he(Xe,"name"),Ye={EXISTS:We,PROPER:We&&"something"===function(){}.name,CONFIGURABLE:We&&(!d||d&&He(Xe,"name").configurable)},Je=E(Function.toString);B(ue.inspectSource)||(ue.inspectSource=function(e){return Je(e)});var Ke,Ze,Qe,et=ue.inspectSource,tt=u.WeakMap,rt=B(tt)&&/native code/.test(String(tt)),nt=le("keys"),it=function(e){return nt[e]||(nt[e]=ye(e))},ot={},st="Object already initialized",at=u.TypeError,ct=u.WeakMap;if(rt||ue.state){var ut=ue.state||(ue.state=new ct);ut.get=ut.get,ut.has=ut.has,ut.set=ut.set,Ke=function(e,t){if(ut.has(e))throw at(st);return t.facade=e,ut.set(e,t),t},Ze=function(e){return ut.get(e)||{}},Qe=function(e){return ut.has(e)}}else{var lt=it("state");ot[lt]=!0,Ke=function(e,t){if(he(e,lt))throw at(st);return t.facade=e,qe(e,lt,t),t},Ze=function(e){return he(e,lt)?e[lt]:{}},Qe=function(e){return he(e,lt)}}var dt={set:Ke,get:Ze,has:Qe,enforce:function(e){return Qe(e)?Ze(e):Ke(e,{})},getterFor:function(e){return function(t){var r;if(!U(t)||(r=Ze(t)).type!==e)throw at("Incompatible receiver, "+e+" required");return r}}},ft=o((function(e){var t=Ye.CONFIGURABLE,r=dt.enforce,n=dt.get,i=Object.defineProperty,o=d&&!l((function(){return 8!==i((function(){}),"length",{value:8}).length})),s=String(String).split("String"),a=e.exports=function(e,n,a){"Symbol("===String(n).slice(0,7)&&(n="["+String(n).replace(/^Symbol\(([^)]*)\)/,"$1")+"]"),a&&a.getter&&(n="get "+n),a&&a.setter&&(n="set "+n),(!he(e,"name")||t&&e.name!==n)&&(d?i(e,"name",{value:n,configurable:!0}):e.name=n),o&&a&&he(a,"arity")&&e.length!==a.arity&&i(e,"length",{value:a.arity});try{a&&he(a,"constructor")&&a.constructor?d&&i(e,"prototype",{writable:!1}):e.prototype&&(e.prototype=void 0)}catch(e){}var c=r(e);return he(c,"source")||(c.source=s.join("string"==typeof n?n:"")),e};Function.prototype.toString=a((function(){return B(this)&&n(this).source||et(this)}),"toString")})),pt=function(e,t,r,n){n||(n={});var i=n.enumerable,o=void 0!==n.name?n.name:t;if(B(r)&&ft(r,o,n),n.global)i?e[t]=r:ae(t,r);else{try{n.unsafe?e[t]&&(i=!0):delete e[t]}catch(e){}i?e[t]=r:$e.f(e,t,{value:r,enumerable:!1,configurable:!n.nonConfigurable,writable:!n.nonWritable})}return e},ht=Math.ceil,gt=Math.floor,mt=Math.trunc||function(e){var t=+e;return(t>0?gt:ht)(t)},vt=function(e){var t=+e;return t!=t||0===t?0:mt(t)},yt=Math.max,bt=Math.min,wt=Math.min,St=function(e){return e>0?wt(vt(e),9007199254740991):0},Ct=function(e){return St(e.length)},Et=function(e){return function(t,r,n){var i,o=L(t),s=Ct(o),a=function(e,t){var r=vt(e);return r<0?yt(r+t,0):bt(r,t)}(n,s);if(e&&r!=r){for(;s>a;)if((i=o[a++])!=i)return!0}else for(;s>a;a++)if((e||a in o)&&o[a]===r)return e||a||0;return!e&&-1}},xt={includes:Et(!0),indexOf:Et(!1)},Tt=xt.indexOf,It=E([].push),Pt=function(e,t){var r,n=L(e),i=0,o=[];for(r in n)!he(ot,r)&&he(n,r)&&It(o,r);for(;t.length>i;)he(n,r=t[i++])&&(~Tt(o,r)||It(o,r));return o},Rt=["constructor","hasOwnProperty","isPrototypeOf","propertyIsEnumerable","toLocaleString","toString","valueOf"],kt=Rt.concat("length","prototype"),Ot={f:Object.getOwnPropertyNames||function(e){return Pt(e,kt)}},At={f:Object.getOwnPropertySymbols},Dt=E([].concat),Lt=V("Reflect","ownKeys")||function(e){var t=Ot.f(Be(e)),r=At.f;return r?Dt(t,r(e)):t},jt=function(e,t,r){for(var n=Lt(t),i=$e.f,o=Le.f,s=0;s<n.length;s++){var a=n[s];he(e,a)||r&&he(r,a)||i(e,a,o(t,a))}},Mt=/#|\.prototype\./,Nt=function(e,t){var r=_t[Bt(e)];return r==Ft||r!=Ut&&(B(t)?l(t):!!t)},Bt=Nt.normalize=function(e){return String(e).replace(Mt,".").toLowerCase()},_t=Nt.data={},Ut=Nt.NATIVE="N",Ft=Nt.POLYFILL="P",Vt=Nt,zt=Le.f,Gt=function(e,t){var r,n,i,o,s,a=e.target,c=e.global,l=e.stat;if(r=c?u:l?u[a]||ae(a,{}):(u[a]||{}).prototype)for(n in t){if(o=t[n],i=e.dontCallGetSet?(s=zt(r,n))&&s.value:r[n],!Vt(c?n:a+(l?".":"#")+n,e.forced)&&void 0!==i){if(typeof o==typeof i)continue;jt(o,i)}(e.sham||i&&i.sham)&&qe(o,"sham",!0),pt(r,n,o,e)}},$t=Function.prototype,qt=$t.apply,Xt=$t.call,Ht="object"==typeof Reflect&&Reflect.apply||(f?Xt.bind(qt):function(){return Xt.apply(qt,arguments)}),Wt=Array.isArray||function(e){return"Array"==I(e)},Yt=E([].slice),Jt=V("JSON","stringify"),Kt=E(/./.exec),Zt=E("".charAt),Qt=E("".charCodeAt),er=E("".replace),tr=E(1..toString),rr=/[\uD800-\uDFFF]/g,nr=/^[\uD800-\uDBFF]$/,ir=/^[\uDC00-\uDFFF]$/,or=!J||l((function(){var e=V("Symbol")();return"[null]"!=Jt([e])||"{}"!=Jt({a:e})||"{}"!=Jt(Object(e))})),sr=l((function(){return'"\\udf06\\ud834"'!==Jt("\udf06\ud834")||'"\\udead"'!==Jt("\udead")})),ar=function(e,t){var r=Yt(arguments),n=t;if((U(t)||void 0!==e)&&!Q(e))return Wt(t)||(t=function(e,t){if(B(n)&&(t=h(n,this,e,t)),!Q(t))return t}),r[1]=t,Ht(Jt,null,r)},cr=function(e,t,r){var n=Zt(r,t-1),i=Zt(r,t+1);return Kt(nr,e)&&!Kt(ir,i)||Kt(ir,e)&&!Kt(nr,n)?"\\u"+tr(Qt(e,0),16):e};Jt&&Gt({target:"JSON",stat:!0,arity:3,forced:or||sr},{stringify:function(e,t,r){var n=Yt(arguments),i=Ht(or?ar:Jt,null,n);return sr&&"string"==typeof i?er(i,rr,cr):i}});var ur,lr={CSSRuleList:0,CSSStyleDeclaration:0,CSSValueList:0,ClientRectList:0,DOMRectList:0,DOMStringList:0,DOMTokenList:1,DataTransferItemList:0,FileList:0,HTMLAllCollection:0,HTMLCollection:0,HTMLFormElement:0,HTMLSelectElement:0,MediaList:0,MimeTypeArray:0,NamedNodeMap:0,NodeList:1,PaintRequestList:0,Plugin:0,PluginArray:0,SVGLengthList:0,SVGNumberList:0,SVGPathSegList:0,SVGPointList:0,SVGStringList:0,SVGTransformList:0,SourceBufferList:0,StyleSheetList:0,TextTrackCueList:0,TextTrackList:0,TouchList:0},dr=Oe("span").classList,fr=dr&&dr.constructor&&dr.constructor.prototype,pr=fr===Object.prototype?void 0:fr,hr=Object.keys||function(e){return Pt(e,Rt)},gr=d&&!je?Object.defineProperties:function(e,t){Be(e);for(var r,n=L(t),i=hr(t),o=i.length,s=0;o>s;)$e.f(e,r=i[s++],n[r]);return e},mr={f:gr},vr=V("document","documentElement"),yr="prototype",br="script",wr=it("IE_PROTO"),Sr=function(){},Cr=function(e){return"<"+br+">"+e+"</"+br+">"},Er=function(e){e.write(Cr("")),e.close();var t=e.parentWindow.Object;return e=null,t},xr=function(){try{ur=new ActiveXObject("htmlfile")}catch(e){}var e,t,r;xr="undefined"!=typeof document?document.domain&&ur?Er(ur):(t=Oe("iframe"),r="java"+br+":",t.style.display="none",vr.appendChild(t),t.src=String(r),(e=t.contentWindow.document).open(),e.write(Cr("document.F=Object")),e.close(),e.F):Er(ur);for(var n=Rt.length;n--;)delete xr[yr][Rt[n]];return xr()};ot[wr]=!0;var Tr=Object.create||function(e,t){var r;return null!==e?(Sr[yr]=Be(e),r=new Sr,Sr[yr]=null,r[wr]=e):r=xr(),void 0===t?r:mr.f(r,t)},Ir=$e.f,Pr=Ee("unscopables"),Rr=Array.prototype;null==Rr[Pr]&&Ir(Rr,Pr,{configurable:!0,value:Tr(null)});var kr,Or,Ar,Dr=function(e){Rr[Pr][e]=!0},Lr={},jr=!l((function(){function e(){}return e.prototype.constructor=null,Object.getPrototypeOf(new e)!==e.prototype})),Mr=it("IE_PROTO"),Nr=Object,Br=Nr.prototype,_r=jr?Nr.getPrototypeOf:function(e){var t=fe(e);if(he(t,Mr))return t[Mr];var r=t.constructor;return B(r)&&t instanceof r?r.prototype:t instanceof Nr?Br:null},Ur=Ee("iterator"),Fr=!1;[].keys&&("next"in(Ar=[].keys())?(Or=_r(_r(Ar)))!==Object.prototype&&(kr=Or):Fr=!0);var Vr=!U(kr)||l((function(){var e={};return kr[Ur].call(e)!==e}));Vr&&(kr={}),B(kr[Ur])||pt(kr,Ur,(function(){return this}));var zr={IteratorPrototype:kr,BUGGY_SAFARI_ITERATORS:Fr},Gr=$e.f,$r=Ee("toStringTag"),qr=function(e,t,r){e&&!r&&(e=e.prototype),e&&!he(e,$r)&&Gr(e,$r,{configurable:!0,value:t})},Xr=zr.IteratorPrototype,Hr=function(){return this},Wr=function(e,t,r,n){var i=t+" Iterator";return e.prototype=Tr(Xr,{next:b(+!n,r)}),qr(e,i,!1),Lr[i]=Hr,e},Yr=String,Jr=TypeError,Kr=Object.setPrototypeOf||("__proto__"in{}?function(){var e,t=!1,r={};try{(e=E(Object.getOwnPropertyDescriptor(Object.prototype,"__proto__").set))(r,[]),t=r instanceof Array}catch(e){}return function(r,n){return Be(r),function(e){if("object"==typeof e||B(e))return e;throw Jr("Can't set "+Yr(e)+" as a prototype")}(n),t?e(r,n):r.__proto__=n,r}}():void 0),Zr=Ye.PROPER,Qr=Ye.CONFIGURABLE,en=zr.IteratorPrototype,tn=zr.BUGGY_SAFARI_ITERATORS,rn=Ee("iterator"),nn="keys",on="values",sn="entries",an=function(){return this},cn=function(e,t){return{value:e,done:t}},un=$e.f,ln="Array Iterator",dn=dt.set,fn=dt.getterFor(ln),pn=function(e,t,r,n,i,o,s){Wr(r,t,n);var a,c,u,l=function(e){if(e===i&&m)return m;if(!tn&&e in p)return p[e];switch(e){case nn:case on:case sn:return function(){return new r(this,e)}}return function(){return new r(this)}},d=t+" Iterator",f=!1,p=e.prototype,g=p[rn]||p["@@iterator"]||i&&p[i],m=!tn&&g||l(i),v="Array"==t&&p.entries||g;if(v&&(a=_r(v.call(new e)))!==Object.prototype&&a.next&&(_r(a)!==en&&(Kr?Kr(a,en):B(a[rn])||pt(a,rn,an)),qr(a,d,!0)),Zr&&i==on&&g&&g.name!==on&&(Qr?qe(p,"name",on):(f=!0,m=function(){return h(g,this)})),i)if(c={values:l(on),keys:o?m:l(nn),entries:l(sn)},s)for(u in c)(tn||f||!(u in p))&&pt(p,u,c[u]);else Gt({target:t,proto:!0,forced:tn||f},c);return p[rn]!==m&&pt(p,rn,m,{name:i}),Lr[t]=m,c}(Array,"Array",(function(e,t){dn(this,{type:ln,target:L(e),index:0,kind:t})}),(function(){var e=fn(this),t=e.target,r=e.kind,n=e.index++;return!t||n>=t.length?(e.target=void 0,cn(void 0,!0)):cn("keys"==r?n:"values"==r?t[n]:[n,t[n]],!1)}),"values"),hn=Lr.Arguments=Lr.Array;if(Dr("keys"),Dr("values"),Dr("entries"),d&&"values"!==hn.name)try{un(hn,"name",{value:"values"})}catch(e){}var gn=Ee("iterator"),mn=Ee("toStringTag"),vn=pn.values,yn=function(e,t){if(e){if(e[gn]!==vn)try{qe(e,gn,vn)}catch(t){e[gn]=vn}if(e[mn]||qe(e,mn,t),lr[t])for(var r in pn)if(e[r]!==pn[r])try{qe(e,r,pn[r])}catch(t){e[r]=pn[r]}}};for(var bn in lr)yn(u[bn]&&u[bn].prototype,bn);yn(pr,"DOMTokenList");var wn=o((function(e){!function(t){var r,n={};n.VERSION="1.6.1";var i={},o=function(e,t){return function(){return t.apply(e,arguments)}},s=function(){var e,t,r=arguments,n=r[0];for(t=1;t<r.length;t++)for(e in r[t])!(e in n)&&r[t].hasOwnProperty(e)&&(n[e]=r[t][e]);return n},a=function(e,t){return{value:e,name:t}};n.TRACE=a(1,"TRACE"),n.DEBUG=a(2,"DEBUG"),n.INFO=a(3,"INFO"),n.TIME=a(4,"TIME"),n.WARN=a(5,"WARN"),n.ERROR=a(8,"ERROR"),n.OFF=a(99,"OFF");var c=function(e){this.context=e,this.setLevel(e.filterLevel),this.log=this.info};c.prototype={setLevel:function(e){e&&"value"in e&&(this.context.filterLevel=e)},getLevel:function(){return this.context.filterLevel},enabledFor:function(e){var t=this.context.filterLevel;return e.value>=t.value},trace:function(){this.invoke(n.TRACE,arguments)},debug:function(){this.invoke(n.DEBUG,arguments)},info:function(){this.invoke(n.INFO,arguments)},warn:function(){this.invoke(n.WARN,arguments)},error:function(){this.invoke(n.ERROR,arguments)},time:function(e){"string"==typeof e&&e.length>0&&this.invoke(n.TIME,[e,"start"])},timeEnd:function(e){"string"==typeof e&&e.length>0&&this.invoke(n.TIME,[e,"end"])},invoke:function(e,t){r&&this.enabledFor(e)&&r(t,s({level:e},this.context))}};var u,l=new c({filterLevel:n.OFF});(u=n).enabledFor=o(l,l.enabledFor),u.trace=o(l,l.trace),u.debug=o(l,l.debug),u.time=o(l,l.time),u.timeEnd=o(l,l.timeEnd),u.info=o(l,l.info),u.warn=o(l,l.warn),u.error=o(l,l.error),u.log=u.info,n.setHandler=function(e){r=e},n.setLevel=function(e){for(var t in l.setLevel(e),i)i.hasOwnProperty(t)&&i[t].setLevel(e)},n.getLevel=function(){return l.getLevel()},n.get=function(e){return i[e]||(i[e]=new c(s({name:e},l.context)))},n.createDefaultHandler=function(e){(e=e||{}).formatter=e.formatter||function(e,t){t.name&&e.unshift("["+t.name+"]")};var t={},r=function(e,t){Function.prototype.apply.call(e,console,t)};return"undefined"==typeof console?function(){}:function(i,o){i=Array.prototype.slice.call(i);var s,a=console.log;o.level===n.TIME?(s=(o.name?"["+o.name+"] ":"")+i[0],"start"===i[1]?console.time?console.time(s):t[s]=(new Date).getTime():console.timeEnd?console.timeEnd(s):r(a,[s+": "+((new Date).getTime()-t[s])+"ms"])):(o.level===n.WARN&&console.warn?a=console.warn:o.level===n.ERROR&&console.error?a=console.error:o.level===n.INFO&&console.info?a=console.info:o.level===n.DEBUG&&console.debug?a=console.debug:o.level===n.TRACE&&console.trace&&(a=console.trace),e.formatter(i,o),r(a,i))}},n.useDefaults=function(e){n.setLevel(e&&e.defaultLevel||n.DEBUG),n.setHandler(n.createDefaultHandler(e))},n.setDefaults=n.useDefaults,e.exports?e.exports=n:(n._prevLogger=t.Logger,n.noConflict=function(){return t.Logger=n._prevLogger,n},t.Logger=n)}(i)}));function Sn(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,n)}return r}function Cn(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?Sn(Object(r),!0).forEach((function(t){n(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):Sn(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}wn.useDefaults({defaultLevel:wn.TRACE});const En=(e,t)=>{e.unshift("[".concat(t.name||"Global","] ").concat((new Date).toISOString()," - ").concat(t.level.name," -"))},xn=(e,t)=>t?e.value>=kn[t].value:e.value>=Rn.value,Tn=wn.createDefaultHandler({formatter:En});wn.setHandler(((e,t)=>{((e,t)=>{e=(e=Array.prototype.slice.call(e)).map((e=>"object"==typeof e?JSON.stringify(e):e)),En(e,t),0!==In?(Pn.push(e.join(" ")),Pn.length>=In&&(Pn=Pn.slice(-In))):Pn=[]})(e,t),xn(t.level,t.name)&&Tn(e,t);for(const{handler:r,level:n}of On)t.level.value>=n.value&&r(e,t)}));let In=1e4,Pn=[],Rn=wn.OFF;const kn={},On=[],An=Cn(Cn({},wn),{},{enabledFor:xn,getHistory:()=>Pn,getHistoryMaxSize:()=>In,setHistoryMaxSize:e=>{In=e},setLevel:e=>{Rn=e;for(const t in kn)kn[t]=e},getLevel:()=>Rn,get:e=>{kn[e]||(kn[e]=Rn);const t=wn.get(e);return t.setLevel=t=>{kn[e]=t},t.getLevel=()=>kn[e],t},setHandler:(e,t)=>{On.push({handler:e,level:t})}});var Dn="process"==I(u.process),Ln=Ee("species"),jn=function(e){var t=V(e),r=$e.f;d&&t&&!t[Ln]&&r(t,Ln,{configurable:!0,get:function(){return this}})},Mn=TypeError,Nn={};Nn[Ee("toStringTag")]="z";var Bn="[object z]"===String(Nn),_n=Ee("toStringTag"),Un=Object,Fn="Arguments"==I(function(){return arguments}()),Vn=Bn?I:function(e){var t,r,n;return void 0===e?"Undefined":null===e?"Null":"string"==typeof(r=function(e,t){try{return e[t]}catch(e){}}(t=Un(e),_n))?r:Fn?I(t):"Object"==(n=I(t))&&B(t.callee)?"Arguments":n},zn=function(){},Gn=[],$n=V("Reflect","construct"),qn=/^\s*(?:class|function)\b/,Xn=E(qn.exec),Hn=!qn.exec(zn),Wn=function(e){if(!B(e))return!1;try{return $n(zn,Gn,e),!0}catch(e){return!1}},Yn=function(e){if(!B(e))return!1;switch(Vn(e)){case"AsyncFunction":case"GeneratorFunction":case"AsyncGeneratorFunction":return!1}try{return Hn||!!Xn(qn,et(e))}catch(e){return!0}};Yn.sham=!0;var Jn,Kn,Zn,Qn,ei=!$n||l((function(){var e;return Wn(Wn.call)||!Wn(Object)||!Wn((function(){e=!0}))||e}))?Yn:Wn,ti=TypeError,ri=Ee("species"),ni=function(e,t){var r,n=Be(e).constructor;return void 0===n||O(r=Be(n)[ri])?t:function(e){if(ei(e))return e;throw ti(te(e)+" is not a constructor")}(r)},ii=function(e){if("Function"===I(e))return E(e)},oi=ii(ii.bind),si=function(e,t){return ne(e),void 0===t?e:f?oi(e,t):function(){return e.apply(t,arguments)}},ai=TypeError,ci=function(e,t){if(e<t)throw ai("Not enough arguments");return e},ui=/(?:ipad|iphone|ipod).*applewebkit/i.test(G),li=u.setImmediate,di=u.clearImmediate,fi=u.process,pi=u.Dispatch,hi=u.Function,gi=u.MessageChannel,mi=u.String,vi=0,yi={},bi="onreadystatechange";try{Jn=u.location}catch(e){}var wi=function(e){if(he(yi,e)){var t=yi[e];delete yi[e],t()}},Si=function(e){return function(){wi(e)}},Ci=function(e){wi(e.data)},Ei=function(e){u.postMessage(mi(e),Jn.protocol+"//"+Jn.host)};li&&di||(li=function(e){ci(arguments.length,1);var t=B(e)?e:hi(e),r=Yt(arguments,1);return yi[++vi]=function(){Ht(t,void 0,r)},Kn(vi),vi},di=function(e){delete yi[e]},Dn?Kn=function(e){fi.nextTick(Si(e))}:pi&&pi.now?Kn=function(e){pi.now(Si(e))}:gi&&!ui?(Qn=(Zn=new gi).port2,Zn.port1.onmessage=Ci,Kn=si(Qn.postMessage,Qn)):u.addEventListener&&B(u.postMessage)&&!u.importScripts&&Jn&&"file:"!==Jn.protocol&&!l(Ei)?(Kn=Ei,u.addEventListener("message",Ci,!1)):Kn=bi in Oe("script")?function(e){vr.appendChild(Oe("script"))[bi]=function(){vr.removeChild(this),wi(e)}}:function(e){setTimeout(Si(e),0)});var xi,Ti,Ii,Pi,Ri,ki,Oi,Ai,Di={set:li,clear:di},Li=/ipad|iphone|ipod/i.test(G)&&void 0!==u.Pebble,ji=/web0s(?!.*chrome)/i.test(G),Mi=Le.f,Ni=Di.set,Bi=u.MutationObserver||u.WebKitMutationObserver,_i=u.document,Ui=u.process,Fi=u.Promise,Vi=Mi(u,"queueMicrotask"),zi=Vi&&Vi.value;zi||(xi=function(){var e,t;for(Dn&&(e=Ui.domain)&&e.exit();Ti;){t=Ti.fn,Ti=Ti.next;try{t()}catch(e){throw Ti?Pi():Ii=void 0,e}}Ii=void 0,e&&e.enter()},ui||Dn||ji||!Bi||!_i?!Li&&Fi&&Fi.resolve?((Oi=Fi.resolve(void 0)).constructor=Fi,Ai=si(Oi.then,Oi),Pi=function(){Ai(xi)}):Dn?Pi=function(){Ui.nextTick(xi)}:(Ni=si(Ni,u),Pi=function(){Ni(xi)}):(Ri=!0,ki=_i.createTextNode(""),new Bi(xi).observe(ki,{characterData:!0}),Pi=function(){ki.data=Ri=!Ri}));var Gi=zi||function(e){var t={fn:e,next:void 0};Ii&&(Ii.next=t),Ti||(Ti=t,Pi()),Ii=t},$i=function(e){try{return{error:!1,value:e()}}catch(e){return{error:!0,value:e}}},qi=function(){this.head=null,this.tail=null};qi.prototype={add:function(e){var t={item:e,next:null};this.head?this.tail.next=t:this.head=t,this.tail=t},get:function(){var e=this.head;if(e)return this.head=e.next,this.tail===e&&(this.tail=null),e.item}};var Xi=qi,Hi=u.Promise,Wi="object"==typeof Deno&&Deno&&"object"==typeof Deno.version,Yi=!Wi&&!Dn&&"object"==typeof window&&"object"==typeof document;Hi&&Hi.prototype;var Ji,Ki,Zi,Qi=Ee("species"),eo=!1,to=B(u.PromiseRejectionEvent),ro=Vt("Promise",(function(){var e=et(Hi),t=e!==String(Hi);if(!t&&66===Y)return!0;if(!Y||Y<51||!/native code/.test(e)){var r=new Hi((function(e){e(1)})),n=function(e){e((function(){}),(function(){}))};if((r.constructor={})[Qi]=n,!(eo=r.then((function(){}))instanceof n))return!0}return!t&&(Yi||Wi)&&!to})),no={CONSTRUCTOR:ro,REJECTION_EVENT:to,SUBCLASSING:eo},io=TypeError,oo=function(e){var t,r;this.promise=new e((function(e,n){if(void 0!==t||void 0!==r)throw io("Bad Promise constructor");t=e,r=n})),this.resolve=ne(t),this.reject=ne(r)},so={f:function(e){return new oo(e)}},ao=Di.set,co="Promise",uo=no.CONSTRUCTOR,lo=no.REJECTION_EVENT,fo=no.SUBCLASSING,po=dt.getterFor(co),ho=dt.set,go=Hi&&Hi.prototype,mo=Hi,vo=go,yo=u.TypeError,bo=u.document,wo=u.process,So=so.f,Co=So,Eo=!!(bo&&bo.createEvent&&u.dispatchEvent),xo="unhandledrejection",To=function(e){var t;return!(!U(e)||!B(t=e.then))&&t},Io=function(e,t){var r,n,i,o=t.value,s=1==t.state,a=s?e.ok:e.fail,c=e.resolve,u=e.reject,l=e.domain;try{a?(s||(2===t.rejection&&Ao(t),t.rejection=1),!0===a?r=o:(l&&l.enter(),r=a(o),l&&(l.exit(),i=!0)),r===e.promise?u(yo("Promise-chain cycle")):(n=To(r))?h(n,r,c,u):c(r)):u(o)}catch(e){l&&!i&&l.exit(),u(e)}},Po=function(e,t){e.notified||(e.notified=!0,Gi((function(){for(var r,n=e.reactions;r=n.get();)Io(r,e);e.notified=!1,t&&!e.rejection&&ko(e)})))},Ro=function(e,t,r){var n,i;Eo?((n=bo.createEvent("Event")).promise=t,n.reason=r,n.initEvent(e,!1,!0),u.dispatchEvent(n)):n={promise:t,reason:r},!lo&&(i=u["on"+e])?i(n):e===xo&&function(e,t){var r=u.console;r&&r.error&&(1==arguments.length?r.error(e):r.error(e,t))}("Unhandled promise rejection",r)},ko=function(e){h(ao,u,(function(){var t,r=e.facade,n=e.value;if(Oo(e)&&(t=$i((function(){Dn?wo.emit("unhandledRejection",n,r):Ro(xo,r,n)})),e.rejection=Dn||Oo(e)?2:1,t.error))throw t.value}))},Oo=function(e){return 1!==e.rejection&&!e.parent},Ao=function(e){h(ao,u,(function(){var t=e.facade;Dn?wo.emit("rejectionHandled",t):Ro("rejectionhandled",t,e.value)}))},Do=function(e,t,r){return function(n){e(t,n,r)}},Lo=function(e,t,r){e.done||(e.done=!0,r&&(e=r),e.value=t,e.state=2,Po(e,!0))},jo=function(e,t,r){if(!e.done){e.done=!0,r&&(e=r);try{if(e.facade===t)throw yo("Promise can't be resolved itself");var n=To(t);n?Gi((function(){var r={done:!1};try{h(n,t,Do(jo,r,e),Do(Lo,r,e))}catch(t){Lo(r,t,e)}})):(e.value=t,e.state=1,Po(e,!1))}catch(t){Lo({done:!1},t,e)}}};if(uo&&(vo=(mo=function(e){!function(e,t){if(z(t,e))return e;throw Mn("Incorrect invocation")}(this,vo),ne(e),h(Ji,this);var t=po(this);try{e(Do(jo,t),Do(Lo,t))}catch(e){Lo(t,e)}}).prototype,(Ji=function(e){ho(this,{type:co,done:!1,notified:!1,parent:!1,reactions:new Xi,rejection:!1,state:0,value:void 0})}).prototype=pt(vo,"then",(function(e,t){var r=po(this),n=So(ni(this,mo));return r.parent=!0,n.ok=!B(e)||e,n.fail=B(t)&&t,n.domain=Dn?wo.domain:void 0,0==r.state?r.reactions.add(n):Gi((function(){Io(n,r)})),n.promise})),Ki=function(){var e=new Ji,t=po(e);this.promise=e,this.resolve=Do(jo,t),this.reject=Do(Lo,t)},so.f=So=function(e){return e===mo||undefined===e?new Ki(e):Co(e)},B(Hi)&&go!==Object.prototype)){Zi=go.then,fo||pt(go,"then",(function(e,t){var r=this;return new mo((function(e,t){h(Zi,r,e,t)})).then(e,t)}),{unsafe:!0});try{delete go.constructor}catch(e){}Kr&&Kr(go,vo)}Gt({global:!0,constructor:!0,wrap:!0,forced:uo},{Promise:mo}),qr(mo,co,!1),jn(co);var Mo=Ee("iterator"),No=Array.prototype,Bo=Ee("iterator"),_o=function(e){if(!O(e))return ie(e,Bo)||ie(e,"@@iterator")||Lr[Vn(e)]},Uo=TypeError,Fo=function(e,t,r){var n,i;Be(e);try{if(!(n=ie(e,"return"))){if("throw"===t)throw r;return r}n=h(n,e)}catch(e){i=!0,n=e}if("throw"===t)throw r;if(i)throw n;return Be(n),r},Vo=TypeError,zo=function(e,t){this.stopped=e,this.result=t},Go=zo.prototype,$o=function(e,t,r){var n,i,o,s,a,c,u,l,d=r&&r.that,f=!(!r||!r.AS_ENTRIES),p=!(!r||!r.IS_RECORD),g=!(!r||!r.IS_ITERATOR),m=!(!r||!r.INTERRUPTED),v=si(t,d),y=function(e){return n&&Fo(n,"normal",e),new zo(!0,e)},b=function(e){return f?(Be(e),m?v(e[0],e[1],y):v(e[0],e[1])):m?v(e,y):v(e)};if(p)n=e.iterator;else if(g)n=e;else{if(!(i=_o(e)))throw Vo(te(e)+" is not iterable");if(void 0!==(l=i)&&(Lr.Array===l||No[Mo]===l)){for(o=0,s=Ct(e);s>o;o++)if((a=b(e[o]))&&z(Go,a))return a;return new zo(!1)}n=function(e,t){var r=arguments.length<2?_o(e):t;if(ne(r))return Be(h(r,e));throw Uo(te(e)+" is not iterable")}(e,i)}for(c=p?e.next:n.next;!(u=h(c,n)).done;){try{a=b(u.value)}catch(e){Fo(n,"throw",e)}if("object"==typeof a&&a&&z(Go,a))return a}return new zo(!1)},qo=Ee("iterator"),Xo=!1;try{var Ho=0,Wo={next:function(){return{done:!!Ho++}},return:function(){Xo=!0}};Wo[qo]=function(){return this},Array.from(Wo,(function(){throw 2}))}catch(e){}var Yo=no.CONSTRUCTOR||!function(e,t){if(!t&&!Xo)return!1;var r=!1;try{var n={};n[qo]=function(){return{next:function(){return{done:r=!0}}}},e(n)}catch(e){}return r}((function(e){Hi.all(e).then(void 0,(function(){}))}));Gt({target:"Promise",stat:!0,forced:Yo},{all:function(e){var t=this,r=so.f(t),n=r.resolve,i=r.reject,o=$i((function(){var r=ne(t.resolve),o=[],s=0,a=1;$o(e,(function(e){var c=s++,u=!1;a++,h(r,t,e).then((function(e){u||(u=!0,o[c]=e,--a||n(o))}),i)})),--a||n(o)}));return o.error&&i(o.value),r.promise}});var Jo=no.CONSTRUCTOR,Ko=Hi&&Hi.prototype;if(Gt({target:"Promise",proto:!0,forced:Jo,real:!0},{catch:function(e){return this.then(void 0,e)}}),B(Hi)){var Zo=V("Promise").prototype.catch;Ko.catch!==Zo&&pt(Ko,"catch",Zo,{unsafe:!0})}Gt({target:"Promise",stat:!0,forced:Yo},{race:function(e){var t=this,r=so.f(t),n=r.reject,i=$i((function(){var i=ne(t.resolve);$o(e,(function(e){h(i,t,e).then(r.resolve,n)}))}));return i.error&&n(i.value),r.promise}}),Gt({target:"Promise",stat:!0,forced:no.CONSTRUCTOR},{reject:function(e){var t=so.f(this);return h(t.reject,void 0,e),t.promise}});var Qo=no.CONSTRUCTOR;V("Promise"),Gt({target:"Promise",stat:!0,forced:Qo},{resolve:function(e){return function(e,t){if(Be(e),U(t)&&t.constructor===e)return t;var r=so.f(e);return(0,r.resolve)(t),r.promise}(this,e)}});var es=$e.f,ts=function(e,t,r){r in e||es(e,r,{configurable:!0,get:function(){return t[r]},set:function(e){t[r]=e}})},rs=function(e,t,r){var n,i;return Kr&&B(n=t.constructor)&&n!==r&&U(i=n.prototype)&&i!==r.prototype&&Kr(e,i),e},ns=String,is=function(e){if("Symbol"===Vn(e))throw TypeError("Cannot convert a Symbol value to a string");return ns(e)},os=function(e,t){return void 0===e?arguments.length<2?"":t:is(e)},ss=function(e,t){U(t)&&"cause"in t&&qe(e,"cause",t.cause)},as=Error,cs=E("".replace),us=String(as("zxcasd").stack),ls=/\n\s*at [^:]*:[^\n]*/,ds=ls.test(us),fs=function(e,t){if(ds&&"string"==typeof e&&!as.prepareStackTrace)for(;t--;)e=cs(e,ls,"");return e},ps=!l((function(){var e=Error("a");return!("stack"in e)||(Object.defineProperty(e,"stack",b(1,7)),7!==e.stack)})),hs=function(e,t,r,n){var i="stackTraceLimit",o=n?2:1,s=e.split("."),a=s[s.length-1],c=V.apply(null,s);if(c){var u=c.prototype;if(he(u,"cause")&&delete u.cause,!r)return c;var l=V("Error"),f=t((function(e,t){var r=os(n?t:e,void 0),i=n?new c(e):new c;return void 0!==r&&qe(i,"message",r),ps&&qe(i,"stack",fs(i.stack,2)),this&&z(u,this)&&rs(i,this,f),arguments.length>o&&ss(i,arguments[o]),i}));f.prototype=u,"Error"!==a?Kr?Kr(f,l):jt(f,l,{name:!0}):d&&i in c&&(ts(f,c,i),ts(f,c,"prepareStackTrace")),jt(f,c);try{u.name!==a&&qe(u,"name",a),u.constructor=f}catch(e){}return f}},gs="WebAssembly",ms=u[gs],vs=7!==Error("e",{cause:7}).cause,ys=function(e,t){var r={};r[e]=hs(e,t,vs),Gt({global:!0,constructor:!0,arity:1,forced:vs},r)},bs=function(e,t){if(ms&&ms[e]){var r={};r[e]=hs(gs+"."+e,t,vs),Gt({target:gs,stat:!0,constructor:!0,arity:1,forced:vs},r)}};ys("Error",(function(e){return function(t){return Ht(e,this,arguments)}})),ys("EvalError",(function(e){return function(t){return Ht(e,this,arguments)}})),ys("RangeError",(function(e){return function(t){return Ht(e,this,arguments)}})),ys("ReferenceError",(function(e){return function(t){return Ht(e,this,arguments)}})),ys("SyntaxError",(function(e){return function(t){return Ht(e,this,arguments)}})),ys("TypeError",(function(e){return function(t){return Ht(e,this,arguments)}})),ys("URIError",(function(e){return function(t){return Ht(e,this,arguments)}})),bs("CompileError",(function(e){return function(t){return Ht(e,this,arguments)}})),bs("LinkError",(function(e){return function(t){return Ht(e,this,arguments)}})),bs("RuntimeError",(function(e){return function(t){return Ht(e,this,arguments)}}));var ws=Ee("match"),Ss=function(e){var t;return U(e)&&(void 0!==(t=e[ws])?!!t:"RegExp"==I(e))},Cs=function(){var e=Be(this),t="";return e.hasIndices&&(t+="d"),e.global&&(t+="g"),e.ignoreCase&&(t+="i"),e.multiline&&(t+="m"),e.dotAll&&(t+="s"),e.unicode&&(t+="u"),e.unicodeSets&&(t+="v"),e.sticky&&(t+="y"),t},Es=RegExp.prototype,xs=function(e){var t=e.flags;return void 0!==t||"flags"in Es||he(e,"flags")||!z(Es,e)?t:h(Cs,e)},Ts=u.RegExp,Is=l((function(){var e=Ts("a","y");return e.lastIndex=2,null!=e.exec("abcd")})),Ps=Is||l((function(){return!Ts("a","y").sticky})),Rs={BROKEN_CARET:Is||l((function(){var e=Ts("^r","gy");return e.lastIndex=2,null!=e.exec("str")})),MISSED_STICKY:Ps,UNSUPPORTED_Y:Is},ks=u.RegExp,Os=l((function(){var e=ks(".","s");return!(e.dotAll&&e.exec("\n")&&"s"===e.flags)})),As=u.RegExp,Ds=l((function(){var e=As("(?<a>b)","g");return"b"!==e.exec("b").groups.a||"bc"!=="b".replace(e,"$<a>c")})),Ls=Ot.f,js=dt.enforce,Ms=Ee("match"),Ns=u.RegExp,Bs=Ns.prototype,_s=u.SyntaxError,Us=E(Bs.exec),Fs=E("".charAt),Vs=E("".replace),zs=E("".indexOf),Gs=E("".slice),$s=/^\?<[^\s\d!#%&*+<=>@^][^\s!#%&*+<=>@^]*>/,qs=/a/g,Xs=/a/g,Hs=new Ns(qs)!==qs,Ws=Rs.MISSED_STICKY,Ys=Rs.UNSUPPORTED_Y,Js=d&&(!Hs||Ws||Os||Ds||l((function(){return Xs[Ms]=!1,Ns(qs)!=qs||Ns(Xs)==Xs||"/a/i"!=Ns(qs,"i")})));if(Vt("RegExp",Js)){for(var Ks=function(e,t){var r,n,i,o,s,a,c=z(Bs,this),u=Ss(e),l=void 0===t,d=[],f=e;if(!c&&u&&l&&e.constructor===Ks)return e;if((u||z(Bs,e))&&(e=e.source,l&&(t=xs(f))),e=void 0===e?"":is(e),t=void 0===t?"":is(t),f=e,Os&&"dotAll"in qs&&(n=!!t&&zs(t,"s")>-1)&&(t=Vs(t,/s/g,"")),r=t,Ws&&"sticky"in qs&&(i=!!t&&zs(t,"y")>-1)&&Ys&&(t=Vs(t,/y/g,"")),Ds&&(o=function(e){for(var t,r=e.length,n=0,i="",o=[],s={},a=!1,c=!1,u=0,l="";n<=r;n++){if("\\"===(t=Fs(e,n)))t+=Fs(e,++n);else if("]"===t)a=!1;else if(!a)switch(!0){case"["===t:a=!0;break;case"("===t:Us($s,Gs(e,n+1))&&(n+=2,c=!0),i+=t,u++;continue;case">"===t&&c:if(""===l||he(s,l))throw new _s("Invalid capture group name");s[l]=!0,o[o.length]=[l,u],c=!1,l="";continue}c?l+=t:i+=t}return[i,o]}(e),e=o[0],d=o[1]),s=rs(Ns(e,t),c?this:Bs,Ks),(n||i||d.length)&&(a=js(s),n&&(a.dotAll=!0,a.raw=Ks(function(e){for(var t,r=e.length,n=0,i="",o=!1;n<=r;n++)"\\"!==(t=Fs(e,n))?o||"."!==t?("["===t?o=!0:"]"===t&&(o=!1),i+=t):i+="[\\s\\S]":i+=t+Fs(e,++n);return i}(e),r)),i&&(a.sticky=!0),d.length&&(a.groups=d)),e!==f)try{qe(s,"source",""===f?"(?:)":f)}catch(e){}return s},Zs=Ls(Ns),Qs=0;Zs.length>Qs;)ts(Ks,Ns,Zs[Qs++]);Bs.constructor=Ks,Ks.prototype=Bs,pt(u,"RegExp",Ks,{constructor:!0})}jn("RegExp");var ea,ta,ra,na=dt.get,ia=RegExp.prototype,oa=TypeError;d&&Os&&(ea=ia,ta="dotAll",(ra={configurable:!0,get:function(){if(this!==ia){if("RegExp"===I(this))return!!na(this).dotAll;throw oa("Incompatible receiver, RegExp required")}}}).get&&ft(ra.get,ta,{getter:!0}),ra.set&&ft(ra.set,ta,{setter:!0}),$e.f(ea,ta,ra));var sa=dt.get,aa=le("native-string-replace",String.prototype.replace),ca=RegExp.prototype.exec,ua=ca,la=E("".charAt),da=E("".indexOf),fa=E("".replace),pa=E("".slice),ha=function(){var e=/a/,t=/b*/g;return h(ca,e,"a"),h(ca,t,"a"),0!==e.lastIndex||0!==t.lastIndex}(),ga=Rs.BROKEN_CARET,ma=void 0!==/()??/.exec("")[1];(ha||ma||ga||Os||Ds)&&(ua=function(e){var t,r,n,i,o,s,a,c=this,u=sa(c),l=is(e),d=u.raw;if(d)return d.lastIndex=c.lastIndex,t=h(ua,d,l),c.lastIndex=d.lastIndex,t;var f=u.groups,p=ga&&c.sticky,g=h(Cs,c),m=c.source,v=0,y=l;if(p&&(g=fa(g,"y",""),-1===da(g,"g")&&(g+="g"),y=pa(l,c.lastIndex),c.lastIndex>0&&(!c.multiline||c.multiline&&"\n"!==la(l,c.lastIndex-1))&&(m="(?: "+m+")",y=" "+y,v++),r=new RegExp("^(?:"+m+")",g)),ma&&(r=new RegExp("^"+m+"$(?!\\s)",g)),ha&&(n=c.lastIndex),i=h(ca,p?r:c,y),p?i?(i.input=pa(i.input,v),i[0]=pa(i[0],v),i.index=c.lastIndex,c.lastIndex+=i[0].length):c.lastIndex=0:ha&&i&&(c.lastIndex=c.global?i.index+i[0].length:n),ma&&i&&i.length>1&&h(aa,i[0],r,(function(){for(o=1;o<arguments.length-2;o++)void 0===arguments[o]&&(i[o]=void 0)})),i&&f)for(i.groups=s=Tr(null),o=0;o<f.length;o++)s[(a=f[o])[0]]=i[a[1]];return i});var va=ua;Gt({target:"RegExp",proto:!0,forced:/./.exec!==va},{exec:va});var ya=xt.includes,ba=l((function(){return!Array(1).includes()}));Gt({target:"Array",proto:!0,forced:ba},{includes:function(e){return ya(this,e,arguments.length>1?arguments[1]:void 0)}}),Dr("includes");var wa,Sa="object"==typeof Reflect?Reflect:null,Ca=Sa&&"function"==typeof Sa.apply?Sa.apply:function(e,t,r){return Function.prototype.apply.call(e,t,r)};wa=Sa&&"function"==typeof Sa.ownKeys?Sa.ownKeys:Object.getOwnPropertySymbols?function(e){return Object.getOwnPropertyNames(e).concat(Object.getOwnPropertySymbols(e))}:function(e){return Object.getOwnPropertyNames(e)};var Ea=Number.isNaN||function(e){return e!=e};function xa(){xa.init.call(this)}var Ta=xa,Ia=function(e,t){return new Promise((function(r,n){function i(r){e.removeListener(t,o),n(r)}function o(){"function"==typeof e.removeListener&&e.removeListener("error",i),r([].slice.call(arguments))}Na(e,t,o,{once:!0}),"error"!==t&&function(e,t,r){"function"==typeof e.on&&Na(e,"error",t,r)}(e,i,{once:!0})}))};xa.EventEmitter=xa,xa.prototype._events=void 0,xa.prototype._eventsCount=0,xa.prototype._maxListeners=void 0;var Pa=10;function Ra(e){if("function"!=typeof e)throw new TypeError('The "listener" argument must be of type Function. Received type '+typeof e)}function ka(e){return void 0===e._maxListeners?xa.defaultMaxListeners:e._maxListeners}function Oa(e,t,r,n){var i,o,s,a;if(Ra(r),void 0===(o=e._events)?(o=e._events=Object.create(null),e._eventsCount=0):(void 0!==o.newListener&&(e.emit("newListener",t,r.listener?r.listener:r),o=e._events),s=o[t]),void 0===s)s=o[t]=r,++e._eventsCount;else if("function"==typeof s?s=o[t]=n?[r,s]:[s,r]:n?s.unshift(r):s.push(r),(i=ka(e))>0&&s.length>i&&!s.warned){s.warned=!0;var c=new Error("Possible EventEmitter memory leak detected. "+s.length+" "+String(t)+" listeners added. Use emitter.setMaxListeners() to increase limit");c.name="MaxListenersExceededWarning",c.emitter=e,c.type=t,c.count=s.length,a=c,console&&console.warn&&console.warn(a)}return e}function Aa(){if(!this.fired)return this.target.removeListener(this.type,this.wrapFn),this.fired=!0,0===arguments.length?this.listener.call(this.target):this.listener.apply(this.target,arguments)}function Da(e,t,r){var n={fired:!1,wrapFn:void 0,target:e,type:t,listener:r},i=Aa.bind(n);return i.listener=r,n.wrapFn=i,i}function La(e,t,r){var n=e._events;if(void 0===n)return[];var i=n[t];return void 0===i?[]:"function"==typeof i?r?[i.listener||i]:[i]:r?function(e){for(var t=new Array(e.length),r=0;r<t.length;++r)t[r]=e[r].listener||e[r];return t}(i):Ma(i,i.length)}function ja(e){var t=this._events;if(void 0!==t){var r=t[e];if("function"==typeof r)return 1;if(void 0!==r)return r.length}return 0}function Ma(e,t){for(var r=new Array(t),n=0;n<t;++n)r[n]=e[n];return r}function Na(e,t,r,n){if("function"==typeof e.on)n.once?e.once(t,r):e.on(t,r);else{if("function"!=typeof e.addEventListener)throw new TypeError('The "emitter" argument must be of type EventEmitter. Received type '+typeof e);e.addEventListener(t,(function i(o){n.once&&e.removeEventListener(t,i),r(o)}))}}Object.defineProperty(xa,"defaultMaxListeners",{enumerable:!0,get:function(){return Pa},set:function(e){if("number"!=typeof e||e<0||Ea(e))throw new RangeError('The value of "defaultMaxListeners" is out of range. It must be a non-negative number. Received '+e+".");Pa=e}}),xa.init=function(){void 0!==this._events&&this._events!==Object.getPrototypeOf(this)._events||(this._events=Object.create(null),this._eventsCount=0),this._maxListeners=this._maxListeners||void 0},xa.prototype.setMaxListeners=function(e){if("number"!=typeof e||e<0||Ea(e))throw new RangeError('The value of "n" is out of range. It must be a non-negative number. Received '+e+".");return this._maxListeners=e,this},xa.prototype.getMaxListeners=function(){return ka(this)},xa.prototype.emit=function(e){for(var t=[],r=1;r<arguments.length;r++)t.push(arguments[r]);var n="error"===e,i=this._events;if(void 0!==i)n=n&&void 0===i.error;else if(!n)return!1;if(n){var o;if(t.length>0&&(o=t[0]),o instanceof Error)throw o;var s=new Error("Unhandled error."+(o?" ("+o.message+")":""));throw s.context=o,s}var a=i[e];if(void 0===a)return!1;if("function"==typeof a)Ca(a,this,t);else{var c=a.length,u=Ma(a,c);for(r=0;r<c;++r)Ca(u[r],this,t)}return!0},xa.prototype.addListener=function(e,t){return Oa(this,e,t,!1)},xa.prototype.on=xa.prototype.addListener,xa.prototype.prependListener=function(e,t){return Oa(this,e,t,!0)},xa.prototype.once=function(e,t){return Ra(t),this.on(e,Da(this,e,t)),this},xa.prototype.prependOnceListener=function(e,t){return Ra(t),this.prependListener(e,Da(this,e,t)),this},xa.prototype.removeListener=function(e,t){var r,n,i,o,s;if(Ra(t),void 0===(n=this._events))return this;if(void 0===(r=n[e]))return this;if(r===t||r.listener===t)0==--this._eventsCount?this._events=Object.create(null):(delete n[e],n.removeListener&&this.emit("removeListener",e,r.listener||t));else if("function"!=typeof r){for(i=-1,o=r.length-1;o>=0;o--)if(r[o]===t||r[o].listener===t){s=r[o].listener,i=o;break}if(i<0)return this;0===i?r.shift():function(e,t){for(;t+1<e.length;t++)e[t]=e[t+1];e.pop()}(r,i),1===r.length&&(n[e]=r[0]),void 0!==n.removeListener&&this.emit("removeListener",e,s||t)}return this},xa.prototype.off=xa.prototype.removeListener,xa.prototype.removeAllListeners=function(e){var t,r,n;if(void 0===(r=this._events))return this;if(void 0===r.removeListener)return 0===arguments.length?(this._events=Object.create(null),this._eventsCount=0):void 0!==r[e]&&(0==--this._eventsCount?this._events=Object.create(null):delete r[e]),this;if(0===arguments.length){var i,o=Object.keys(r);for(n=0;n<o.length;++n)"removeListener"!==(i=o[n])&&this.removeAllListeners(i);return this.removeAllListeners("removeListener"),this._events=Object.create(null),this._eventsCount=0,this}if("function"==typeof(t=r[e]))this.removeListener(e,t);else if(void 0!==t)for(n=t.length-1;n>=0;n--)this.removeListener(e,t[n]);return this},xa.prototype.listeners=function(e){return La(this,e,!0)},xa.prototype.rawListeners=function(e){return La(this,e,!1)},xa.listenerCount=function(e,t){return"function"==typeof e.listenerCount?e.listenerCount(t):ja.call(e,t)},xa.prototype.listenerCount=ja,xa.prototype.eventNames=function(){return this._eventsCount>0?wa(this._events):[]},Ta.once=Ia;var Ba=Fa,_a=function(e,t){var r=new Ua;return Fa(e,r,t),r},Ua=Ta.EventEmitter;function Fa(e,t,r){Array.isArray(r)||(r=[r]);var n=[];return r.forEach((function(r){var i=function(){var e=[].slice.call(arguments);e.unshift(r),t.emit.apply(t,e)};n.push(i),e.on(r,i)})),function(){r.forEach((function(t,r){e.removeListener(t,n[r])}))}}function Va(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,n)}return r}function za(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?Va(Object(r),!0).forEach((function(t){n(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):Va(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}Ba.filter=_a;const Ga=An.get("PeerConnectionStats"),$a="stats";class qa extends Ta{constructor(e){super(),this.peer=e,this.stats=null,this.emitInterval=null,this.previousStats=null}init(){Ga.info("Initializing peer connection stats"),this.emitInterval=setInterval((async()=>{const e=await this.peer.getStats();this.parseStats(e),this.emit($a,this.stats)}),1e3)}parseStats(e){this.previousStats=this.stats;const t={audio:{inbounds:[],outbounds:[]},video:{inbounds:[],outbounds:[]},raw:e};for(const r of e.values())switch(r.type){case"outbound-rtp":Xa(r,this.previousStats,t);break;case"inbound-rtp":Ha(r,this.previousStats,t);break;case"candidate-pair":r.nominated&&Wa(r,t)}this.stats=t}stop(){Ga.info("Stopping peer connection stats"),clearInterval(this.emitInterval)}}const Xa=(e,t,r)=>{var n,i;const o=Ya(e),s=Ja(e.codecId,r.raw),a=Ka(e,o);a.totalBytesSent=e.bytesSent,a.id=e.id,a.mid=e.mid;const c=t?null!==(n=null===(i=t[o].outbounds.find((e=>e.id===a.id)))||void 0===i?void 0:i.totalBytesSent)&&void 0!==n?n:0:null;a.bitrate=c?8*(e.bytesSent-c):0,"video"===o&&(a.qualityLimitationReason=e.qualityLimitationReason),r[o].outbounds.push(za(za({},s),a))},Ha=(e,t,r)=>{let n=Ya(e);const i=Ja(e.codecId,r.raw);["audio","video"].includes(n)||(n=e.id.includes("Video")?"video":"audio");const o=Ka(e,n);if(o.totalBytesReceived=e.bytesReceived,o.totalPacketsReceived=e.packetsReceived,o.totalPacketsLost=e.packetsLost,o.jitter=e.jitter,o.id=e.id,o.mid=e.mid,o.bitrate=0,o.packetsLostRatioPerSecond=0,o.packetsLostDeltaPerSecond=0,t){const r=t[n].inbounds.find((e=>e.id===o.id));if(r){const t=r.totalBytesReceived;o.bitrate=8*(e.bytesReceived-t),o.packetsLostRatioPerSecond=Za(o,r),o.packetsLostDeltaPerSecond=Qa(o,r)}}r[n].inbounds.push(za(za({},i),o))},Wa=(e,t)=>{t.totalRoundTripTime=e.totalRoundTripTime,t.currentRoundTripTime=e.currentRoundTripTime,t.availableOutgoingBitrate=e.availableOutgoingBitrate,t.candidateType=t.raw.get(e.localCandidateId).candidateType},Ya=e=>e.mediaType||e.kind,Ja=(e,t)=>{var r;const{mimeType:n}=e&&null!==(r=t.get(e))&&void 0!==r?r:{};return{mimeType:n}},Ka=(e,t)=>{const r={};return"video"===t&&(r.framesPerSecond=e.framesPerSecond,r.frameHeight=e.frameHeight,r.frameWidth=e.frameWidth),r.timestamp=e.timestamp,r},Za=(e,t)=>Qa(e,t)/(e.totalPacketsReceived-t.totalPacketsReceived),Qa=(e,t)=>e.totalPacketsLost-t.totalPacketsLost;var ec=Ee("species"),tc=RegExp.prototype,rc=E("".charAt),nc=E("".charCodeAt),ic=E("".slice),oc=function(e){return function(t,r){var n,i,o=is(D(t)),s=vt(r),a=o.length;return s<0||s>=a?e?"":void 0:(n=nc(o,s))<55296||n>56319||s+1===a||(i=nc(o,s+1))<56320||i>57343?e?rc(o,s):n:e?ic(o,s,s+2):i-56320+(n-55296<<10)+65536}},sc={codeAt:oc(!1),charAt:oc(!0)}.charAt,ac=function(e,t,r){return t+(r?sc(e,t).length:1)},cc=Math.floor,uc=E("".charAt),lc=E("".replace),dc=E("".slice),fc=/\$([$&'`]|\d{1,2}|<[^>]*>)/g,pc=/\$([$&'`]|\d{1,2})/g,hc=function(e,t,r,n,i,o){var s=r+e.length,a=n.length,c=pc;return void 0!==i&&(i=fe(i),c=fc),lc(o,c,(function(o,c){var u;switch(uc(c,0)){case"$":return"$";case"&":return e;case"`":return dc(t,0,r);case"'":return dc(t,s);case"<":u=i[dc(c,1,-1)];break;default:var l=+c;if(0===l)return o;if(l>a){var d=cc(l/10);return 0===d?o:d<=a?void 0===n[d-1]?uc(c,1):n[d-1]+uc(c,1):o}u=n[l-1]}return void 0===u?"":u}))},gc=TypeError,mc=function(e,t){var r=e.exec;if(B(r)){var n=h(r,e,t);return null!==n&&Be(n),n}if("RegExp"===I(e))return h(va,e,t);throw gc("RegExp#exec called on incompatible receiver")},vc=Ee("replace"),yc=Math.max,bc=Math.min,wc=E([].concat),Sc=E([].push),Cc=E("".indexOf),Ec=E("".slice),xc="$0"==="a".replace(/./,"$0"),Tc=!!/./[vc]&&""===/./[vc]("a","$0");!function(e,t,r,n){var i=Ee(e),o=!l((function(){var t={};return t[i]=function(){return 7},7!=""[e](t)})),s=o&&!l((function(){var t=!1,r=/a/;return"split"===e&&((r={}).constructor={},r.constructor[ec]=function(){return r},r.flags="",r[i]=/./[i]),r.exec=function(){return t=!0,null},r[i](""),!t}));if(!o||!s||r){var a=ii(/./[i]),c=t(i,""[e],(function(e,t,r,n,i){var s=ii(e),c=t.exec;return c===va||c===tc.exec?o&&!i?{done:!0,value:a(t,r,n)}:{done:!0,value:s(r,t,n)}:{done:!1}}));pt(String.prototype,e,c[0]),pt(tc,i,c[1])}n&&qe(tc[i],"sham",!0)}("replace",(function(e,t,r){var n=Tc?"$":"$0";return[function(e,r){var n=D(this),i=O(e)?void 0:ie(e,vc);return i?h(i,e,n,r):h(t,is(n),e,r)},function(e,i){var o=Be(this),s=is(e);if("string"==typeof i&&-1===Cc(i,n)&&-1===Cc(i,"$<")){var a=r(t,o,s,i);if(a.done)return a.value}var c=B(i);c||(i=is(i));var u=o.global;if(u){var l=o.unicode;o.lastIndex=0}for(var d=[];;){var f=mc(o,s);if(null===f)break;if(Sc(d,f),!u)break;""===is(f[0])&&(o.lastIndex=ac(s,St(o.lastIndex),l))}for(var p,h="",g=0,m=0;m<d.length;m++){for(var v=is((f=d[m])[0]),y=yc(bc(vt(f.index),s.length),0),b=[],w=1;w<f.length;w++)Sc(b,void 0===(p=f[w])?p:String(p));var S=f.groups;if(c){var C=wc([v],b,y,s);void 0!==S&&Sc(C,S);var E=is(Ht(i,void 0,C))}else E=hc(v,s,y,b,S,i);y>=g&&(h+=Ec(s,g,y)+E,g=y+v.length)}return h+Ec(s,g)}]}),!!l((function(){var e=/./;return e.exec=function(){var e=[];return e.groups={a:"7"},e},"7"!=="".replace(e,"$<a>")}))||!xc||Tc);var Ic,Pc="\t\n\v\f\r                　\u2028\u2029\ufeff",Rc=E("".replace),kc="["+Pc+"]",Oc=RegExp("^"+kc+kc+"*"),Ac=RegExp(kc+kc+"*$"),Dc=function(e){return function(t){var r=is(D(t));return 1&e&&(r=Rc(r,Oc,"")),2&e&&(r=Rc(r,Ac,"")),r}},Lc={start:Dc(1),end:Dc(2),trim:Dc(3)},jc=Ye.PROPER,Mc=Lc.trim;Gt({target:"String",proto:!0,forced:(Ic="trim",l((function(){return!!Pc[Ic]()||"​᠎"!=="​᠎"[Ic]()||jc&&Pc[Ic].name!==Ic})))},{trim:function(){return Mc(this)}});var Nc=Ee("matchAll"),Bc="RegExp String",_c=Bc+" Iterator",Uc=dt.set,Fc=dt.getterFor(_c),Vc=RegExp.prototype,zc=TypeError,Gc=ii("".indexOf),$c=ii("".matchAll),qc=!!$c&&!l((function(){$c("a",/./)})),Xc=Wr((function(e,t,r,n){Uc(this,{type:_c,regexp:e,string:t,global:r,unicode:n,done:!1})}),Bc,(function(){var e=Fc(this);if(e.done)return cn(void 0,!0);var t=e.regexp,r=e.string,n=mc(t,r);return null===n?(e.done=!0,cn(void 0,!0)):e.global?(""===is(n[0])&&(t.lastIndex=ac(r,St(t.lastIndex),e.unicode)),cn(n,!1)):(e.done=!0,cn(n,!1))})),Hc=function(e){var t,r,n,i=Be(this),o=is(e),s=ni(i,RegExp),a=is(xs(i));return t=new s(s===RegExp?i.source:i,a),r=!!~Gc(a,"g"),n=!!~Gc(a,"u"),t.lastIndex=St(i.lastIndex),new Xc(t,o,r,n)};Gt({target:"String",proto:!0,forced:qc},{matchAll:function(e){var t,r,n,i=D(this);if(O(e)){if(qc)return $c(i,e)}else{if(Ss(e)&&(t=is(D(xs(e))),!~Gc(t,"g")))throw zc("`.matchAll` does not allow non-global regexes");if(qc)return $c(i,e);if(n=ie(e,Nc))return h(n,e,i)}return r=is(i),new RegExp(e,"g")[Nc](r)}}),Nc in Vc||pt(Vc,Nc,Hc);var Wc=E([].reverse),Yc=[1,2];Gt({target:"Array",proto:!0,forced:String(Yc)===String(Yc.reverse())},{reverse:function(){return Wt(this)&&(this.length=this.length),Wc(this)}});var Jc=o((function(e){var t=e.exports={v:[{name:"version",reg:/^(\d*)$/}],o:[{name:"origin",reg:/^(\S*) (\d*) (\d*) (\S*) IP(\d) (\S*)/,names:["username","sessionId","sessionVersion","netType","ipVer","address"],format:"%s %s %d %s IP%d %s"}],s:[{name:"name"}],i:[{name:"description"}],u:[{name:"uri"}],e:[{name:"email"}],p:[{name:"phone"}],z:[{name:"timezones"}],r:[{name:"repeats"}],t:[{name:"timing",reg:/^(\d*) (\d*)/,names:["start","stop"],format:"%d %d"}],c:[{name:"connection",reg:/^IN IP(\d) (\S*)/,names:["version","ip"],format:"IN IP%d %s"}],b:[{push:"bandwidth",reg:/^(TIAS|AS|CT|RR|RS):(\d*)/,names:["type","limit"],format:"%s:%s"}],m:[{reg:/^(\w*) (\d*) ([\w/]*)(?: (.*))?/,names:["type","port","protocol","payloads"],format:"%s %d %s %s"}],a:[{push:"rtp",reg:/^rtpmap:(\d*) ([\w\-.]*)(?:\s*\/(\d*)(?:\s*\/(\S*))?)?/,names:["payload","codec","rate","encoding"],format:function(e){return e.encoding?"rtpmap:%d %s/%s/%s":e.rate?"rtpmap:%d %s/%s":"rtpmap:%d %s"}},{push:"fmtp",reg:/^fmtp:(\d*) ([\S| ]*)/,names:["payload","config"],format:"fmtp:%d %s"},{name:"control",reg:/^control:(.*)/,format:"control:%s"},{name:"rtcp",reg:/^rtcp:(\d*)(?: (\S*) IP(\d) (\S*))?/,names:["port","netType","ipVer","address"],format:function(e){return null!=e.address?"rtcp:%d %s IP%d %s":"rtcp:%d"}},{push:"rtcpFbTrrInt",reg:/^rtcp-fb:(\*|\d*) trr-int (\d*)/,names:["payload","value"],format:"rtcp-fb:%s trr-int %d"},{push:"rtcpFb",reg:/^rtcp-fb:(\*|\d*) ([\w-_]*)(?: ([\w-_]*))?/,names:["payload","type","subtype"],format:function(e){return null!=e.subtype?"rtcp-fb:%s %s %s":"rtcp-fb:%s %s"}},{push:"ext",reg:/^extmap:(\d+)(?:\/(\w+))?(?: (urn:ietf:params:rtp-hdrext:encrypt))? (\S*)(?: (\S*))?/,names:["value","direction","encrypt-uri","uri","config"],format:function(e){return"extmap:%d"+(e.direction?"/%s":"%v")+(e["encrypt-uri"]?" %s":"%v")+" %s"+(e.config?" %s":"")}},{name:"extmapAllowMixed",reg:/^(extmap-allow-mixed)/},{push:"crypto",reg:/^crypto:(\d*) ([\w_]*) (\S*)(?: (\S*))?/,names:["id","suite","config","sessionConfig"],format:function(e){return null!=e.sessionConfig?"crypto:%d %s %s %s":"crypto:%d %s %s"}},{name:"setup",reg:/^setup:(\w*)/,format:"setup:%s"},{name:"connectionType",reg:/^connection:(new|existing)/,format:"connection:%s"},{name:"mid",reg:/^mid:([^\s]*)/,format:"mid:%s"},{name:"msid",reg:/^msid:(.*)/,format:"msid:%s"},{name:"ptime",reg:/^ptime:(\d*(?:\.\d*)*)/,format:"ptime:%d"},{name:"maxptime",reg:/^maxptime:(\d*(?:\.\d*)*)/,format:"maxptime:%d"},{name:"direction",reg:/^(sendrecv|recvonly|sendonly|inactive)/},{name:"icelite",reg:/^(ice-lite)/},{name:"iceUfrag",reg:/^ice-ufrag:(\S*)/,format:"ice-ufrag:%s"},{name:"icePwd",reg:/^ice-pwd:(\S*)/,format:"ice-pwd:%s"},{name:"fingerprint",reg:/^fingerprint:(\S*) (\S*)/,names:["type","hash"],format:"fingerprint:%s %s"},{push:"candidates",reg:/^candidate:(\S*) (\d*) (\S*) (\d*) (\S*) (\d*) typ (\S*)(?: raddr (\S*) rport (\d*))?(?: tcptype (\S*))?(?: generation (\d*))?(?: network-id (\d*))?(?: network-cost (\d*))?/,names:["foundation","component","transport","priority","ip","port","type","raddr","rport","tcptype","generation","network-id","network-cost"],format:function(e){var t="candidate:%s %d %s %d %s %d typ %s";return t+=null!=e.raddr?" raddr %s rport %d":"%v%v",t+=null!=e.tcptype?" tcptype %s":"%v",null!=e.generation&&(t+=" generation %d"),t+=null!=e["network-id"]?" network-id %d":"%v",t+=null!=e["network-cost"]?" network-cost %d":"%v"}},{name:"endOfCandidates",reg:/^(end-of-candidates)/},{name:"remoteCandidates",reg:/^remote-candidates:(.*)/,format:"remote-candidates:%s"},{name:"iceOptions",reg:/^ice-options:(\S*)/,format:"ice-options:%s"},{push:"ssrcs",reg:/^ssrc:(\d*) ([\w_-]*)(?::(.*))?/,names:["id","attribute","value"],format:function(e){var t="ssrc:%d";return null!=e.attribute&&(t+=" %s",null!=e.value&&(t+=":%s")),t}},{push:"ssrcGroups",reg:/^ssrc-group:([\x21\x23\x24\x25\x26\x27\x2A\x2B\x2D\x2E\w]*) (.*)/,names:["semantics","ssrcs"],format:"ssrc-group:%s %s"},{name:"msidSemantic",reg:/^msid-semantic:\s?(\w*) (\S*)/,names:["semantic","token"],format:"msid-semantic: %s %s"},{push:"groups",reg:/^group:(\w*) (.*)/,names:["type","mids"],format:"group:%s %s"},{name:"rtcpMux",reg:/^(rtcp-mux)/},{name:"rtcpRsize",reg:/^(rtcp-rsize)/},{name:"sctpmap",reg:/^sctpmap:([\w_/]*) (\S*)(?: (\S*))?/,names:["sctpmapNumber","app","maxMessageSize"],format:function(e){return null!=e.maxMessageSize?"sctpmap:%s %s %s":"sctpmap:%s %s"}},{name:"xGoogleFlag",reg:/^x-google-flag:([^\s]*)/,format:"x-google-flag:%s"},{push:"rids",reg:/^rid:([\d\w]+) (\w+)(?: ([\S| ]*))?/,names:["id","direction","params"],format:function(e){return e.params?"rid:%s %s %s":"rid:%s %s"}},{push:"imageattrs",reg:new RegExp("^imageattr:(\\d+|\\*)[\\s\\t]+(send|recv)[\\s\\t]+(\\*|\\[\\S+\\](?:[\\s\\t]+\\[\\S+\\])*)(?:[\\s\\t]+(recv|send)[\\s\\t]+(\\*|\\[\\S+\\](?:[\\s\\t]+\\[\\S+\\])*))?"),names:["pt","dir1","attrs1","dir2","attrs2"],format:function(e){return"imageattr:%s %s %s"+(e.dir2?" %s %s":"")}},{name:"simulcast",reg:new RegExp("^simulcast:(send|recv) ([a-zA-Z0-9\\-_~;,]+)(?:\\s?(send|recv) ([a-zA-Z0-9\\-_~;,]+))?$"),names:["dir1","list1","dir2","list2"],format:function(e){return"simulcast:%s %s"+(e.dir2?" %s %s":"")}},{name:"simulcast_03",reg:/^simulcast:[\s\t]+([\S+\s\t]+)$/,names:["value"],format:"simulcast: %s"},{name:"framerate",reg:/^framerate:(\d+(?:$|\.\d+))/,format:"framerate:%s"},{name:"sourceFilter",reg:/^source-filter: *(excl|incl) (\S*) (IP4|IP6|\*) (\S*) (.*)/,names:["filterMode","netType","addressTypes","destAddress","srcList"],format:"source-filter: %s %s %s %s %s"},{name:"bundleOnly",reg:/^(bundle-only)/},{name:"label",reg:/^label:(.+)/,format:"label:%s"},{name:"sctpPort",reg:/^sctp-port:(\d+)$/,format:"sctp-port:%s"},{name:"maxMessageSize",reg:/^max-message-size:(\d+)$/,format:"max-message-size:%s"},{push:"tsRefClocks",reg:/^ts-refclk:([^\s=]*)(?:=(\S*))?/,names:["clksrc","clksrcExt"],format:function(e){return"ts-refclk:%s"+(null!=e.clksrcExt?"=%s":"")}},{name:"mediaClk",reg:/^mediaclk:(?:id=(\S*))? *([^\s=]*)(?:=(\S*))?(?: *rate=(\d+)\/(\d+))?/,names:["id","mediaClockName","mediaClockValue","rateNumerator","rateDenominator"],format:function(e){var t="mediaclk:";return t+=null!=e.id?"id=%s %s":"%v%s",t+=null!=e.mediaClockValue?"=%s":"",t+=null!=e.rateNumerator?" rate=%s":"",t+=null!=e.rateDenominator?"/%s":""}},{name:"keywords",reg:/^keywds:(.+)$/,format:"keywds:%s"},{name:"content",reg:/^content:(.+)/,format:"content:%s"},{name:"bfcpFloorCtrl",reg:/^floorctrl:(c-only|s-only|c-s)/,format:"floorctrl:%s"},{name:"bfcpConfId",reg:/^confid:(\d+)/,format:"confid:%s"},{name:"bfcpUserId",reg:/^userid:(\d+)/,format:"userid:%s"},{name:"bfcpFloorId",reg:/^floorid:(.+) (?:m-stream|mstrm):(.+)/,names:["id","mStream"],format:"floorid:%s mstrm:%s"},{push:"invalid",names:["value"]}]};Object.keys(t).forEach((function(e){t[e].forEach((function(e){e.reg||(e.reg=/(.*)/),e.format||(e.format="%s")}))}))})),Kc=o((function(e,t){var r=function(e){return String(Number(e))===e?Number(e):e},n=function(e,t,n){var i=e.name&&e.names;e.push&&!t[e.push]?t[e.push]=[]:i&&!t[e.name]&&(t[e.name]={});var o=e.push?{}:i?t[e.name]:t;!function(e,t,n,i){if(i&&!n)t[i]=r(e[1]);else for(var o=0;o<n.length;o+=1)null!=e[o+1]&&(t[n[o]]=r(e[o+1]))}(n.match(e.reg),o,e.names,e.name),e.push&&t[e.push].push(o)},i=RegExp.prototype.test.bind(/^([a-z])=(.*)/);t.parse=function(e){var t={},r=[],o=t;return e.split(/(\r\n|\r|\n)/).filter(i).forEach((function(e){var t=e[0],i=e.slice(2);"m"===t&&(r.push({rtp:[],fmtp:[]}),o=r[r.length-1]);for(var s=0;s<(Jc[t]||[]).length;s+=1){var a=Jc[t][s];if(a.reg.test(i))return n(a,o,i)}})),t.media=r,t};var o=function(e,t){var n=t.split(/=(.+)/,2);return 2===n.length?e[n[0]]=r(n[1]):1===n.length&&t.length>1&&(e[n[0]]=void 0),e};t.parseParams=function(e){return e.split(/;\s?/).reduce(o,{})},t.parseFmtpConfig=t.parseParams,t.parsePayloads=function(e){return e.toString().split(" ").map(Number)},t.parseRemoteCandidates=function(e){for(var t=[],n=e.split(" ").map(r),i=0;i<n.length;i+=3)t.push({component:n[i],ip:n[i+1],port:n[i+2]});return t},t.parseImageAttributes=function(e){return e.split(" ").map((function(e){return e.substring(1,e.length-1).split(",").reduce(o,{})}))},t.parseSimulcastStreamList=function(e){return e.split(";").map((function(e){return e.split(",").map((function(e){var t,n=!1;return"~"!==e[0]?t=r(e):(t=r(e.substring(1,e.length)),n=!0),{scid:t,paused:n}}))}))}})),Zc=/%[sdv%]/g,Qc=function(e){var t=1,r=arguments,n=r.length;return e.replace(Zc,(function(e){if(t>=n)return e;var i=r[t];switch(t+=1,e){case"%%":return"%";case"%s":return String(i);case"%d":return Number(i);case"%v":return""}}))},eu=function(e,t,r){var n=[e+"="+(t.format instanceof Function?t.format(t.push?r:r[t.name]):t.format)];if(t.names)for(var i=0;i<t.names.length;i+=1){var o=t.names[i];t.name?n.push(r[t.name][o]):n.push(r[t.names[i]])}else n.push(r[t.name]);return Qc.apply(null,n)},tu=["v","o","s","i","u","e","p","c","b","t","r","z","a"],ru=["i","c","b","a"],nu={write:function(e,t){t=t||{},null==e.version&&(e.version=0),null==e.name&&(e.name=" "),e.media.forEach((function(e){null==e.payloads&&(e.payloads="")}));var r=t.outerOrder||tu,n=t.innerOrder||ru,i=[];return r.forEach((function(t){Jc[t].forEach((function(r){r.name in e&&null!=e[r.name]?i.push(eu(t,r,e)):r.push in e&&null!=e[r.push]&&e[r.push].forEach((function(e){i.push(eu(t,r,e))}))}))})),e.media.forEach((function(e){i.push(eu("m",Jc.m[0],e)),n.forEach((function(t){Jc[t].forEach((function(r){r.name in e&&null!=e[r.name]?i.push(eu(t,r,e)):r.push in e&&null!=e[r.push]&&e[r.push].forEach((function(e){i.push(eu(t,r,e))}))}))}))})),i.join("\r\n")+"\r\n"},parse:Kc.parse,parseParams:Kc.parseParams,parseFmtpConfig:Kc.parseFmtpConfig,parsePayloads:Kc.parsePayloads,parseRemoteCandidates:Kc.parseRemoteCandidates,parseImageAttributes:Kc.parseImageAttributes,parseSimulcastStreamList:Kc.parseSimulcastStreamList};class iu{constructor(e,t,r,n,i,o,s,a,c){this.foundation=e,this.componentId=t,this.transport=r,this.priority=n,this.address=i,this.port=o,this.type=s,this.relAddr=a,this.relPort=c}equals(e){return e.foundation===this.foundation&&e.componentId===this.componentId&&e.transport===this.transport&&e.priority===this.priority&&e.address===this.address&&e.port===this.port&&e.type===this.type&&e.relAddr===this.relAddr&&e.relPort===this.relPort}clone(){return new iu(this.foundation,this.componentId,this.transport,this.priority,this.address,this.port,this.type,this.relAddr,this.relPort)}plain(){const e={foundation:this.foundation,componentId:this.componentId,transport:this.transport,priority:this.priority,address:this.address,port:this.port,type:this.type};return this.relAddr&&(e.relAddr=this.relAddr),this.relPort&&(e.relPort=this.relPort),e}getFoundation(){return this.foundation}getComponentId(){return this.componentId}getTransport(){return this.transport}getPriority(){return this.priority}getAddress(){return this.address}getPort(){return this.port}getType(){return this.type}getRelAddr(){return this.relAddr}getRelPort(){return this.relPort}}iu.expand=function(e){return new iu(e.foundation,e.componentId,e.transport,e.priority,e.address,e.port,e.type,e.relAddr,e.relPort)};var ou=iu;class su{constructor(e,t){this.id=e,this.params=t||[]}clone(){return new su(this.id,this.params)}plain(){return this.params.length?{id:this.id,params:this.params}:{id:this.id}}getId(){return this.id}getParams(){return this.params}}su.expand=function(e){return new su(e.id,e.params)};var au=su;class cu{constructor(e,t,r){this.codec=e,this.type=t,this.params={},this.rtcpfbs=new Set,r&&this.addParams(r)}clone(){const e=new cu(this.codec,this.type,this.params);this.hasRTX()&&e.setRTX(this.getRTX());for(const t of this.rtcpfbs)e.addRTCPFeedback(t.clone());return this.hasChannels()&&e.setChannels(this.getChannels()),e}plain(){const e={codec:this.codec,type:this.type};this.rtx&&(e.rtx=this.rtx),this.channels&&(e.channels=this.channels),Object.keys(this.params).length&&(e.params=this.params);for(const t of this.rtcpfbs)e.rtcpfbs||(e.rtcpfbs=[]),e.rtcpfbs.push(t.plain());return e}setRTX(e){this.rtx=e}getType(){return this.type}setType(e){this.type=e}getCodec(){return this.codec}getParams(){return this.params}addParams(e){for(const t in e)this.params[t]=e[t]}addParam(e,t){this.params[e]=t}hasParam(e){return this.params.hasOwnProperty(e)}getParam(e,t){return this.hasParam(e)?this.params[e]:""+t}hasRTX(){return this.rtx}getRTX(){return this.rtx}hasChannels(){return this.channels}getChannels(){return this.channels}setChannels(e){this.channels=e}addRTCPFeedback(e){this.rtcpfbs.add(e)}getRTCPFeedbacks(){return this.rtcpfbs}}cu.expand=function(e){const t=new cu(e.codec,e.type,e.params);e.rtx&&t.setRTX(e.rtx),e.channels&&t.setChannels(e.channels);for(let r=0;e.rtcpfbs&&r<e.rtcpfbs.length;++r){const n=au.expand(e.rtcpfbs[r]);t.addRTCPFeedback(n)}return t},cu.MapFromNames=function(e,t,r){const n=new Map;let i=96;for(let o=0;o<e.length;++o){let s;const a=e[o].split(";"),c=a[0].toLowerCase().trim();s="pcmu"===c?0:"pcma"===c?8:++i;const u=new cu(c,s);"opus"===c?u.setChannels(2):"multiopus"===c&&u.setChannels(6),t&&"ulpfec"!==c&&"flexfec-03"!==c&&"red"!==c&&u.setRTX(++i);for(let e=0;r&&e<r.length;++e)u.addRTCPFeedback(new au(r[e].id,r[e].params));for(let e=1;e<a.length;++e){let t=a[e].split("=");u.addParam(t[0].trim(),t[1].trim())}n.set(u.getCodec().toLowerCase(),u)}return n};var uu=cu;var lu=function e(){var t=this;if(!(this instanceof e))return new(Function.prototype.bind.apply(e,[null].concat(Array.prototype.slice.call(arguments))));Array.from(arguments).forEach((function(e){t[e]=Symbol.for("MEDOOZE_SEMANTIC_SDP_"+e)}))};const du=lu("ACTIVE","PASSIVE","ACTPASS","INACTIVE");du.byValue=function(e){switch(e){case du.ACTIVE:case du.PASSIVE:case du.ACTPASS:case du.INACTIVE:return e}return du[e.toUpperCase()]},du.toString=function(e){switch(e){case du.ACTIVE:return"active";case du.PASSIVE:return"passive";case du.ACTPASS:return"actpass";case du.INACTIVE:return"inactive"}},du.reverse=function(e){switch(e){case du.ACTIVE:return du.PASSIVE;case du.PASSIVE:return du.ACTIVE;case du.ACTPASS:return du.PASSIVE;case du.INACTIVE:return du.INACTIVE}};var fu=du;class pu{constructor(e,t,r){this.setup=e,this.hash=t,this.fingerprint=r}clone(){return new pu(this.setup,this.hash,this.fingerprint)}plain(){return{setup:fu.toString(this.setup),hash:this.hash,fingerprint:this.fingerprint}}getFingerprint(){return this.fingerprint}getHash(){return this.hash}getSetup(){return this.setup}setSetup(e){this.setup=e}}pu.expand=function(e){return new pu(e.setup?fu.byValue(e.setup):fu.ACTPASS,e.hash,e.fingerprint)};var hu=pu;class gu{constructor(e,t,r,n){this.tag=e,this.suite=t,this.keyParams=r,this.sessionParams=n}clone(){return new gu(this.tag,this.suite,this.keyParams,this.sessionParams)}plain(){return{tag:this.tag,suite:this.suite,keyParams:this.keyParams,sessionParams:this.sessionParams}}getSessionParams(){return this.sessionParams}getKeyParams(){return this.keyParams}getSuite(){return this.suite}getTag(){return this.tag}}gu.expand=function(e){return new gu(e.tag,e.suite,e.keyParams,e.sessionParams)};for(var mu=gu,vu=function(e){var t=Iu(e),r=t[0],n=t[1];return 3*(r+n)/4-n},yu=function(e){var t,r,n=Iu(e),i=n[0],o=n[1],s=new Cu(function(e,t,r){return 3*(t+r)/4-r}(0,i,o)),a=0,c=o>0?i-4:i;for(r=0;r<c;r+=4)t=Su[e.charCodeAt(r)]<<18|Su[e.charCodeAt(r+1)]<<12|Su[e.charCodeAt(r+2)]<<6|Su[e.charCodeAt(r+3)],s[a++]=t>>16&255,s[a++]=t>>8&255,s[a++]=255&t;2===o&&(t=Su[e.charCodeAt(r)]<<2|Su[e.charCodeAt(r+1)]>>4,s[a++]=255&t);1===o&&(t=Su[e.charCodeAt(r)]<<10|Su[e.charCodeAt(r+1)]<<4|Su[e.charCodeAt(r+2)]>>2,s[a++]=t>>8&255,s[a++]=255&t);return s},bu=function(e){for(var t,r=e.length,n=r%3,i=[],o=16383,s=0,a=r-n;s<a;s+=o)i.push(Pu(e,s,s+o>a?a:s+o));1===n?(t=e[r-1],i.push(wu[t>>2]+wu[t<<4&63]+"==")):2===n&&(t=(e[r-2]<<8)+e[r-1],i.push(wu[t>>10]+wu[t>>4&63]+wu[t<<2&63]+"="));return i.join("")},wu=[],Su=[],Cu="undefined"!=typeof Uint8Array?Uint8Array:Array,Eu="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",xu=0,Tu=Eu.length;xu<Tu;++xu)wu[xu]=Eu[xu],Su[Eu.charCodeAt(xu)]=xu;function Iu(e){var t=e.length;if(t%4>0)throw new Error("Invalid string. Length must be a multiple of 4");var r=e.indexOf("=");return-1===r&&(r=t),[r,r===t?0:4-r%4]}function Pu(e,t,r){for(var n,i,o=[],s=t;s<r;s+=3)n=(e[s]<<16&16711680)+(e[s+1]<<8&65280)+(255&e[s+2]),o.push(wu[(i=n)>>18&63]+wu[i>>12&63]+wu[i>>6&63]+wu[63&i]);return o.join("")}Su["-".charCodeAt(0)]=62,Su["_".charCodeAt(0)]=63;var Ru={byteLength:vu,toByteArray:yu,fromByteArray:bu},ku=function(e,t,r,n,i){var o,s,a=8*i-n-1,c=(1<<a)-1,u=c>>1,l=-7,d=r?i-1:0,f=r?-1:1,p=e[t+d];for(d+=f,o=p&(1<<-l)-1,p>>=-l,l+=a;l>0;o=256*o+e[t+d],d+=f,l-=8);for(s=o&(1<<-l)-1,o>>=-l,l+=n;l>0;s=256*s+e[t+d],d+=f,l-=8);if(0===o)o=1-u;else{if(o===c)return s?NaN:1/0*(p?-1:1);s+=Math.pow(2,n),o-=u}return(p?-1:1)*s*Math.pow(2,o-n)},Ou=function(e,t,r,n,i,o){var s,a,c,u=8*o-i-1,l=(1<<u)-1,d=l>>1,f=23===i?Math.pow(2,-24)-Math.pow(2,-77):0,p=n?0:o-1,h=n?1:-1,g=t<0||0===t&&1/t<0?1:0;for(t=Math.abs(t),isNaN(t)||t===1/0?(a=isNaN(t)?1:0,s=l):(s=Math.floor(Math.log(t)/Math.LN2),t*(c=Math.pow(2,-s))<1&&(s--,c*=2),(t+=s+d>=1?f/c:f*Math.pow(2,1-d))*c>=2&&(s++,c/=2),s+d>=l?(a=0,s=l):s+d>=1?(a=(t*c-1)*Math.pow(2,i),s+=d):(a=t*Math.pow(2,d-1)*Math.pow(2,i),s=0));i>=8;e[r+p]=255&a,p+=h,a/=256,i-=8);for(s=s<<i|a,u+=i;u>0;e[r+p]=255&s,p+=h,s/=256,u-=8);e[r+p-h]|=128*g},Au=o((function(e,t){const r="function"==typeof Symbol&&"function"==typeof Symbol.for?Symbol.for("nodejs.util.inspect.custom"):null;t.Buffer=o,t.SlowBuffer=function(e){+e!=e&&(e=0);return o.alloc(+e)},t.INSPECT_MAX_BYTES=50;const n=2147483647;function i(e){if(e>n)throw new RangeError('The value "'+e+'" is invalid for option "size"');const t=new Uint8Array(e);return Object.setPrototypeOf(t,o.prototype),t}function o(e,t,r){if("number"==typeof e){if("string"==typeof t)throw new TypeError('The "string" argument must be of type string. Received type number');return c(e)}return s(e,t,r)}function s(e,t,r){if("string"==typeof e)return function(e,t){"string"==typeof t&&""!==t||(t="utf8");if(!o.isEncoding(t))throw new TypeError("Unknown encoding: "+t);const r=0|f(e,t);let n=i(r);const s=n.write(e,t);s!==r&&(n=n.slice(0,s));return n}(e,t);if(ArrayBuffer.isView(e))return function(e){if(X(e,Uint8Array)){const t=new Uint8Array(e);return l(t.buffer,t.byteOffset,t.byteLength)}return u(e)}(e);if(null==e)throw new TypeError("The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type "+typeof e);if(X(e,ArrayBuffer)||e&&X(e.buffer,ArrayBuffer))return l(e,t,r);if("undefined"!=typeof SharedArrayBuffer&&(X(e,SharedArrayBuffer)||e&&X(e.buffer,SharedArrayBuffer)))return l(e,t,r);if("number"==typeof e)throw new TypeError('The "value" argument must not be of type number. Received type number');const n=e.valueOf&&e.valueOf();if(null!=n&&n!==e)return o.from(n,t,r);const s=function(e){if(o.isBuffer(e)){const t=0|d(e.length),r=i(t);return 0===r.length||e.copy(r,0,0,t),r}if(void 0!==e.length)return"number"!=typeof e.length||H(e.length)?i(0):u(e);if("Buffer"===e.type&&Array.isArray(e.data))return u(e.data)}(e);if(s)return s;if("undefined"!=typeof Symbol&&null!=Symbol.toPrimitive&&"function"==typeof e[Symbol.toPrimitive])return o.from(e[Symbol.toPrimitive]("string"),t,r);throw new TypeError("The first argument must be one of type string, Buffer, ArrayBuffer, Array, or Array-like Object. Received type "+typeof e)}function a(e){if("number"!=typeof e)throw new TypeError('"size" argument must be of type number');if(e<0)throw new RangeError('The value "'+e+'" is invalid for option "size"')}function c(e){return a(e),i(e<0?0:0|d(e))}function u(e){const t=e.length<0?0:0|d(e.length),r=i(t);for(let n=0;n<t;n+=1)r[n]=255&e[n];return r}function l(e,t,r){if(t<0||e.byteLength<t)throw new RangeError('"offset" is outside of buffer bounds');if(e.byteLength<t+(r||0))throw new RangeError('"length" is outside of buffer bounds');let n;return n=void 0===t&&void 0===r?new Uint8Array(e):void 0===r?new Uint8Array(e,t):new Uint8Array(e,t,r),Object.setPrototypeOf(n,o.prototype),n}function d(e){if(e>=n)throw new RangeError("Attempt to allocate Buffer larger than maximum size: 0x"+n.toString(16)+" bytes");return 0|e}function f(e,t){if(o.isBuffer(e))return e.length;if(ArrayBuffer.isView(e)||X(e,ArrayBuffer))return e.byteLength;if("string"!=typeof e)throw new TypeError('The "string" argument must be one of type string, Buffer, or ArrayBuffer. Received type '+typeof e);const r=e.length,n=arguments.length>2&&!0===arguments[2];if(!n&&0===r)return 0;let i=!1;for(;;)switch(t){case"ascii":case"latin1":case"binary":return r;case"utf8":case"utf-8":return G(e).length;case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return 2*r;case"hex":return r>>>1;case"base64":return $(e).length;default:if(i)return n?-1:G(e).length;t=(""+t).toLowerCase(),i=!0}}function p(e,t,r){let n=!1;if((void 0===t||t<0)&&(t=0),t>this.length)return"";if((void 0===r||r>this.length)&&(r=this.length),r<=0)return"";if((r>>>=0)<=(t>>>=0))return"";for(e||(e="utf8");;)switch(e){case"hex":return P(this,t,r);case"utf8":case"utf-8":return E(this,t,r);case"ascii":return T(this,t,r);case"latin1":case"binary":return I(this,t,r);case"base64":return C(this,t,r);case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return R(this,t,r);default:if(n)throw new TypeError("Unknown encoding: "+e);e=(e+"").toLowerCase(),n=!0}}function h(e,t,r){const n=e[t];e[t]=e[r],e[r]=n}function g(e,t,r,n,i){if(0===e.length)return-1;if("string"==typeof r?(n=r,r=0):r>2147483647?r=2147483647:r<-2147483648&&(r=-2147483648),H(r=+r)&&(r=i?0:e.length-1),r<0&&(r=e.length+r),r>=e.length){if(i)return-1;r=e.length-1}else if(r<0){if(!i)return-1;r=0}if("string"==typeof t&&(t=o.from(t,n)),o.isBuffer(t))return 0===t.length?-1:m(e,t,r,n,i);if("number"==typeof t)return t&=255,"function"==typeof Uint8Array.prototype.indexOf?i?Uint8Array.prototype.indexOf.call(e,t,r):Uint8Array.prototype.lastIndexOf.call(e,t,r):m(e,[t],r,n,i);throw new TypeError("val must be string, number or Buffer")}function m(e,t,r,n,i){let o,s=1,a=e.length,c=t.length;if(void 0!==n&&("ucs2"===(n=String(n).toLowerCase())||"ucs-2"===n||"utf16le"===n||"utf-16le"===n)){if(e.length<2||t.length<2)return-1;s=2,a/=2,c/=2,r/=2}function u(e,t){return 1===s?e[t]:e.readUInt16BE(t*s)}if(i){let n=-1;for(o=r;o<a;o++)if(u(e,o)===u(t,-1===n?0:o-n)){if(-1===n&&(n=o),o-n+1===c)return n*s}else-1!==n&&(o-=o-n),n=-1}else for(r+c>a&&(r=a-c),o=r;o>=0;o--){let r=!0;for(let n=0;n<c;n++)if(u(e,o+n)!==u(t,n)){r=!1;break}if(r)return o}return-1}function v(e,t,r,n){r=Number(r)||0;const i=e.length-r;n?(n=Number(n))>i&&(n=i):n=i;const o=t.length;let s;for(n>o/2&&(n=o/2),s=0;s<n;++s){const n=parseInt(t.substr(2*s,2),16);if(H(n))return s;e[r+s]=n}return s}function y(e,t,r,n){return q(G(t,e.length-r),e,r,n)}function b(e,t,r,n){return q(function(e){const t=[];for(let r=0;r<e.length;++r)t.push(255&e.charCodeAt(r));return t}(t),e,r,n)}function w(e,t,r,n){return q($(t),e,r,n)}function S(e,t,r,n){return q(function(e,t){let r,n,i;const o=[];for(let s=0;s<e.length&&!((t-=2)<0);++s)r=e.charCodeAt(s),n=r>>8,i=r%256,o.push(i),o.push(n);return o}(t,e.length-r),e,r,n)}function C(e,t,r){return 0===t&&r===e.length?Ru.fromByteArray(e):Ru.fromByteArray(e.slice(t,r))}function E(e,t,r){r=Math.min(e.length,r);const n=[];let i=t;for(;i<r;){const t=e[i];let o=null,s=t>239?4:t>223?3:t>191?2:1;if(i+s<=r){let r,n,a,c;switch(s){case 1:t<128&&(o=t);break;case 2:r=e[i+1],128==(192&r)&&(c=(31&t)<<6|63&r,c>127&&(o=c));break;case 3:r=e[i+1],n=e[i+2],128==(192&r)&&128==(192&n)&&(c=(15&t)<<12|(63&r)<<6|63&n,c>2047&&(c<55296||c>57343)&&(o=c));break;case 4:r=e[i+1],n=e[i+2],a=e[i+3],128==(192&r)&&128==(192&n)&&128==(192&a)&&(c=(15&t)<<18|(63&r)<<12|(63&n)<<6|63&a,c>65535&&c<1114112&&(o=c))}}null===o?(o=65533,s=1):o>65535&&(o-=65536,n.push(o>>>10&1023|55296),o=56320|1023&o),n.push(o),i+=s}return function(e){const t=e.length;if(t<=x)return String.fromCharCode.apply(String,e);let r="",n=0;for(;n<t;)r+=String.fromCharCode.apply(String,e.slice(n,n+=x));return r}(n)}t.kMaxLength=n,o.TYPED_ARRAY_SUPPORT=function(){try{const e=new Uint8Array(1),t={foo:function(){return 42}};return Object.setPrototypeOf(t,Uint8Array.prototype),Object.setPrototypeOf(e,t),42===e.foo()}catch(e){return!1}}(),o.TYPED_ARRAY_SUPPORT||"undefined"==typeof console||"function"!=typeof console.error||console.error("This browser lacks typed array (Uint8Array) support which is required by `buffer` v5.x. Use `buffer` v4.x if you require old browser support."),Object.defineProperty(o.prototype,"parent",{enumerable:!0,get:function(){if(o.isBuffer(this))return this.buffer}}),Object.defineProperty(o.prototype,"offset",{enumerable:!0,get:function(){if(o.isBuffer(this))return this.byteOffset}}),o.poolSize=8192,o.from=function(e,t,r){return s(e,t,r)},Object.setPrototypeOf(o.prototype,Uint8Array.prototype),Object.setPrototypeOf(o,Uint8Array),o.alloc=function(e,t,r){return function(e,t,r){return a(e),e<=0?i(e):void 0!==t?"string"==typeof r?i(e).fill(t,r):i(e).fill(t):i(e)}(e,t,r)},o.allocUnsafe=function(e){return c(e)},o.allocUnsafeSlow=function(e){return c(e)},o.isBuffer=function(e){return null!=e&&!0===e._isBuffer&&e!==o.prototype},o.compare=function(e,t){if(X(e,Uint8Array)&&(e=o.from(e,e.offset,e.byteLength)),X(t,Uint8Array)&&(t=o.from(t,t.offset,t.byteLength)),!o.isBuffer(e)||!o.isBuffer(t))throw new TypeError('The "buf1", "buf2" arguments must be one of type Buffer or Uint8Array');if(e===t)return 0;let r=e.length,n=t.length;for(let i=0,o=Math.min(r,n);i<o;++i)if(e[i]!==t[i]){r=e[i],n=t[i];break}return r<n?-1:n<r?1:0},o.isEncoding=function(e){switch(String(e).toLowerCase()){case"hex":case"utf8":case"utf-8":case"ascii":case"latin1":case"binary":case"base64":case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return!0;default:return!1}},o.concat=function(e,t){if(!Array.isArray(e))throw new TypeError('"list" argument must be an Array of Buffers');if(0===e.length)return o.alloc(0);let r;if(void 0===t)for(t=0,r=0;r<e.length;++r)t+=e[r].length;const n=o.allocUnsafe(t);let i=0;for(r=0;r<e.length;++r){let t=e[r];if(X(t,Uint8Array))i+t.length>n.length?(o.isBuffer(t)||(t=o.from(t)),t.copy(n,i)):Uint8Array.prototype.set.call(n,t,i);else{if(!o.isBuffer(t))throw new TypeError('"list" argument must be an Array of Buffers');t.copy(n,i)}i+=t.length}return n},o.byteLength=f,o.prototype._isBuffer=!0,o.prototype.swap16=function(){const e=this.length;if(e%2!=0)throw new RangeError("Buffer size must be a multiple of 16-bits");for(let t=0;t<e;t+=2)h(this,t,t+1);return this},o.prototype.swap32=function(){const e=this.length;if(e%4!=0)throw new RangeError("Buffer size must be a multiple of 32-bits");for(let t=0;t<e;t+=4)h(this,t,t+3),h(this,t+1,t+2);return this},o.prototype.swap64=function(){const e=this.length;if(e%8!=0)throw new RangeError("Buffer size must be a multiple of 64-bits");for(let t=0;t<e;t+=8)h(this,t,t+7),h(this,t+1,t+6),h(this,t+2,t+5),h(this,t+3,t+4);return this},o.prototype.toString=function(){const e=this.length;return 0===e?"":0===arguments.length?E(this,0,e):p.apply(this,arguments)},o.prototype.toLocaleString=o.prototype.toString,o.prototype.equals=function(e){if(!o.isBuffer(e))throw new TypeError("Argument must be a Buffer");return this===e||0===o.compare(this,e)},o.prototype.inspect=function(){let e="";const r=t.INSPECT_MAX_BYTES;return e=this.toString("hex",0,r).replace(/(.{2})/g,"$1 ").trim(),this.length>r&&(e+=" ... "),"<Buffer "+e+">"},r&&(o.prototype[r]=o.prototype.inspect),o.prototype.compare=function(e,t,r,n,i){if(X(e,Uint8Array)&&(e=o.from(e,e.offset,e.byteLength)),!o.isBuffer(e))throw new TypeError('The "target" argument must be one of type Buffer or Uint8Array. Received type '+typeof e);if(void 0===t&&(t=0),void 0===r&&(r=e?e.length:0),void 0===n&&(n=0),void 0===i&&(i=this.length),t<0||r>e.length||n<0||i>this.length)throw new RangeError("out of range index");if(n>=i&&t>=r)return 0;if(n>=i)return-1;if(t>=r)return 1;if(this===e)return 0;let s=(i>>>=0)-(n>>>=0),a=(r>>>=0)-(t>>>=0);const c=Math.min(s,a),u=this.slice(n,i),l=e.slice(t,r);for(let e=0;e<c;++e)if(u[e]!==l[e]){s=u[e],a=l[e];break}return s<a?-1:a<s?1:0},o.prototype.includes=function(e,t,r){return-1!==this.indexOf(e,t,r)},o.prototype.indexOf=function(e,t,r){return g(this,e,t,r,!0)},o.prototype.lastIndexOf=function(e,t,r){return g(this,e,t,r,!1)},o.prototype.write=function(e,t,r,n){if(void 0===t)n="utf8",r=this.length,t=0;else if(void 0===r&&"string"==typeof t)n=t,r=this.length,t=0;else{if(!isFinite(t))throw new Error("Buffer.write(string, encoding, offset[, length]) is no longer supported");t>>>=0,isFinite(r)?(r>>>=0,void 0===n&&(n="utf8")):(n=r,r=void 0)}const i=this.length-t;if((void 0===r||r>i)&&(r=i),e.length>0&&(r<0||t<0)||t>this.length)throw new RangeError("Attempt to write outside buffer bounds");n||(n="utf8");let o=!1;for(;;)switch(n){case"hex":return v(this,e,t,r);case"utf8":case"utf-8":return y(this,e,t,r);case"ascii":case"latin1":case"binary":return b(this,e,t,r);case"base64":return w(this,e,t,r);case"ucs2":case"ucs-2":case"utf16le":case"utf-16le":return S(this,e,t,r);default:if(o)throw new TypeError("Unknown encoding: "+n);n=(""+n).toLowerCase(),o=!0}},o.prototype.toJSON=function(){return{type:"Buffer",data:Array.prototype.slice.call(this._arr||this,0)}};const x=4096;function T(e,t,r){let n="";r=Math.min(e.length,r);for(let i=t;i<r;++i)n+=String.fromCharCode(127&e[i]);return n}function I(e,t,r){let n="";r=Math.min(e.length,r);for(let i=t;i<r;++i)n+=String.fromCharCode(e[i]);return n}function P(e,t,r){const n=e.length;(!t||t<0)&&(t=0),(!r||r<0||r>n)&&(r=n);let i="";for(let n=t;n<r;++n)i+=W[e[n]];return i}function R(e,t,r){const n=e.slice(t,r);let i="";for(let e=0;e<n.length-1;e+=2)i+=String.fromCharCode(n[e]+256*n[e+1]);return i}function k(e,t,r){if(e%1!=0||e<0)throw new RangeError("offset is not uint");if(e+t>r)throw new RangeError("Trying to access beyond buffer length")}function O(e,t,r,n,i,s){if(!o.isBuffer(e))throw new TypeError('"buffer" argument must be a Buffer instance');if(t>i||t<s)throw new RangeError('"value" argument is out of bounds');if(r+n>e.length)throw new RangeError("Index out of range")}function A(e,t,r,n,i){U(t,n,i,e,r,7);let o=Number(t&BigInt(4294967295));e[r++]=o,o>>=8,e[r++]=o,o>>=8,e[r++]=o,o>>=8,e[r++]=o;let s=Number(t>>BigInt(32)&BigInt(4294967295));return e[r++]=s,s>>=8,e[r++]=s,s>>=8,e[r++]=s,s>>=8,e[r++]=s,r}function D(e,t,r,n,i){U(t,n,i,e,r,7);let o=Number(t&BigInt(4294967295));e[r+7]=o,o>>=8,e[r+6]=o,o>>=8,e[r+5]=o,o>>=8,e[r+4]=o;let s=Number(t>>BigInt(32)&BigInt(4294967295));return e[r+3]=s,s>>=8,e[r+2]=s,s>>=8,e[r+1]=s,s>>=8,e[r]=s,r+8}function L(e,t,r,n,i,o){if(r+n>e.length)throw new RangeError("Index out of range");if(r<0)throw new RangeError("Index out of range")}function j(e,t,r,n,i){return t=+t,r>>>=0,i||L(e,0,r,4),Ou(e,t,r,n,23,4),r+4}function M(e,t,r,n,i){return t=+t,r>>>=0,i||L(e,0,r,8),Ou(e,t,r,n,52,8),r+8}o.prototype.slice=function(e,t){const r=this.length;(e=~~e)<0?(e+=r)<0&&(e=0):e>r&&(e=r),(t=void 0===t?r:~~t)<0?(t+=r)<0&&(t=0):t>r&&(t=r),t<e&&(t=e);const n=this.subarray(e,t);return Object.setPrototypeOf(n,o.prototype),n},o.prototype.readUintLE=o.prototype.readUIntLE=function(e,t,r){e>>>=0,t>>>=0,r||k(e,t,this.length);let n=this[e],i=1,o=0;for(;++o<t&&(i*=256);)n+=this[e+o]*i;return n},o.prototype.readUintBE=o.prototype.readUIntBE=function(e,t,r){e>>>=0,t>>>=0,r||k(e,t,this.length);let n=this[e+--t],i=1;for(;t>0&&(i*=256);)n+=this[e+--t]*i;return n},o.prototype.readUint8=o.prototype.readUInt8=function(e,t){return e>>>=0,t||k(e,1,this.length),this[e]},o.prototype.readUint16LE=o.prototype.readUInt16LE=function(e,t){return e>>>=0,t||k(e,2,this.length),this[e]|this[e+1]<<8},o.prototype.readUint16BE=o.prototype.readUInt16BE=function(e,t){return e>>>=0,t||k(e,2,this.length),this[e]<<8|this[e+1]},o.prototype.readUint32LE=o.prototype.readUInt32LE=function(e,t){return e>>>=0,t||k(e,4,this.length),(this[e]|this[e+1]<<8|this[e+2]<<16)+16777216*this[e+3]},o.prototype.readUint32BE=o.prototype.readUInt32BE=function(e,t){return e>>>=0,t||k(e,4,this.length),16777216*this[e]+(this[e+1]<<16|this[e+2]<<8|this[e+3])},o.prototype.readBigUInt64LE=Y((function(e){F(e>>>=0,"offset");const t=this[e],r=this[e+7];void 0!==t&&void 0!==r||V(e,this.length-8);const n=t+256*this[++e]+65536*this[++e]+this[++e]*2**24,i=this[++e]+256*this[++e]+65536*this[++e]+r*2**24;return BigInt(n)+(BigInt(i)<<BigInt(32))})),o.prototype.readBigUInt64BE=Y((function(e){F(e>>>=0,"offset");const t=this[e],r=this[e+7];void 0!==t&&void 0!==r||V(e,this.length-8);const n=t*2**24+65536*this[++e]+256*this[++e]+this[++e],i=this[++e]*2**24+65536*this[++e]+256*this[++e]+r;return(BigInt(n)<<BigInt(32))+BigInt(i)})),o.prototype.readIntLE=function(e,t,r){e>>>=0,t>>>=0,r||k(e,t,this.length);let n=this[e],i=1,o=0;for(;++o<t&&(i*=256);)n+=this[e+o]*i;return i*=128,n>=i&&(n-=Math.pow(2,8*t)),n},o.prototype.readIntBE=function(e,t,r){e>>>=0,t>>>=0,r||k(e,t,this.length);let n=t,i=1,o=this[e+--n];for(;n>0&&(i*=256);)o+=this[e+--n]*i;return i*=128,o>=i&&(o-=Math.pow(2,8*t)),o},o.prototype.readInt8=function(e,t){return e>>>=0,t||k(e,1,this.length),128&this[e]?-1*(255-this[e]+1):this[e]},o.prototype.readInt16LE=function(e,t){e>>>=0,t||k(e,2,this.length);const r=this[e]|this[e+1]<<8;return 32768&r?4294901760|r:r},o.prototype.readInt16BE=function(e,t){e>>>=0,t||k(e,2,this.length);const r=this[e+1]|this[e]<<8;return 32768&r?4294901760|r:r},o.prototype.readInt32LE=function(e,t){return e>>>=0,t||k(e,4,this.length),this[e]|this[e+1]<<8|this[e+2]<<16|this[e+3]<<24},o.prototype.readInt32BE=function(e,t){return e>>>=0,t||k(e,4,this.length),this[e]<<24|this[e+1]<<16|this[e+2]<<8|this[e+3]},o.prototype.readBigInt64LE=Y((function(e){F(e>>>=0,"offset");const t=this[e],r=this[e+7];void 0!==t&&void 0!==r||V(e,this.length-8);const n=this[e+4]+256*this[e+5]+65536*this[e+6]+(r<<24);return(BigInt(n)<<BigInt(32))+BigInt(t+256*this[++e]+65536*this[++e]+this[++e]*2**24)})),o.prototype.readBigInt64BE=Y((function(e){F(e>>>=0,"offset");const t=this[e],r=this[e+7];void 0!==t&&void 0!==r||V(e,this.length-8);const n=(t<<24)+65536*this[++e]+256*this[++e]+this[++e];return(BigInt(n)<<BigInt(32))+BigInt(this[++e]*2**24+65536*this[++e]+256*this[++e]+r)})),o.prototype.readFloatLE=function(e,t){return e>>>=0,t||k(e,4,this.length),ku(this,e,!0,23,4)},o.prototype.readFloatBE=function(e,t){return e>>>=0,t||k(e,4,this.length),ku(this,e,!1,23,4)},o.prototype.readDoubleLE=function(e,t){return e>>>=0,t||k(e,8,this.length),ku(this,e,!0,52,8)},o.prototype.readDoubleBE=function(e,t){return e>>>=0,t||k(e,8,this.length),ku(this,e,!1,52,8)},o.prototype.writeUintLE=o.prototype.writeUIntLE=function(e,t,r,n){if(e=+e,t>>>=0,r>>>=0,!n){O(this,e,t,r,Math.pow(2,8*r)-1,0)}let i=1,o=0;for(this[t]=255&e;++o<r&&(i*=256);)this[t+o]=e/i&255;return t+r},o.prototype.writeUintBE=o.prototype.writeUIntBE=function(e,t,r,n){if(e=+e,t>>>=0,r>>>=0,!n){O(this,e,t,r,Math.pow(2,8*r)-1,0)}let i=r-1,o=1;for(this[t+i]=255&e;--i>=0&&(o*=256);)this[t+i]=e/o&255;return t+r},o.prototype.writeUint8=o.prototype.writeUInt8=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,1,255,0),this[t]=255&e,t+1},o.prototype.writeUint16LE=o.prototype.writeUInt16LE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,2,65535,0),this[t]=255&e,this[t+1]=e>>>8,t+2},o.prototype.writeUint16BE=o.prototype.writeUInt16BE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,2,65535,0),this[t]=e>>>8,this[t+1]=255&e,t+2},o.prototype.writeUint32LE=o.prototype.writeUInt32LE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,4,4294967295,0),this[t+3]=e>>>24,this[t+2]=e>>>16,this[t+1]=e>>>8,this[t]=255&e,t+4},o.prototype.writeUint32BE=o.prototype.writeUInt32BE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,4,4294967295,0),this[t]=e>>>24,this[t+1]=e>>>16,this[t+2]=e>>>8,this[t+3]=255&e,t+4},o.prototype.writeBigUInt64LE=Y((function(e,t=0){return A(this,e,t,BigInt(0),BigInt("0xffffffffffffffff"))})),o.prototype.writeBigUInt64BE=Y((function(e,t=0){return D(this,e,t,BigInt(0),BigInt("0xffffffffffffffff"))})),o.prototype.writeIntLE=function(e,t,r,n){if(e=+e,t>>>=0,!n){const n=Math.pow(2,8*r-1);O(this,e,t,r,n-1,-n)}let i=0,o=1,s=0;for(this[t]=255&e;++i<r&&(o*=256);)e<0&&0===s&&0!==this[t+i-1]&&(s=1),this[t+i]=(e/o>>0)-s&255;return t+r},o.prototype.writeIntBE=function(e,t,r,n){if(e=+e,t>>>=0,!n){const n=Math.pow(2,8*r-1);O(this,e,t,r,n-1,-n)}let i=r-1,o=1,s=0;for(this[t+i]=255&e;--i>=0&&(o*=256);)e<0&&0===s&&0!==this[t+i+1]&&(s=1),this[t+i]=(e/o>>0)-s&255;return t+r},o.prototype.writeInt8=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,1,127,-128),e<0&&(e=255+e+1),this[t]=255&e,t+1},o.prototype.writeInt16LE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,2,32767,-32768),this[t]=255&e,this[t+1]=e>>>8,t+2},o.prototype.writeInt16BE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,2,32767,-32768),this[t]=e>>>8,this[t+1]=255&e,t+2},o.prototype.writeInt32LE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,4,2147483647,-2147483648),this[t]=255&e,this[t+1]=e>>>8,this[t+2]=e>>>16,this[t+3]=e>>>24,t+4},o.prototype.writeInt32BE=function(e,t,r){return e=+e,t>>>=0,r||O(this,e,t,4,2147483647,-2147483648),e<0&&(e=4294967295+e+1),this[t]=e>>>24,this[t+1]=e>>>16,this[t+2]=e>>>8,this[t+3]=255&e,t+4},o.prototype.writeBigInt64LE=Y((function(e,t=0){return A(this,e,t,-BigInt("0x8000000000000000"),BigInt("0x7fffffffffffffff"))})),o.prototype.writeBigInt64BE=Y((function(e,t=0){return D(this,e,t,-BigInt("0x8000000000000000"),BigInt("0x7fffffffffffffff"))})),o.prototype.writeFloatLE=function(e,t,r){return j(this,e,t,!0,r)},o.prototype.writeFloatBE=function(e,t,r){return j(this,e,t,!1,r)},o.prototype.writeDoubleLE=function(e,t,r){return M(this,e,t,!0,r)},o.prototype.writeDoubleBE=function(e,t,r){return M(this,e,t,!1,r)},o.prototype.copy=function(e,t,r,n){if(!o.isBuffer(e))throw new TypeError("argument should be a Buffer");if(r||(r=0),n||0===n||(n=this.length),t>=e.length&&(t=e.length),t||(t=0),n>0&&n<r&&(n=r),n===r)return 0;if(0===e.length||0===this.length)return 0;if(t<0)throw new RangeError("targetStart out of bounds");if(r<0||r>=this.length)throw new RangeError("Index out of range");if(n<0)throw new RangeError("sourceEnd out of bounds");n>this.length&&(n=this.length),e.length-t<n-r&&(n=e.length-t+r);const i=n-r;return this===e&&"function"==typeof Uint8Array.prototype.copyWithin?this.copyWithin(t,r,n):Uint8Array.prototype.set.call(e,this.subarray(r,n),t),i},o.prototype.fill=function(e,t,r,n){if("string"==typeof e){if("string"==typeof t?(n=t,t=0,r=this.length):"string"==typeof r&&(n=r,r=this.length),void 0!==n&&"string"!=typeof n)throw new TypeError("encoding must be a string");if("string"==typeof n&&!o.isEncoding(n))throw new TypeError("Unknown encoding: "+n);if(1===e.length){const t=e.charCodeAt(0);("utf8"===n&&t<128||"latin1"===n)&&(e=t)}}else"number"==typeof e?e&=255:"boolean"==typeof e&&(e=Number(e));if(t<0||this.length<t||this.length<r)throw new RangeError("Out of range index");if(r<=t)return this;let i;if(t>>>=0,r=void 0===r?this.length:r>>>0,e||(e=0),"number"==typeof e)for(i=t;i<r;++i)this[i]=e;else{const s=o.isBuffer(e)?e:o.from(e,n),a=s.length;if(0===a)throw new TypeError('The value "'+e+'" is invalid for argument "value"');for(i=0;i<r-t;++i)this[i+t]=s[i%a]}return this};const N={};function B(e,t,r){N[e]=class extends r{constructor(){super(),Object.defineProperty(this,"message",{value:t.apply(this,arguments),writable:!0,configurable:!0}),this.name=`${this.name} [${e}]`,this.stack,delete this.name}get code(){return e}set code(e){Object.defineProperty(this,"code",{configurable:!0,enumerable:!0,value:e,writable:!0})}toString(){return`${this.name} [${e}]: ${this.message}`}}}function _(e){let t="",r=e.length;const n="-"===e[0]?1:0;for(;r>=n+4;r-=3)t=`_${e.slice(r-3,r)}${t}`;return`${e.slice(0,r)}${t}`}function U(e,t,r,n,i,o){if(e>r||e<t){const n="bigint"==typeof t?"n":"";let i;throw i=o>3?0===t||t===BigInt(0)?`>= 0${n} and < 2${n} ** ${8*(o+1)}${n}`:`>= -(2${n} ** ${8*(o+1)-1}${n}) and < 2 ** ${8*(o+1)-1}${n}`:`>= ${t}${n} and <= ${r}${n}`,new N.ERR_OUT_OF_RANGE("value",i,e)}!function(e,t,r){F(t,"offset"),void 0!==e[t]&&void 0!==e[t+r]||V(t,e.length-(r+1))}(n,i,o)}function F(e,t){if("number"!=typeof e)throw new N.ERR_INVALID_ARG_TYPE(t,"number",e)}function V(e,t,r){if(Math.floor(e)!==e)throw F(e,r),new N.ERR_OUT_OF_RANGE(r||"offset","an integer",e);if(t<0)throw new N.ERR_BUFFER_OUT_OF_BOUNDS;throw new N.ERR_OUT_OF_RANGE(r||"offset",`>= ${r?1:0} and <= ${t}`,e)}B("ERR_BUFFER_OUT_OF_BOUNDS",(function(e){return e?`${e} is outside of buffer bounds`:"Attempt to access memory outside buffer bounds"}),RangeError),B("ERR_INVALID_ARG_TYPE",(function(e,t){return`The "${e}" argument must be of type number. Received type ${typeof t}`}),TypeError),B("ERR_OUT_OF_RANGE",(function(e,t,r){let n=`The value of "${e}" is out of range.`,i=r;return Number.isInteger(r)&&Math.abs(r)>2**32?i=_(String(r)):"bigint"==typeof r&&(i=String(r),(r>BigInt(2)**BigInt(32)||r<-(BigInt(2)**BigInt(32)))&&(i=_(i)),i+="n"),n+=` It must be ${t}. Received ${i}`,n}),RangeError);const z=/[^+/0-9A-Za-z-_]/g;function G(e,t){let r;t=t||1/0;const n=e.length;let i=null;const o=[];for(let s=0;s<n;++s){if(r=e.charCodeAt(s),r>55295&&r<57344){if(!i){if(r>56319){(t-=3)>-1&&o.push(239,191,189);continue}if(s+1===n){(t-=3)>-1&&o.push(239,191,189);continue}i=r;continue}if(r<56320){(t-=3)>-1&&o.push(239,191,189),i=r;continue}r=65536+(i-55296<<10|r-56320)}else i&&(t-=3)>-1&&o.push(239,191,189);if(i=null,r<128){if((t-=1)<0)break;o.push(r)}else if(r<2048){if((t-=2)<0)break;o.push(r>>6|192,63&r|128)}else if(r<65536){if((t-=3)<0)break;o.push(r>>12|224,r>>6&63|128,63&r|128)}else{if(!(r<1114112))throw new Error("Invalid code point");if((t-=4)<0)break;o.push(r>>18|240,r>>12&63|128,r>>6&63|128,63&r|128)}}return o}function $(e){return Ru.toByteArray(function(e){if((e=(e=e.split("=")[0]).trim().replace(z,"")).length<2)return"";for(;e.length%4!=0;)e+="=";return e}(e))}function q(e,t,r,n){let i;for(i=0;i<n&&!(i+r>=t.length||i>=e.length);++i)t[i+r]=e[i];return i}function X(e,t){return e instanceof t||null!=e&&null!=e.constructor&&null!=e.constructor.name&&e.constructor.name===t.name}function H(e){return e!=e}const W=function(){const e="0123456789abcdef",t=new Array(256);for(let r=0;r<16;++r){const n=16*r;for(let i=0;i<16;++i)t[n+i]=e[r]+e[i]}return t}();function Y(e){return"undefined"==typeof BigInt?J:e}function J(){throw new Error("BigInt not supported")}})),Du=o((function(e,t){var r=Au.Buffer;function n(e,t){for(var r in e)t[r]=e[r]}function i(e,t,n){return r(e,t,n)}r.from&&r.alloc&&r.allocUnsafe&&r.allocUnsafeSlow?e.exports=Au:(n(Au,t),t.Buffer=i),n(r,i),i.from=function(e,t,n){if("number"==typeof e)throw new TypeError("Argument must not be a number");return r(e,t,n)},i.alloc=function(e,t,n){if("number"!=typeof e)throw new TypeError("Argument must be a number");var i=r(e);return void 0!==t?"string"==typeof n?i.fill(t,n):i.fill(t):i.fill(0),i},i.allocUnsafe=function(e){if("number"!=typeof e)throw new TypeError("Argument must be a number");return r(e)},i.allocUnsafeSlow=function(e){if("number"!=typeof e)throw new TypeError("Argument must be a number");return Au.SlowBuffer(e)}})),Lu=o((function(e){var t=65536,r=4294967295;var n=Du.Buffer,o=i.crypto||i.msCrypto;o&&o.getRandomValues?e.exports=function(e,i){if(e>r)throw new RangeError("requested too many random bytes");var s=n.allocUnsafe(e);if(e>0)if(e>t)for(var a=0;a<e;a+=t)o.getRandomValues(s.slice(a,a+t));else o.getRandomValues(s);if("function"==typeof i)return process.nextTick((function(){i(null,s)}));return s}:e.exports=function(){throw new Error("Secure random number generation is not supported by this browser.\nUse Chrome, Firefox or Internet Explorer 11")}}));class ju{constructor(e,t){this.ufrag=e,this.pwd=t,this.lite=!1,this.endOfCandidates=!1}clone(){const e=new ju(this.ufrag,this.pwd);return e.setLite(this.lite),e.setEndOfCandidates(this.endOfCandidates),e}plain(){const e={ufrag:this.ufrag,pwd:this.pwd};return this.lite&&(e.lite=this.lite),this.endOfCandidates&&(e.endOfCandidates=this.endOfCandidates),e}getUfrag(){return this.ufrag}getPwd(){return this.pwd}isLite(){return this.lite}setLite(e){this.lite=e}isEndOfCandidates(){return this.endOfCandidates}setEndOfCandidates(e){this.endOfCandidates=e}}ju.generate=function(e){const t=new ju,r=Lu(8),n=Lu(24);return t.ufrag=r.toString("hex"),t.pwd=n.toString("hex"),t.lite=e,t},ju.expand=function(e){const t=new ju(e.ufrag,e.pwd);return t.setLite(e.lite),t.setEndOfCandidates(e.endOfCandidates),t};var Mu=ju;const Nu=lu("SEND","RECV");Nu.byValue=function(e){return Nu[e.toUpperCase()]},Nu.toString=function(e){switch(e){case Nu.SEND:return"send";case Nu.RECV:return"recv"}},Nu.reverse=function(e){switch(e){case Nu.SEND:return Nu.RECV;case Nu.RECV:return Nu.SEND}};var Bu=Nu;class _u{constructor(e,t){this.id=e,this.direction=t,this.formats=[],this.params=new Map}clone(){var e=new _u(this.id,this.direction);return e.setFormats(this.formats),e.setParams(this.params),e}plain(){var e={id:this.id,direction:Bu.toString(this.direction)};for(var[t,r]of(this.formats&&(e.formats=this.formats),this.params.entries()))e.params||(e.params={}),e.params[t]=r;return e}getId(){return this.id}getDirection(){return this.direction}setDirection(e){this.direction=e}getFormats(){return this.formats}setFormats(e){this.formats=[];for(let t=0;t<e.length;++t)this.formats.push(parseInt(e[t]))}getParams(){return this.params}setParams(e){this.params=new Map(e)}addParam(e,t){this.params.set(e,t)}getDirection(){return this.direction}setDirection(e){this.direction=e}}_u.expand=function(e){const t=new _u(e.id,Bu.byValue(e.direction));for(let r in e.params)t.addParam(r,e.params[r]);return e.formats&&t.setFormats(e.formats),t};var Uu=_u;class Fu{constructor(e,t){this.paused=t,this.id=e}clone(){return new Fu(this.id,this.paused)}plain(){return{id:this.id,paused:this.paused}}isPaused(){return this.paused}getId(){return this.id}}Fu.expand=function(e){return new Fu(e.id,e.paused)};var Vu=Fu;class zu{constructor(){this.send=[],this.recv=[]}clone(){const e=new zu;for(let t=0;t<this.send.length;++t){let r=[];for(let e=0;t<this.send[e].length;++t)r.push(this.send[t][e].clone());e.addSimulcastAlternativeStreams(Bu.SEND,r)}for(let t=0;t<this.recv.length;++t){let r=[];for(let e=0;t<this.recv[e].length;++t)r.push(this.recv[t][e].clone());e.addSimulcastAlternativeStreams(Bu.RECV,r)}return e}plain(){const e={send:[],recv:[]};for(let t=0;t<this.send.length;++t){let r=[];for(let e=0;e<this.send[t].length;++e)r.push(this.send[t][e].plain());e.send.push(r)}for(let t=0;t<this.recv.length;++t){let r=[];for(let e=0;e<this.recv[t].length;++e)r.push(this.recv[t][e].plain());e.recv.push(r)}return e}addSimulcastAlternativeStreams(e,t){return e===Bu.SEND?this.send.push(t):this.recv.push(t)}addSimulcastStream(e,t){return e===Bu.SEND?this.send.push([t]):this.recv.push([t])}getSimulcastStreams(e){return e===Bu.SEND?this.send:this.recv}}zu.expand=function(e){const t=new zu;for(let r=0;r<e.send.length;++r){let n=[];for(let t=0;t<e.send[r].length;++t)n.push(Vu.expand(e.send[r][t]));t.addSimulcastAlternativeStreams(Bu.SEND,n)}for(let r=0;r<e.recv.length;++r){let n=[];for(let t=0;t<e.recv[r].length;++t)n.push(Vu.expand(e.recv[r][t]));t.addSimulcastAlternativeStreams(Bu.RECV,n)}return t};var Gu=zu;const $u=lu("SENDRECV","SENDONLY","RECVONLY","INACTIVE");$u.byValue=function(e){return $u[e.toUpperCase()]},$u.toString=function(e){switch(e){case $u.SENDRECV:return"sendrecv";case $u.SENDONLY:return"sendonly";case $u.RECVONLY:return"recvonly";case $u.INACTIVE:return"inactive"}},$u.reverse=function(e){switch(e){case $u.SENDRECV:return $u.SENDRECV;case $u.SENDONLY:return $u.RECVONLY;case $u.RECVONLY:return $u.SENDONLY;case $u.INACTIVE:return $u.INACTIVE}};var qu=$u;class Xu{constructor(e,t){this.port=e,this.maxMessageSize=t}clone(){return new Xu(this.port,this.maxMessageSize)}plain(){return{port:this.port,maxMessageSize:this.maxMessageSize}}getPort(){return this.port}getMaxMessageSize(){return this.maxMessageSize}}Xu.expand=function(e){return new Xu(e.port,e.maxMessageSize)};var Hu=Xu;class Wu{constructor(e,t){this.id=e,this.type=t,this.direction=qu.SENDRECV,this.extensions=new Map,this.codecs=new Map,this.rids=new Map,this.simulcast=null,this.bitrate=0,this.control=null,this.dataChannel=null}clone(){const e=new Wu(this.id,this.type);e.setDirection(this.direction),e.setBitrate(this.bitrate);for(const t of this.codecs.values())e.addCodec(t.clone());for(const[t,r]of this.extensions.entries())e.addExtension(t,r);for(const t of this.rids.values())e.addRID(t.clone());return this.simulcast&&e.setSimulcast(this.simulcast.clone()),this.control&&e.setControl(this.control),this.dataChannel&&e.setDatachannel(this.dataChannel.clone()),e}plain(){const e={id:this.id,type:this.type,direction:qu.toString(this.direction),codecs:[]};this.dataChannel&&(e.dataChannel=this.dataChannel.plain()),this.bitrate&&(e.bitrate=this.bitrate);for(const t of this.codecs.values())e.codecs.push(t.plain());for(const[t,r]of this.extensions.entries())e.extensions||(e.extensions={}),e.extensions[t]=r;for(const t of this.rids.values())e.rids||(e.rids=[]),e.rids.push(t.plain());return this.simulcast&&(e.simulcast=this.simulcast.plain()),this.control&&(e.control=this.control),e}getType(){return this.type}getId(){return this.id}setId(e){this.id=e}addExtension(e,t){this.extensions.set(e,t)}addRID(e){this.rids.set(e.getId(),e)}addCodec(e){this.codecs.set(e.getType(),e)}setCodecs(e){this.codecs=e}getCodecForType(e){return this.codecs.get(e)}getCodec(e){for(const t of this.codecs.values())if(t.getCodec().toLowerCase()===e.toLowerCase())return t;return null}hasCodec(e){return null!==this.getCodec(e)}getCodecs(){return this.codecs}hasRTX(){for(const e of this.codecs.values())if(e.hasRTX())return!0;return!1}getExtensions(){return this.extensions}getRIDs(){return this.rids}getRID(e){return this.rids.get(e)}getBitrate(){return this.bitrate}setBitrate(e){this.bitrate=e}getDirection(){return this.direction}setDirection(e){this.direction=e}hasControl(){return!!this.control}getControl(){return this.control}setControl(e){this.control=e}hasDataChannel(){return!!this.dataChannel}getDataChannel(){return this.dataChannel}setDataChannel(e){this.dataChannel=e}answer(e){const t=new Wu(this.id,this.type);if(e){if(t.setDirection(qu.reverse(this.direction)),e.codecs){let r;r=Array.isArray(e.codecs)?uu.MapFromNames(e.codecs,e.rtx,e.rtcpfbs):e.codecs;for(let e of this.codecs.values())if(r.has(e.getCodec().toLowerCase())){const n=r.get(e.getCodec().toLowerCase());if("h264"===n.getCodec()&&n.hasParam("packetization-mode")&&n.getParam("packetization-mode")!=e.getParam("packetization-mode","0"))continue;if("h264"===n.getCodec()&&n.hasParam("profile-level-id")&&e.hasParam("profile-level-id")&&n.getParam("profile-level-id")!=e.getParam("profile-level-id"))continue;if("multiopus"===n.getCodec()&&n.hasParam("num_streams")&&e.hasParam("num_streams")&&n.getParam("num_streams")!=e.getParam("num_streams"))continue;const i=n.clone();i.setType(e.getType()),i.hasRTX()&&i.setRTX(e.getRTX()),e.hasChannels()&&i.setChannels(e.getChannels()),i.addParams(e.getParams()),t.addCodec(i)}}const n=new Set(e.extensions);for(let[e,r]of this.extensions)n.has(r)&&t.addExtension(e,r);if(e.simulcast&&this.simulcast){const e=new Gu,n=this.simulcast.getSimulcastStreams(Bu.SEND);if(n)for(let t=0;t<n.length;++t){var r=[];for(let e=0;e<n[t].length;++e)r.push(n[t][e].clone());e.addSimulcastAlternativeStreams(Bu.RECV,r)}const i=this.simulcast.getSimulcastStreams(Bu.RECV);if(i)for(let t=0;t<i.length;++t){r=[];for(let e=0;e<i[t].length;++e)r.push(i[t][e].clone());e.addSimulcastAlternativeStreams(Bu.SEND,r)}for(const e of this.rids.values()){const r=e.clone();r.setDirection(Bu.reverse(e.getDirection())),t.addRID(r)}t.setSimulcast(e)}if(e.dataChannel&&this.dataChannel){const r=new Hu(this.dataChannel.getPort(),e.dataChannel.maxMessageSize?e.dataChannel.maxMessageSize:this.dataChannel.getMaxMessageSize());t.setDataChannel(r)}}else t.setDirection(qu.INACTIVE);return t}getSimulcast(){return this.simulcast}setSimulcast(e){this.simulcast=e}}Wu.create=function(e,t){const r=new Wu(e,e);return t?t.codecs&&(Array.isArray(t.codecs)?r.setCodecs(uu.MapFromNames(t.codecs,t.rtx,t.rtcpfbs)):r.setCodecs(t.codecs)):r.setDirection(qu.INACTIVE),r},Wu.expand=function(e){const t=new Wu(e.id,e.type);if(e.direction&&t.setDirection(qu.byValue(e.direction)),t.setBitrate(e.bitrate),e.dataChannel){const r=Hu.expand(e.dataChannel);r&&t.setDataChannel(r)}for(let r in e.extensions)t.addExtension(r,e.extensions[r]);for(let r=0;e.codecs&&r<e.codecs.length;++r){const n=uu.expand(e.codecs[r]);n&&t.addCodec(n)}for(let r=0;e.rids&&r<e.rids.length;++r){const n=Uu.expand(e.rids[r]);t.addRID(n)}return e.simulcast&&t.setSimulcast(Gu.expand(e.simulcast)),e.control&&t.setControl(e.control),t};var Yu=Wu;class Ju{constructor(e,t){this.semantics=e,this.ssrcs=[];for(let e=0;e<t.length;++e)this.ssrcs.push(parseInt(t[e]))}clone(){return new Ju(this.semantics,this.ssrcs)}plain(){const e={semantics:this.semantics,ssrcs:[]};for(let t=0;t<this.ssrcs.length;++t)e.ssrcs.push(this.ssrcs[t]);return e}getSemantics(){return this.semantics}getSSRCs(){return this.ssrcs}}Ju.expand=function(e){return new Ju(e.semantics,e.ssrcs)};var Ku=Ju;class Zu{constructor(e){this.ssrc=e}clone(){const e=new Zu(this.ssrc);e.setCName(this.cname),e.setStreamId(this.streamId),e.setTrackId(this.trackId)}plain(){const e={ssrc:this.ssrc};return this.cname&&(e.cname=this.cname),this.streamId&&(e.streamId=this.streamId),this.trackId&&(e.trackid=this.trackId),e}getCName(){return this.cname}setCName(e){this.cname=e}getStreamId(){return this.streamId}setStreamId(e){this.streamId=e}getTrackId(){return this.trackId}setTrackId(e){this.trackId=e}getSSRC(){return this.ssrc}}Zu.expand=function(e){const t=new Zu(e.ssrc);return t.setCName(e.cname),t.setStreamId(e.streamId),t.setTrackId(e.trackId),t};var Qu=Zu;class el{constructor(e,t){this.id=e,this.paused=t,this.codecs=new Map,this.params=new Map}clone(){var e=new el(this.id,this.paused);for(let t of this.codecs.values())e.addCodec(t.clone());return e.setParams(this.params),e}plain(){var e={id:this.id,paused:this.paused,codecs:{},params:{}};for(var[t,r]of this.codecs.entries())e.codecs[t]=r.plain();for(var[t,n]of this.params.entries())e.params[t]=n;return e}getId(){return this.id}getCodecs(){return this.codecs}addCodec(e){this.codecs.set(e.getType(),e)}getParams(){return this.params}setParams(e){this.params=new Map(e)}addParam(e,t){this.params.set(e,t)}isPaused(){return this.paused}}el.expand=function(e){const t=new el(e.id,e.paused);for(let r in e.codecs)t.addCodec(uu.expand(e.codecs[r]));for(let r in e.params)t.addParam(r,e.params[r]);return t};var tl=el;class rl{constructor(e,t){this.media=e,this.id=t,this.ssrcs=[],this.groups=[],this.encodings=[]}clone(){const e=new rl(this.media,this.id);this.mediaId&&e.setMediaId(this.mediaId);for(let t=0;t<this.ssrcs.length;++t)e.addSSRC(this.ssrcs[t]);for(let t=0;t<this.groups.length;++t)e.addSourceGroup(this.groups[t].clone());for(let t=0;t<this.encodings.length;++t){const r=[];for(let e=0;e<this.encodings[t].length;++e)r.push(this.encodings[t][e].clone());e.addAlternativeEncodings(r)}return e}plain(){const e={media:this.media,id:this.id,ssrcs:[]};this.mediaId&&(e.mediaId=this.mediaId);for(let t=0;t<this.ssrcs.length;++t)e.ssrcs.push(this.ssrcs[t]);for(let t=0;t<this.groups.length;++t)e.groups||(e.groups=[]),e.groups.push(this.groups[t].plain());for(let t=0;t<this.encodings.length;++t){const r=[];for(let e=0;e<this.encodings[t].length;++e)r.push(this.encodings[t][e].plain());r.length&&(e.encodings||(e.encodings=[]),e.encodings.push(r))}return e}getMedia(){return this.media}setMediaId(e){this.mediaId=e}getMediaId(){return this.mediaId}getId(){return this.id}addSSRC(e){this.ssrcs.push(e)}getSSRCs(){return this.ssrcs}addSourceGroup(e){this.groups.push(e)}getSourceGroup(e){for(const t of this.groups)if(t.getSemantics().toLowerCase()===e.toLowerCase())return t;return null}getSourceGroups(){return this.groups}hasSourceGroup(e){for(const t of this.groups)if(t.getSemantics().toLowerCase()===e.toLowerCase())return!0;return!1}getEncodings(){return this.encodings}addEncoding(e){this.encodings.push([e])}addAlternativeEncodings(e){this.encodings.push(e)}setEncodings(e){this.encodings=e}}rl.expand=function(e){const t=new rl(e.media,e.id);e.mediaId&&t.setMediaId(e.mediaId);for(let r=0;e.ssrcs&&r<e.ssrcs.length;++r)t.addSSRC(e.ssrcs[r]);for(let r=0;e.groups&&r<e.groups.length;++r)t.addSourceGroup(Ku.expand(e.groups[r]));for(let r=0;e.encodings&&r<e.encodings.length;++r){const n=[];for(let t=0;t<e.encodings[r].length;++t)n.push(tl.expand(e.encodings[r][t]));t.addAlternativeEncodings(n)}return t};var nl=rl;class il{constructor(e){this.id=e,this.tracks=new Map}clone(){const e=new il(this.id);for(const t of this.tracks.values())e.addTrack(t.clone());return e}plain(){const e={id:this.id,tracks:[]};for(const t of this.tracks.values())e.tracks.push(t.plain());return e}getId(){return this.id}addTrack(e){this.tracks.set(e.getId(),e)}removeTrack(e){return this.tracks.delete(e.getId())}removeTrackById(e){return this.tracks.delete(e)}getFirstTrack(e){for(let t of this.tracks.values())if(t.getMedia().toLowerCase()===e.toLowerCase())return t;return null}getTracks(){return this.tracks}removeAllTracks(){this.tracks.clear()}getTrack(e){return this.tracks.get(e)}}il.expand=function(e){const t=new il(e.id,e.paused);for(let r=0;r<e.tracks.length;++r){const n=nl.expand(e.tracks[r]);n&&t.addTrack(n)}return t};var ol=il;class sl{constructor(e){this.version=e||1,this.streams=new Map,this.medias=new Array,this.candidates=new Array,this.ice=null,this.dtls=null,this.crypto=null,this.extmapAllowMixed=!0}clone(){const e=new sl(this.version);for(let t=0;t<this.medias.length;++t)e.addMedia(this.medias[t].clone());for(const t of this.streams.values())e.addStream(t.clone());for(let t=0;t<this.candidates.length;++t)e.addCandidate(this.candidates[t].clone());return e.setICE(this.ice.clone()),this.dtls&&e.setDTLS(this.dtls.clone()),this.crypto&&e.setCrypto(this.crypto.clone()),e.setExmapAllowMixed(this.extmapAllowMixed),e}plain(){const e={version:this.version,streams:[],medias:[],candidates:[]};for(let t=0;t<this.medias.length;++t)e.medias.push(this.medias[t].plain());for(const t of this.streams.values())e.streams.push(t.plain());for(let t=0;t<this.candidates.length;++t)e.candidates.push(this.candidates[t].plain());return this.ice&&(e.ice=this.ice.plain()),this.dtls&&(e.dtls=this.dtls.plain()),this.crypto&&(e.crypto=this.crypto.plain()),this.extmapAllowMixed||(e.extmapAllowMixedNotSupported=!this.extmapAllowMixed),e}unify(){const e=new sl(this.version);for(let t=0;t<this.medias.length;++t)e.addMedia(this.medias[t].clone());const t={audio:e.getMediasByType("audio"),video:e.getMediasByType("video")};for(const r of this.streams.values()){const n=r.clone();for(const r of n.getTracks().values()){let n=t[r.getMedia()].pop();if(!n){n=this.getMedia(r.getMedia()).clone(),n.setId(r.getId()),e.addMedia(n)}r.setMediaId(n.getId())}e.addStream(n)}for(let t=0;t<this.candidates.length;++t)e.addCandidate(this.candidates[t].clone());return this.ice&&e.setICE(this.ice.clone()),this.dtls&&e.setDTLS(this.dtls.clone()),this.crypto&&e.setCrypto(this.crypto.clone()),e}setVersion(e){this.version=e}addMedia(e){this.medias.push(e)}getMedia(e){for(let t in this.medias){let r=this.medias[t];if(r.getType().toLowerCase()===e.toLowerCase())return r}return null}getMediasByType(e){var t=[];for(let r in this.medias){let n=this.medias[r];n.getType().toLowerCase()===e.toLowerCase()&&t.push(n)}return t}getMediaById(e){for(let t in this.medias){let r=this.medias[t];if(r.getId().toLowerCase()===e.toLowerCase())return r}return null}replaceMedia(e){for(let t in this.medias)if(this.medias[t].getId()==e.getId())return this.medias[t]=e,!0;return!1}getMedias(){return this.medias}getVersion(){return this.version}getDTLS(){return this.dtls}setDTLS(e){this.dtls=e}hasCrypto(){return!!this.crypto}getCrypto(){return this.crypto}setCrypto(e){this.crypto=e}hasICE(){return!!this.ice}getICE(){return this.ice}setICE(e){this.ice=e}addCandidate(e){for(let t=0;t<this.candidates.length;++t)if(this.candidates[t].equals(e))return;this.candidates.push(e)}addCandidates(e){for(let t=0;t<e.length;++t)this.addCandidate(e[t])}getCandidates(){return this.candidates}getStream(e){return this.streams.get(e)}getStreams(){return this.streams}getFirstStream(){for(let e of this.streams.values())return e;return null}addStream(e){this.streams.set(e.getId(),e)}removeStream(e){return this.streams.delete(e.getId())}removeAllStreams(){this.streams.clear()}getTrackByMediaId(e){for(let t of this.streams.values())for(let[r,n]of t.getTracks())if(n.getMediaId()==e)return n;return null}getStreamByMediaId(e){for(let t of this.streams.values())for(let[r,n]of t.getTracks())if(n.getMediaId()==e)return t;return null}getExtmapAllowMixed(){return this.extmapAllowMixed}setExtmapAllowMixed(e){this.extmapAllowMixed=e}answer(e){const t=new sl;e.ice&&(e.ice instanceof Mu?t.setICE(e.ice.clone()):t.setICE(Mu.expand(e.ice))),e.dtls&&(e.dtls instanceof hu?t.setDTLS(e.dtls):t.setDTLS(hu.expand(e.dtls))),e.crypto&&(e.crypto instanceof mu?t.setCrypto(e.crypto):t.setCrypto(mu.expand(e.crypto)));for(let r=0;e.candidates&&r<e.candidates.length;++r)e.candidates[r]instanceof ou?t.addCandidate(e.candidates[r].clone()):t.addCandidate(ou.expand(e.candidates[r]));for(const r of this.medias){const n=e&&e.capabilities&&e.capabilities[r.getType()];t.addMedia(r.answer(n))}return t.setExtmapAllowMixed(this.extmapAllowMixed),t}toString(){let e={version:0,media:[]};e.version=0,e.origin={username:"-",sessionId:(new Date).getTime(),sessionVersion:this.version,netType:"IN",ipVer:4,address:"127.0.0.1"},e.name="semantic-sdp",e.connection={version:4,ip:"0.0.0.0"},e.timing={start:0,stop:0},this.hasICE()&&this.getICE().isLite()&&(e.icelite="ice-lite"),e.msidSemantic={semantic:"WMS",token:"*"},e.groups=[],this.extmapAllowMixed&&(e.extmapAllowMixed="extmap-allow-mixed");let t={type:"BUNDLE",mids:[]};for(let r in this.medias){let n=this.medias[r],i={type:n.getType(),port:9,protocol:"",fmtp:[],rtp:[],rtcpFb:[],ext:[],bandwidth:[],candidates:[],ssrcGroups:[],ssrcs:[],rids:[]};i.direction=qu.toString(n.getDirection()),this.extmapAllowMixed&&(i.extmapAllowMixed="extmap-allow-mixed"),i.mid=n.getId(),t.mids.push(n.getId()),n.hasControl()&&(i.control=n.getControl()),n.getBitrate()>0&&(i.bandwidth.push({type:"AS",limit:n.getBitrate()}),i.bandwidth.push({type:"TIAS",limit:1e3*n.getBitrate()}));let o=this.getCandidates();for(let e=0;e<o.length;++e){let t=o[e];i.candidates.push({foundation:t.getFoundation(),component:t.getComponentId(),transport:t.getTransport(),priority:t.getPriority(),ip:t.getAddress(),port:t.getPort(),type:t.getType(),raddr:t.getRelAddr(),rport:t.getRelPort()})}if(this.getICE()&&(i.iceUfrag=this.getICE().getUfrag(),i.icePwd=this.getICE().getPwd()),["audio","video"].includes(n.getType().toLowerCase())){i.rtcpMux="rtcp-mux",i.rtcpRsize="rtcp-rsize",this.getDTLS()?(i.protocol="UDP/TLS/RTP/SAVPF",i.fingerprint={type:this.getDTLS().getHash(),hash:this.getDTLS().getFingerprint()},i.setup=fu.toString(this.getDTLS().getSetup())):this.getCrypto()?(i.protocol="RTP/SAVPF",i.crypto=[{id:this.getCrypto().getTag(),suite:this.getCrypto().getSuite(),config:this.getCrypto().getKeyParams()}]):i.protocol="RTP/AVP";for(let e of n.getCodecs().values()){"video"===n.getType().toLowerCase()?i.rtp.push({payload:e.getType(),codec:e.getCodec().toUpperCase(),rate:9e4}):"opus"===e.getCodec().toLowerCase()||"multiopus"===e.getCodec().toLowerCase()?i.rtp.push({payload:e.getType(),codec:e.getCodec(),rate:48e3,encoding:e.getChannels()}):i.rtp.push({payload:e.getType(),codec:e.getCodec(),rate:8e3});for(const t of e.getRTCPFeedbacks())i.rtcpFb.push({payload:e.getType(),type:t.getId(),subtype:t.getParams().join(" ")});e.hasRTX()&&(i.rtp.push({payload:e.getRTX(),codec:"rtx",rate:9e4}),i.fmtp.push({payload:e.getRTX(),config:"apt="+e.getType()}));const t=e.getParams();if(Object.keys(t).length){const r={payload:e.getType(),config:""};for(const e in t)r.config.length&&(r.config+=";"),t.hasOwnProperty(e)?r.config+=e+"="+t[e]:r.config+=e;i.fmtp.push(r)}}const e=[];for(let t=0;t<i.rtp.length;++t)e.push(i.rtp[t].payload);i.payloads=e.join(" ");for(let[e,t]of n.getExtensions().entries())i.ext.push({value:e,uri:t});for(let e of n.getRIDs().values()){let t={id:e.getId(),direction:Bu.toString(e.getDirection()),params:""};e.getFormats().length&&(t.params="pt="+e.getFormats().join(","));for(let[r,n]of e.getParams().entries())t.params+=(t.params.length?";":"")+r+"="+n;i.rids.push(t)}const t=n.getSimulcast();if(t){let e=1;i.simulcast={};const r=t.getSimulcastStreams(Bu.SEND),n=t.getSimulcastStreams(Bu.RECV);if(r&&r.length){let t="";for(let e=0;e<r.length;++e){let n="";for(let t=0;t<r[e].length;++t)n+=(n.length?",":"")+(r[e][t].isPaused()?"~":"")+r[e][t].getId();t+=(t.length?";":"")+n}i.simulcast["dir"+e]="send",i.simulcast["list"+e]=t,e++}if(n&&n.length){let t=[];for(let e=0;e<n.length;++e){let r="";for(let t=0;t<n[e].length;++t)r+=(r.length?",":"")+(n[e][t].isPaused()?"~":"")+n[e][t].getId();t+=(t.length?";":"")+r}i.simulcast["dir"+e]="recv",i.simulcast["list"+e]=t,e++}}}else if(n.hasDataChannel()){i.protocol="UDP/DTLS/SCTP",i.payloads="webrtc-datachannel";const e=n.getDataChannel();i.sctpPort=e.getPort(),i.maxMessageSize=e.getMaxMessageSize()}e.media.push(i)}for(let t of this.streams.values())for(let r of t.getTracks().values())for(let n in e.media){let i=e.media[n];if(r.getMediaId()){if(r.getMediaId()==i.mid){let e=r.getSourceGroups();for(let t in e){let r=e[t];i.ssrcGroups.push({semantics:r.getSemantics(),ssrcs:r.getSSRCs().join(" ")})}let n=r.getSSRCs();for(let e in n)i.ssrcs.push({id:n[e],attribute:"cname",value:t.getId()}),i.ssrcs.push({id:n[e],attribute:"msid",value:t.getId()+" "+r.getId()});i.msid=t.getId()+" "+r.getId();break}}else if(i.type.toLowerCase()===r.getMedia().toLowerCase()){let e=r.getSourceGroups();for(let t in e){let r=e[t];i.ssrcGroups.push({semantics:r.getSemantics(),ssrcs:r.getSSRCs().join(" ")})}let n=r.getSSRCs();for(let e in n)i.ssrcs.push({id:n[e],attribute:"cname",value:t.getId()}),i.ssrcs.push({id:n[e],attribute:"msid",value:t.getId()+" "+r.getId()});break}}return t.mids=t.mids.join(" "),e.groups.push(t),nu.write(e)}toIceFragmentString(){let e={version:0,media:[],candidates:[]};this.hasICE()&&this.getICE().isLite()&&(e.icelite="ice-lite"),this.getICE()&&(e.iceUfrag=this.getICE().getUfrag(),e.icePwd=this.getICE().getPwd());for(const t of this.getCandidates())e.candidates.push({foundation:t.getFoundation(),component:t.getComponentId(),transport:t.getTransport(),priority:t.getPriority(),ip:t.getAddress(),port:t.getPort(),type:t.getType(),raddr:t.getRelAddr(),rport:t.getRelPort()});return nu.write(e).slice(10)}}sl.create=function(e){const t=new sl;e.ice&&(e.ice instanceof Mu?t.setICE(e.ice.clone()):t.setICE(Mu.expand(e.ice))),e.dtls&&(e.dtls instanceof hu?t.setDTLS(e.dtls):t.setDTLS(hu.expand(e.dtls))),e.crypto&&(e.crypto instanceof mu?t.setCrypto(e.crypto):t.setCrypto(mu.expand(e.crypto)));for(let r=0;e.candidates&&r<e.candidates.length;++r)e.candidates[r]instanceof ou?t.addCandidate(e.candidates[r].clone()):t.addCandidate(ou.expand(e.candidates[r]));let r=96,n=1;for(let i in e.capabilities){const o=Yu.create(i,e.capabilities[i]);for(const[e,t]of o.getCodecs())t.getType()>=96&&t.setType(r++),t.getRTX()&&t.setRTX(r++);if(e.capabilities[i].extensions)for(let t of e.capabilities[i].extensions)15===n&&n++,o.addExtension(n++,t);t.addMedia(o)}return t},sl.expand=function(e){const t=new sl(e.version);for(let r=0;e.medias&&r<e.medias.length;++r){const n=Yu.expand(e.medias[r]);n&&t.addMedia(n)}for(let r=0;e.streams&&r<e.streams.length;++r){const n=ol.expand(e.streams[r]);n&&t.addStream(n)}for(let r=0;e.candidates&&r<e.candidates.length;++r){const n=ou.expand(e.candidates[r]);n&&t.addCandidate(n)}return e.ice&&t.setICE(Mu.expand(e.ice)),e.dtls&&t.setDTLS(hu.expand(e.dtls)),e.crypto&&t.setCrypto(hu.expand(e.crypto)),e.extmapAllowMixedNotSupported&&(this.extmapAllowMixed=!e.extmapAllowMixedNotSupported),t},sl.process=function(e){return sl.parse(e)},sl.parse=function(e){const t=nu.parse(e),r=new sl;if(r.setVersion(t.version),t.iceUfrag&&t.icePwd){const e=String(t.iceUfrag),n=String(t.icePwd),i=new Mu(e,n);i.setLite("ice-lite"==t.icelite),i.setEndOfCandidates("end-of-candidates"==t.endOfCandidates),r.setICE(i)}for(let e in t.media){const n=t.media[e],i=n.type,o=n.mid?n.mid.toString():e,s=new Yu(o,i);if(n.iceUfrag&&n.icePwd){const e=String(n.iceUfrag),i=String(n.icePwd),o=new Mu(e,i);o.setLite("ice-lite"==t.icelite),o.setEndOfCandidates("end-of-candidates"==n.endOfCandidates),r.setICE(o)}for(let e=0;n.candidates&&e<n.candidates.length;++e){const t=n.candidates[e],i=new ou(t.foundation,t.component,t.transport,t.priority,t.ip,t.port,t.type,t.raddr,t.rport);r.addCandidate(i)}const a=n.fingerprint||t.fingerprint;if(a){const e=a.type,t=a.hash;let i=fu.ACTPASS;n.setup&&(i=fu.byValue(n.setup)),r.setDTLS(new hu(i,e,t))}if(n.crypto){const e=n.crypto[0];r.setCrypto(new mu(e.id,e.suite,e.config,e.sessionConfig))}let c=qu.SENDRECV;n.direction&&(c=qu.byValue(n.direction),s.setDirection(c)),n.control&&s.setControl(n.control),r.setExtmapAllowMixed("extmap-allow-mixed"==n.extmapAllowMixed||"extmap-allow-mixed"==t.extmapAllowMixed);const u=new Map;for(let e in n.rtp){const t=n.rtp[e],r=t.payload,i=t.codec;if("RED"===i.toUpperCase()||"ULPFEC"===i.toUpperCase())continue;let o={};for(let e in n.fmtp){const t=n.fmtp[e];if(t.payload===r){const e=t.config.split(";");for(let t in e){const r=e[t].split("="),n=r[0].trim(),i=r.splice(1).join("=").trim();o[n]=i}}}if("RTX"===i.toUpperCase())u.set(parseInt(o.apt),r);else{const e=new uu(i,r,o);t.encoding>1&&e.setChannels(t.encoding),s.addCodec(e)}}for(let e of u.entries()){const t=s.getCodecForType(e[0]);t&&t.setRTX(e[1])}for(let e=0;n.rtcpFb&&e<n.rtcpFb.length;++e){const t=s.getCodecForType(n.rtcpFb[e].payload);if(t){const r=n.rtcpFb[e].type,i=n.rtcpFb[e].subtype?n.rtcpFb[e].subtype.split(" "):null;t.addRTCPFeedback(new au(r,i))}}const l=n.ext;for(let e in l){const t=l[e];s.addExtension(t.value,t.uri)}const d=n.rids;for(let e in d){const t=d[e],r=new Uu(t.id,Bu.byValue(t.direction));let n=[];const i=new Map;if(t.params){const e=nu.parseParams(t.params);for(let t in e)"pt"===t?n=e[t].split(","):i.set(t,e[t]);r.setFormats(n),r.setParams(i)}s.addRID(r)}const f=[];if(n.simulcast){const e=new Gu;if(n.simulcast.dir1){const t=Bu.byValue(n.simulcast.dir1),r=nu.parseSimulcastStreamList(n.simulcast.list1);for(let n=0;n<r.length;++n){const i=[];for(let e=0;e<r[n].length;++e)i.push(new Vu(r[n][e].scid,r[n][e].paused));e.addSimulcastAlternativeStreams(t,i)}}if(n.simulcast.dir2){const t=Bu.byValue(n.simulcast.dir2),r=nu.parseSimulcastStreamList(n.simulcast.list2);for(let n=0;n<r.length;++n){const i=[];for(let e=0;e<r[n].length;++e)i.push(new Vu(r[n][e].scid,r[n][e].paused));e.addSimulcastAlternativeStreams(t,i)}}for(let t of e.getSimulcastStreams(Bu.SEND)){const e=[];for(let r=0;r<t.length;r++){const n=new tl(t[r].getId(),t[r].isPaused()),i=s.getRID(n.getId());if(i){const t=i.getFormats();for(let e=0;t&&e<t.length;++e){const r=s.getCodecForType(t[e]);r&&n.addCodec(r)}n.setParams(i.getParams()),e.push(n)}}e.length&&f.push(e)}s.setSimulcast(e)}const p=new Map;if(n.ssrcs)for(let e in n.ssrcs){let t=n.ssrcs[e],s=t.id,a=t.attribute,c=t.value,u=p.get(s);if(u||(u=new Qu(s),p.set(u.getSSRC(),u)),"cname"===a.toLowerCase())u.setCName(c);else if("msid"===a.toLowerCase()){let e=c.split(" "),t=e[0],n=e[1];u.setStreamId(t),u.setTrackId(n);let a=r.getStream(t);a||(a=new ol(t),r.addStream(a));let l=a.getTrack(n);l||(l=new nl(i,n),l.setMediaId(o),l.setEncodings(f),a.addTrack(l)),l.addSSRC(s)}}if(n.msid){let e=n.msid.split(" "),t=e[0],s=e[1],a=r.getStream(t);a||(a=new ol(t),r.addStream(a));let c=a.getTrack(s);c||(c=new nl(i,s),c.setMediaId(o),c.setEncodings(f),a.addTrack(c));for(let[e,r]of p.entries())r.getStreamId()||(r.setStreamId(t),r.setTrackId(s),c.addSSRC(e))}for(let[e,t]of p.entries())if(!t.getStreamId()){let n=t.getCName(),s=o;t.setStreamId(n),t.setTrackId(s);let a=r.getStream(n);a||(a=new ol(n),r.addStream(a));let c=a.getTrack(s);c||(c=new nl(i,s),c.setMediaId(o),c.setEncodings(f),a.addTrack(c)),c.addSSRC(e)}if(n.ssrcGroups)for(let e in n.ssrcGroups){let t=n.ssrcGroups[e],i=t.ssrcs.split(" "),o=new Ku(t.semantics,i),s=p.get(parseInt(i[0]));s&&r.getStream(s.getStreamId()).getTrack(s.getTrackId()).addSourceGroup(o)}if("application"==n.type&&"webrtc-datachannel"==n.payloads){const e=new Hu(n.sctpPort,n.maxMessageSize);s.setDataChannel(e)}r.addMedia(s)}return r};var al={SDPInfo:sl,CandidateInfo:ou,CodecInfo:uu,DTLSInfo:hu,CryptoInfo:mu,ICEInfo:Mu,MediaInfo:Yu,Setup:fu,SourceGroupInfo:Ku,SourceInfo:Qu,StreamInfo:ol,TrackInfo:nl,RTCPFeedbackInfo:au,TrackEncodingInfo:tl,Direction:qu},cl=o((function(e,t){!function(r,n){var i="function",o="undefined",s="object",a="string",c="model",u="name",l="type",d="vendor",f="version",p="architecture",h="console",g="mobile",m="tablet",v="smarttv",y="wearable",b="embedded",w="Amazon",S="Apple",C="ASUS",E="BlackBerry",x="Browser",T="Chrome",I="Firefox",P="Google",R="Huawei",k="LG",O="Microsoft",A="Motorola",D="Opera",L="Samsung",j="Sharp",M="Sony",N="Xiaomi",B="Zebra",_="Facebook",U=function(e){for(var t={},r=0;r<e.length;r++)t[e[r].toUpperCase()]=e[r];return t},F=function(e,t){return typeof e===a&&-1!==V(t).indexOf(V(e))},V=function(e){return e.toLowerCase()},z=function(e,t){if(typeof e===a)return e=e.replace(/^\s\s*/,"").replace(/\s\s*$/,""),typeof t===o?e:e.substring(0,350)},G=function(e,t){for(var r,o,a,c,u,l,d=0;d<t.length&&!u;){var f=t[d],p=t[d+1];for(r=o=0;r<f.length&&!u;)if(u=f[r++].exec(e))for(a=0;a<p.length;a++)l=u[++o],typeof(c=p[a])===s&&c.length>0?2===c.length?typeof c[1]==i?this[c[0]]=c[1].call(this,l):this[c[0]]=c[1]:3===c.length?typeof c[1]!==i||c[1].exec&&c[1].test?this[c[0]]=l?l.replace(c[1],c[2]):n:this[c[0]]=l?c[1].call(this,l,c[2]):n:4===c.length&&(this[c[0]]=l?c[3].call(this,l.replace(c[1],c[2])):n):this[c]=l||n;d+=2}},$=function(e,t){for(var r in t)if(typeof t[r]===s&&t[r].length>0){for(var i=0;i<t[r].length;i++)if(F(t[r][i],e))return"?"===r?n:r}else if(F(t[r],e))return"?"===r?n:r;return e},q={ME:"4.90","NT 3.11":"NT3.51","NT 4.0":"NT4.0",2e3:"NT 5.0",XP:["NT 5.1","NT 5.2"],Vista:"NT 6.0",7:"NT 6.1",8:"NT 6.2",8.1:"NT 6.3",10:["NT 6.4","NT 10.0"],RT:"ARM"},X={browser:[[/\b(?:crmo|crios)\/([\w\.]+)/i],[f,[u,"Chrome"]],[/edg(?:e|ios|a)?\/([\w\.]+)/i],[f,[u,"Edge"]],[/(opera mini)\/([-\w\.]+)/i,/(opera [mobiletab]{3,6})\b.+version\/([-\w\.]+)/i,/(opera)(?:.+version\/|[\/ ]+)([\w\.]+)/i],[u,f],[/opios[\/ ]+([\w\.]+)/i],[f,[u,D+" Mini"]],[/\bopr\/([\w\.]+)/i],[f,[u,D]],[/(kindle)\/([\w\.]+)/i,/(lunascape|maxthon|netfront|jasmine|blazer)[\/ ]?([\w\.]*)/i,/(avant |iemobile|slim)(?:browser)?[\/ ]?([\w\.]*)/i,/(ba?idubrowser)[\/ ]?([\w\.]+)/i,/(?:ms|\()(ie) ([\w\.]+)/i,/(flock|rockmelt|midori|epiphany|silk|skyfire|ovibrowser|bolt|iron|vivaldi|iridium|phantomjs|bowser|quark|qupzilla|falkon|rekonq|puffin|brave|whale|qqbrowserlite|qq|duckduckgo)\/([-\w\.]+)/i,/(weibo)__([\d\.]+)/i],[u,f],[/(?:\buc? ?browser|(?:juc.+)ucweb)[\/ ]?([\w\.]+)/i],[f,[u,"UC"+x]],[/microm.+\bqbcore\/([\w\.]+)/i,/\bqbcore\/([\w\.]+).+microm/i],[f,[u,"WeChat(Win) Desktop"]],[/micromessenger\/([\w\.]+)/i],[f,[u,"WeChat"]],[/konqueror\/([\w\.]+)/i],[f,[u,"Konqueror"]],[/trident.+rv[: ]([\w\.]{1,9})\b.+like gecko/i],[f,[u,"IE"]],[/yabrowser\/([\w\.]+)/i],[f,[u,"Yandex"]],[/(avast|avg)\/([\w\.]+)/i],[[u,/(.+)/,"$1 Secure "+x],f],[/\bfocus\/([\w\.]+)/i],[f,[u,I+" Focus"]],[/\bopt\/([\w\.]+)/i],[f,[u,D+" Touch"]],[/coc_coc\w+\/([\w\.]+)/i],[f,[u,"Coc Coc"]],[/dolfin\/([\w\.]+)/i],[f,[u,"Dolphin"]],[/coast\/([\w\.]+)/i],[f,[u,D+" Coast"]],[/miuibrowser\/([\w\.]+)/i],[f,[u,"MIUI "+x]],[/fxios\/([-\w\.]+)/i],[f,[u,I]],[/\bqihu|(qi?ho?o?|360)browser/i],[[u,"360 "+x]],[/(oculus|samsung|sailfish|huawei)browser\/([\w\.]+)/i],[[u,/(.+)/,"$1 "+x],f],[/(comodo_dragon)\/([\w\.]+)/i],[[u,/_/g," "],f],[/(electron)\/([\w\.]+) safari/i,/(tesla)(?: qtcarbrowser|\/(20\d\d\.[-\w\.]+))/i,/m?(qqbrowser|baiduboxapp|2345Explorer)[\/ ]?([\w\.]+)/i],[u,f],[/(metasr)[\/ ]?([\w\.]+)/i,/(lbbrowser)/i,/\[(linkedin)app\]/i],[u],[/((?:fban\/fbios|fb_iab\/fb4a)(?!.+fbav)|;fbav\/([\w\.]+);)/i],[[u,_],f],[/safari (line)\/([\w\.]+)/i,/\b(line)\/([\w\.]+)\/iab/i,/(chromium|instagram)[\/ ]([-\w\.]+)/i],[u,f],[/\bgsa\/([\w\.]+) .*safari\//i],[f,[u,"GSA"]],[/headlesschrome(?:\/([\w\.]+)| )/i],[f,[u,T+" Headless"]],[/ wv\).+(chrome)\/([\w\.]+)/i],[[u,T+" WebView"],f],[/droid.+ version\/([\w\.]+)\b.+(?:mobile safari|safari)/i],[f,[u,"Android "+x]],[/(chrome|omniweb|arora|[tizenoka]{5} ?browser)\/v?([\w\.]+)/i],[u,f],[/version\/([\w\.\,]+) .*mobile\/\w+ (safari)/i],[f,[u,"Mobile Safari"]],[/version\/([\w(\.|\,)]+) .*(mobile ?safari|safari)/i],[f,u],[/webkit.+?(mobile ?safari|safari)(\/[\w\.]+)/i],[u,[f,$,{"1.0":"/8",1.2:"/1",1.3:"/3","2.0":"/412","2.0.2":"/416","2.0.3":"/417","2.0.4":"/419","?":"/"}]],[/(webkit|khtml)\/([\w\.]+)/i],[u,f],[/(navigator|netscape\d?)\/([-\w\.]+)/i],[[u,"Netscape"],f],[/mobile vr; rv:([\w\.]+)\).+firefox/i],[f,[u,I+" Reality"]],[/ekiohf.+(flow)\/([\w\.]+)/i,/(swiftfox)/i,/(icedragon|iceweasel|camino|chimera|fennec|maemo browser|minimo|conkeror|klar)[\/ ]?([\w\.\+]+)/i,/(seamonkey|k-meleon|icecat|iceape|firebird|phoenix|palemoon|basilisk|waterfox)\/([-\w\.]+)$/i,/(firefox)\/([\w\.]+)/i,/(mozilla)\/([\w\.]+) .+rv\:.+gecko\/\d+/i,/(polaris|lynx|dillo|icab|doris|amaya|w3m|netsurf|sleipnir|obigo|mosaic|(?:go|ice|up)[\. ]?browser)[-\/ ]?v?([\w\.]+)/i,/(links) \(([\w\.]+)/i],[u,f]],cpu:[[/(?:(amd|x(?:(?:86|64)[-_])?|wow|win)64)[;\)]/i],[[p,"amd64"]],[/(ia32(?=;))/i],[[p,V]],[/((?:i[346]|x)86)[;\)]/i],[[p,"ia32"]],[/\b(aarch64|arm(v?8e?l?|_?64))\b/i],[[p,"arm64"]],[/\b(arm(?:v[67])?ht?n?[fl]p?)\b/i],[[p,"armhf"]],[/windows (ce|mobile); ppc;/i],[[p,"arm"]],[/((?:ppc|powerpc)(?:64)?)(?: mac|;|\))/i],[[p,/ower/,"",V]],[/(sun4\w)[;\)]/i],[[p,"sparc"]],[/((?:avr32|ia64(?=;))|68k(?=\))|\barm(?=v(?:[1-7]|[5-7]1)l?|;|eabi)|(?=atmel )avr|(?:irix|mips|sparc)(?:64)?\b|pa-risc)/i],[[p,V]]],device:[[/\b(sch-i[89]0\d|shw-m380s|sm-[ptx]\w{2,4}|gt-[pn]\d{2,4}|sgh-t8[56]9|nexus 10)/i],[c,[d,L],[l,m]],[/\b((?:s[cgp]h|gt|sm)-\w+|galaxy nexus)/i,/samsung[- ]([-\w]+)/i,/sec-(sgh\w+)/i],[c,[d,L],[l,g]],[/\((ip(?:hone|od)[\w ]*);/i],[c,[d,S],[l,g]],[/\((ipad);[-\w\),; ]+apple/i,/applecoremedia\/[\w\.]+ \((ipad)/i,/\b(ipad)\d\d?,\d\d?[;\]].+ios/i],[c,[d,S],[l,m]],[/\b((?:ag[rs][23]?|bah2?|sht?|btv)-a?[lw]\d{2})\b(?!.+d\/s)/i],[c,[d,R],[l,m]],[/(?:huawei|honor)([-\w ]+)[;\)]/i,/\b(nexus 6p|\w{2,4}e?-[atu]?[ln][\dx][012359c][adn]?)\b(?!.+d\/s)/i],[c,[d,R],[l,g]],[/\b(poco[\w ]+)(?: bui|\))/i,/\b; (\w+) build\/hm\1/i,/\b(hm[-_ ]?note?[_ ]?(?:\d\w)?) bui/i,/\b(redmi[\-_ ]?(?:note|k)?[\w_ ]+)(?: bui|\))/i,/\b(mi[-_ ]?(?:a\d|one|one[_ ]plus|note lte|max|cc)?[_ ]?(?:\d?\w?)[_ ]?(?:plus|se|lite)?)(?: bui|\))/i],[[c,/_/g," "],[d,N],[l,g]],[/\b(mi[-_ ]?(?:pad)(?:[\w_ ]+))(?: bui|\))/i],[[c,/_/g," "],[d,N],[l,m]],[/; (\w+) bui.+ oppo/i,/\b(cph[12]\d{3}|p(?:af|c[al]|d\w|e[ar])[mt]\d0|x9007|a101op)\b/i],[c,[d,"OPPO"],[l,g]],[/vivo (\w+)(?: bui|\))/i,/\b(v[12]\d{3}\w?[at])(?: bui|;)/i],[c,[d,"Vivo"],[l,g]],[/\b(rmx[12]\d{3})(?: bui|;|\))/i],[c,[d,"Realme"],[l,g]],[/\b(milestone|droid(?:[2-4x]| (?:bionic|x2|pro|razr))?:?( 4g)?)\b[\w ]+build\//i,/\bmot(?:orola)?[- ](\w*)/i,/((?:moto[\w\(\) ]+|xt\d{3,4}|nexus 6)(?= bui|\)))/i],[c,[d,A],[l,g]],[/\b(mz60\d|xoom[2 ]{0,2}) build\//i],[c,[d,A],[l,m]],[/((?=lg)?[vl]k\-?\d{3}) bui| 3\.[-\w; ]{10}lg?-([06cv9]{3,4})/i],[c,[d,k],[l,m]],[/(lm(?:-?f100[nv]?|-[\w\.]+)(?= bui|\))|nexus [45])/i,/\blg[-e;\/ ]+((?!browser|netcast|android tv)\w+)/i,/\blg-?([\d\w]+) bui/i],[c,[d,k],[l,g]],[/(ideatab[-\w ]+)/i,/lenovo ?(s[56]000[-\w]+|tab(?:[\w ]+)|yt[-\d\w]{6}|tb[-\d\w]{6})/i],[c,[d,"Lenovo"],[l,m]],[/(?:maemo|nokia).*(n900|lumia \d+)/i,/nokia[-_ ]?([-\w\.]*)/i],[[c,/_/g," "],[d,"Nokia"],[l,g]],[/(pixel c)\b/i],[c,[d,P],[l,m]],[/droid.+; (pixel[\daxl ]{0,6})(?: bui|\))/i],[c,[d,P],[l,g]],[/droid.+ (a?\d[0-2]{2}so|[c-g]\d{4}|so[-gl]\w+|xq-a\w[4-7][12])(?= bui|\).+chrome\/(?![1-6]{0,1}\d\.))/i],[c,[d,M],[l,g]],[/sony tablet [ps]/i,/\b(?:sony)?sgp\w+(?: bui|\))/i],[[c,"Xperia Tablet"],[d,M],[l,m]],[/ (kb2005|in20[12]5|be20[12][59])\b/i,/(?:one)?(?:plus)? (a\d0\d\d)(?: b|\))/i],[c,[d,"OnePlus"],[l,g]],[/(alexa)webm/i,/(kf[a-z]{2}wi)( bui|\))/i,/(kf[a-z]+)( bui|\)).+silk\//i],[c,[d,w],[l,m]],[/((?:sd|kf)[0349hijorstuw]+)( bui|\)).+silk\//i],[[c,/(.+)/g,"Fire Phone $1"],[d,w],[l,g]],[/(playbook);[-\w\),; ]+(rim)/i],[c,d,[l,m]],[/\b((?:bb[a-f]|st[hv])100-\d)/i,/\(bb10; (\w+)/i],[c,[d,E],[l,g]],[/(?:\b|asus_)(transfo[prime ]{4,10} \w+|eeepc|slider \w+|nexus 7|padfone|p00[cj])/i],[c,[d,C],[l,m]],[/ (z[bes]6[027][012][km][ls]|zenfone \d\w?)\b/i],[c,[d,C],[l,g]],[/(nexus 9)/i],[c,[d,"HTC"],[l,m]],[/(htc)[-;_ ]{1,2}([\w ]+(?=\)| bui)|\w+)/i,/(zte)[- ]([\w ]+?)(?: bui|\/|\))/i,/(alcatel|geeksphone|nexian|panasonic|sony(?!-bra))[-_ ]?([-\w]*)/i],[d,[c,/_/g," "],[l,g]],[/droid.+; ([ab][1-7]-?[0178a]\d\d?)/i],[c,[d,"Acer"],[l,m]],[/droid.+; (m[1-5] note) bui/i,/\bmz-([-\w]{2,})/i],[c,[d,"Meizu"],[l,g]],[/\b(sh-?[altvz]?\d\d[a-ekm]?)/i],[c,[d,j],[l,g]],[/(blackberry|benq|palm(?=\-)|sonyericsson|acer|asus|dell|meizu|motorola|polytron)[-_ ]?([-\w]*)/i,/(hp) ([\w ]+\w)/i,/(asus)-?(\w+)/i,/(microsoft); (lumia[\w ]+)/i,/(lenovo)[-_ ]?([-\w]+)/i,/(jolla)/i,/(oppo) ?([\w ]+) bui/i],[d,c,[l,g]],[/(archos) (gamepad2?)/i,/(hp).+(touchpad(?!.+tablet)|tablet)/i,/(kindle)\/([\w\.]+)/i,/(nook)[\w ]+build\/(\w+)/i,/(dell) (strea[kpr\d ]*[\dko])/i,/(le[- ]+pan)[- ]+(\w{1,9}) bui/i,/(trinity)[- ]*(t\d{3}) bui/i,/(gigaset)[- ]+(q\w{1,9}) bui/i,/(vodafone) ([\w ]+)(?:\)| bui)/i],[d,c,[l,m]],[/(surface duo)/i],[c,[d,O],[l,m]],[/droid [\d\.]+; (fp\du?)(?: b|\))/i],[c,[d,"Fairphone"],[l,g]],[/(u304aa)/i],[c,[d,"AT&T"],[l,g]],[/\bsie-(\w*)/i],[c,[d,"Siemens"],[l,g]],[/\b(rct\w+) b/i],[c,[d,"RCA"],[l,m]],[/\b(venue[\d ]{2,7}) b/i],[c,[d,"Dell"],[l,m]],[/\b(q(?:mv|ta)\w+) b/i],[c,[d,"Verizon"],[l,m]],[/\b(?:barnes[& ]+noble |bn[rt])([\w\+ ]*) b/i],[c,[d,"Barnes & Noble"],[l,m]],[/\b(tm\d{3}\w+) b/i],[c,[d,"NuVision"],[l,m]],[/\b(k88) b/i],[c,[d,"ZTE"],[l,m]],[/\b(nx\d{3}j) b/i],[c,[d,"ZTE"],[l,g]],[/\b(gen\d{3}) b.+49h/i],[c,[d,"Swiss"],[l,g]],[/\b(zur\d{3}) b/i],[c,[d,"Swiss"],[l,m]],[/\b((zeki)?tb.*\b) b/i],[c,[d,"Zeki"],[l,m]],[/\b([yr]\d{2}) b/i,/\b(dragon[- ]+touch |dt)(\w{5}) b/i],[[d,"Dragon Touch"],c,[l,m]],[/\b(ns-?\w{0,9}) b/i],[c,[d,"Insignia"],[l,m]],[/\b((nxa|next)-?\w{0,9}) b/i],[c,[d,"NextBook"],[l,m]],[/\b(xtreme\_)?(v(1[045]|2[015]|[3469]0|7[05])) b/i],[[d,"Voice"],c,[l,g]],[/\b(lvtel\-)?(v1[12]) b/i],[[d,"LvTel"],c,[l,g]],[/\b(ph-1) /i],[c,[d,"Essential"],[l,g]],[/\b(v(100md|700na|7011|917g).*\b) b/i],[c,[d,"Envizen"],[l,m]],[/\b(trio[-\w\. ]+) b/i],[c,[d,"MachSpeed"],[l,m]],[/\btu_(1491) b/i],[c,[d,"Rotor"],[l,m]],[/(shield[\w ]+) b/i],[c,[d,"Nvidia"],[l,m]],[/(sprint) (\w+)/i],[d,c,[l,g]],[/(kin\.[onetw]{3})/i],[[c,/\./g," "],[d,O],[l,g]],[/droid.+; (cc6666?|et5[16]|mc[239][23]x?|vc8[03]x?)\)/i],[c,[d,B],[l,m]],[/droid.+; (ec30|ps20|tc[2-8]\d[kx])\)/i],[c,[d,B],[l,g]],[/(ouya)/i,/(nintendo) ([wids3utch]+)/i],[d,c,[l,h]],[/droid.+; (shield) bui/i],[c,[d,"Nvidia"],[l,h]],[/(playstation [345portablevi]+)/i],[c,[d,M],[l,h]],[/\b(xbox(?: one)?(?!; xbox))[\); ]/i],[c,[d,O],[l,h]],[/smart-tv.+(samsung)/i],[d,[l,v]],[/hbbtv.+maple;(\d+)/i],[[c,/^/,"SmartTV"],[d,L],[l,v]],[/(nux; netcast.+smarttv|lg (netcast\.tv-201\d|android tv))/i],[[d,k],[l,v]],[/(apple) ?tv/i],[d,[c,S+" TV"],[l,v]],[/crkey/i],[[c,T+"cast"],[d,P],[l,v]],[/droid.+aft(\w)( bui|\))/i],[c,[d,w],[l,v]],[/\(dtv[\);].+(aquos)/i,/(aquos-tv[\w ]+)\)/i],[c,[d,j],[l,v]],[/(bravia[\w ]+)( bui|\))/i],[c,[d,M],[l,v]],[/(mitv-\w{5}) bui/i],[c,[d,N],[l,v]],[/\b(roku)[\dx]*[\)\/]((?:dvp-)?[\d\.]*)/i,/hbbtv\/\d+\.\d+\.\d+ +\([\w ]*; *(\w[^;]*);([^;]*)/i],[[d,z],[c,z],[l,v]],[/\b(android tv|smart[- ]?tv|opera tv|tv; rv:)\b/i],[[l,v]],[/((pebble))app/i],[d,c,[l,y]],[/droid.+; (glass) \d/i],[c,[d,P],[l,y]],[/droid.+; (wt63?0{2,3})\)/i],[c,[d,B],[l,y]],[/(quest( 2)?)/i],[c,[d,_],[l,y]],[/(tesla)(?: qtcarbrowser|\/[-\w\.]+)/i],[d,[l,b]],[/droid .+?; ([^;]+?)(?: bui|\) applew).+? mobile safari/i],[c,[l,g]],[/droid .+?; ([^;]+?)(?: bui|\) applew).+?(?! mobile) safari/i],[c,[l,m]],[/\b((tablet|tab)[;\/]|focus\/\d(?!.+mobile))/i],[[l,m]],[/(phone|mobile(?:[;\/]| [ \w\/\.]*safari)|pda(?=.+windows ce))/i],[[l,g]],[/(android[-\w\. ]{0,9});.+buil/i],[c,[d,"Generic"]]],engine:[[/windows.+ edge\/([\w\.]+)/i],[f,[u,"EdgeHTML"]],[/webkit\/537\.36.+chrome\/(?!27)([\w\.]+)/i],[f,[u,"Blink"]],[/(presto)\/([\w\.]+)/i,/(webkit|trident|netfront|netsurf|amaya|lynx|w3m|goanna)\/([\w\.]+)/i,/ekioh(flow)\/([\w\.]+)/i,/(khtml|tasman|links)[\/ ]\(?([\w\.]+)/i,/(icab)[\/ ]([23]\.[\d\.]+)/i],[u,f],[/rv\:([\w\.]{1,9})\b.+(gecko)/i],[f,u]],os:[[/microsoft (windows) (vista|xp)/i],[u,f],[/(windows) nt 6\.2; (arm)/i,/(windows (?:phone(?: os)?|mobile))[\/ ]?([\d\.\w ]*)/i,/(windows)[\/ ]?([ntce\d\. ]+\w)(?!.+xbox)/i],[u,[f,$,q]],[/(win(?=3|9|n)|win 9x )([nt\d\.]+)/i],[[u,"Windows"],[f,$,q]],[/ip[honead]{2,4}\b(?:.*os ([\w]+) like mac|; opera)/i,/cfnetwork\/.+darwin/i],[[f,/_/g,"."],[u,"iOS"]],[/(mac os x) ?([\w\. ]*)/i,/(macintosh|mac_powerpc\b)(?!.+haiku)/i],[[u,"Mac OS"],[f,/_/g,"."]],[/droid ([\w\.]+)\b.+(android[- ]x86|harmonyos)/i],[f,u],[/(android|webos|qnx|bada|rim tablet os|maemo|meego|sailfish)[-\/ ]?([\w\.]*)/i,/(blackberry)\w*\/([\w\.]*)/i,/(tizen|kaios)[\/ ]([\w\.]+)/i,/\((series40);/i],[u,f],[/\(bb(10);/i],[f,[u,E]],[/(?:symbian ?os|symbos|s60(?=;)|series60)[-\/ ]?([\w\.]*)/i],[f,[u,"Symbian"]],[/mozilla\/[\d\.]+ \((?:mobile|tablet|tv|mobile; [\w ]+); rv:.+ gecko\/([\w\.]+)/i],[f,[u,I+" OS"]],[/web0s;.+rt(tv)/i,/\b(?:hp)?wos(?:browser)?\/([\w\.]+)/i],[f,[u,"webOS"]],[/crkey\/([\d\.]+)/i],[f,[u,T+"cast"]],[/(cros) [\w]+ ([\w\.]+\w)/i],[[u,"Chromium OS"],f],[/(nintendo|playstation) ([wids345portablevuch]+)/i,/(xbox); +xbox ([^\);]+)/i,/\b(joli|palm)\b ?(?:os)?\/?([\w\.]*)/i,/(mint)[\/\(\) ]?(\w*)/i,/(mageia|vectorlinux)[; ]/i,/([kxln]?ubuntu|debian|suse|opensuse|gentoo|arch(?= linux)|slackware|fedora|mandriva|centos|pclinuxos|red ?hat|zenwalk|linpus|raspbian|plan 9|minix|risc os|contiki|deepin|manjaro|elementary os|sabayon|linspire)(?: gnu\/linux)?(?: enterprise)?(?:[- ]linux)?(?:-gnu)?[-\/ ]?(?!chrom|package)([-\w\.]*)/i,/(hurd|linux) ?([\w\.]*)/i,/(gnu) ?([\w\.]*)/i,/\b([-frentopcghs]{0,5}bsd|dragonfly)[\/ ]?(?!amd|[ix346]{1,2}86)([\w\.]*)/i,/(haiku) (\w+)/i],[u,f],[/(sunos) ?([\w\.\d]*)/i],[[u,"Solaris"],f],[/((?:open)?solaris)[-\/ ]?([\w\.]*)/i,/(aix) ((\d)(?=\.|\)| )[\w\.])*/i,/\b(beos|os\/2|amigaos|morphos|openvms|fuchsia|hp-ux)/i,/(unix) ?([\w\.]*)/i],[u,f]]},H=function(e,t){if(typeof e===s&&(t=e,e=n),!(this instanceof H))return new H(e,t).getResult();var i=e||(typeof r!==o&&r.navigator&&r.navigator.userAgent?r.navigator.userAgent:""),h=t?function(e,t){var r={};for(var n in e)t[n]&&t[n].length%2==0?r[n]=t[n].concat(e[n]):r[n]=e[n];return r}(X,t):X;return this.getBrowser=function(){var e={};return e[u]=n,e[f]=n,G.call(e,i,h.browser),e.major=function(e){return typeof e===a?e.replace(/[^\d\.]/g,"").split(".")[0]:n}(e.version),e},this.getCPU=function(){var e={};return e[p]=n,G.call(e,i,h.cpu),e},this.getDevice=function(){var e={};return e[d]=n,e[c]=n,e[l]=n,G.call(e,i,h.device),e},this.getEngine=function(){var e={};return e[u]=n,e[f]=n,G.call(e,i,h.engine),e},this.getOS=function(){var e={};return e[u]=n,e[f]=n,G.call(e,i,h.os),e},this.getResult=function(){return{ua:this.getUA(),browser:this.getBrowser(),engine:this.getEngine(),os:this.getOS(),device:this.getDevice(),cpu:this.getCPU()}},this.getUA=function(){return i},this.setUA=function(e){return i=typeof e===a&&e.length>350?z(e,350):e,this},this.setUA(i),this};H.VERSION="0.7.32",H.BROWSER=U([u,f,"major"]),H.CPU=U([p]),H.DEVICE=U([c,d,l,h,g,v,m,y,b]),H.ENGINE=H.OS=U([u,f]),e.exports&&(t=e.exports=H),t.UAParser=H;var W=typeof r!==o&&(r.jQuery||r.Zepto);if(W&&!W.ua){var Y=new H;W.ua=Y.getResult(),W.ua.get=function(){return Y.getUA()},W.ua.set=function(e){Y.setUA(e);var t=Y.getResult();for(var r in t)W.ua[r]=t[r]}}}("object"==typeof window?window:i)}));const ul=["iOS"];class ll extends cl{constructor(){super(window.navigator.userAgent)}isChrome(){const e=this.getBrowser();if(!e.name)return!1;const t=this.getOS();let r=!0;return r=!new RegExp(ul.join("|"),"i").test(t.name),e.name.match(/Chrome/i)&&r}isFirefox(){const e=this.getBrowser();return!!e.name&&e.name.match(/Firefox/i)}isOpera(){const e=this.getBrowser();return!!e.name&&e.name.match(/Opera/i)}isSafari(){const e=this.getBrowser();return!!e.name&&e.name.match(/Safari/i)}}const dl=An.get("SdpParser"),fl=Array.from({length:31},((e,t)=>t+35)),pl=Array.from({length:32},((e,t)=>t+96)),hl=Array.from({length:14},((e,t)=>t+1)),gl=Array.from({length:240},((e,t)=>t+16));class ml{static setSimulcast(e,t){dl.info("Setting simulcast. Codec: ",t);if(!(new ll).isChrome())return dl.warn("Simulcast is only available in Google Chrome browser"),e;if("h264"!==t&&"vp8"!==t)return dl.warn("Simulcast is only available in h264 and vp8 codecs"),e;try{const t=/m=video[\s\S]*?a=ssrc:(\d*) msid:([\s\S]+?)\r\n/,r=/m=video[\s\S]*?a=ssrc:(\d*) cname:([\s\S]+?)\r\n/.exec(e),n=r[1],i=r[2],o=t.exec(e)[2],s=2,a=[n];for(let t=0;t<s;++t){const r=100+2*t,n=r+1;a.push(r),e+="a=ssrc-group:FID "+r+" "+n+"\r\na=ssrc:"+r+" cname:"+i+"\r\na=ssrc:"+r+" msid:"+o+"\r\na=ssrc:"+n+" cname:"+i+"\r\na=ssrc:"+n+" msid:"+o+"\r\n"}return e+="a=ssrc-group:SIM "+a.join(" ")+"\r\n",dl.info("Simulcast setted"),dl.debug("Simulcast SDP: ",e),e}catch(e){throw dl.error("Error setting SDP for simulcast: ",e),e}}static setStereo(e){return dl.info("Replacing SDP response for support stereo"),e=e.replace(/useinbandfec=1/g,"useinbandfec=1; stereo=1"),dl.info("Replaced SDP response for support stereo"),dl.debug("New SDP value: ",e),e}static setDTX(e){return dl.info("Replacing SDP response for support dtx"),e=e.replace("useinbandfec=1","useinbandfec=1; usedtx=1"),dl.info("Replaced SDP response for support dtx"),dl.debug("New SDP value: ",e),e}static setAbsoluteCaptureTime(e){const t="a=extmap:"+ml.getAvailableHeaderExtensionIdRange(e)[0]+" http://www.webrtc.org/experiments/rtp-hdrext/abs-capture-time\r\n";return e=e.replace(/(m=.*\r\n(?:.*\r\n)*?)(a=extmap.*\r\n)/gm,((e,r,n)=>r+t+n)),dl.info("Replaced SDP response for setting absolute capture time"),dl.debug("New SDP value: ",e),e}static setDependencyDescriptor(e){const t="a=extmap:"+ml.getAvailableHeaderExtensionIdRange(e)[0]+" https://aomediacodec.github.io/av1-rtp-spec/#dependency-descriptor-rtp-header-extension\r\n";return e=e.replace(/(m=.*\r\n(?:.*\r\n)*?)(a=extmap.*\r\n)/gm,((e,r,n)=>r+t+n)),dl.info("Replaced SDP response for setting depency descriptor"),dl.debug("New SDP value: ",e),e}static setVideoBitrate(e,t){if(t<1)dl.info("Remove bitrate restrictions"),e=e.replace(/b=AS:.*\r\n/,"").replace(/b=TIAS:.*\r\n/,"");else{const r=al.SDPInfo.parse(e),n=r.getMedia("video");dl.info("Setting video bitrate"),n.setBitrate(t),e=r.toString()}return e}static removeSdpLine(e,t){return dl.debug("SDP before trimming: ",e),e=e.split("\n").filter((e=>e.trim()!==t)).join("\n"),dl.debug("SDP trimmed result: ",e),e}static adaptCodecName(e,t,r){if(!e)return e;const n=new RegExp("".concat(t),"i");return e.replace(n,r)}static setMultiopus(e,t){if(!(new ll).isFirefox()&&(!t||vl(t)))if(e.includes("multiopus/48000/6"))dl.info("Multiopus already setted");else{dl.info("Setting multiopus");const t=/m=audio 9 UDP\/TLS\/RTP\/SAVPF (.*)\r\n/.exec(e)[0],r=ml.getAvailablePayloadTypeRange(e)[0],n=t.replace("\r\n"," ")+r+"\r\na=rtpmap:"+r+" multiopus/48000/6\r\na=fmtp:"+r+" channel_mapping=0,4,1,2,3,5;coupled_streams=2;minptime=10;num_streams=4;useinbandfec=1\r\n";e=e.replace(t,n),dl.info("Multiopus offer created"),dl.debug("SDP parsed for multioups: ",e)}return e}static getAvailablePayloadTypeRange(e){const t=e.matchAll(/m=(?:.*) (?:.*) UDP\/TLS\/RTP\/SAVPF (.*)\r\n/gm);let r=pl.concat(fl);for(const e of t){const t=e[1].split(" ").map((e=>parseInt(e)));r=r.filter((e=>!t.includes(e)))}return r}static getAvailableHeaderExtensionIdRange(e){const t=e.matchAll(/a=extmap:(\d+)(?:.*)\r\n/gm);let r=hl.concat(gl);for(const e of t){const t=e[1].split(" ").map((e=>parseInt(e)));r=r.filter((e=>!t.includes(e)))}return r}static renegotiate(e,t){const r=al.SDPInfo.parse(e),n=al.SDPInfo.parse(t);for(const e of r.getMedias()){let t=n.getMediaById(e.getId());if(!t){t=new al.MediaInfo(e.getId(),e.getType()),t.setDirection(al.Direction.reverse(e.getDirection()));const r=n.getMedia(e.getType());if(r){t.setCodecs(r.getCodecs());for(const[e,n]of r.getExtensions())t.addExtension(e,n)}n.addMedia(t)}}return n.toString()}static updateMissingVideoExtensions(e,t){var r;const n=al.SDPInfo.parse(e),i=null===(r=al.SDPInfo.parse(t).getMediasByType("video")[0])||void 0===r?void 0:r.getExtensions();if(i||i.length){for(const t of n.getMediasByType("video")){const r=t.getExtensions();i.forEach(((n,i)=>{if(!r.get(i)){const r=t.getId(),o="a=extmap:"+i+" "+n+"\r\n",s=new RegExp("(a=mid:"+r+"\r\n(?:.*\r\n)*?)","g");e=e.replace(s,((e,t,r)=>t+o))}}))}return e}}}const vl=e=>e.getAudioTracks().some((e=>e.getSettings().channelCount>2));class yl extends Ta{constructor(e,t){super(),this.namespace=e,this.tm=t}cmd(e,t){return this.tm.cmd(e,t,this.namespace)}event(e,t){return this.tm.event(e,t,this.namespace)}close(){return this.tm.namespaces.delete(this.namespace)}}var bl=class extends Ta{constructor(e){super(),this.maxId=0,this.namespaces=new Map,this.transactions=new Map,this.transport=e,this.listener=t=>{let r;try{r=JSON.parse(t.utf8Data||t.data||t)}catch(e){return}switch(r.type){case"cmd":const t={name:r.name,data:r.data,namespace:r.namespace,accept:t=>{e.send(JSON.stringify({type:"response",transId:r.transId,data:t}))},reject:t=>{e.send(JSON.stringify({type:"error",transId:r.transId,data:t}))}};if(t.namespace){const e=this.namespaces.get(t.namespace);e?e.emit("cmd",t):this.emit("cmd",t)}else this.emit("cmd",t);break;case"response":{const e=this.transactions.get(r.transId);if(!e)return;this.transactions.delete(r.transId),e.resolve(r.data);break}case"error":{const e=this.transactions.get(r.transId);if(!e)return;this.transactions.delete(r.transId),e.reject(r.data);break}case"event":const i={name:r.name,data:r.data,namespace:r.namespace};if(i.namespace){var n=this.namespaces.get(i.namespace);n?n.emit("event",i):this.emit("event",i)}else this.emit("event",i)}},this.transport.addListener?this.transport.addListener("message",this.listener):this.transport.addEventListener("message",this.listener)}cmd(e,t,r){return new Promise(((n,i)=>{if(!e||0===e.length)throw new Error("Bad command name");const o={type:"cmd",transId:this.maxId++,name:e,data:t};r&&(o.namespace=r);const s=JSON.stringify(o);o.resolve=n,o.reject=i,this.transactions.set(o.transId,o);try{this.transport.send(s)}catch(e){throw this.transactions.delete(o.transId),e}}))}event(e,t,r){if(!e||0===e.length)throw new Error("Bad event name");const n={type:"event",name:e,data:t};r&&(n.namespace=r);const i=JSON.stringify(n);this.transport.send(i)}namespace(e){let t=this.namespaces.get(e);return t||(t=new yl(e,this),this.namespaces.set(e,t),t)}close(){for(const e of this.namespaces.values())e.close();this.transport.removeListener?this.transport.removeListener("message",this.listener):this.transport.removeEventListener("message",this.listener)}};const wl=An.get("Signaling"),Sl="wsConnectionSuccess",Cl="wsConnectionError",El="wsConnectionClose",xl="broadcastEvent",Tl={VP8:"vp8",VP9:"vp9",H264:"h264",AV1:"av1"},Il={OPUS:"opus",MULTIOPUS:"multiopus"};class Pl extends Ta{constructor(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{streamName:null,url:"ws://localhost:8080/"};super(),this.streamName=e.streamName,this.wsUrl=e.url,this.webSocket=null,this.transactionManager=null,this.serverId=null,this.clusterId=null;(new ll).isSafari()&&(Tl.H265="h265")}async connect(){var e;return wl.info("Connecting to Signaling Server"),this.transactionManager&&(null===(e=this.webSocket)||void 0===e?void 0:e.readyState)===WebSocket.OPEN?(wl.info("Connected to server: ",this.webSocket.url),wl.debug("WebSocket value: ",{url:this.webSocket.url,protocol:this.webSocket.protocol,readyState:this.webSocket.readyState,binaryType:this.webSocket.binaryType,extensions:this.webSocket.extensions}),this.emit(Sl,{ws:this.webSocket,tm:this.transactionManager}),this.webSocket):new Promise(((e,t)=>{this.webSocket=new WebSocket(this.wsUrl),this.transactionManager=new bl(this.webSocket),this.webSocket.onopen=()=>{wl.info("WebSocket opened"),this.transactionManager.on("event",(e=>{this.emit(xl,e)})),wl.info("Connected to server: ",this.webSocket.url),wl.debug("WebSocket value: ",{url:this.webSocket.url,protocol:this.webSocket.protocol,readyState:this.webSocket.readyState,binaryType:this.webSocket.binaryType,extensions:this.webSocket.extensions}),this.emit(Sl,{ws:this.webSocket,tm:this.transactionManager}),e(this.webSocket)},this.webSocket.onerror=()=>{wl.error("WebSocket not connected: ",this.webSocket.url),this.emit(Cl,this.webSocket.url),t(this.webSocket.url)},this.webSocket.onclose=()=>{this.webSocket=null,this.transactionManager=null,wl.info("Connection closed with Signaling Server."),this.emit(El)}}))}close(){var e;wl.info("Closing connection with Signaling Server."),null===(e=this.webSocket)||void 0===e||e.close()}async subscribe(e,t){let r=arguments.length>2&&void 0!==arguments[2]?arguments[2]:null,n=arguments.length>3&&void 0!==arguments[3]?arguments[3]:null;wl.info("Starting subscription to streamName: ",this.streamName),wl.debug("Subcription local description: ",e);const i=Rl(t,r,n),o={sdp:e=ml.adaptCodecName(e,"AV1X",Tl.AV1),streamId:this.streamName,pinnedSourceId:i.pinnedSourceId,excludedSourceIds:i.excludedSourceIds};i.vad&&(o.vad=!0),Array.isArray(i.events)&&(o.events=i.events),i.forcePlayoutDelay&&(o.forcePlayoutDelay=i.forcePlayoutDelay);try{var s,a,c,u,l;await this.connect(),wl.info("Sending view command");const e=await this.transactionManager.cmd("view",o),t=null===(s=(a=RTCRtpReceiver).getCapabilities)||void 0===s||null===(c=s.call(a,"video"))||void 0===c||null===(u=c.codecs)||void 0===u||null===(l=u.find)||void 0===l?void 0:l.call(u,(e=>"video/AV1X"===e.mimeType));return e.sdp=t?ml.adaptCodecName(e.sdp,Tl.AV1,"AV1X"):e.sdp,wl.info("Command sent, subscriberId: ",e.subscriberId),wl.debug("Command result: ",e),this.serverId=e.subscriberId,this.clusterId=e.clusterId,e.sdp}catch(e){throw wl.error("Error sending view command, error: ",e),e}}async publish(e,t){const r=kl(t,arguments.length>2&&void 0!==arguments[2]?arguments[2]:null,arguments.length>3&&void 0!==arguments[3]?arguments[3]:null);wl.info("Starting publishing to streamName: ".concat(this.streamName,", codec: ").concat(r.codec)),wl.debug("Publishing local description: ",e);const n=Object.values(Tl);if(-1===n.indexOf(r.codec))throw wl.error("Invalid codec. Possible values are: ",n),new Error("Invalid codec. Possible values are: ".concat(n));r.codec===Tl.AV1&&(e=ml.adaptCodecName(e,"AV1X",Tl.AV1));const i={name:this.streamName,sdp:e,codec:r.codec,sourceId:r.sourceId};null!==r.record&&(i.record=r.record),Array.isArray(r.events)&&(i.events=r.events);try{await this.connect(),wl.info("Sending publish command");const e=await this.transactionManager.cmd("publish",i);if(r.codec===Tl.AV1){var o,s,a,c,u;const t=null===(o=(s=RTCRtpSender).getCapabilities)||void 0===o||null===(a=o.call(s,"video"))||void 0===a||null===(c=a.codecs)||void 0===c||null===(u=c.find)||void 0===u?void 0:u.call(c,(e=>"video/AV1X"===e.mimeType));e.sdp=t?ml.adaptCodecName(e.sdp,Tl.AV1,"AV1X"):e.sdp}return wl.info("Command sent, publisherId: ",e.publisherId),wl.debug("Command result: ",e),this.serverId=e.publisherId,this.clusterId=e.clusterId,e.sdp}catch(e){throw wl.error("Error sending publish command, error: ",e),e}}async cmd(e,t){return wl.info("Sending cmd: ".concat(e)),this.transactionManager.cmd(e,t)}}const Rl=(e,t,r)=>{let n="object"==typeof e?e:{};return 0===Object.keys(n).length&&(n={vad:e,pinnedSourceId:t,excludedSourceIds:r}),n},kl=(e,t,r)=>{let n="object"==typeof e?e:{};if(0===Object.keys(n).length){const i=Tl.H264;n={codec:null!=e?e:i,record:t,sourceId:r}}return n};function Ol(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,n)}return r}function Al(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?Ol(Object(r),!0).forEach((function(t){n(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):Ol(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}const Dl=An.get("PeerConnection"),Ll={track:"track",connectionStateChange:"connectionStateChange"},jl={stereo:!1,mediaStream:null,codec:"h264",simulcast:!1,scalabilityMode:null,disableAudio:!1,disableVideo:!1,setSDPToPeer:!0};class Ml extends Ta{constructor(){super(),this.sessionDescription=null,this.peer=null,this.peerConnectionStats=null}async createRTCPeer(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:null;Dl.info("Creating new RTCPeerConnection"),Dl.debug("RTC configuration provided by user: ",e),this.peer=_l(this,e)}getRTCPeer(){return Dl.info("Getting RTC Peer"),this.peer}async closeRTCPeer(){var e;Dl.info("Closing RTCPeerConnection"),null===(e=this.peer)||void 0===e||e.close(),this.peer=null,this.stopStats(),this.emit(Ll.connectionStateChange,"closed")}async setRTCRemoteSDP(e){Dl.info("Setting RTC Remote SDP");const t={type:"answer",sdp:e};try{await this.peer.setRemoteDescription(t),Dl.info("RTC Remote SDP was set successfully."),Dl.debug("RTC Remote SDP new value: ",e)}catch(e){throw Dl.error("Error while setting RTC Remote SDP: ",e),e}}async getRTCLocalSDP(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:jl;Dl.info("Getting RTC Local SDP"),e=Al(Al({},jl),e),Dl.debug("Options: ",e);const t=Bl(e.mediaStream);t?Fl(this.peer,t,e):Vl(this.peer,e),Dl.info("Creating peer offer");const r=await this.peer.createOffer();return Dl.info("Peer offer created"),Dl.debug("Peer offer response: ",r.sdp),this.sessionDescription=r,e.disableAudio||(e.stereo&&(this.sessionDescription.sdp=ml.setStereo(this.sessionDescription.sdp)),e.dtx&&(this.sessionDescription.sdp=ml.setDTX(this.sessionDescription.sdp)),this.sessionDescription.sdp=ml.setMultiopus(this.sessionDescription.sdp,t)),!e.disableVideo&&e.simulcast&&(this.sessionDescription.sdp=ml.setSimulcast(this.sessionDescription.sdp,e.codec)),e.absCaptureTime&&(this.sessionDescription.sdp=ml.setAbsoluteCaptureTime(this.sessionDescription.sdp)),e.dependencyDescriptor&&(this.sessionDescription.sdp=ml.setDependencyDescriptor(this.sessionDescription.sdp)),e.setSDPToPeer&&(await this.peer.setLocalDescription(this.sessionDescription),Dl.info("Peer local description set")),this.sessionDescription.sdp}async addRemoteTrack(e,t){const r=await new Promise(((r,n)=>{try{const n=this.peer.addTransceiver(e,{direction:"recvonly"});n.resolve=r,n.streams=t}catch(e){n(e)}}));for(const e of t)e.addTrack(r.receiver.track);return r}updateBandwidthRestriction(e,t){return Dl.info("Updating bandwidth restriction, bitrate value: ",t),Dl.debug("SDP value: ",e),ml.setVideoBitrate(e,t)}async updateBitrate(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:0;if(!this.peer)throw Dl.error("Cannot update bitrate. No peer found."),new Error("Cannot update bitrate. No peer found.");Dl.info("Updating bitrate to value: ",e),this.sessionDescription=await this.peer.createOffer(),await this.peer.setLocalDescription(this.sessionDescription);const t=this.updateBandwidthRestriction(this.peer.remoteDescription.sdp,e);await this.setRTCRemoteSDP(t),Dl.info("Bitrate restirctions updated: ","".concat(e>0?e:"unlimited"," kbps"))}getRTCPeerStatus(){if(Dl.info("Getting RTC peer status"),!this.peer)return null;const e=zl(this.peer);return Dl.info("RTC peer status getted, value: ",e),e}replaceTrack(e){if(!this.peer)return void Dl.error("Could not change track if there is not an active connection.");const t=this.peer.getSenders().find((t=>t.track.kind===e.kind));t?t.replaceTrack(e):Dl.error("There is no ".concat(e.kind," track in active broadcast."))}static getCapabilities(e){const t=new ll;if(t.isFirefox())return(e=>"video"===e?{codecs:[{codec:"vp8",mimeType:"video/VP8"},{codec:"vp9",mimeType:"video/VP9"},{codec:"h264",mimeType:"video/H264"}],headerExtensions:[]}:"audio"===e?{codecs:[{codec:"opus",mimeType:"audio/opus",channels:2}],headerExtensions:[]}:null)(e);const r=RTCRtpSender.getCapabilities(e);if(r){const n={};let i=new RegExp("^video/(".concat(Object.values(Tl).join("|"),")x?$"),"i");"audio"===e&&(i=new RegExp("^audio/(".concat(Object.values(Il).join("|"),")$"),"i"),t.isChrome()&&(n.multiopus={mimeType:"audio/multiopus",channels:6}));for(const e of r.codecs){const t=e.mimeType.match(i);if(t){const r=t[1].toLowerCase();if(n[r]=Al(Al({},n[r]),{},{mimeType:e.mimeType}),e.scalabilityModes){let t=n[r].scalabilityModes||[];t=[...t,...e.scalabilityModes],n[r].scalabilityModes=[...new Set(t)]}e.channels&&(n[r].channels=e.channels)}}r.codecs=Object.keys(n).map((e=>Al({codec:e},n[e])))}return r}getTracks(){var e,t;return null===(e=this.peer)||void 0===e||null===(t=e.getSenders())||void 0===t?void 0:t.map((e=>e.track))}initStats(){this.peerConnectionStats?Dl.warn("Cannot init peer stats: Already initialized"):this.peer?(this.peerConnectionStats=new qa(this.peer),this.peerConnectionStats.init(),Ba(this.peerConnectionStats,this,[$a])):Dl.warn("Cannot init peer stats: RTCPeerConnection not initialized")}stopStats(){var e;null===(e=this.peerConnectionStats)||void 0===e||e.stop(),this.peerConnectionStats=null}}const Nl=e=>(null==e?void 0:e.getAudioTracks().length)<=1&&(null==e?void 0:e.getVideoTracks().length)<=1,Bl=e=>{if(!e)return null;if(e instanceof MediaStream&&Nl(e))return e;if(!(e instanceof MediaStream)){Dl.info("Creating MediaStream to add received tracks.");const t=new MediaStream;for(const r of e)t.addTrack(r);if(Nl(t))return t}throw Dl.error("MediaStream must have 1 audio track and 1 video track, or at least one of them."),new Error("MediaStream must have 1 audio track and 1 video track, or at least one of them.")},_l=(e,t)=>{const r=new RTCPeerConnection(t);return Ul(e,r),r},Ul=(e,t)=>{t.ontrack=t=>{var r;if(Dl.info("New track from peer."),Dl.debug("Track event value: ",t),null!=t&&null!==(r=t.transceiver)&&void 0!==r&&r.resolve){const e=t.transceiver.resolve;delete t.transceiver.resolve,e(t.transceiver)}e.emit(Ll.track,t)},t.connectionState?t.onconnectionstatechange=r=>{Dl.info("Peer connection state change: ",t.connectionState),e.emit(Ll.connectionStateChange,t.connectionState)}:t.oniceconnectionstatechange=r=>{Dl.info("Peer ICE connection state change: ",t.iceConnectionState),e.emit(Ll.connectionStateChange,t.iceConnectionState)},t.onnegotiationneeded=async e=>{if(!t.remoteDescription)return;Dl.info("Peer onnegotiationneeded, updating local description");const r=await t.createOffer();Dl.info("Peer onnegotiationneeded, got local offer",r.sdp),r.sdp=ml.updateMissingVideoExtensions(r.sdp,t.remoteDescription.sdp),await t.setLocalDescription(r);const n=ml.renegotiate(r.sdp,t.remoteDescription.sdp);Dl.info("Peer onnegotiationneeded, updating remote description",n),await t.setRemoteDescription({type:"answer",sdp:n}),Dl.info("Peer onnegotiationneeded, renegotiation done")}},Fl=(e,t,r)=>{Dl.info("Adding mediaStream tracks to RTCPeerConnection");for(const n of t.getTracks()){const i={streams:[t]};"audio"===n.kind&&(i.direction=r.disableAudio?"inactive":"sendonly"),"video"===n.kind&&(i.direction=r.disableVideo?"inactive":"sendonly",r.scalabilityMode&&(new ll).isChrome()?(Dl.debug("Video track with scalability mode: ".concat(r.scalabilityMode,".")),i.sendEncodings=[{scalabilityMode:r.scalabilityMode}]):r.scalabilityMode&&Dl.warn("SVC is only supported in Google Chrome")),e.addTransceiver(n,i),Dl.info("Track '".concat(n.label,"' added: "),"id: ".concat(n.id),"kind: ".concat(n.kind))}},Vl=(e,t)=>{const r=new ll;if(!t.disableVideo){const t=e.addTransceiver("video",{direction:"recvonly"});r.isOpera()&&t.setCodecPreferences(RTCRtpReceiver.getCapabilities("video").codecs.filter((e=>"video/H264"!==e.mimeType||e.sdpFmtpLine.includes("profile-level-id=4"))))}t.disableAudio||e.addTransceiver("audio",{direction:"recvonly"});for(let r=0;r<t.multiplexedAudioTracks;r++)e.addTransceiver("audio",{direction:"recvonly"})},zl=e=>{var t;const r=null!==(t=e.connectionState)&&void 0!==t?t:e.iceConnectionState;switch(r){case"checking":return"connecting";case"completed":return"connected";default:return r}};function Gl(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,n)}return r}function $l(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?Gl(Object(r),!0).forEach((function(t){n(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):Gl(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}const ql=An.get("Director"),Xl="WebRtc";let Hl="";let Wl="https://director.millicast.com";class Yl{static setEndpoint(e){Wl=e.replace(/\/$/,"")}static getEndpoint(){return Wl}static setLiveDomain(e){Hl=e.replace(/\/$/,"")}static getLiveDomain(){return Hl}static async getPublisher(e){const t=Jl(e,arguments.length>1&&void 0!==arguments[1]?arguments[1]:null,arguments.length>2&&void 0!==arguments[2]?arguments[2]:Xl);ql.info("Getting publisher connection path for stream name: ",t.streamName);const r={streamName:t.streamName,streamType:t.streamType},n={"Content-Type":"application/json",Authorization:"Bearer ".concat(t.token)},i="".concat(this.getEndpoint(),"/api/director/publish");try{let e=await fetch(i,{method:"POST",headers:n,body:JSON.stringify(r)});if(e=await e.json(),"fail"===e.status){throw new Error(e.data.message)}return e=Zl(e),ql.debug("Getting publisher response: ",e),e.data}catch(e){throw ql.error("Error while getting publisher connection path. ",e),e}}static async getSubscriber(e){const t=Kl(e,arguments.length>1&&void 0!==arguments[1]?arguments[1]:null,arguments.length>2&&void 0!==arguments[2]?arguments[2]:null);ql.info("Getting subscriber connection data for stream name: ".concat(t.streamName," and account id: ").concat(t.streamAccountId));const r={streamAccountId:t.streamAccountId,streamName:t.streamName};let n={"Content-Type":"application/json"};t.subscriberToken&&(n=$l($l({},n),{},{Authorization:"Bearer ".concat(t.subscriberToken)}));const i="".concat(this.getEndpoint(),"/api/director/subscribe");try{let e=await fetch(i,{method:"POST",headers:n,body:JSON.stringify(r)});if(e=await e.json(),"fail"===e.status){throw new Error(e.data.message)}return e=Zl(e),ql.debug("Getting subscriber response: ",e),e.data}catch(e){throw ql.error("Error while getting subscriber connection path. ",e),e}}}const Jl=(e,t,r)=>{let n="object"==typeof e?e:{};return 0===Object.keys(n).length&&(n={token:e,streamName:t,streamType:r}),n},Kl=(e,t,r)=>{let n="object"==typeof e?e:{};return 0===Object.keys(n).length&&(n={streamName:e,streamAccountId:t,subscriberToken:r}),n},Zl=e=>{if(Yl.getLiveDomain()){const t=/\/\/(.*?)\//,r=e.data.urls.map((e=>{const r=t.exec(e);return e.replace(r[1],Yl.getLiveDomain())}));e.data.urls=r}return e};function Ql(e){this.message=e}Ql.prototype=new Error,Ql.prototype.name="InvalidCharacterError";var ed="undefined"!=typeof window&&window.atob&&window.atob.bind(window)||function(e){var t=String(e).replace(/=+$/,"");if(t.length%4==1)throw new Ql("'atob' failed: The string to be decoded is not correctly encoded.");for(var r,n,i=0,o=0,s="";n=t.charAt(o++);~n&&(r=i%4?64*r+n:n,i++%4)?s+=String.fromCharCode(255&r>>(-2*i&6)):0)n="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=".indexOf(n);return s};function td(e){var t=e.replace(/-/g,"+").replace(/_/g,"/");switch(t.length%4){case 0:break;case 2:t+="==";break;case 3:t+="=";break;default:throw"Illegal base64url string!"}try{return function(e){return decodeURIComponent(ed(e).replace(/(.)/g,(function(e,t){var r=t.charCodeAt(0).toString(16).toUpperCase();return r.length<2&&(r="0"+r),"%"+r})))}(t)}catch(e){return ed(t)}}function rd(e){this.message=e}rd.prototype=new Error,rd.prototype.name="InvalidTokenError";var nd=o((function(e,t){!function(r){if(null!=t&&"number"!=typeof t.nodeType)e.exports=r();else{var n=r(),i="undefined"!=typeof self?self:$.global;"function"!=typeof i.btoa&&(i.btoa=n.btoa),"function"!=typeof i.atob&&(i.atob=n.atob)}}((function(){var e="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";function t(e){this.message=e}return t.prototype=new Error,t.prototype.name="InvalidCharacterError",{btoa:function(r){for(var n,i,o=String(r),s=0,a=e,c="";o.charAt(0|s)||(a="=",s%1);c+=a.charAt(63&n>>8-s%1*8)){if((i=o.charCodeAt(s+=3/4))>255)throw new t("'btoa' failed: The string to be encoded contains characters outside of the Latin1 range.");n=n<<8|i}return c},atob:function(r){var n=String(r).replace(/[=]+$/,"");if(n.length%4==1)throw new t("'atob' failed: The string to be decoded is not correctly encoded.");for(var i,o,s=0,a=0,c="";o=n.charAt(a++);~o&&(i=s%4?64*i+o:o,s++%4)?c+=String.fromCharCode(255&i>>(-2*s&6)):0)o=e.indexOf(o);return c}}}))}));let id;class od extends Ta{constructor(e,t,r,n){if(super(),id=r,!e)throw id.error("Stream Name is required to construct this module."),new Error("Stream Name is required to construct this module.");if(!t)throw id.error("Token generator is required to construct this module."),new Error("Token generator is required to construct this module.");this.webRTCPeer=new Ml,this.signaling=null,this.streamName=e,this.autoReconnect=n,this.reconnectionInterval=1e3,this.alreadyDisconnected=!1,this.firstReconnection=!0,this.stopReconnection=!1,this.tokenGenerator=t,this.options=null}getRTCPeerConnection(){return this.webRTCPeer?this.webRTCPeer.getRTCPeer():null}stop(){var e;id.info("Stopping"),this.webRTCPeer.closeRTCPeer(),null===(e=this.signaling)||void 0===e||e.close(),this.signaling=null,this.stopReconnection=!0,this.webRTCPeer=new Ml}isActive(){const e=this.webRTCPeer.getRTCPeerStatus();return id.info("Broadcast status: ",e||"not_established"),"connected"===e}setReconnect(){this.signaling.on("migrate",(()=>this.replaceConnection())),this.autoReconnect&&(this.signaling.on(Cl,(()=>{!this.firstReconnection&&this.alreadyDisconnected||(this.firstReconnection=!1,this.reconnect({error:new Error("Signaling error: wsConnectionError")}))})),this.webRTCPeer.on(Ll.connectionStateChange,(e=>{("failed"===e||"disconnected"===e&&this.alreadyDisconnected)&&this.firstReconnection?(this.firstReconnection=!1,this.reconnect({error:new Error("Connection state change: RTCPeerConnectionState disconnected")})):"disconnected"===e?(this.alreadyDisconnected=!0,setTimeout((()=>this.reconnect({error:new Error("Connection state change: RTCPeerConnectionState disconnected")})),1500)):this.alreadyDisconnected=!1})))}async reconnect(e){try{this.isActive()||this.stopReconnection||(this.stop(),this.emit("reconnect",{timeout:sd(this.reconnectionInterval),error:null!=e&&e.error?null==e?void 0:e.error:new Error("Attempting to reconnect")}),await this.connect(this.options),this.alreadyDisconnected=!1,this.reconnectionInterval=1e3,this.firstReconnection=!0)}catch(e){this.reconnectionInterval=sd(this.reconnectionInterval),id.error("Reconnection failed, retrying in ".concat(this.reconnectionInterval,"ms. "),e),setTimeout((()=>this.reconnect({error:e})),this.reconnectionInterval)}}}const sd=e=>e<32e3?2*e:e;function ad(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,n)}return r}function cd(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?ad(Object(r),!0).forEach((function(t){n(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):ad(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}const ud=An.get("Publish"),ld={mediaStream:null,bandwidth:0,disableVideo:!1,disableAudio:!1,codec:Tl.H264,simulcast:!1,scalabilityMode:null,peerConfig:{}};function dd(e,t){var r=Object.keys(e);if(Object.getOwnPropertySymbols){var n=Object.getOwnPropertySymbols(e);t&&(n=n.filter((function(t){return Object.getOwnPropertyDescriptor(e,t).enumerable}))),r.push.apply(r,n)}return r}function fd(e){for(var t=1;t<arguments.length;t++){var r=null!=arguments[t]?arguments[t]:{};t%2?dd(Object(r),!0).forEach((function(t){n(e,t,r[t])})):Object.getOwnPropertyDescriptors?Object.defineProperties(e,Object.getOwnPropertyDescriptors(r)):dd(Object(r)).forEach((function(t){Object.defineProperty(e,t,Object.getOwnPropertyDescriptor(r,t))}))}return e}const pd=An.get("View"),hd={disableVideo:!1,disableAudio:!1,peerConfig:{}};e.Director=Yl,e.Logger=An,e.PeerConnection=Ml,e.Publish=class extends od{constructor(e,t){super(e,t,ud,!(arguments.length>2&&void 0!==arguments[2])||arguments[2])}async connect(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:ld;this.options=cd(cd(cd({},ld),e),{},{setSDPToPeer:!1}),await this.initConnection({migrate:!1})}async reconnect(e){var t,r;this.options.mediaStream=null!==(t=null===(r=this.webRTCPeer)||void 0===r?void 0:r.getTracks())&&void 0!==t?t:this.options.mediaStream,super.reconnect(e)}async replaceConnection(){var e,t;ud.info("Migrating current connection"),this.options.mediaStream=null!==(e=null===(t=this.webRTCPeer)||void 0===t?void 0:t.getTracks())&&void 0!==e?e:this.options.mediaStream,await this.initConnection({migrate:!0})}async record(){var e;this.recordingAvailable?(this.options.record=!0,await(null===(e=this.signaling)||void 0===e?void 0:e.cmd("record")),ud.info("Broadcaster start recording")):ud.error("Record not available")}async unrecord(){var e;this.recordingAvailable?(this.options.record=!1,await(null===(e=this.signaling)||void 0===e?void 0:e.cmd("unrecord")),ud.info("Broadcaster stop recording")):ud.error("Unrecord not available")}async initConnection(e){var t,r;let n,i;if(ud.debug("Broadcast option values: ",this.options),this.stopReconnection=!1,!this.options.mediaStream)throw ud.error("Error while broadcasting. MediaStream required"),new Error("MediaStream required");if(!e.migrate&&this.isActive())throw ud.warn("Broadcast currently working"),new Error("Broadcast currently working");try{var o;i=await this.tokenGenerator(),this.options.peerConfig.iceServers=null===(o=i)||void 0===o?void 0:o.iceServers}catch(e){throw ud.error("Error generating token."),e}if(!i)throw ud.error("Error while broadcasting. Publisher data required"),new Error("Publisher data required");if(this.recordingAvailable=function(e,t){if("string"!=typeof e)throw new rd("Invalid token specified");var r=!0===(t=t||{}).header?0:1;try{return JSON.parse(td(e.split(".")[r]))}catch(e){throw new rd("Invalid token specified: "+e.message)}}(i.jwt)[nd.atob("bWlsbGljYXN0")].record,this.options.record&&!this.recordingAvailable)throw ud.error("Error while broadcasting. Record option detected but recording is not available"),new Error("Record option detected but recording is not available");const s=new Pl({streamName:this.streamName,url:"".concat(i.urls[0],"?token=").concat(i.jwt)}),a=e.migrate?new Ml:this.webRTCPeer;await a.createRTCPeer(this.options.peerConfig),null===(t=this.stopReemitingWebRTCPeerInstanceEvents)||void 0===t||t.call(this),null===(r=this.stopReemitingSignalingInstanceEvents)||void 0===r||r.call(this),this.stopReemitingWebRTCPeerInstanceEvents=Ba(a,this,[Ll.connectionStateChange]),this.stopReemitingSignalingInstanceEvents=Ba(s,this,[xl]);const c=a.getRTCLocalSDP(this.options),u=s.connect();n=await Promise.all([c,u]);const l=n[0];let d=this.signaling;this.signaling=s;const f=this.signaling.publish(l,this.options),p=a.peer.setLocalDescription(a.sessionDescription);n=await Promise.all([f,p]);let h=n[0];!this.options.disableVideo&&this.options.bandwidth>0&&(h=a.updateBandwidthRestriction(h,this.options.bandwidth)),await a.setRTCRemoteSDP(h),ud.info("Broadcasting to streamName: ",this.streamName);let g=this.webRTCPeer;this.webRTCPeer=a,this.setReconnect(),e.migrate&&this.webRTCPeer.on(Ll.connectionStateChange,(e=>{var t,r,n,i;["connected","disconnected","failed","closed"].includes(e)&&(null===(t=d)||void 0===t||null===(r=t.close)||void 0===r||r.call(t),null===(n=g)||void 0===n||null===(i=n.closeRTCPeer)||void 0===i||i.call(n),d=g=null)}))}},e.Signaling=Pl,e.View=class extends od{constructor(e,t){let r=arguments.length>2&&void 0!==arguments[2]?arguments[2]:null;super(e,t,pd,!(arguments.length>3&&void 0!==arguments[3])||arguments[3]),r&&this.on(Ll.track,(e=>{r.srcObject=e.streams[0]}))}async connect(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:hd;this.options=fd(fd(fd({},hd),e),{},{setSDPToPeer:!1}),await this.initConnection({migrate:!1})}async select(){let e=arguments.length>0&&void 0!==arguments[0]?arguments[0]:{};pd.debug("Viewer select layer values: ",e),await this.signaling.cmd("select",{layer:e}),pd.info("Connected to streamName: ",this.streamName)}async addRemoteTrack(e,t){return pd.info("Viewer adding remote % track",e),this.webRTCPeer.addRemoteTrack(e,t)}async project(e,t){for(const e of t){if(!e.trackId&&!e.media)throw pd.error("Error in projection mapping, trackId or mediaId must be set"),new Error("Error in projection mapping, trackId or mediaId must be set");const t=this.webRTCPeer.getRTCPeer();if(e.mediaId&&!t.getTransceivers().find((t=>t.mid===e.mediaId.toString())))throw pd.error("Error in projection mapping, ".concat(e.mediaId," mid not found in local transceivers")),new Error("Error in projection mapping, ".concat(e.mediaId," mid not found in local transceivers"))}pd.debug("Viewer project source: layer mappings: ",e,t),await this.signaling.cmd("project",{sourceId:e,mapping:t}),pd.info("Projection done")}async unproject(e){pd.debug("Viewer unproject mediaIds: ",e),await this.signaling.cmd("unproject",{mediaIds:e}),pd.info("Unprojection done")}async replaceConnection(){pd.info("Migrating current connection"),await this.initConnection({migrate:!0})}async initConnection(e){var t,r;let n,i;if(pd.debug("Viewer connect options values: ",this.options),this.stopReconnection=!1,!e.migrate&&this.isActive())throw pd.warn("Viewer currently subscribed"),new Error("Viewer currently subscribed");try{var o;i=await this.tokenGenerator(),this.options.peerConfig.iceServers=null===(o=i)||void 0===o?void 0:o.iceServers}catch(e){throw pd.error("Error generating token."),e}if(!i)throw pd.error("Error while subscribing. Subscriber data required"),new Error("Subscriber data required");const s=new Pl({streamName:this.streamName,url:"".concat(i.urls[0],"?token=").concat(i.jwt)}),a=e.migrate?new Ml:this.webRTCPeer;await a.createRTCPeer(this.options.peerConfig),null===(t=this.stopReemitingWebRTCPeerInstanceEvents)||void 0===t||t.call(this),null===(r=this.stopReemitingSignalingInstanceEvents)||void 0===r||r.call(this),this.stopReemitingWebRTCPeerInstanceEvents=Ba(a,this,Object.values(Ll)),this.stopReemitingSignalingInstanceEvents=Ba(s,this,[xl]);const c=a.getRTCLocalSDP(fd(fd({},this.options),{},{stereo:!0})),u=s.connect();n=await Promise.all([c,u]);const l=n[0];let d=this.signaling;this.signaling=s;const f=this.signaling.subscribe(l,fd(fd({},this.options),{},{vad:this.options.multiplexedAudioTracks>0})),p=a.peer.setLocalDescription(a.sessionDescription);n=await Promise.all([f,p]);const h=n[0];await a.setRTCRemoteSDP(h),pd.info("Connected to streamName: ",this.streamName);let g=this.webRTCPeer;this.webRTCPeer=a,this.setReconnect(),e.migrate&&this.webRTCPeer.on(Ll.connectionStateChange,(e=>{if("connected"===e)setTimeout((()=>{var e,t,r,n;null===(e=d)||void 0===e||null===(t=e.close)||void 0===t||t.call(e),null===(r=g)||void 0===r||null===(n=r.closeRTCPeer)||void 0===n||n.call(r),d=g=null,pd.info("Current connection migrated")}),1e3);else if(["disconnected","failed","closed"].includes(e)){var t,r,n,i;null===(t=d)||void 0===t||null===(r=t.close)||void 0===r||r.call(t),null===(n=g)||void 0===n||null===(i=n.closeRTCPeer)||void 0===i||i.call(n),d=g=null}}))}},Object.defineProperty(e,"__esModule",{value:!0})}));
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("c8ba"), __webpack_require__("4362")))
 
@@ -7962,7 +8007,7 @@ var hasOwn = __webpack_require__("1a2d");
 var isCallable = __webpack_require__("1626");
 var isPrototypeOf = __webpack_require__("3a9b");
 var toString = __webpack_require__("577e");
-var defineProperty = __webpack_require__("9bf2").f;
+var defineBuiltInAccessor = __webpack_require__("edd0");
 var copyConstructorProperties = __webpack_require__("e893");
 
 var NativeSymbol = global.Symbol;
@@ -7995,7 +8040,7 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
   var replace = uncurryThis(''.replace);
   var stringSlice = uncurryThis(''.slice);
 
-  defineProperty(SymbolPrototype, 'description', {
+  defineBuiltInAccessor(SymbolPrototype, 'description', {
     configurable: true,
     get: function description() {
       var symbol = thisSymbolValue(this);
@@ -8047,7 +8092,7 @@ var ObjectPrototype = $Object.prototype;
 
 // `Object.getPrototypeOf` method
 // https://tc39.es/ecma262/#sec-object.getprototypeof
-// eslint-disable-next-line es-x/no-object-getprototypeof -- safe
+// eslint-disable-next-line es/no-object-getprototypeof -- safe
 module.exports = CORRECT_PROTOTYPE_GETTER ? $Object.getPrototypeOf : function (O) {
   var object = toObject(O);
   if (hasOwn(object, IE_PROTO)) return object[IE_PROTO];
@@ -8068,7 +8113,7 @@ var fails = __webpack_require__("d039");
 module.exports = !fails(function () {
   function F() { /* empty */ }
   F.prototype.constructor = null;
-  // eslint-disable-next-line es-x/no-object-getprototypeof -- required for testing
+  // eslint-disable-next-line es/no-object-getprototypeof -- required for testing
   return Object.getPrototypeOf(new F()) !== F.prototype;
 });
 
@@ -8160,20 +8205,53 @@ if (!IS_PURE && DESCRIPTORS && values.name !== 'values') try {
 
 /***/ }),
 
+/***/ "e267":
+/***/ (function(module, exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__("e330");
+var isArray = __webpack_require__("e8b5");
+var isCallable = __webpack_require__("1626");
+var classof = __webpack_require__("c6b6");
+var toString = __webpack_require__("577e");
+
+var push = uncurryThis([].push);
+
+module.exports = function (replacer) {
+  if (isCallable(replacer)) return replacer;
+  if (!isArray(replacer)) return;
+  var rawLength = replacer.length;
+  var keys = [];
+  for (var i = 0; i < rawLength; i++) {
+    var element = replacer[i];
+    if (typeof element == 'string') push(keys, element);
+    else if (typeof element == 'number' || classof(element) == 'Number' || classof(element) == 'String') push(keys, toString(element));
+  }
+  var keysLength = keys.length;
+  var root = true;
+  return function (key, value) {
+    if (root) {
+      root = false;
+      return value;
+    }
+    if (isArray(this)) return value;
+    for (var j = 0; j < keysLength; j++) if (keys[j] === key) return value;
+  };
+};
+
+
+/***/ }),
+
 /***/ "e330":
 /***/ (function(module, exports, __webpack_require__) {
 
 var NATIVE_BIND = __webpack_require__("40d5");
 
 var FunctionPrototype = Function.prototype;
-var bind = FunctionPrototype.bind;
 var call = FunctionPrototype.call;
-var uncurryThis = NATIVE_BIND && bind.bind(call, call);
+var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call, call);
 
-module.exports = NATIVE_BIND ? function (fn) {
-  return fn && uncurryThis(fn);
-} : function (fn) {
-  return fn && function () {
+module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
+  return function () {
     return call.apply(fn, arguments);
   };
 };
@@ -8232,8 +8310,7 @@ var proxyAccessor = __webpack_require__("aeb0");
 var inheritIfRequired = __webpack_require__("7156");
 var normalizeStringArgument = __webpack_require__("e391");
 var installErrorCause = __webpack_require__("ab36");
-var clearErrorStack = __webpack_require__("0d26");
-var ERROR_STACK_INSTALLABLE = __webpack_require__("b980");
+var installErrorStack = __webpack_require__("6f19");
 var DESCRIPTORS = __webpack_require__("83ab");
 var IS_PURE = __webpack_require__("c430");
 
@@ -8259,7 +8336,7 @@ module.exports = function (FULL_NAME, wrapper, FORCED, IS_AGGREGATE_ERROR) {
     var message = normalizeStringArgument(IS_AGGREGATE_ERROR ? b : a, undefined);
     var result = IS_AGGREGATE_ERROR ? new OriginalError(a) : new OriginalError();
     if (message !== undefined) createNonEnumerableProperty(result, 'message', message);
-    if (ERROR_STACK_INSTALLABLE) createNonEnumerableProperty(result, 'stack', clearErrorStack(result.stack, 2));
+    installErrorStack(result, WrappedError, result.stack, 2);
     if (this && isPrototypeOf(OriginalErrorPrototype, this)) inheritIfRequired(result, this, WrappedError);
     if (arguments.length > OPTIONS_POSITION) installErrorCause(result, arguments[OPTIONS_POSITION]);
     return result;
@@ -8356,7 +8433,7 @@ var classof = __webpack_require__("c6b6");
 
 // `IsArray` abstract operation
 // https://tc39.es/ecma262/#sec-isarray
-// eslint-disable-next-line es-x/no-array-isarray -- safe
+// eslint-disable-next-line es/no-array-isarray -- safe
 module.exports = Array.isArray || function isArray(argument) {
   return classof(argument) == 'Array';
 };
@@ -8390,13 +8467,13 @@ var apply = __webpack_require__("2ba4");
 var call = __webpack_require__("c65b");
 var uncurryThis = __webpack_require__("e330");
 var fails = __webpack_require__("d039");
-var isArray = __webpack_require__("e8b5");
 var isCallable = __webpack_require__("1626");
-var isObject = __webpack_require__("861d");
 var isSymbol = __webpack_require__("d9b5");
 var arraySlice = __webpack_require__("f36a");
+var getReplacerFunction = __webpack_require__("e267");
 var NATIVE_SYMBOL = __webpack_require__("04f8");
 
+var $String = String;
 var $stringify = getBuiltIn('JSON', 'stringify');
 var exec = uncurryThis(/./.exec);
 var charAt = uncurryThis(''.charAt);
@@ -8426,13 +8503,13 @@ var ILL_FORMED_UNICODE = fails(function () {
 
 var stringifyWithSymbolsFix = function (it, replacer) {
   var args = arraySlice(arguments);
-  var $replacer = replacer;
-  if (!isObject(replacer) && it === undefined || isSymbol(it)) return; // IE8 returns string on undefined
-  if (!isArray(replacer)) replacer = function (key, value) {
-    if (isCallable($replacer)) value = call($replacer, this, key, value);
+  var $replacer = getReplacerFunction(replacer);
+  if (!isCallable($replacer) && (it === undefined || isSymbol(it))) return; // IE8 returns string on undefined
+  args[1] = function (key, value) {
+    // some old implementations (like WebKit) could pass numbers as keys
+    if (isCallable($replacer)) value = call($replacer, this, $String(key), value);
     if (!isSymbol(value)) return value;
   };
-  args[1] = replacer;
   return apply($stringify, null, args);
 };
 
@@ -8477,10 +8554,25 @@ module.exports = IS_PURE || !fails(function () {
   if (WEBKIT && WEBKIT < 535) return;
   var key = Math.random();
   // In FF throws only define methods
-  // eslint-disable-next-line no-undef, no-useless-call, es-x/no-legacy-object-prototype-accessor-methods -- required for testing
+  // eslint-disable-next-line no-undef, no-useless-call, es/no-legacy-object-prototype-accessor-methods -- required for testing
   __defineSetter__.call(null, key, function () { /* empty */ });
   delete global[key];
 });
+
+
+/***/ }),
+
+/***/ "edd0":
+/***/ (function(module, exports, __webpack_require__) {
+
+var makeBuiltIn = __webpack_require__("13d2");
+var defineProperty = __webpack_require__("9bf2");
+
+module.exports = function (target, name, descriptor) {
+  if (descriptor.get) makeBuiltIn(descriptor.get, name, { getter: true });
+  if (descriptor.set) makeBuiltIn(descriptor.set, name, { setter: true });
+  return defineProperty.f(target, name, descriptor);
+};
 
 
 /***/ }),
@@ -8543,6 +8635,17 @@ $({ target: 'Promise', stat: true, forced: FORCED_PROMISE_CONSTRUCTOR }, {
 var uncurryThis = __webpack_require__("e330");
 
 module.exports = uncurryThis([].slice);
+
+
+/***/ }),
+
+/***/ "f3eb":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_1c4d6198_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("d264");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_1c4d6198_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_1c4d6198_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
 
 
 /***/ }),
@@ -8660,24 +8763,21 @@ var es_object_to_string = __webpack_require__("d3b7");
 // EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","root":"Vue"}
 var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__("8bbf");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/App.vue?vue&type=template&id=5c2a5d4d&scoped=true
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/App.vue?vue&type=template&id=1c4d6198&scoped=true
 
-
-var Appvue_type_template_id_5c2a5d4d_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-5c2a5d4d"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
+var Appvue_type_template_id_1c4d6198_scoped_true_withScopeId = function _withScopeId(n) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-1c4d6198"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var _hoisted_1 = {
   id: "viewer-container"
 };
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerContainer = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerContainer");
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", _hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerContainer, {
     class: "ml-viewer"
   })]);
 }
-// CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=5c2a5d4d&scoped=true
+// CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=1c4d6198&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__("a4d3");
@@ -8709,17 +8809,17 @@ var es_json_to_string_tag = __webpack_require__("0c47");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.math.to-string-tag.js
 var es_math_to_string_tag = __webpack_require__("23dc");
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
-var es_error_cause = __webpack_require__("d9e2");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.to-string.js
-var es_error_to_string = __webpack_require__("d401");
-
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-prototype-of.js
 var es_object_get_prototype_of = __webpack_require__("3410");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
 var es_array_for_each = __webpack_require__("4160");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
+var es_error_cause = __webpack_require__("d9e2");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.to-string.js
+var es_error_to_string = __webpack_require__("d401");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
 var es_array_push = __webpack_require__("14d9");
@@ -8781,20 +8881,21 @@ function _typeof(obj) {
 
 function _regeneratorRuntime() {
   "use strict";
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
 
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
   _regeneratorRuntime = function _regeneratorRuntime() {
     return exports;
   };
-
   var exports = {},
-      Op = Object.prototype,
-      hasOwn = Op.hasOwnProperty,
-      $Symbol = "function" == typeof Symbol ? Symbol : {},
-      iteratorSymbol = $Symbol.iterator || "@@iterator",
-      asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
-      toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
+    Op = Object.prototype,
+    hasOwn = Op.hasOwnProperty,
+    defineProperty = Object.defineProperty || function (obj, key, desc) {
+      obj[key] = desc.value;
+    },
+    $Symbol = "function" == typeof Symbol ? Symbol : {},
+    iteratorSymbol = $Symbol.iterator || "@@iterator",
+    asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
+    toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
   function define(obj, key, value) {
     return Object.defineProperty(obj, key, {
       value: value,
@@ -8803,7 +8904,6 @@ function _regeneratorRuntime() {
       writable: !0
     }), obj[key];
   }
-
   try {
     define({}, "");
   } catch (err) {
@@ -8811,54 +8911,14 @@ function _regeneratorRuntime() {
       return obj[key] = value;
     };
   }
-
   function wrap(innerFn, outerFn, self, tryLocsList) {
     var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
-        generator = Object.create(protoGenerator.prototype),
-        context = new Context(tryLocsList || []);
-    return generator._invoke = function (innerFn, self, context) {
-      var state = "suspendedStart";
-      return function (method, arg) {
-        if ("executing" === state) throw new Error("Generator is already running");
-
-        if ("completed" === state) {
-          if ("throw" === method) throw arg;
-          return doneResult();
-        }
-
-        for (context.method = method, context.arg = arg;;) {
-          var delegate = context.delegate;
-
-          if (delegate) {
-            var delegateResult = maybeInvokeDelegate(delegate, context);
-
-            if (delegateResult) {
-              if (delegateResult === ContinueSentinel) continue;
-              return delegateResult;
-            }
-          }
-
-          if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
-            if ("suspendedStart" === state) throw state = "completed", context.arg;
-            context.dispatchException(context.arg);
-          } else "return" === context.method && context.abrupt("return", context.arg);
-          state = "executing";
-          var record = tryCatch(innerFn, self, context);
-
-          if ("normal" === record.type) {
-            if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
-            return {
-              value: record.arg,
-              done: context.done
-            };
-          }
-
-          "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
-        }
-      };
-    }(innerFn, self, context), generator;
+      generator = Object.create(protoGenerator.prototype),
+      context = new Context(tryLocsList || []);
+    return defineProperty(generator, "_invoke", {
+      value: makeInvokeMethod(innerFn, self, context)
+    }), generator;
   }
-
   function tryCatch(fn, obj, arg) {
     try {
       return {
@@ -8872,25 +8932,19 @@ function _regeneratorRuntime() {
       };
     }
   }
-
   exports.wrap = wrap;
   var ContinueSentinel = {};
-
   function Generator() {}
-
   function GeneratorFunction() {}
-
   function GeneratorFunctionPrototype() {}
-
   var IteratorPrototype = {};
   define(IteratorPrototype, iteratorSymbol, function () {
     return this;
   });
   var getProto = Object.getPrototypeOf,
-      NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+    NativeIteratorPrototype = getProto && getProto(getProto(values([])));
   NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
   var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
-
   function defineIteratorMethods(prototype) {
     ["next", "throw", "return"].forEach(function (method) {
       define(prototype, method, function (arg) {
@@ -8898,14 +8952,12 @@ function _regeneratorRuntime() {
       });
     });
   }
-
   function AsyncIterator(generator, PromiseImpl) {
     function invoke(method, arg, resolve, reject) {
       var record = tryCatch(generator[method], generator, arg);
-
       if ("throw" !== record.type) {
         var result = record.arg,
-            value = result.value;
+          value = result.value;
         return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {
           invoke("next", value, resolve, reject);
         }, function (err) {
@@ -8916,92 +8968,109 @@ function _regeneratorRuntime() {
           return invoke("throw", error, resolve, reject);
         });
       }
-
       reject(record.arg);
     }
-
     var previousPromise;
-
-    this._invoke = function (method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function (resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
+    defineProperty(this, "_invoke", {
+      value: function value(method, arg) {
+        function callInvokeWithMethodAndArg() {
+          return new PromiseImpl(function (resolve, reject) {
+            invoke(method, arg, resolve, reject);
+          });
+        }
+        return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
       }
-
-      return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+    });
+  }
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = "suspendedStart";
+    return function (method, arg) {
+      if ("executing" === state) throw new Error("Generator is already running");
+      if ("completed" === state) {
+        if ("throw" === method) throw arg;
+        return doneResult();
+      }
+      for (context.method = method, context.arg = arg;;) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+        if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
+          if ("suspendedStart" === state) throw state = "completed", context.arg;
+          context.dispatchException(context.arg);
+        } else "return" === context.method && context.abrupt("return", context.arg);
+        state = "executing";
+        var record = tryCatch(innerFn, self, context);
+        if ("normal" === record.type) {
+          if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
+          return {
+            value: record.arg,
+            done: context.done
+          };
+        }
+        "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
+      }
     };
   }
-
   function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-
-    if (undefined === method) {
-      if (context.delegate = null, "throw" === context.method) {
-        if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel;
-        context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
+    var methodName = context.method,
+      method = delegate.iterator[methodName];
+    if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;
     var record = tryCatch(method, delegate.iterator, context.arg);
     if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
     var info = record.arg;
     return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
   }
-
   function pushTryEntry(locs) {
     var entry = {
       tryLoc: locs[0]
     };
     1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
   }
-
   function resetTryEntry(entry) {
     var record = entry.completion || {};
     record.type = "normal", delete record.arg, entry.completion = record;
   }
-
   function Context(tryLocsList) {
     this.tryEntries = [{
       tryLoc: "root"
     }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);
   }
-
   function values(iterable) {
     if (iterable) {
       var iteratorMethod = iterable[iteratorSymbol];
       if (iteratorMethod) return iteratorMethod.call(iterable);
       if ("function" == typeof iterable.next) return iterable;
-
       if (!isNaN(iterable.length)) {
         var i = -1,
-            next = function next() {
-          for (; ++i < iterable.length;) {
-            if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
-          }
-
-          return next.value = undefined, next.done = !0, next;
-        };
-
+          next = function next() {
+            for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
+            return next.value = undefined, next.done = !0, next;
+          };
         return next.next = next;
       }
     }
-
     return {
       next: doneResult
     };
   }
-
   function doneResult() {
     return {
       value: undefined,
       done: !0
     };
   }
-
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", {
+    value: GeneratorFunctionPrototype,
+    configurable: !0
+  }), defineProperty(GeneratorFunctionPrototype, "constructor", {
+    value: GeneratorFunction,
+    configurable: !0
+  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
     var ctor = "function" == typeof genFun && genFun.constructor;
     return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
   }, exports.mark = function (genFun) {
@@ -9022,27 +9091,21 @@ function _regeneratorRuntime() {
     return this;
   }), define(Gp, "toString", function () {
     return "[object Generator]";
-  }), exports.keys = function (object) {
-    var keys = [];
-
-    for (var key in object) {
-      keys.push(key);
-    }
-
+  }), exports.keys = function (val) {
+    var object = Object(val),
+      keys = [];
+    for (var key in object) keys.push(key);
     return keys.reverse(), function next() {
       for (; keys.length;) {
         var key = keys.pop();
         if (key in object) return next.value = key, next.done = !1, next;
       }
-
       return next.done = !0, next;
     };
   }, exports.values = values, Context.prototype = {
     constructor: Context,
     reset: function reset(skipTempReset) {
-      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) {
-        "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
-      }
+      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
     },
     stop: function stop() {
       this.done = !0;
@@ -9053,20 +9116,16 @@ function _regeneratorRuntime() {
     dispatchException: function dispatchException(exception) {
       if (this.done) throw exception;
       var context = this;
-
       function handle(loc, caught) {
         return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;
       }
-
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i],
-            record = entry.completion;
+          record = entry.completion;
         if ("root" === entry.tryLoc) return handle("end");
-
         if (entry.tryLoc <= this.prev) {
           var hasCatch = hasOwn.call(entry, "catchLoc"),
-              hasFinally = hasOwn.call(entry, "finallyLoc");
-
+            hasFinally = hasOwn.call(entry, "finallyLoc");
           if (hasCatch && hasFinally) {
             if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
             if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
@@ -9082,13 +9141,11 @@ function _regeneratorRuntime() {
     abrupt: function abrupt(type, arg) {
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
-
         if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
           var finallyEntry = entry;
           break;
         }
       }
-
       finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
       var record = finallyEntry ? finallyEntry.completion : {};
       return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
@@ -9106,19 +9163,15 @@ function _regeneratorRuntime() {
     "catch": function _catch(tryLoc) {
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
-
         if (entry.tryLoc === tryLoc) {
           var record = entry.completion;
-
           if ("throw" === record.type) {
             var thrown = record.arg;
             resetTryEntry(entry);
           }
-
           return thrown;
         }
       }
-
       throw new Error("illegal catch attempt");
     },
     delegateYield: function delegateYield(iterable, resultName, nextLoc) {
@@ -9133,7 +9186,6 @@ function _regeneratorRuntime() {
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
 
 
-
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
   try {
     var info = gen[key](arg);
@@ -9142,29 +9194,24 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     reject(error);
     return;
   }
-
   if (info.done) {
     resolve(value);
   } else {
     Promise.resolve(value).then(_next, _throw);
   }
 }
-
 function _asyncToGenerator(fn) {
   return function () {
     var self = this,
-        args = arguments;
+      args = arguments;
     return new Promise(function (resolve, reject) {
       var gen = fn.apply(self, args);
-
       function _next(value) {
         asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
       }
-
       function _throw(err) {
         asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
       }
-
       _next(undefined);
     });
   };
@@ -9178,26 +9225,27 @@ function _extends() {
   _extends = Object.assign ? Object.assign.bind() : function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
-
       for (var key in source) {
         if (Object.prototype.hasOwnProperty.call(source, key)) {
           target[key] = source[key];
         }
       }
     }
-
     return target;
   };
   return _extends.apply(this, arguments);
 }
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerContainer.vue?vue&type=template&id=a613ee1c&scoped=true
+// EXTERNAL MODULE: ./src/assets/cast-icon.svg
+var cast_icon = __webpack_require__("0334");
+var cast_icon_default = /*#__PURE__*/__webpack_require__.n(cast_icon);
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerContainer.vue?vue&type=template&id=573bd532&scoped=true
 
 
-var VideoPlayerContainervue_type_template_id_a613ee1c_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-a613ee1c"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
+var VideoPlayerContainervue_type_template_id_573bd532_scoped_true_withScopeId = function _withScopeId(n) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-573bd532"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
-var VideoPlayerContainervue_type_template_id_a613ee1c_scoped_true_hoisted_1 = {
+var VideoPlayerContainervue_type_template_id_573bd532_scoped_true_hoisted_1 = {
   class: "row mx-0",
   style: {
     "height": "100%"
@@ -9227,8 +9275,7 @@ var _hoisted_8 = {
   key: 1,
   class: "overlay d-flex justify-content-center align-items-center"
 };
-
-var _hoisted_9 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_a613ee1c_scoped_true_withScopeId(function () {
+var _hoisted_9 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_573bd532_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: "spinner-border text-light",
     role: "status"
@@ -9236,25 +9283,26 @@ var _hoisted_9 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_a613ee1c_
     class: "sr-only"
   }, "Loading...")], -1);
 });
-
 var _hoisted_10 = [_hoisted_9];
 var _hoisted_11 = {
   key: 2,
   class: "overlay d-flex flex-row justify-content-center align-items-center"
 };
-var _hoisted_12 = {
+var _hoisted_12 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_573bd532_scoped_true_withScopeId(function () {
+  return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", null, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("img", {
+    src: cast_icon_default.a
+  })], -1);
+});
+var _hoisted_13 = {
   class: "d-flex flex-column ml-3"
 };
-
-var _hoisted_13 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_a613ee1c_scoped_true_withScopeId(function () {
+var _hoisted_14 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_573bd532_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h3", null, "Casting to", -1);
 });
-
-var _hoisted_14 = {
+var _hoisted_15 = {
   class: "font-weight-bold"
 };
-
-var _hoisted_15 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_a613ee1c_scoped_true_withScopeId(function () {
+var _hoisted_16 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_573bd532_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", null, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: "d-flex justify-content-center"
   }, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
@@ -9263,19 +9311,13 @@ var _hoisted_15 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_a613ee1c
     class: "text-center tap-text"
   }, "Tap to unmute")], -1);
 });
-
-var _hoisted_16 = [_hoisted_15];
-function VideoPlayerContainervue_type_template_id_a613ee1c_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+var _hoisted_17 = [_hoisted_16];
+function VideoPlayerContainervue_type_template_id_573bd532_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerControlsUserCount = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsUserCount");
-
   var _component_VideoPlayerControlsBadge = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsBadge");
-
   var _component_VideoPlayerControlsContainer = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsContainer");
-
   var _component_VideoPlayerMedia = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerMedia");
-
   var _component_VideoPlayerSideVideoSources = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerSideVideoSources");
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
     style: {
       "height": "100%"
@@ -9286,7 +9328,7 @@ function VideoPlayerContainervue_type_template_id_a613ee1c_scoped_true_render(_c
     onMousemove: _cache[3] || (_cache[3] = function () {
       return $options.showControls && $options.showControls.apply($options, arguments);
     })
-  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerContainervue_type_template_id_a613ee1c_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerContainervue_type_template_id_573bd532_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     id: "vplayer",
     ref: "player",
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["player", {
@@ -9307,13 +9349,13 @@ function VideoPlayerContainervue_type_template_id_a613ee1c_scoped_true_render(_c
     streamId: _ctx.queryParams.streamId
   }, null, 8, ["isConnected", "showButton", "currentTime", "streamId"])])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerMedia, {
     ref: "element"
-  }, null, 512), _ctx.isLoading ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", _hoisted_8, _hoisted_10)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $data.cast.device ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", _hoisted_11, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", _hoisted_12, [_hoisted_13, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h1", _hoisted_14, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($data.cast.device.friendlyName), 1)])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), _ctx.autoPlayMuted && _ctx.isLive ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
+  }, null, 512), _ctx.isLoading ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", _hoisted_8, _hoisted_10)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $data.cast.device ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", _hoisted_11, [_hoisted_12, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", _hoisted_13, [_hoisted_14, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h1", _hoisted_15, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($data.cast.device.friendlyName), 1)])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), _ctx.autoPlayMuted && _ctx.isLive ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
     key: 3,
     onClick: _cache[0] || (_cache[0] = function () {
       return $options.tapUnmute && $options.tapUnmute.apply($options, arguments);
     }),
     class: "overlay tap-unmute d-flex align-items-center justify-content-center"
-  }, _hoisted_16)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 34), _ctx.sourceRemoteTracks.length && _ctx.isSplittedView ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
+  }, _hoisted_17)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 34), _ctx.sourceRemoteTracks.length && _ctx.isSplittedView ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
     key: 0,
     class: "side-panel overflow-auto sc1 mv-col-3",
     style: 'scroll-snap-type: y mandatory',
@@ -9322,7 +9364,7 @@ function VideoPlayerContainervue_type_template_id_a613ee1c_scoped_true_render(_c
     })
   }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerSideVideoSources)], 32)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)])], 34);
 }
-// CONCATENATED MODULE: ./src/components/VideoPlayerContainer.vue?vue&type=template&id=a613ee1c&scoped=true
+// CONCATENATED MODULE: ./src/components/VideoPlayerContainer.vue?vue&type=template&id=573bd532&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.includes.js
 var es_array_includes = __webpack_require__("caad");
@@ -9332,11 +9374,9 @@ var es_string_includes = __webpack_require__("2532");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerMedia.vue?vue&type=template&id=71d829ec&scoped=true
 
-
 var VideoPlayerMediavue_type_template_id_71d829ec_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-71d829ec"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerMediavue_type_template_id_71d829ec_scoped_true_hoisted_1 = ["poster"];
 var VideoPlayerMediavue_type_template_id_71d829ec_scoped_true_hoisted_2 = ["poster"];
 var VideoPlayerMediavue_type_template_id_71d829ec_scoped_true_hoisted_3 = {
@@ -9543,8 +9583,8 @@ function setupDevtoolsPlugin(pluginDescriptor, setupFn) {
 
 // CONCATENATED MODULE: ./node_modules/vuex/dist/vuex.esm-browser.js
 /*!
- * vuex v4.0.2
- * (c) 2021 Evan You
+ * vuex v4.1.0
+ * (c) 2022 Evan You
  * @license MIT
  */
 
@@ -9661,6 +9701,7 @@ function resetStore (store, hot) {
 
 function resetStoreState (store, state, hot) {
   var oldState = store._state;
+  var oldScope = store._scope;
 
   // bind store public getters
   store.getters = {};
@@ -9668,22 +9709,33 @@ function resetStoreState (store, state, hot) {
   store._makeLocalGettersCache = Object.create(null);
   var wrappedGetters = store._wrappedGetters;
   var computedObj = {};
-  forEachValue(wrappedGetters, function (fn, key) {
-    // use computed to leverage its lazy-caching mechanism
-    // direct inline function use will lead to closure preserving oldState.
-    // using partial to return function with only arguments preserved in closure environment.
-    computedObj[key] = partial(fn, store);
-    Object.defineProperty(store.getters, key, {
-      // TODO: use `computed` when it's possible. at the moment we can't due to
-      // https://github.com/vuejs/vuex/pull/1883
-      get: function () { return computedObj[key](); },
-      enumerable: true // for local getters
+  var computedCache = {};
+
+  // create a new effect scope and create computed object inside it to avoid
+  // getters (computed) getting destroyed on component unmount.
+  var scope = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["effectScope"])(true);
+
+  scope.run(function () {
+    forEachValue(wrappedGetters, function (fn, key) {
+      // use computed to leverage its lazy-caching mechanism
+      // direct inline function use will lead to closure preserving oldState.
+      // using partial to return function with only arguments preserved in closure environment.
+      computedObj[key] = partial(fn, store);
+      computedCache[key] = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["computed"])(function () { return computedObj[key](); });
+      Object.defineProperty(store.getters, key, {
+        get: function () { return computedCache[key].value; },
+        enumerable: true // for local getters
+      });
     });
   });
 
   store._state = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["reactive"])({
     data: state
   });
+
+  // register the newly created effect scope to the store so that we can
+  // dispose the effects when this method runs again in the future.
+  store._scope = scope;
 
   // enable strict mode for new state
   if (store.strict) {
@@ -9698,6 +9750,11 @@ function resetStoreState (store, state, hot) {
         oldState.data = null;
       });
     }
+  }
+
+  // dispose previously registered effect scope if there is one.
+  if (oldScope) {
+    oldScope.stop();
   }
 }
 
@@ -10447,6 +10504,12 @@ var Store = function Store (options) {
   this._modulesNamespaceMap = Object.create(null);
   this._subscribers = [];
   this._makeLocalGettersCache = Object.create(null);
+
+  // EffectScope instance. when registering new getters, we wrap them inside
+  // EffectScope so that getters (computed) would not be destroyed on
+  // component unmount.
+  this._scope = null;
+
   this._devtools = devtools;
 
   // bind commit and dispatch to self
@@ -10988,7 +11051,7 @@ function pad (num, maxLength) {
 }
 
 var vuex_esm_browser_index = {
-  version: '4.0.2',
+  version: '4.1.0',
   Store: Store,
   storeKey: storeKey,
   createStore: createStore,
@@ -11034,8 +11097,7 @@ var defaulState = {
   mutations: {
     setSelectedSource: function setSelectedSource(state, _ref) {
       var kind = _ref.kind,
-          selectedSource = _ref.selectedSource;
-
+        selectedSource = _ref.selectedSource;
       if (kind === 'video') {
         state.selectedVideoSource = selectedSource;
       } else if (kind === 'audio') {
@@ -11044,8 +11106,7 @@ var defaulState = {
     },
     setSources: function setSources(state, _ref2) {
       var kind = _ref2.kind,
-          sources = _ref2.sources;
-
+        sources = _ref2.sources;
       if (kind === 'video') {
         state.videoSources = sources;
       } else if (kind === 'audio') {
@@ -11059,25 +11120,23 @@ var defaulState = {
       state.isAudioOnly = isAudioOnly;
     },
     addSourceRemoteTrack: function addSourceRemoteTrack(state, sourceRemoteTrack) {
-      state.sourceRemoteTracks.push(sourceRemoteTrack); //I know that is video source because we don't implement multi audio
-
+      state.sourceRemoteTracks.push(sourceRemoteTrack);
+      //I know that is video source because we don't implement multi audio
       var sid = state.videoSources.findIndex(function (v) {
         return v.sourceId === sourceRemoteTrack.sourceId;
       });
-
       if (sid !== -1) {
         state.videoSources[sid].mid = sourceRemoteTrack.transceiver.mid;
       }
     },
     replaceSourceRemoteTrack: function replaceSourceRemoteTrack(state, _ref3) {
       var sourceRemoteTrack = _ref3.sourceRemoteTrack,
-          remoteTrackIndex = _ref3.remoteTrackIndex;
-      state.sourceRemoteTracks[remoteTrackIndex] = sourceRemoteTrack; //I know that is video source because we don't implement multi audio
-
+        remoteTrackIndex = _ref3.remoteTrackIndex;
+      state.sourceRemoteTracks[remoteTrackIndex] = sourceRemoteTrack;
+      //I know that is video source because we don't implement multi audio
       var sid = state.videoSources.findIndex(function (v) {
         return v.sourceId === sourceRemoteTrack.sourceId;
       });
-
       if (sid !== -1) {
         state.videoSources[sid].mid = sourceRemoteTrack.transceiver.mid;
       }
@@ -11086,7 +11145,6 @@ var defaulState = {
       var remoteToDeleteIndex = state.sourceRemoteTracks.findIndex(function (remoteTrack) {
         return remoteTrack.sourceId === sourceId;
       });
-
       if (remoteToDeleteIndex !== -1) {
         state.sourceRemoteTracks.splice(remoteToDeleteIndex, 1);
       }
@@ -11231,7 +11289,6 @@ var controls_defaulState = {
       if (!isLive && document.pictureInPictureElement) {
         document.exitPictureInPicture();
       }
-
       state.isLive = isLive;
     },
     setIsLoading: function setIsLoading(state, isLoading) {
@@ -11261,7 +11318,7 @@ var controls_defaulState = {
     },
     handleReconnection: function handleReconnection(state, _ref) {
       var error = _ref.error,
-          timeout = _ref.timeout;
+        timeout = _ref.timeout;
       state.reconnection.error = error;
       state.reconnection.timeout = timeout;
       state.reconnection.status = true;
@@ -11321,8 +11378,8 @@ var defaultState = {
 });
 // CONCATENATED MODULE: ./src/service/userParams.js
 
- // const availableControls = ['play', 'volume', 'pip', 'fullscreen', 'cast', 'liveBadge', 'userCount', 'settings']
 
+var availableControls = ['play', 'volume', 'pip', 'fullscreen', 'cast', 'liveBadge', 'userCount', 'settings'];
 var defaultOptions = {
   audioOnly: false,
   autoplay: true,
@@ -11332,17 +11389,21 @@ var defaultOptions = {
   muted: true,
   placeholderImg: null,
   streamId: null,
-  token: null
+  token: null,
+  chromecastId: null,
+  reportUrl: null
 };
 function setUserParams(_ref) {
   var streamId = _ref.streamId,
-      audioOnly = _ref.audioOnly,
-      token = _ref.token,
-      image = _ref.image,
-      directorUrl = _ref.directorUrl,
-      hideButtons = _ref.hideButtons,
-      autoplay = _ref.autoplay,
-      muted = _ref.muted;
+    audioOnly = _ref.audioOnly,
+    token = _ref.token,
+    image = _ref.image,
+    directorUrl = _ref.directorUrl,
+    hideButtons = _ref.hideButtons,
+    autoplay = _ref.autoplay,
+    muted = _ref.muted,
+    chromecastId = _ref.chromecastId,
+    reportUrl = _ref.reportUrl;
   var options = {};
   options.streamId = streamId;
   options.audioOnly = audioOnly !== null && audioOnly !== void 0 ? audioOnly : false;
@@ -11352,6 +11413,8 @@ function setUserParams(_ref) {
   options.hideButtons = hideButtons !== null && hideButtons !== void 0 ? hideButtons : [];
   options.autoplay = autoplay !== null && autoplay !== void 0 ? autoplay : true;
   options.muted = muted !== null && muted !== void 0 ? muted : false;
+  options.chromecastId = chromecastId !== null && chromecastId !== void 0 ? chromecastId : null;
+  options.reportUrl = reportUrl !== null && reportUrl !== void 0 ? reportUrl : null;
   src_store.commit('Params/setQueryParams', _extends(_extends({}, defaultOptions), options));
 }
 // CONCATENATED MODULE: ./src/store/modules/params.js
@@ -11365,6 +11428,14 @@ var params_defaulState = {
   mutations: {
     setQueryParams: function setQueryParams(state, queryParams) {
       state.queryParams = queryParams;
+    }
+  },
+  getters: {
+    queryParams: function queryParams(state) {
+      return state.queryParams;
+    },
+    chromecastId: function chromecastId(state) {
+      return state.queryParams.chromecastId;
     }
   }
 });
@@ -11396,12 +11467,10 @@ var params_defaulState = {
 var params_state = src_store.state;
 var getAccountId = function getAccountId() {
   var _state$Params$queryPa, _state$Params$queryPa2;
-
   return (_state$Params$queryPa = params_state.Params.queryParams.streamId) === null || _state$Params$queryPa === void 0 ? void 0 : (_state$Params$queryPa2 = _state$Params$queryPa.match(/^(.*?)\/.*$/)) === null || _state$Params$queryPa2 === void 0 ? void 0 : _state$Params$queryPa2[1];
 };
 var getStreamName = function getStreamName() {
   var _state$Params$queryPa3, _state$Params$queryPa4;
-
   return (_state$Params$queryPa3 = params_state.Params.queryParams.streamId) === null || _state$Params$queryPa3 === void 0 ? void 0 : (_state$Params$queryPa4 = _state$Params$queryPa3.match(/^.*?\/(.*)$/)) === null || _state$Params$queryPa4 === void 0 ? void 0 : _state$Params$queryPa4[1];
 };
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-getter.js
@@ -11536,120 +11605,94 @@ var can_autoplay_es_index = { audio: audio, video: can_autoplay_es_video };
 
 
 var commit = src_store.commit,
-    viewConnection_state = src_store.state;
-
+  viewConnection_state = src_store.state;
 
 var setEnvironment = function setEnvironment() {
   viewConnection_setDirectorEndpoint();
   viewConnection_setLiveDomain();
   viewConnection_setPeerConnection();
 };
-
 var viewConnection_setDirectorEndpoint = function setDirectorEndpoint() {
-  if (Object({"NODE_ENV":"production","VUE_APP_CHROMECAST_ID":"","VUE_APP_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).VUE_APP_DIRECTOR_ENDPOINT || viewConnection_state.Params.queryParams.directorUrl) {
+  if (Object({"NODE_ENV":"production","BASE_URL":"/"}).VUE_APP_DIRECTOR_ENDPOINT || viewConnection_state.Params.queryParams.directorUrl) {
     var _state$Params$queryPa;
-
-    millicast_umd["Director"].setEndpoint((_state$Params$queryPa = viewConnection_state.Params.queryParams.directorUrl) !== null && _state$Params$queryPa !== void 0 ? _state$Params$queryPa : Object({"NODE_ENV":"production","VUE_APP_CHROMECAST_ID":"","VUE_APP_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).VUE_APP_DIRECTOR_ENDPOINT);
+    millicast_umd["Director"].setEndpoint((_state$Params$queryPa = viewConnection_state.Params.queryParams.directorUrl) !== null && _state$Params$queryPa !== void 0 ? _state$Params$queryPa : Object({"NODE_ENV":"production","BASE_URL":"/"}).VUE_APP_DIRECTOR_ENDPOINT);
   }
 };
-
 var viewConnection_setLiveDomain = function setLiveDomain() {
-  if (Object({"NODE_ENV":"production","VUE_APP_CHROMECAST_ID":"","VUE_APP_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).VUE_APP_LIVEWS_ENDPOINT) {
-    millicast_umd["Director"].setLiveDomain(Object({"NODE_ENV":"production","VUE_APP_CHROMECAST_ID":"","VUE_APP_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).VUE_APP_LIVEWS_ENDPOINT);
+  if (Object({"NODE_ENV":"production","BASE_URL":"/"}).VUE_APP_LIVEWS_ENDPOINT) {
+    millicast_umd["Director"].setLiveDomain(Object({"NODE_ENV":"production","BASE_URL":"/"}).VUE_APP_LIVEWS_ENDPOINT);
   }
 };
-
 var viewConnection_setPeerConnection = function setPeerConnection() {
-  if (Object({"NODE_ENV":"production","VUE_APP_CHROMECAST_ID":"","VUE_APP_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).VUE_APP_TURN_ENDPOINT) {
-    millicast_umd["PeerConnection"].setTurnServerLocation(Object({"NODE_ENV":"production","VUE_APP_CHROMECAST_ID":"","VUE_APP_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).VUE_APP_TURN_ENDPOINT);
+  if (Object({"NODE_ENV":"production","BASE_URL":"/"}).VUE_APP_TURN_ENDPOINT) {
+    millicast_umd["PeerConnection"].setTurnServerLocation(Object({"NODE_ENV":"production","BASE_URL":"/"}).VUE_APP_TURN_ENDPOINT);
   }
 };
-
 var viewConnection_handleInitViewConnection = function handleInitViewConnection(accountId, streamName) {
   if (!streamName || !accountId) {
     throw new Error('Stream ID not provided.');
   }
-
   setEnvironment();
-
   var tokenGenerator = function tokenGenerator() {
     return millicast_umd["Director"].getSubscriber(streamName, accountId, viewConnection_state.Params.queryParams.token);
   };
-
   var millicastView = new millicast_umd["View"](streamName, tokenGenerator);
   window.millicastView = millicastView;
-
   window.__defineGetter__('peer', function () {
     return millicastView.getRTCPeerConnection();
   });
-
   commit('ViewConnection/setMillicastView', millicastView);
 };
 var handleConnectToStream = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
     var millicastView, _e$response, _e$response$data, _e$response$data$data, message;
-
     return _regeneratorRuntime().wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            millicastView = viewConnection_state.ViewConnection.millicastView;
-
-            if (!millicastView.isActive()) {
-              _context.next = 3;
-              break;
-            }
-
-            return _context.abrupt("return");
-
-          case 3:
-            _context.prev = 3;
-            _context.next = 6;
-            return setCanAutoPlayStream();
-
-          case 6:
-            _context.next = 8;
-            return millicastView.connect({
-              events: ['active', 'inactive', 'layers', 'viewercount'],
-              absCaptureTime: true
-            });
-
-          case 8:
-            addSignalingMigrateListener();
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          millicastView = viewConnection_state.ViewConnection.millicastView;
+          if (!millicastView.isActive()) {
+            _context.next = 3;
+            break;
+          }
+          return _context.abrupt("return");
+        case 3:
+          _context.prev = 3;
+          _context.next = 6;
+          return setCanAutoPlayStream();
+        case 6:
+          _context.next = 8;
+          return millicastView.connect({
+            events: ['active', 'inactive', 'layers', 'viewercount'],
+            absCaptureTime: true
+          });
+        case 8:
+          addSignalingMigrateListener();
+          _context.next = 21;
+          break;
+        case 11:
+          _context.prev = 11;
+          _context.t0 = _context["catch"](3);
+          message = (_e$response = _context.t0.response) === null || _e$response === void 0 ? void 0 : (_e$response$data = _e$response.data) === null || _e$response$data === void 0 ? void 0 : (_e$response$data$data = _e$response$data.data) === null || _e$response$data$data === void 0 ? void 0 : _e$response$data$data.message;
+          commit('Controls/setIsLoading', false);
+          commit('Controls/setIsLive', false);
+          millicastView.reconnect();
+          if (message) {
+            _context.next = 19;
+            break;
+          }
+          return _context.abrupt("return");
+        case 19:
+          if (message.toLowerCase().includes('stream not being published')) {
             _context.next = 21;
             break;
-
-          case 11:
-            _context.prev = 11;
-            _context.t0 = _context["catch"](3);
-            message = (_e$response = _context.t0.response) === null || _e$response === void 0 ? void 0 : (_e$response$data = _e$response.data) === null || _e$response$data === void 0 ? void 0 : (_e$response$data$data = _e$response$data.data) === null || _e$response$data$data === void 0 ? void 0 : _e$response$data$data.message;
-            commit('Controls/setIsLoading', false);
-            commit('Controls/setIsLive', false);
-            millicastView.reconnect();
-
-            if (message) {
-              _context.next = 19;
-              break;
-            }
-
-            return _context.abrupt("return");
-
-          case 19:
-            if (message.toLowerCase().includes('stream not being published')) {
-              _context.next = 21;
-              break;
-            }
-
-            throw new Error("".concat(message.charAt(0).toUpperCase()).concat(message.slice(1)));
-
-          case 21:
-          case "end":
-            return _context.stop();
-        }
+          }
+          throw new Error("".concat(message.charAt(0).toUpperCase()).concat(message.slice(1)));
+        case 21:
+        case "end":
+          return _context.stop();
       }
     }, _callee, null, [[3, 11]]);
   }));
-
   return function handleConnectToStream() {
     return _ref.apply(this, arguments);
   };
@@ -11659,190 +11702,154 @@ var viewConnection_setTrackEvent = function setTrackEvent() {
   millicastView.on('track', /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(event) {
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              if (!event.streams.length) {
-                _context2.next = 3;
-                break;
-              }
-
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            if (!event.streams.length) {
               _context2.next = 3;
-              return setStream(event.streams[0]);
-
-            case 3:
-              if (!viewConnection_state.ViewConnection.trackEvent[event.track.kind].transceiver[0]) {
-                viewConnection_state.ViewConnection.trackEvent[event.track.kind].transceiver[0] = event.transceiver;
-              } else {
-                viewConnection_state.ViewConnection.trackEvent[event.track.kind].transceiver.push(event.transceiver);
-              }
-
-              viewConnection_state.ViewConnection.trackEvent[event.track.kind].track = true;
-
-            case 5:
-            case "end":
-              return _context2.stop();
-          }
+              break;
+            }
+            _context2.next = 3;
+            return setStream(event.streams[0]);
+          case 3:
+            if (!viewConnection_state.ViewConnection.trackEvent[event.track.kind].transceiver[0]) {
+              viewConnection_state.ViewConnection.trackEvent[event.track.kind].transceiver[0] = event.transceiver;
+            } else {
+              viewConnection_state.ViewConnection.trackEvent[event.track.kind].transceiver.push(event.transceiver);
+            }
+            viewConnection_state.ViewConnection.trackEvent[event.track.kind].track = true;
+          case 5:
+          case "end":
+            return _context2.stop();
         }
       }, _callee2);
     }));
-
     return function (_x) {
       return _ref2.apply(this, arguments);
     };
   }());
 };
-
 var setStream = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(entrySrcObject) {
     var video, opositeElementRef, mediaTag;
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            video = viewConnection_state.Controls.video;
-            addSignalingMigrateListener();
-            verifyStreamWithPeer(); //If we already had a a stream and is not migrating then we ignore it (Firefox addRemoteTrack issue)
-
-            if (!(video.srcObject && video.srcObject.id !== entrySrcObject.id && !viewConnection_state.Controls.viewerMigratingEvent)) {
-              _context4.next = 5;
-              break;
-            }
-
-            return _context4.abrupt("return");
-
-          case 5:
-            if (!(video.srcObject && video.srcObject.id !== entrySrcObject.id && viewConnection_state.Controls.viewerMigratingEvent)) {
-              _context4.next = 25;
-              break;
-            }
-
-            commit('Controls/setPreviousSplitState', viewConnection_state.Controls.isSplittedView);
-            commit('Controls/setIsMigrating', true);
-            commit('Controls/setIsSplittedView', false);
-            _context4.next = 11;
-            return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
-
-          case 11:
-            opositeElementRef = viewConnection_state.Controls.currentElementRef === 'player' ? 'player2' : 'player';
-            mediaTag = document.getElementById(opositeElementRef);
-            commit('Controls/setSrcObject', entrySrcObject);
-            mediaTag.srcObject = entrySrcObject;
-            mediaTag.autoplay = viewConnection_state.Controls.playing;
-            mediaTag.muted = viewConnection_state.Controls.muted;
-            removeVideoPauseListeners();
-            addVideoEventListeners(mediaTag);
-            mediaTag.onloadedmetadata = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-              return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-                while (1) {
-                  switch (_context3.prev = _context3.next) {
-                    case 0:
-                      commit('Controls/setVideo', mediaTag);
-                      commit('Controls/setCurrentElementRef', opositeElementRef);
-                      commit('Controls/setIsMigrating', false);
-                      commit('Controls/setIsSplittedView', viewConnection_state.Controls.previousSplitState);
-
-                      if (document.pictureInPictureElement) {
-                        mediaTag.requestPictureInPicture();
-                      }
-
-                    case 5:
-                    case "end":
-                      return _context3.stop();
-                  }
-                }
-              }, _callee3);
-            }));
-            commit('Controls/setViewerMigratingEvent', false);
-            commit('Controls/setMigrateListenerIsSet', false); //We have to set the listener again since the signaling attribute of millicastView is changed after the migrate.
-
-            addSignalingMigrateListener();
-            _context4.next = 26;
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          video = viewConnection_state.Controls.video;
+          addSignalingMigrateListener();
+          verifyStreamWithPeer();
+          //If we already had a a stream and is not migrating then we ignore it (Firefox addRemoteTrack issue)
+          if (!(video.srcObject && video.srcObject.id !== entrySrcObject.id && !viewConnection_state.Controls.viewerMigratingEvent)) {
+            _context4.next = 5;
             break;
-
-          case 25:
-            setVideoPlayer({
-              videoPlayer: video,
-              srcObject: entrySrcObject
-            });
-
-          case 26:
-          case "end":
-            return _context4.stop();
-        }
+          }
+          return _context4.abrupt("return");
+        case 5:
+          if (!(video.srcObject && video.srcObject.id !== entrySrcObject.id && viewConnection_state.Controls.viewerMigratingEvent)) {
+            _context4.next = 25;
+            break;
+          }
+          commit('Controls/setPreviousSplitState', viewConnection_state.Controls.isSplittedView);
+          commit('Controls/setIsMigrating', true);
+          commit('Controls/setIsSplittedView', false);
+          _context4.next = 11;
+          return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
+        case 11:
+          opositeElementRef = viewConnection_state.Controls.currentElementRef === 'player' ? 'player2' : 'player';
+          mediaTag = document.getElementById(opositeElementRef);
+          commit('Controls/setSrcObject', entrySrcObject);
+          mediaTag.srcObject = entrySrcObject;
+          mediaTag.autoplay = viewConnection_state.Controls.playing;
+          mediaTag.muted = viewConnection_state.Controls.muted;
+          removeVideoPauseListeners();
+          addVideoEventListeners(mediaTag);
+          mediaTag.onloadedmetadata = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+            return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+              while (1) switch (_context3.prev = _context3.next) {
+                case 0:
+                  commit('Controls/setVideo', mediaTag);
+                  commit('Controls/setCurrentElementRef', opositeElementRef);
+                  commit('Controls/setIsMigrating', false);
+                  commit('Controls/setIsSplittedView', viewConnection_state.Controls.previousSplitState);
+                  if (document.pictureInPictureElement) {
+                    mediaTag.requestPictureInPicture();
+                  }
+                case 5:
+                case "end":
+                  return _context3.stop();
+              }
+            }, _callee3);
+          }));
+          commit('Controls/setViewerMigratingEvent', false);
+          commit('Controls/setMigrateListenerIsSet', false);
+          //We have to set the listener again since the signaling attribute of millicastView is changed after the migrate.
+          addSignalingMigrateListener();
+          _context4.next = 26;
+          break;
+        case 25:
+          setVideoPlayer({
+            videoPlayer: video,
+            srcObject: entrySrcObject
+          });
+        case 26:
+        case "end":
+          return _context4.stop();
       }
     }, _callee4);
   }));
-
   return function setStream(_x2) {
     return _ref3.apply(this, arguments);
   };
 }();
-
 var setCanAutoPlayStream = /*#__PURE__*/function () {
   var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
     var canAutoPlayVideo, muted;
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-      while (1) {
-        switch (_context5.prev = _context5.next) {
-          case 0:
-            commit('Controls/setVideoAutoplay', viewConnection_state.Params.queryParams.autoplay);
-
-            if (!viewConnection_state.Params.queryParams.autoplay) {
-              _context5.next = 8;
-              break;
-            }
-
-            _context5.next = 4;
-            return can_autoplay_es.video({
-              muted: viewConnection_state.Params.queryParams.muted
-            });
-
-          case 4:
-            canAutoPlayVideo = _context5.sent;
-            muted = !viewConnection_state.Params.queryParams.muted ? !canAutoPlayVideo.result : viewConnection_state.Params.queryParams.muted;
-            commit('Controls/setVideoMuted', muted);
-            commit('Controls/setAutoPlayMuted', muted);
-
-          case 8:
-          case "end":
-            return _context5.stop();
-        }
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          commit('Controls/setVideoAutoplay', viewConnection_state.Params.queryParams.autoplay);
+          if (!viewConnection_state.Params.queryParams.autoplay) {
+            _context5.next = 8;
+            break;
+          }
+          _context5.next = 4;
+          return can_autoplay_es.video({
+            muted: viewConnection_state.Params.queryParams.muted
+          });
+        case 4:
+          canAutoPlayVideo = _context5.sent;
+          muted = !viewConnection_state.Params.queryParams.muted ? !canAutoPlayVideo.result : viewConnection_state.Params.queryParams.muted;
+          commit('Controls/setVideoMuted', muted);
+          commit('Controls/setAutoPlayMuted', muted);
+        case 8:
+        case "end":
+          return _context5.stop();
       }
     }, _callee5);
   }));
-
   return function setCanAutoPlayStream() {
     return _ref5.apply(this, arguments);
   };
 }();
-
 var verifyStreamWithPeer = function verifyStreamWithPeer() {
   var _video$srcObject;
-
   var millicastView = viewConnection_state.ViewConnection.millicastView;
   var peerVideoReceiver = millicastView.webRTCPeer.peer.getReceivers().find(function (r) {
     return r.track.kind === "video";
   });
   var video = viewConnection_state.Controls.video;
-
   if ((peerVideoReceiver === null || peerVideoReceiver === void 0 ? void 0 : peerVideoReceiver.track.id) !== ((_video$srcObject = video.srcObject) === null || _video$srcObject === void 0 ? void 0 : _video$srcObject.getVideoTracks()[0].id)) {
     commit('Controls/setVideoSource', null);
     commit('Controls/setSrcObject', null);
     commit('Controls/setIsSplittedView', false);
   }
 };
-
 var setReconnect = function setReconnect() {
   var _state$ViewConnection;
-
   viewConnection_state.ViewConnection.eventListeners.reconnect = (_state$ViewConnection = viewConnection_state.ViewConnection.eventListeners.reconnect) !== null && _state$ViewConnection !== void 0 ? _state$ViewConnection : viewConnection_state.ViewConnection.millicastView.on('reconnect', function (_ref6) {
     var _error$response, _error$response$data, _error$response$data$, _error$response$data$2;
-
     var timeout = _ref6.timeout,
-        error = _ref6.error;
+      error = _ref6.error;
     var errorMessage = (_error$response = error.response) === null || _error$response === void 0 ? void 0 : (_error$response$data = _error$response.data) === null || _error$response$data === void 0 ? void 0 : (_error$response$data$ = _error$response$data.data) === null || _error$response$data$ === void 0 ? void 0 : (_error$response$data$2 = _error$response$data$.message) === null || _error$response$data$2 === void 0 ? void 0 : _error$response$data$2.toLowerCase();
-
     if (errorMessage !== null && errorMessage !== void 0 && errorMessage.toLowerCase().includes('stream not being published')) {
       commit('Controls/setIsLoading', false);
       commit('Controls/setIsLive', false);
@@ -11860,19 +11867,17 @@ var setReconnect = function setReconnect() {
 };
 var handleStopStream = function handleStopStream() {
   var _state$ViewConnection2;
-
   (_state$ViewConnection2 = viewConnection_state.ViewConnection.millicastView) === null || _state$ViewConnection2 === void 0 ? void 0 : _state$ViewConnection2.stop();
   commit('Controls/setVideoSource', null);
   commit('Controls/setSrcObject', null);
 };
-
 var addSignalingMigrateListener = function addSignalingMigrateListener() {
   if (!viewConnection_state.Controls.viewerMigratingEvent && !viewConnection_state.Controls.migrateListenerIsSet && viewConnection_state.ViewConnection.millicastView.signaling) {
     setTimeout(function () {
       viewConnection_state.ViewConnection.millicastView.signaling.on('migrate', function () {
         commit('Controls/setViewerMigratingEvent', true);
-      }); // Avoid setting the event listener more than once
-
+      });
+      // Avoid setting the event listener more than once
       commit('Controls/setMigrateListenerIsSet', true);
     }, 50); //We have to set a timeout because it takes a while before the millicastView signaling instance changes on migrate.
   }
@@ -11891,180 +11896,158 @@ var es_array_unshift = __webpack_require__("3c65");
 
 
 
+
+
 var cast_commit = src_store.commit,
-    cast_state = src_store.state;
-var receiverApplicationId = "";
+  cast_state = src_store.state;
 var castContext = null;
 var castSession = null;
+var receiverApplicationId = null;
 var handleSetCast = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
     var castStateListener, sessionListener;
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-      while (1) {
-        switch (_context5.prev = _context5.next) {
-          case 0:
-            castStateListener = /*#__PURE__*/function () {
-              var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(castState) {
-                var _window, cast;
-
-                return _regeneratorRuntime().wrap(function _callee$(_context) {
-                  while (1) {
-                    switch (_context.prev = _context.next) {
-                      case 0:
-                        _window = window, cast = _window.cast;
-                        _context.t0 = castState;
-                        _context.next = _context.t0 === cast.framework.CastState.NO_DEVICES_AVAILABLE ? 4 : _context.t0 === cast.framework.CastState.NOT_CONNECTED ? 6 : _context.t0 === cast.framework.CastState.CONNECTED ? 8 : 11;
-                        break;
-
-                      case 4:
-                        cast_commit('Controls/setCastAvailable', false);
-                        return _context.abrupt("break", 12);
-
-                      case 6:
-                        cast_commit('Controls/setCastAvailable', true);
-                        return _context.abrupt("break", 12);
-
-                      case 8:
-                        _context.next = 10;
-                        return sendLoadRequest();
-
-                      case 10:
-                        return _context.abrupt("break", 12);
-
-                      case 11:
-                        return _context.abrupt("break", 12);
-
-                      case 12:
-                      case "end":
-                        return _context.stop();
-                    }
-                  }
-                }, _callee);
-              }));
-
-              return function castStateListener(_x) {
-                return _ref2.apply(this, arguments);
-              };
-            }();
-
-            sessionListener = function sessionListener(event) {
-              var _window2 = window,
-                  cast = _window2.cast;
-
-              switch (event.sessionState) {
-                case cast.framework.SessionState.SESSION_ENDED:
-                  castSession = null;
-                  connectToStream(); // Change to new connect
-
-                  cast_commit('Controls/setCastIsConnected', false);
-                  break;
-
-                default:
-                  break;
-              }
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          if (receiverApplicationId) {
+            _context5.next = 6;
+            break;
+          }
+          _context5.next = 3;
+          return new Promise(function (r) {
+            return setTimeout(r, 20);
+          });
+        case 3:
+          receiverApplicationId = cast_state.Params.queryParams.chromecastId;
+          _context5.next = 0;
+          break;
+        case 6:
+          castStateListener = /*#__PURE__*/function () {
+            var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(castState) {
+              var _window, cast;
+              return _regeneratorRuntime().wrap(function _callee$(_context) {
+                while (1) switch (_context.prev = _context.next) {
+                  case 0:
+                    _window = window, cast = _window.cast;
+                    _context.t0 = castState;
+                    _context.next = _context.t0 === cast.framework.CastState.NO_DEVICES_AVAILABLE ? 4 : _context.t0 === cast.framework.CastState.NOT_CONNECTED ? 6 : _context.t0 === cast.framework.CastState.CONNECTED ? 8 : 11;
+                    break;
+                  case 4:
+                    cast_commit('Controls/setCastAvailable', false);
+                    return _context.abrupt("break", 12);
+                  case 6:
+                    cast_commit('Controls/setCastAvailable', true);
+                    return _context.abrupt("break", 12);
+                  case 8:
+                    _context.next = 10;
+                    return sendLoadRequest();
+                  case 10:
+                    return _context.abrupt("break", 12);
+                  case 11:
+                    return _context.abrupt("break", 12);
+                  case 12:
+                  case "end":
+                    return _context.stop();
+                }
+              }, _callee);
+            }));
+            return function castStateListener(_x) {
+              return _ref2.apply(this, arguments);
             };
-
-            window['__onGCastApiAvailable'] = /*#__PURE__*/function () {
-              var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(isAvailable) {
-                return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-                  while (1) {
-                    switch (_context4.prev = _context4.next) {
-                      case 0:
-                        if (isAvailable) {
-                          setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-                            var _window$cast$framewor, CAST_STATE_CHANGED, SESSION_STATE_CHANGED;
-
-                            return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-                              while (1) {
-                                switch (_context3.prev = _context3.next) {
-                                  case 0:
-                                    _context3.next = 2;
-                                    return window.cast.framework.CastContext.getInstance();
-
-                                  case 2:
-                                    castContext = _context3.sent;
-
-                                    if (!(window.chrome.cast && window.chrome.cast.AutoJoinPolicy)) {
-                                      _context3.next = 12;
-                                      break;
-                                    }
-
-                                    castContext.setOptions({
-                                      autoJoinPolicy: window.chrome.cast.AutoJoinPolicy.PAGE_SCOPED,
-                                      receiverApplicationId: receiverApplicationId
-                                    });
-                                    _window$cast$framewor = window.cast.framework.CastContextEventType, CAST_STATE_CHANGED = _window$cast$framewor.CAST_STATE_CHANGED, SESSION_STATE_CHANGED = _window$cast$framewor.SESSION_STATE_CHANGED;
-                                    _context3.next = 8;
-                                    return castContext.addEventListener(CAST_STATE_CHANGED, /*#__PURE__*/function () {
-                                      var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref5) {
-                                        var castState;
-                                        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-                                          while (1) {
-                                            switch (_context2.prev = _context2.next) {
-                                              case 0:
-                                                castState = _ref5.castState;
-                                                _context2.next = 3;
-                                                return castStateListener(castState);
-
-                                              case 3:
-                                                return _context2.abrupt("return", _context2.sent);
-
-                                              case 4:
-                                              case "end":
-                                                return _context2.stop();
-                                            }
-                                          }
-                                        }, _callee2);
-                                      }));
-
-                                      return function (_x3) {
-                                        return _ref6.apply(this, arguments);
-                                      };
-                                    }());
-
-                                  case 8:
-                                    _context3.next = 10;
-                                    return castContext.addEventListener(SESSION_STATE_CHANGED, function (e) {
-                                      return sessionListener(e);
-                                    });
-
-                                  case 10:
-                                    _context3.next = 13;
-                                    break;
-
-                                  case 12:
-                                    cast_commit('Controls/setCastAvailable', false);
-
-                                  case 13:
-                                  case "end":
-                                    return _context3.stop();
-                                }
+          }();
+          sessionListener = function sessionListener(event) {
+            var _window2 = window,
+              cast = _window2.cast;
+            switch (event.sessionState) {
+              case cast.framework.SessionState.SESSION_ENDED:
+                castSession = null;
+                connectToStream();
+                // Change to new connect
+                cast_commit('Controls/setCastIsConnected', false);
+                break;
+              default:
+                break;
+            }
+          };
+          window['__onGCastApiAvailable'] = /*#__PURE__*/function () {
+            var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(isAvailable) {
+              return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+                while (1) switch (_context4.prev = _context4.next) {
+                  case 0:
+                    if (isAvailable) {
+                      setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+                        var _window$cast$framewor, CAST_STATE_CHANGED, SESSION_STATE_CHANGED;
+                        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+                          while (1) switch (_context3.prev = _context3.next) {
+                            case 0:
+                              _context3.next = 2;
+                              return window.cast.framework.CastContext.getInstance();
+                            case 2:
+                              castContext = _context3.sent;
+                              if (!(window.chrome.cast && window.chrome.cast.AutoJoinPolicy)) {
+                                _context3.next = 12;
+                                break;
                               }
-                            }, _callee3);
-                          })), 20);
-                        }
-
-                      case 1:
-                      case "end":
-                        return _context4.stop();
+                              castContext.setOptions({
+                                autoJoinPolicy: window.chrome.cast.AutoJoinPolicy.PAGE_SCOPED,
+                                receiverApplicationId: receiverApplicationId
+                              });
+                              _window$cast$framewor = window.cast.framework.CastContextEventType, CAST_STATE_CHANGED = _window$cast$framewor.CAST_STATE_CHANGED, SESSION_STATE_CHANGED = _window$cast$framewor.SESSION_STATE_CHANGED;
+                              _context3.next = 8;
+                              return castContext.addEventListener(CAST_STATE_CHANGED, /*#__PURE__*/function () {
+                                var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref5) {
+                                  var castState;
+                                  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+                                    while (1) switch (_context2.prev = _context2.next) {
+                                      case 0:
+                                        castState = _ref5.castState;
+                                        _context2.next = 3;
+                                        return castStateListener(castState);
+                                      case 3:
+                                        return _context2.abrupt("return", _context2.sent);
+                                      case 4:
+                                      case "end":
+                                        return _context2.stop();
+                                    }
+                                  }, _callee2);
+                                }));
+                                return function (_x3) {
+                                  return _ref6.apply(this, arguments);
+                                };
+                              }());
+                            case 8:
+                              _context3.next = 10;
+                              return castContext.addEventListener(SESSION_STATE_CHANGED, function (e) {
+                                return sessionListener(e);
+                              });
+                            case 10:
+                              _context3.next = 13;
+                              break;
+                            case 12:
+                              cast_commit('Controls/setCastAvailable', false);
+                            case 13:
+                            case "end":
+                              return _context3.stop();
+                          }
+                        }, _callee3);
+                      })), 20);
                     }
-                  }
-                }, _callee4);
-              }));
-
-              return function (_x2) {
-                return _ref3.apply(this, arguments);
-              };
-            }();
-
-          case 3:
-          case "end":
-            return _context5.stop();
-        }
+                  case 1:
+                  case "end":
+                    return _context4.stop();
+                }
+              }, _callee4);
+            }));
+            return function (_x2) {
+              return _ref3.apply(this, arguments);
+            };
+          }();
+        case 9:
+        case "end":
+          return _context5.stop();
       }
     }, _callee5);
   }));
-
   return function handleSetCast() {
     return _ref.apply(this, arguments);
   };
@@ -12072,48 +12055,43 @@ var handleSetCast = /*#__PURE__*/function () {
 var sendLoadRequest = /*#__PURE__*/function () {
   var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
     var _state$ViewConnection, _state$ViewConnection2, _state$ViewConnection3, _state$ViewConnection4, _state$ViewConnection5, _state$ViewConnection6;
-
     var _window3, chrome, _state$Controls$castO, streamId, token, multiSourceOptions, mediaInfo, loadRequest;
-
     return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-      while (1) {
-        switch (_context6.prev = _context6.next) {
-          case 0:
-            _window3 = window, chrome = _window3.chrome;
-            _state$Controls$castO = cast_state.Controls.castOptions, streamId = _state$Controls$castO.streamId, token = _state$Controls$castO.token;
-            multiSourceOptions = {
-              audioSource: cast_state.Sources.selectedAudioSource,
-              videoSource: cast_state.Sources.selectedVideoSource,
-              audioMediaId: (_state$ViewConnection = (_state$ViewConnection2 = cast_state.ViewConnection.trackEvent) === null || _state$ViewConnection2 === void 0 ? void 0 : (_state$ViewConnection3 = _state$ViewConnection2.audio) === null || _state$ViewConnection3 === void 0 ? void 0 : _state$ViewConnection3.transceiver.mid) !== null && _state$ViewConnection !== void 0 ? _state$ViewConnection : null,
-              videoMediaId: (_state$ViewConnection4 = (_state$ViewConnection5 = cast_state.ViewConnection.trackEvent) === null || _state$ViewConnection5 === void 0 ? void 0 : (_state$ViewConnection6 = _state$ViewConnection5.video) === null || _state$ViewConnection6 === void 0 ? void 0 : _state$ViewConnection6.transceiver.mid) !== null && _state$ViewConnection4 !== void 0 ? _state$ViewConnection4 : null
-            };
-            _context6.next = 5;
-            return castContext.getCurrentSession();
-
-          case 5:
-            castSession = _context6.sent;
-            mediaInfo = new chrome.cast.media.MediaInfo(streamId, '');
-            mediaInfo.customData = {
-              streamId: streamId,
-              token: token,
-              multiSourceOptions: multiSourceOptions
-            };
-            mediaInfo.streamType = chrome.cast.media.StreamType.LIVE;
-            loadRequest = new chrome.cast.media.LoadRequest(mediaInfo);
-            castSession.loadMedia(loadRequest).then(function () {
-              stopStream();
-              cast_commit('Controls/setCastDevice', castSession.getCastDevice());
-              cast_commit('Controls/setCastIsConnected', true);
-            });
-
-          case 11:
-          case "end":
-            return _context6.stop();
-        }
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          _window3 = window, chrome = _window3.chrome;
+          _state$Controls$castO = cast_state.Controls.castOptions, streamId = _state$Controls$castO.streamId, token = _state$Controls$castO.token;
+          multiSourceOptions = {
+            audioSource: cast_state.Sources.selectedAudioSource,
+            videoSource: cast_state.Sources.selectedVideoSource,
+            audioMediaId: (_state$ViewConnection = (_state$ViewConnection2 = cast_state.ViewConnection.trackEvent) === null || _state$ViewConnection2 === void 0 ? void 0 : (_state$ViewConnection3 = _state$ViewConnection2.audio) === null || _state$ViewConnection3 === void 0 ? void 0 : _state$ViewConnection3.transceiver.mid) !== null && _state$ViewConnection !== void 0 ? _state$ViewConnection : null,
+            videoMediaId: (_state$ViewConnection4 = (_state$ViewConnection5 = cast_state.ViewConnection.trackEvent) === null || _state$ViewConnection5 === void 0 ? void 0 : (_state$ViewConnection6 = _state$ViewConnection5.video) === null || _state$ViewConnection6 === void 0 ? void 0 : _state$ViewConnection6.transceiver.mid) !== null && _state$ViewConnection4 !== void 0 ? _state$ViewConnection4 : null
+          };
+          _context6.next = 5;
+          return castContext.getCurrentSession();
+        case 5:
+          castSession = _context6.sent;
+          mediaInfo = new chrome.cast.media.MediaInfo(streamId, '');
+          mediaInfo.customData = {
+            streamId: streamId,
+            token: token,
+            multiSourceOptions: multiSourceOptions
+          };
+          mediaInfo.streamType = chrome.cast.media.StreamType.LIVE;
+          loadRequest = new chrome.cast.media.LoadRequest(mediaInfo);
+          castSession.loadMedia(loadRequest).then(function () {
+            stopStream();
+            cast_commit('Controls/setCastDevice', castSession.getCastDevice());
+            cast_commit('Controls/setCastIsConnected', true);
+          }).catch(function (error) {
+            console.log(error);
+          });
+        case 11:
+        case "end":
+          return _context6.stop();
       }
     }, _callee6);
   }));
-
   return function sendLoadRequest() {
     return _ref7.apply(this, arguments);
   };
@@ -12139,7 +12117,7 @@ var es_parse_int = __webpack_require__("e25e");
 
 
 var layers_commit = src_store.commit,
-    layers_state = src_store.state;
+  layers_state = src_store.state;
 var updateLayers = function updateLayers(evntData) {
   var data = evntData.data;
   var activeQualities = [];
@@ -12147,10 +12125,8 @@ var updateLayers = function updateLayers(evntData) {
   var encodings = Object.values(data.medias);
   encodings.forEach(function (encoding) {
     var _encoding$active$;
-
     if ((encoding === null || encoding === void 0 ? void 0 : encoding.active.length) === 1 && (encoding === null || encoding === void 0 ? void 0 : (_encoding$active$ = encoding.active[0]) === null || _encoding$active$ === void 0 ? void 0 : _encoding$active$.layers.length) > 1) {
       var _encoding$active$2, _encoding$active$2$la, _encoding$inactive$, _encoding$inactive$$l;
-
       (_encoding$active$2 = encoding.active[0]) === null || _encoding$active$2 === void 0 ? void 0 : (_encoding$active$2$la = _encoding$active$2.layers) === null || _encoding$active$2$la === void 0 ? void 0 : _encoding$active$2$la.forEach(function (quality) {
         if (!activeQualities.some(function (info) {
           return info.spatialLayerId === quality.spatialLayerId;
@@ -12170,7 +12146,6 @@ var updateLayers = function updateLayers(evntData) {
       });
     } else {
       var _encoding$active, _encoding$inactive;
-
       (_encoding$active = encoding.active) === null || _encoding$active === void 0 ? void 0 : _encoding$active.forEach(function (quality) {
         if (!activeQualities.some(function (info) {
           return info.id === quality.id;
@@ -12192,7 +12167,6 @@ var updateLayers = function updateLayers(evntData) {
   activeQualities.sort(function (a, b) {
     return b.bitrate - a.bitrate;
   });
-
   if (activeQualities.length === 2) {
     activeQualities[0].name = 'High';
     activeQualities[1].name = 'Low';
@@ -12207,13 +12181,11 @@ var updateLayers = function updateLayers(evntData) {
       name: 'Auto'
     });
   }
-
   if (activeQualities.length != layers_state.Layers.medias.active.length) {
     layers_commit('Layers/setSelectedQuality', {
       name: 'Auto'
     });
   }
-
   layers_commit('Layers/setMedias', {
     active: activeQualities,
     inactive: inactiveQualities
@@ -12231,11 +12203,9 @@ var deleteLayers = function deleteLayers() {
 var handleSelectQuality = function handleSelectQuality(media) {
   var selectedData = {};
   selectedData.encodingId = media.id;
-
   if (!selectedData.encodingId && media.spatialLayerId !== null) {
     selectedData.spatialLayerId = parseInt(media.spatialLayerId);
   }
-
   var data = selectedData.encodingId || selectedData.encodingId === 0 || selectedData.spatialLayerId || selectedData.spatialLayerId === 0 ? selectedData : {};
   layers_state.ViewConnection.millicastView.select(data);
   layers_commit('Layers/selectQuality', media);
@@ -12256,8 +12226,8 @@ var handleSelectQuality = function handleSelectQuality(media) {
 
 
 var sources_commit = src_store.commit,
-    sources_state = src_store.state,
-    getters = src_store.getters;
+  sources_state = src_store.state,
+  getters = src_store.getters;
 
 
 var getTracks = function getTracks(data) {
@@ -12266,98 +12236,80 @@ var getTracks = function getTracks(data) {
     if (e.media === 'video') {
       addRemoteTracks(sourceId);
       addSource('video', sourceId, e.trackId);
-
       if (sources_state.Sources.videoSources.length === 1) {
         sources_commit('Sources/setIsAudioOnly', false);
       }
     }
-
     if (e.media === 'audio') {
       addSource('audio', sourceId, e.trackId);
-
       if (sources_state.Sources.audioSources.length === 1) {
         sources_commit('Sources/setIsAudioOnly', sources_state.Sources.videoSources.length ? false : true);
       }
     }
   });
-
   if (tracksAvailableAndMainNotExists()) {
     setTimeout(processTrackWarning, 1000);
   } else if (sources_state.Controls.trackWarning) {
     sources_commit('Controls/setTrackWarning', false);
   }
 };
-
 var addRemoteTracks = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(sourceId) {
     var remoteTrackIndex, mediaStream;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            if (sourceId) {
-              _context2.next = 2;
-              break;
-            }
-
-            return _context2.abrupt("return");
-
-          case 2:
-            remoteTrackIndex = sources_state.Sources.sourceRemoteTracks.findIndex(function (t) {
-              return t.sourceId === sourceId;
-            });
-            mediaStream = new MediaStream();
-            setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-              var transceiver, sourceRemoteTrack;
-              return _regeneratorRuntime().wrap(function _callee$(_context) {
-                while (1) {
-                  switch (_context.prev = _context.next) {
-                    case 0:
-                      _context.next = 2;
-                      return sources_state.ViewConnection.millicastView.addRemoteTrack('video', [mediaStream]);
-
-                    case 2:
-                      transceiver = _context.sent;
-                      sourceRemoteTrack = {
-                        transceiver: transceiver,
-                        mediaStream: mediaStream,
-                        sourceId: sourceId
-                      };
-
-                      if (remoteTrackIndex !== -1) {
-                        sources_commit('Sources/replaceSourceRemoteTrack', {
-                          sourceRemoteTrack: sourceRemoteTrack,
-                          remoteTrackIndex: remoteTrackIndex
-                        });
-                      } else {
-                        sources_commit('Sources/addSourceRemoteTrack', sourceRemoteTrack);
-                      }
-
-                    case 5:
-                    case "end":
-                      return _context.stop();
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          if (sourceId) {
+            _context2.next = 2;
+            break;
+          }
+          return _context2.abrupt("return");
+        case 2:
+          remoteTrackIndex = sources_state.Sources.sourceRemoteTracks.findIndex(function (t) {
+            return t.sourceId === sourceId;
+          });
+          mediaStream = new MediaStream();
+          setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+            var transceiver, sourceRemoteTrack;
+            return _regeneratorRuntime().wrap(function _callee$(_context) {
+              while (1) switch (_context.prev = _context.next) {
+                case 0:
+                  _context.next = 2;
+                  return sources_state.ViewConnection.millicastView.addRemoteTrack('video', [mediaStream]);
+                case 2:
+                  transceiver = _context.sent;
+                  sourceRemoteTrack = {
+                    transceiver: transceiver,
+                    mediaStream: mediaStream,
+                    sourceId: sourceId
+                  };
+                  if (remoteTrackIndex !== -1) {
+                    sources_commit('Sources/replaceSourceRemoteTrack', {
+                      sourceRemoteTrack: sourceRemoteTrack,
+                      remoteTrackIndex: remoteTrackIndex
+                    });
+                  } else {
+                    sources_commit('Sources/addSourceRemoteTrack', sourceRemoteTrack);
                   }
-                }
-              }, _callee);
-            })), 50); //We have to set a timeout because it takes a while before the millicastView signaling instance changes on migrate.
-
-          case 5:
-          case "end":
-            return _context2.stop();
-        }
+                case 5:
+                case "end":
+                  return _context.stop();
+              }
+            }, _callee);
+          })), 50); //We have to set a timeout because it takes a while before the millicastView signaling instance changes on migrate.
+        case 5:
+        case "end":
+          return _context2.stop();
       }
     }, _callee2);
   }));
-
   return function addRemoteTracks(_x) {
     return _ref.apply(this, arguments);
   };
 }();
-
 var tracksAvailableAndMainNotExists = function tracksAvailableAndMainNotExists() {
   return !getters['Sources/getVideoHasMain'] && sources_state.Sources.videoSources.length || !getters['Sources/getAudioHasMain'] && sources_state.Sources.audioSources.length;
 };
-
 var addSource = function addSource(kind, sourceId, trackId) {
   var source = {
     name: sourceId === null ? 'Main' : sourceId,
@@ -12366,14 +12318,12 @@ var addSource = function addSource(kind, sourceId, trackId) {
   };
   var sourceToUse = kind === 'video' ? sources_state.Sources.videoSources : sources_state.Sources.audioSources;
   var sources = Array.from(sourceToUse);
-
   if (!sources.some(function (e) {
     return e.sourceId === source.sourceId;
   })) {
     if (source.sourceId === null) {
       sources.unshift(source);
       var selectedMediaSource = kind === 'video' ? sources_state.Sources.selectedVideoSource : sources_state.Sources.selectedAudioSource;
-
       if (selectedMediaSource.name === 'none') {
         sources_commit('Sources/setSelectedSource', {
           kind: kind,
@@ -12383,24 +12333,20 @@ var addSource = function addSource(kind, sourceId, trackId) {
     } else {
       sources.push(source);
     }
-
     sources_commit('Sources/setSources', {
       kind: kind,
       sources: sources
     });
   }
 };
-
 var processTrackWarning = function processTrackWarning() {
   if (tracksAvailableAndMainNotExists() && !sources_state.Sources.trackWarning) {
     if (sources_state.Controls.dropup === '') {
       sources_commit('Controls/setDropup', 'settings');
     }
-
     sources_commit('Controls/setTrackWarning', true);
   }
 };
-
 var handleDeleteSource = function handleDeleteSource(sourceId) {
   var videoIndex = sources_state.Sources.videoSources.findIndex(function (source) {
     return source.sourceId === sourceId;
@@ -12408,27 +12354,22 @@ var handleDeleteSource = function handleDeleteSource(sourceId) {
   var audioIndex = sources_state.Sources.audioSources.findIndex(function (source) {
     return source.sourceId === sourceId;
   });
-
   if (videoIndex !== -1) {
     deleteSource('video', sourceId);
-
     if (!sources_state.Sources.videoSources.length) {
       sources_commit('Sources/setIsAudioOnly', true);
     }
   }
-
   if (audioIndex !== -1) {
     deleteSource('audio', sourceId);
   }
 };
-
 var deleteSource = function deleteSource(kind, sourceId) {
   var selectedSource = kind === 'video' ? sources_state.Sources.selectedVideoSource : sources_state.Sources.selectedAudioSource;
   var sourcesToUse = kind === 'video' ? sources_state.Sources.videoSources : sources_state.Sources.audioSources;
   sourcesToUse = sourcesToUse.filter(function (source) {
     return source.sourceId !== sourceId;
   });
-
   if (sourceId === selectedSource.sourceId) {
     if (sourcesToUse.findIndex(function (source) {
       return source.sourceId === null;
@@ -12441,7 +12382,6 @@ var deleteSource = function deleteSource(kind, sourceId) {
       };
     }
   }
-
   sources_commit('Sources/removeSourceRemoteTrack', sourceId);
   sources_commit('Sources/setSources', {
     kind: kind,
@@ -12452,151 +12392,123 @@ var deleteSource = function deleteSource(kind, sourceId) {
     source: selectedSource
   });
 };
-
 var handleSelectSource = /*#__PURE__*/function () {
   var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(_ref3) {
     var kind, source, track, selectedSource;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            kind = _ref3.kind, source = _ref3.source;
-            track = null;
-            selectedSource = null;
-
-            if (kind === 'video') {
-              deleteLayers();
-              track = sources_state.ViewConnection.trackEvent.video.track;
-              selectedSource = sources_state.Sources.selectedAudioSource;
-            } else if (kind === 'audio') {
-              track = sources_state.ViewConnection.trackEvent.audio.track;
-              selectedSource = sources_state.Sources.selectedVideoSource;
-            }
-
-            sources_commit('Sources/setSelectedSource', {
-              kind: kind,
-              selectedSource: source
-            });
-
-            if (!(source && (source === null || source === void 0 ? void 0 : source.name) !== 'none' && track)) {
-              _context3.next = 9;
-              break;
-            }
-
-            _context3.next = 8;
-            return project({
-              kind: kind,
-              source: source
-            });
-
-          case 8:
-            if (selectedSource.name !== 'none') {
-              sources_commit('Controls/setTrackWarning', false);
-            }
-
-          case 9:
-          case "end":
-            return _context3.stop();
-        }
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          kind = _ref3.kind, source = _ref3.source;
+          track = null;
+          selectedSource = null;
+          if (kind === 'video') {
+            deleteLayers();
+            track = sources_state.ViewConnection.trackEvent.video.track;
+            selectedSource = sources_state.Sources.selectedAudioSource;
+          } else if (kind === 'audio') {
+            track = sources_state.ViewConnection.trackEvent.audio.track;
+            selectedSource = sources_state.Sources.selectedVideoSource;
+          }
+          sources_commit('Sources/setSelectedSource', {
+            kind: kind,
+            selectedSource: source
+          });
+          if (!(source && (source === null || source === void 0 ? void 0 : source.name) !== 'none' && track)) {
+            _context3.next = 9;
+            break;
+          }
+          _context3.next = 8;
+          return project({
+            kind: kind,
+            source: source
+          });
+        case 8:
+          if (selectedSource.name !== 'none') {
+            sources_commit('Controls/setTrackWarning', false);
+          }
+        case 9:
+        case "end":
+          return _context3.stop();
       }
     }, _callee3);
   }));
-
   return function handleSelectSource(_x2) {
     return _ref4.apply(this, arguments);
   };
 }();
-
 var project = /*#__PURE__*/function () {
   var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(_ref5) {
     var kind, source, sourceId, sources, transceiver, _state$ViewConnection, _state$ViewConnection2, _state$ViewConnection3, _state$ViewConnection4, _transceiver$mid, _transceiver, mediaId;
-
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            kind = _ref5.kind, source = _ref5.source;
-            sourceId = source === null || source === void 0 ? void 0 : source.sourceId;
-            sources = null;
-            transceiver = null;
-
-            if (kind === 'video') {
-              sources = sources_state.Sources.videoSources;
-              transceiver = (_state$ViewConnection = sources_state.ViewConnection.trackEvent) === null || _state$ViewConnection === void 0 ? void 0 : (_state$ViewConnection2 = _state$ViewConnection.video) === null || _state$ViewConnection2 === void 0 ? void 0 : _state$ViewConnection2.transceiver;
-            } else if (kind === 'audio') {
-              sources = sources_state.Sources.audioSources;
-              transceiver = (_state$ViewConnection3 = sources_state.ViewConnection.trackEvent) === null || _state$ViewConnection3 === void 0 ? void 0 : (_state$ViewConnection4 = _state$ViewConnection3.audio) === null || _state$ViewConnection4 === void 0 ? void 0 : _state$ViewConnection4.transceiver;
-            }
-
-            if (!(source.name !== 'none' && !(sourceId === null && !sources.length) && !sources_state.Controls.castIsConnected)) {
-              _context4.next = 11;
-              break;
-            }
-
-            mediaId = (_transceiver$mid = (_transceiver = transceiver) === null || _transceiver === void 0 ? void 0 : _transceiver.mid) !== null && _transceiver$mid !== void 0 ? _transceiver$mid : null;
-            _context4.next = 9;
-            return sources_state.ViewConnection.millicastView.project(sourceId, [{
-              trackId: source.trackId,
-              mediaId: mediaId
-            }]);
-
-          case 9:
-            _context4.next = 17;
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          kind = _ref5.kind, source = _ref5.source;
+          sourceId = source === null || source === void 0 ? void 0 : source.sourceId;
+          sources = null;
+          transceiver = null;
+          if (kind === 'video') {
+            sources = sources_state.Sources.videoSources;
+            transceiver = (_state$ViewConnection = sources_state.ViewConnection.trackEvent) === null || _state$ViewConnection === void 0 ? void 0 : (_state$ViewConnection2 = _state$ViewConnection.video) === null || _state$ViewConnection2 === void 0 ? void 0 : _state$ViewConnection2.transceiver;
+          } else if (kind === 'audio') {
+            sources = sources_state.Sources.audioSources;
+            transceiver = (_state$ViewConnection3 = sources_state.ViewConnection.trackEvent) === null || _state$ViewConnection3 === void 0 ? void 0 : (_state$ViewConnection4 = _state$ViewConnection3.audio) === null || _state$ViewConnection4 === void 0 ? void 0 : _state$ViewConnection4.transceiver;
+          }
+          if (!(source.name !== 'none' && !(sourceId === null && !sources.length) && !sources_state.Controls.castIsConnected)) {
+            _context4.next = 11;
             break;
-
-          case 11:
-            if (!sources_state.Controls.castIsConnected) {
-              _context4.next = 15;
-              break;
-            }
-
-            sendLoadRequest();
-            _context4.next = 17;
+          }
+          mediaId = (_transceiver$mid = (_transceiver = transceiver) === null || _transceiver === void 0 ? void 0 : _transceiver.mid) !== null && _transceiver$mid !== void 0 ? _transceiver$mid : null;
+          _context4.next = 9;
+          return sources_state.ViewConnection.millicastView.project(sourceId, [{
+            trackId: source.trackId,
+            mediaId: mediaId
+          }]);
+        case 9:
+          _context4.next = 17;
+          break;
+        case 11:
+          if (!sources_state.Controls.castIsConnected) {
+            _context4.next = 15;
             break;
-
-          case 15:
-            _context4.next = 17;
-            return handleSelectSource({
-              kind: kind,
-              source: source
-            });
-
-          case 17:
-          case "end":
-            return _context4.stop();
-        }
+          }
+          sendLoadRequest();
+          _context4.next = 17;
+          break;
+        case 15:
+          _context4.next = 17;
+          return handleSelectSource({
+            kind: kind,
+            source: source
+          });
+        case 17:
+        case "end":
+          return _context4.stop();
       }
     }, _callee4);
   }));
-
   return function project(_x3) {
     return _ref6.apply(this, arguments);
   };
 }();
-
 var handleProjectVideo = /*#__PURE__*/function () {
   var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(what, where, index) {
     var sideLabel;
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-      while (1) {
-        switch (_context5.prev = _context5.next) {
-          case 0:
-            sideLabel = 'sideLabel' + where;
-            document.getElementById(sideLabel).textContent = what !== null && what !== void 0 ? what : 'Main';
-            _context5.next = 4;
-            return sources_state.ViewConnection.millicastView.project(what, [{
-              trackId: sources_state.Sources.videoSources[index].trackId,
-              mediaId: where
-            }]);
-
-          case 4:
-          case "end":
-            return _context5.stop();
-        }
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          sideLabel = 'sideLabel' + where;
+          document.getElementById(sideLabel).textContent = what !== null && what !== void 0 ? what : 'Main';
+          _context5.next = 4;
+          return sources_state.ViewConnection.millicastView.project(what, [{
+            trackId: sources_state.Sources.videoSources[index].trackId,
+            mediaId: where
+          }]);
+        case 4:
+        case "end":
+          return _context5.stop();
       }
     }, _callee5);
   }));
-
   return function handleProjectVideo(_x4, _x5, _x6) {
     return _ref7.apply(this, arguments);
   };
@@ -12604,41 +12516,32 @@ var handleProjectVideo = /*#__PURE__*/function () {
 var handleProjectRemoteTracks = /*#__PURE__*/function () {
   var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(index) {
     var _state$Sources$source, _state$Sources$source2;
-
     var newSourceRemoteTrackIndex, vidId, sidePlayerId;
     return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-      while (1) {
-        switch (_context6.prev = _context6.next) {
-          case 0:
-            _context6.next = 2;
-            return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
-
-          case 2:
-            newSourceRemoteTrackIndex = index;
-            vidId = index + sources_state.Sources.videoSources.length - sources_state.Sources.sourceRemoteTracks.length;
-
-            if (!(newSourceRemoteTrackIndex < 0)) {
-              _context6.next = 6;
-              break;
-            }
-
-            return _context6.abrupt("return");
-
-          case 6:
-            sidePlayerId = 'sidePlayer' + sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].sourceId;
-            document.getElementById(sidePlayerId).srcObject = sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].mediaStream;
-            handleProjectVideo(sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].sourceId, (_state$Sources$source = (_state$Sources$source2 = sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].transceiver) === null || _state$Sources$source2 === void 0 ? void 0 : _state$Sources$source2.mid) !== null && _state$Sources$source !== void 0 ? _state$Sources$source : null, vidId);
-            document.getElementById(sidePlayerId).muted = true;
-            document.getElementById(sidePlayerId).play();
-
-          case 11:
-          case "end":
-            return _context6.stop();
-        }
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          _context6.next = 2;
+          return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
+        case 2:
+          newSourceRemoteTrackIndex = index;
+          vidId = index + sources_state.Sources.videoSources.length - sources_state.Sources.sourceRemoteTracks.length;
+          if (!(newSourceRemoteTrackIndex < 0)) {
+            _context6.next = 6;
+            break;
+          }
+          return _context6.abrupt("return");
+        case 6:
+          sidePlayerId = 'sidePlayer' + sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].sourceId;
+          document.getElementById(sidePlayerId).srcObject = sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].mediaStream;
+          handleProjectVideo(sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].sourceId, (_state$Sources$source = (_state$Sources$source2 = sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].transceiver) === null || _state$Sources$source2 === void 0 ? void 0 : _state$Sources$source2.mid) !== null && _state$Sources$source !== void 0 ? _state$Sources$source : null, vidId);
+          document.getElementById(sidePlayerId).muted = true;
+          document.getElementById(sidePlayerId).play();
+        case 11:
+        case "end":
+          return _context6.stop();
       }
     }, _callee6);
   }));
-
   return function handleProjectRemoteTracks(_x7) {
     return _ref8.apply(this, arguments);
   };
@@ -12651,30 +12554,30 @@ var handleProjectRemoteTracks = /*#__PURE__*/function () {
 
 
 
- //Import Vuex Store.
 
+
+//Import Vuex Store.
 
 var sdkManager_commit = src_store.commit,
-    sdkManager_state = src_store.state; // VIDEO PLAYER
-// Similar logic to playerChange event
+  sdkManager_state = src_store.state;
 
+// VIDEO PLAYER
+
+// Similar logic to playerChange event
 var setVideoPlayer = function setVideoPlayer(_ref) {
   var videoPlayer = _ref.videoPlayer,
-      srcObject = _ref.srcObject,
-      volume = _ref.volume,
-      muted = _ref.muted,
-      autoplay = _ref.autoplay;
-
+    srcObject = _ref.srcObject,
+    volume = _ref.volume,
+    muted = _ref.muted,
+    autoplay = _ref.autoplay;
   if (videoPlayer) {
     sdkManager_commit('Controls/setVideo', videoPlayer);
     sdkManager_commit('Controls/setCurrentElementRef', videoPlayer.id);
   }
-
   if (srcObject) {
     sdkManager_commit('Controls/setSrcObject', srcObject);
     sdkManager_commit('Controls/setVideoSource', srcObject);
   }
-
   if (volume) sdkManager_commit('Controls/setVideoVolume', volume);
   if (muted) sdkManager_commit('Controls/setVideoMuted', muted);
   if (autoplay) sdkManager_commit('Controls/setVideoAutoplay', autoplay);
@@ -12684,14 +12587,11 @@ var addVideoEventListeners = function addVideoEventListeners(video) {
   video.onplay = function () {
     return sdkManager_commit('Controls/setPlaying', true);
   };
-
   video.addEventListener('emptied', pauseControlListener);
   video.addEventListener('pause', pauseControlListener);
-
   video.onenterpictureinpicture = function () {
     return sdkManager_commit('Controls/setPip', true);
   };
-
   video.onleavepictureinpicture = function () {
     return sdkManager_commit('Controls/setPip', false);
   };
@@ -12700,15 +12600,14 @@ var removeVideoPauseListeners = function removeVideoPauseListeners() {
   sdkManager_state.Controls.video.removeEventListener('emptied', pauseControlListener);
   sdkManager_state.Controls.video.removeEventListener('pause', pauseControlListener);
 };
-
 var pauseControlListener = function pauseControlListener() {
   sdkManager_commit('Controls/setPlaying', false);
-}; // SDK VIEW MODULE INITIALIZATION
-
+};
+// SDK VIEW MODULE INITIALIZATION
 
 var sdkManager_initViewModule = function initViewModule() {
   //Expose Viewer version and SDK Logger into the console
-  window.Version = Object({"NODE_ENV":"production","VUE_APP_CHROMECAST_ID":"","VUE_APP_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).PACKAGE_VERSION;
+  window.Version = Object({"NODE_ENV":"production","BASE_URL":"/"}).PACKAGE_VERSION;
   window.Logger = millicast_umd["Logger"];
   var accountId = getAccountId();
   var streamName = getStreamName();
@@ -12718,19 +12617,15 @@ var sdkManager_initViewModule = function initViewModule() {
 var connectToStream = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
     return _regeneratorRuntime().wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            handleConnectToStream();
-
-          case 1:
-          case "end":
-            return _context.stop();
-        }
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          handleConnectToStream();
+        case 1:
+        case "end":
+          return _context.stop();
       }
     }, _callee);
   }));
-
   return function connectToStream() {
     return _ref2.apply(this, arguments);
   };
@@ -12738,94 +12633,76 @@ var connectToStream = /*#__PURE__*/function () {
 var stopStream = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            handleStopStream();
-
-          case 1:
-          case "end":
-            return _context2.stop();
-        }
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          handleStopStream();
+        case 1:
+        case "end":
+          return _context2.stop();
       }
     }, _callee2);
   }));
-
   return function stopStream() {
     return _ref3.apply(this, arguments);
   };
 }();
-
 var sdkManager_setViewerEvents = function setViewerEvents() {
   viewConnection_setTrackEvent();
   setBroadcastEvent();
-}; // BROADCAST EVENTS
+};
 
+// BROADCAST EVENTS
 
 var setBroadcastEvent = function setBroadcastEvent() {
   var _state$ViewConnection;
-
   //todo: catch user count event and set it in Vuex
   var millicastView = sdkManager_state.ViewConnection.millicastView;
   sdkManager_state.ViewConnection.eventListeners.broadcastEvent = (_state$ViewConnection = sdkManager_state.ViewConnection.eventListeners.broadcastEvent) !== null && _state$ViewConnection !== void 0 ? _state$ViewConnection : millicastView.on('broadcastEvent', function (event) {
     var name = event.name;
-
     switch (name) {
       case 'active':
         sdkManager_updateActiveBroadcastState(event);
         break;
-
       case 'stopped':
         updateStoppedBroadcastState(event);
         break;
-
       case 'inactive':
         sdkManager_updateInactiveBroadcastState(event);
         break;
-
       case 'layers':
         sdkManager_updateLayersBroadcastState(event);
         break;
-
       case 'viewercount':
         updateViewerCount(event);
         break;
-
       default:
         break;
     }
   });
 };
-
 var sdkManager_updateActiveBroadcastState = function updateActiveBroadcastState(event) {
   getTracks(event.data);
   sdkManager_commit('Controls/setIsLoading', false);
   sdkManager_commit('Controls/setIsLive', true);
   setReconnect();
-
   if (!sdkManager_state.Controls.video.srcObject) {
     sdkManager_commit('Controls/setVideoSource', sdkManager_state.Controls.srcObject);
   }
 };
-
 var updateStoppedBroadcastState = function updateStoppedBroadcastState() {
   sdkManager_commit('Controls/setIsLoading', false);
   sdkManager_commit('Controls/setIsLive', false);
 };
-
 var sdkManager_updateInactiveBroadcastState = function updateInactiveBroadcastState(event) {
   var _data$sourceId;
-
   var data = event.data;
   var selectedVideoSource = sdkManager_state.Sources.selectedVideoSource;
   var selectedAudioSource = sdkManager_state.Sources.selectedAudioSource;
   var trackWarning = (selectedVideoSource.sourceId === null || selectedAudioSource.sourceId === null) && data.sourceId === null;
   handleDeleteSource((_data$sourceId = data === null || data === void 0 ? void 0 : data.sourceId) !== null && _data$sourceId !== void 0 ? _data$sourceId : null);
-
   if (!event.data.streamId) {
     sdkManager_commit('Controls/setUserCount', null);
   }
-
   if (sdkManager_state.Sources.videoSources.length + sdkManager_state.Sources.audioSources.length === 0) {
     deleteLayers();
     sdkManager_commit('Controls/setTrackWarning', false);
@@ -12836,45 +12713,41 @@ var sdkManager_updateInactiveBroadcastState = function updateInactiveBroadcastSt
     if (sdkManager_state.Controls.dropup === '') {
       sdkManager_commit('Controls/setDropup', 'settings');
     }
-
     sdkManager_commit('Controls/setTrackWarning', trackWarning);
   }
 };
-
 var sdkManager_updateLayersBroadcastState = function updateLayersBroadcastState(event) {
   updateLayers(event);
 };
-
 var updateViewerCount = function updateViewerCount(event) {
   sdkManager_commit('Controls/setViewerCount', event.data.viewercount);
-}; // LAYERS
+};
 
+// LAYERS
 
 var sdkManager_selectQuality = function selectQuality(media) {
   handleSelectQuality(media);
-}; // SOURCES
+};
+
+// SOURCES
 
 var selectSource = /*#__PURE__*/function () {
   var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(_ref4) {
     var kind, source;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            kind = _ref4.kind, source = _ref4.source;
-            handleSelectSource({
-              kind: kind,
-              source: source
-            });
-
-          case 2:
-          case "end":
-            return _context3.stop();
-        }
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          kind = _ref4.kind, source = _ref4.source;
+          handleSelectSource({
+            kind: kind,
+            source: source
+          });
+        case 2:
+        case "end":
+          return _context3.stop();
       }
     }, _callee3);
   }));
-
   return function selectSource(_x) {
     return _ref5.apply(this, arguments);
   };
@@ -12882,19 +12755,15 @@ var selectSource = /*#__PURE__*/function () {
 var projectRemoteTracks = /*#__PURE__*/function () {
   var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(index) {
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            handleProjectRemoteTracks(index);
-
-          case 1:
-          case "end":
-            return _context4.stop();
-        }
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          handleProjectRemoteTracks(index);
+        case 1:
+        case "end":
+          return _context4.stop();
       }
     }, _callee4);
   }));
-
   return function projectRemoteTracks(_x2) {
     return _ref6.apply(this, arguments);
   };
@@ -12902,40 +12771,34 @@ var projectRemoteTracks = /*#__PURE__*/function () {
 var projectVideo = /*#__PURE__*/function () {
   var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(what, where, index) {
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-      while (1) {
-        switch (_context5.prev = _context5.next) {
-          case 0:
-            handleProjectVideo(what, where, index);
-
-          case 1:
-          case "end":
-            return _context5.stop();
-        }
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          handleProjectVideo(what, where, index);
+        case 1:
+        case "end":
+          return _context5.stop();
       }
     }, _callee5);
   }));
-
   return function projectVideo(_x3, _x4, _x5) {
     return _ref7.apply(this, arguments);
   };
-}(); // CAST
+}();
+
+// CAST
 
 var setCast = /*#__PURE__*/function () {
   var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
     return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-      while (1) {
-        switch (_context6.prev = _context6.next) {
-          case 0:
-            handleSetCast();
-
-          case 1:
-          case "end":
-            return _context6.stop();
-        }
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          handleSetCast();
+        case 1:
+        case "end":
+          return _context6.stop();
       }
     }, _callee6);
   }));
-
   return function setCast() {
     return _ref8.apply(this, arguments);
   };
@@ -14043,26 +13906,22 @@ var src_default = VueToastificationPlugin;
   },
   mounted: function mounted() {
     var _this = this;
-
     return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var player;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              player = document.getElementById(_this.currentElementRef);
-              setVideoPlayer({
-                videoPlayer: player,
-                srcObject: null,
-                volume: 1,
-                muted: _this.queryParams.muted,
-                autoplay: _this.queryParams.autoplay
-              });
-
-            case 2:
-            case "end":
-              return _context.stop();
-          }
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            player = document.getElementById(_this.currentElementRef);
+            setVideoPlayer({
+              videoPlayer: player,
+              srcObject: null,
+              volume: 1,
+              muted: _this.queryParams.muted,
+              autoplay: _this.queryParams.autoplay
+            });
+          case 2:
+          case "end":
+            return _context.stop();
         }
       }, _callee);
     }))();
@@ -14140,7 +13999,6 @@ var src_default = VueToastificationPlugin;
   methods: _extends(_extends(_extends(_extends(_extends(_extends({}, mapMutations('Sources', ['addVideoSource', 'addAudioSource', 'setStream'])), mapMutations('Layers', ['addLayers', 'selectQuality', 'deleteLayers'])), mapMutations('Controls', ['setVideoMuted', 'setDropup', 'setTrackWarning', 'stopVideo', 'setAutoPlayMuted', 'userParamOptions', 'setIsSplittedView'])), mapMutations('ViewConnection', ['setMillicastView'])), mapActions('Sources', ['updateBroadcastState'])), {}, {
     stop: function stop() {
       var _this$millicastView;
-
       (_this$millicastView = this.millicastView) === null || _this$millicastView === void 0 ? void 0 : _this$millicastView.stop();
       this.stopCurrentVideo();
     },
@@ -14153,7 +14011,6 @@ var src_default = VueToastificationPlugin;
     reconnectionStatus: function reconnectionStatus(isReconnecting) {
       var toast = useToast();
       toast.clear();
-
       if (isReconnecting) {
         this.setIsSplittedView(false);
         toast.warning("Connection lost. Retrying...");
@@ -14163,87 +14020,71 @@ var src_default = VueToastificationPlugin;
       var _displayAudioOnly = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
         var srcObject, volume, muted, autoplay, player;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                //If the flag changes we have to set the same events and src to the new tag
-                //Get current params from previous video/audio tag
-                srcObject = this.video.srcObject;
-                volume = this.video.volume;
-                muted = this.video.muted;
-                autoplay = this.video.autoplay; //Render new tag
-
-                _context2.next = 6;
-                return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
-
-              case 6:
-                //Set new tag params
-                player = document.getElementById(this.currentElementRef);
-                setVideoPlayer({
-                  videoPlayer: player,
-                  srcObject: srcObject,
-                  volume: volume,
-                  muted: muted,
-                  autoplay: autoplay
-                });
-
-              case 8:
-              case "end":
-                return _context2.stop();
-            }
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              //If the flag changes we have to set the same events and src to the new tag
+              //Get current params from previous video/audio tag
+              srcObject = this.video.srcObject;
+              volume = this.video.volume;
+              muted = this.video.muted;
+              autoplay = this.video.autoplay; //Render new tag
+              _context2.next = 6;
+              return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
+            case 6:
+              //Set new tag params
+              player = document.getElementById(this.currentElementRef);
+              setVideoPlayer({
+                videoPlayer: player,
+                srcObject: srcObject,
+                volume: volume,
+                muted: muted,
+                autoplay: autoplay
+              });
+            case 8:
+            case "end":
+              return _context2.stop();
           }
         }, _callee2, this);
       }));
-
       function displayAudioOnly() {
         return _displayAudioOnly.apply(this, arguments);
       }
-
       return displayAudioOnly;
     }(),
     queryParams: function queryParams() {
       var _this2 = this;
-
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
         var toast;
         return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return stopStream();
-
-              case 2:
-                _context3.next = 4;
-                return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
-
-              case 4:
-                _context3.next = 6;
-                return useToast();
-
-              case 6:
-                toast = _context3.sent;
-                sdkManager_initViewModule();
-                _context3.prev = 8;
-                _context3.next = 11;
-                return connectToStream();
-
-              case 11:
-                setTimeout(function () {
-                  _this2.setAutoPlayMuted(false);
-                }, 6000);
-                _context3.next = 17;
-                break;
-
-              case 14:
-                _context3.prev = 14;
-                _context3.t0 = _context3["catch"](8);
-                toast.error(_context3.t0.message);
-
-              case 17:
-              case "end":
-                return _context3.stop();
-            }
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return stopStream();
+            case 2:
+              _context3.next = 4;
+              return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
+            case 4:
+              _context3.next = 6;
+              return useToast();
+            case 6:
+              toast = _context3.sent;
+              sdkManager_initViewModule();
+              _context3.prev = 8;
+              _context3.next = 11;
+              return connectToStream();
+            case 11:
+              setTimeout(function () {
+                _this2.setAutoPlayMuted(false);
+              }, 6000);
+              _context3.next = 17;
+              break;
+            case 14:
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](8);
+              toast.error(_context3.t0.message);
+            case 17:
+            case "end":
+              return _context3.stop();
           }
         }, _callee3, null, [[8, 14]]);
       }))();
@@ -14272,11 +14113,9 @@ const __exports__ = /*#__PURE__*/exportHelper_default()(VideoPlayerMediavue_type
 /* harmony default export */ var VideoPlayerMedia = (__exports__);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerSideVideoSources.vue?vue&type=template&id=bcbd0770&scoped=true
 
-
 var VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-bcbd0770"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_hoisted_1 = {
   class: "row my-1 mx-0 p-0",
   style: {
@@ -14292,7 +14131,6 @@ var VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_hoisted
 function VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("ul", VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_hoisted_1, [(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(true), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Fragment"], null, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["renderList"])(_ctx.sourceRemoteTracks, function (source, index) {
     var _source$transceiver;
-
     return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("li", {
       class: "mv-col-6 mv-col-12 mb-1 side-source",
       style: 'scroll-snap-align: end',
@@ -14336,41 +14174,32 @@ function VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_re
   })),
   mounted: function mounted() {
     var _this = this;
-
     return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _this.sourceRemoteTracks.forEach( /*#__PURE__*/function () {
-                var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_, index) {
-                  return _regeneratorRuntime().wrap(function _callee$(_context) {
-                    while (1) {
-                      switch (_context.prev = _context.next) {
-                        case 0:
-                          _context.next = 2;
-                          return projectRemoteTracks(index);
-
-                        case 2:
-                          return _context.abrupt("return", _context.sent);
-
-                        case 3:
-                        case "end":
-                          return _context.stop();
-                      }
-                    }
-                  }, _callee);
-                }));
-
-                return function (_x, _x2) {
-                  return _ref.apply(this, arguments);
-                };
-              }());
-
-            case 1:
-            case "end":
-              return _context2.stop();
-          }
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            _this.sourceRemoteTracks.forEach( /*#__PURE__*/function () {
+              var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_, index) {
+                return _regeneratorRuntime().wrap(function _callee$(_context) {
+                  while (1) switch (_context.prev = _context.next) {
+                    case 0:
+                      _context.next = 2;
+                      return projectRemoteTracks(index);
+                    case 2:
+                      return _context.abrupt("return", _context.sent);
+                    case 3:
+                    case "end":
+                      return _context.stop();
+                  }
+                }, _callee);
+              }));
+              return function (_x, _x2) {
+                return _ref.apply(this, arguments);
+              };
+            }());
+          case 1:
+          case "end":
+            return _context2.stop();
         }
       }, _callee2);
     }))();
@@ -14379,78 +14208,63 @@ function VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_re
     'sourceRemoteTracks.length': function () {
       var _sourceRemoteTracksLength = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
         return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return projectRemoteTracks(this.sourceRemoteTracks.length - 1);
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return projectRemoteTracks(this.sourceRemoteTracks.length - 1);
+            case 2:
+            case "end":
+              return _context3.stop();
           }
         }, _callee3, this);
       }));
-
       function sourceRemoteTracksLength() {
         return _sourceRemoteTracksLength.apply(this, arguments);
       }
-
       return sourceRemoteTracksLength;
     }()
   },
   methods: _extends(_extends({}, mapMutations('Sources', ['setMainLabel'])), {}, {
     switchProjection: function switchProjection(index) {
       var _this2 = this;
-
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
         var _source$sourceId;
-
         var vidId, source, _this2$sourceRemoteTr, _this2$sourceRemoteTr2, _this2$sourceRemoteTr3, _this2$sourceRemoteTr4;
-
         return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
-
-              case 2:
-                // select the source in the dropdown
-                vidId = index + _this2.videoSources.length - _this2.sourceRemoteTracks.length;
-                source = _this2.videoSources[vidId];
-
-                if (_this2.getVideoHasMain) {
-                  if (_this2.indexSourceProjectedInMain === null) {
-                    // the one projected is the main and want to project a small one
-                    projectVideo(null, (_this2$sourceRemoteTr = _this2.sourceRemoteTracks[index].transceiver) === null || _this2$sourceRemoteTr === void 0 ? void 0 : _this2$sourceRemoteTr.mid, vidId);
-                    _this2.indexSourceProjectedInMain = index;
-                  } else if (_this2.indexSourceProjectedInMain === index) {
-                    // is being projected a small video and want to switch to main with this one
-                    projectVideo(_this2.sourceRemoteTracks[index].sourceId, (_this2$sourceRemoteTr2 = _this2.sourceRemoteTracks[index].transceiver) === null || _this2$sourceRemoteTr2 === void 0 ? void 0 : _this2$sourceRemoteTr2.mid, vidId);
-                    _this2.indexSourceProjectedInMain = null;
-                    source = _this2.videoSources[_this2.indexMainMediaSource];
-                  } else {
-                    // is being projected a small video but want to project another small one
-                    projectVideo(null, (_this2$sourceRemoteTr3 = _this2.sourceRemoteTracks[index].transceiver) === null || _this2$sourceRemoteTr3 === void 0 ? void 0 : _this2$sourceRemoteTr3.mid, vidId);
-                    projectVideo(_this2.sourceRemoteTracks[_this2.indexSourceProjectedInMain].sourceId, (_this2$sourceRemoteTr4 = _this2.sourceRemoteTracks[_this2.indexSourceProjectedInMain].transceiver) === null || _this2$sourceRemoteTr4 === void 0 ? void 0 : _this2$sourceRemoteTr4.mid, vidId);
-                    _this2.indexSourceProjectedInMain = index;
-                  }
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.next = 2;
+              return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
+            case 2:
+              // select the source in the dropdown
+              vidId = index + _this2.videoSources.length - _this2.sourceRemoteTracks.length;
+              source = _this2.videoSources[vidId];
+              if (_this2.getVideoHasMain) {
+                if (_this2.indexSourceProjectedInMain === null) {
+                  // the one projected is the main and want to project a small one
+                  projectVideo(null, (_this2$sourceRemoteTr = _this2.sourceRemoteTracks[index].transceiver) === null || _this2$sourceRemoteTr === void 0 ? void 0 : _this2$sourceRemoteTr.mid, vidId);
+                  _this2.indexSourceProjectedInMain = index;
+                } else if (_this2.indexSourceProjectedInMain === index) {
+                  // is being projected a small video and want to switch to main with this one
+                  projectVideo(_this2.sourceRemoteTracks[index].sourceId, (_this2$sourceRemoteTr2 = _this2.sourceRemoteTracks[index].transceiver) === null || _this2$sourceRemoteTr2 === void 0 ? void 0 : _this2$sourceRemoteTr2.mid, vidId);
+                  _this2.indexSourceProjectedInMain = null;
+                  source = _this2.videoSources[_this2.indexMainMediaSource];
+                } else {
+                  // is being projected a small video but want to project another small one
+                  projectVideo(null, (_this2$sourceRemoteTr3 = _this2.sourceRemoteTracks[index].transceiver) === null || _this2$sourceRemoteTr3 === void 0 ? void 0 : _this2$sourceRemoteTr3.mid, vidId);
+                  projectVideo(_this2.sourceRemoteTracks[_this2.indexSourceProjectedInMain].sourceId, (_this2$sourceRemoteTr4 = _this2.sourceRemoteTracks[_this2.indexSourceProjectedInMain].transceiver) === null || _this2$sourceRemoteTr4 === void 0 ? void 0 : _this2$sourceRemoteTr4.mid, vidId);
+                  _this2.indexSourceProjectedInMain = index;
                 }
-
-                _this2.setMainLabel((_source$sourceId = source.sourceId) !== null && _source$sourceId !== void 0 ? _source$sourceId : 'Main');
-
-                _context4.next = 8;
-                return selectSource({
-                  kind: source.trackId,
-                  source: source
-                });
-
-              case 8:
-              case "end":
-                return _context4.stop();
-            }
+              }
+              _this2.setMainLabel((_source$sourceId = source.sourceId) !== null && _source$sourceId !== void 0 ? _source$sourceId : 'Main');
+              _context4.next = 8;
+              return selectSource({
+                kind: source.trackId,
+                source: source
+              });
+            case 8:
+            case "end":
+              return _context4.stop();
           }
         }, _callee4);
       }))();
@@ -14524,9 +14338,6 @@ const VideoPlayerControlsBadge_exports_ = /*#__PURE__*/exportHelper_default()(Vi
 /* harmony default export */ var VideoPlayerControlsBadge = (VideoPlayerControlsBadge_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsFullscreen.vue?vue&type=template&id=d39d68da
 
-
-var VideoPlayerControlsFullscreenvue_type_template_id_d39d68da_hoisted_1 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Full Screen ");
-
 function VideoPlayerControlsFullscreenvue_type_template_id_d39d68da_render(_ctx, _cache, $props, $setup, $data, $options) {
   return _ctx.isMobile ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     key: 0,
@@ -14539,7 +14350,7 @@ function VideoPlayerControlsFullscreenvue_type_template_id_d39d68da_render(_ctx,
       'ml-viewer-bi-fullscreen': !$data.fullscreen,
       'ml-viewer-bi-fullscreen-exit': $data.fullscreen
     }])
-  }, null, 2), VideoPlayerControlsFullscreenvue_type_template_id_d39d68da_hoisted_1])) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("i", {
+  }, null, 2), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Full Screen ")])) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("i", {
     key: 1,
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["h3 align-middle control-icon", {
       'ml-viewer-bi-fullscreen': !$data.fullscreen,
@@ -14567,18 +14378,14 @@ function VideoPlayerControlsFullscreenvue_type_template_id_d39d68da_render(_ctx,
   },
   mounted: function mounted() {
     var _this = this,
-        _document$getElementB;
-
+      _document$getElementB;
     document.onfullscreenchange = function () {
       _this.fullscreen = !!document.fullscreenElement;
     };
-
     var player = (_document$getElementB = document.getElementById('player')) !== null && _document$getElementB !== void 0 ? _document$getElementB : document.getElementById('player2');
-
     player.onwebkitfullscreenchange = function () {
       _this.fullscreen = player.fullscreenElement;
     };
-
     this.fullscreen = !!document.fullscreenElement || player.fullscreenElement;
   },
   computed: _extends({}, mapState('Controls', {
@@ -14600,13 +14407,6 @@ const VideoPlayerControlsFullscreen_exports_ = /*#__PURE__*/exportHelper_default
 /* harmony default export */ var VideoPlayerControlsFullscreen = (VideoPlayerControlsFullscreen_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsPip.vue?vue&type=template&id=63e7514d&scoped=true
 
-
-var VideoPlayerControlsPipvue_type_template_id_63e7514d_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-63e7514d"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
-};
-
-var VideoPlayerControlsPipvue_type_template_id_63e7514d_scoped_true_hoisted_1 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Miniplayer ");
-
 function VideoPlayerControlsPipvue_type_template_id_63e7514d_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   return _ctx.isMobile ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     key: 0,
@@ -14619,7 +14419,7 @@ function VideoPlayerControlsPipvue_type_template_id_63e7514d_scoped_true_render(
       'ml-viewer-bi-pip': !_ctx.pip,
       'ml-viewer-bi-pip-fill': _ctx.pip
     }])
-  }, null, 2), VideoPlayerControlsPipvue_type_template_id_63e7514d_scoped_true_hoisted_1])) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
+  }, null, 2), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Miniplayer ")])) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
     key: 1,
     class: "mobile-setting",
     onClick: _cache[1] || (_cache[1] = function () {
@@ -14711,48 +14511,37 @@ function VideoPlayerControlsPlayvue_type_template_id_11fee096_render(_ctx, _cach
     togglePlay: function () {
       var _togglePlay = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var _this$video;
-
         return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!this.playing) {
-                  _context.next = 5;
-                  break;
-                }
-
-                _context.next = 3;
-                return this.video.pause();
-
-              case 3:
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              if (!this.playing) {
+                _context.next = 5;
+                break;
+              }
+              _context.next = 3;
+              return this.video.pause();
+            case 3:
+              _context.next = 10;
+              break;
+            case 5:
+              if (!(((_this$video = this.video) === null || _this$video === void 0 ? void 0 : _this$video.srcObject) !== null)) {
                 _context.next = 10;
                 break;
-
-              case 5:
-                if (!(((_this$video = this.video) === null || _this$video === void 0 ? void 0 : _this$video.srcObject) !== null)) {
-                  _context.next = 10;
-                  break;
-                }
-
-                _context.next = 8;
-                return connectToStream();
-
-              case 8:
-                _context.next = 10;
-                return this.video.play();
-
-              case 10:
-              case "end":
-                return _context.stop();
-            }
+              }
+              _context.next = 8;
+              return connectToStream();
+            case 8:
+              _context.next = 10;
+              return this.video.play();
+            case 10:
+            case "end":
+              return _context.stop();
           }
         }, _callee, this);
       }));
-
       function togglePlay() {
         return _togglePlay.apply(this, arguments);
       }
-
       return togglePlay;
     }()
   }
@@ -14770,11 +14559,9 @@ const VideoPlayerControlsPlay_exports_ = /*#__PURE__*/exportHelper_default()(Vid
 /* harmony default export */ var VideoPlayerControlsPlay = (VideoPlayerControlsPlay_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettings.vue?vue&type=template&id=5b688000&scoped=true
 
-
 var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-5b688000"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_1 = {
   class: "dropup"
 };
@@ -14782,24 +14569,20 @@ var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted
   key: 0,
   class: "badge bg-light ms-2"
 };
-
 var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_3 = /*#__PURE__*/VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "bi ml-viewer-bi-exclamation-circle-fill p-0"
   }, null, -1);
 });
-
 var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_4 = [VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_3];
 var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_5 = {
   class: "dropdown-header d-flex m-0 col-12"
 };
-
 var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_6 = /*#__PURE__*/VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h6", {
     class: "p-0 m-0"
   }, "Settings", -1);
 });
-
 var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_7 = {
   class: "p-0 ml-auto",
   style: {
@@ -14808,19 +14591,12 @@ var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted
 };
 function VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerControlsSettingsQuality = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsQuality");
-
   var _component_VideoPlayerControlsSettingsSplitView = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsSplitView");
-
   var _component_VideoPlayerControlsSettingsVideoTrack = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsVideoTrack");
-
   var _component_VideoPlayerControlsSettingsAudioTrack = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsAudioTrack");
-
   var _component_VideoPlayerControlsSettingsStats = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsStats");
-
   var _component_VideoPlayerControlsSettingsReportIssue = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsReportIssue");
-
   var _component_VideoPlayerControlsSettingsDropdown = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsDropdown");
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Fragment"], null, [_ctx.dropup !== '' ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Teleport"], {
     key: 0,
     to: "#viewer-container"
@@ -14894,11 +14670,9 @@ var es_string_replace = __webpack_require__("5319");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsVideoTrack.vue?vue&type=template&id=7ef173a6&scoped=true
 
-
 var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-7ef173a6"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_1 = {
   class: "back-header mr-2"
 };
@@ -14909,34 +14683,29 @@ var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_tr
   key: 0,
   class: "badge bg-danger"
 };
-
-var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_4 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Video Source: ");
-
-var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_5 = ["innerHTML"];
-var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_6 = {
+var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_4 = ["innerHTML"];
+var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_5 = {
   key: 1
 };
-
-var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_7 = /*#__PURE__*/VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_withScopeId(function () {
+var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_6 = /*#__PURE__*/VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: "back-arrow"
   }, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "bi ml-viewer-bi-chevron-right ml-auto py-0"
   })], -1);
 });
-
 function VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     class: "dropdown-item d-flex align-items-center pr-0 justify-content-between",
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return _ctx.setDropup('videoTracks');
     })
-  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_2, [this.selectedVideoSource.name === 'none' ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]), VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_4]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_2, [this.selectedVideoSource.name === 'none' ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Video Source: ")]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["dropdown-item-name mr-auto", [this.selectedVideoSource.name === 'none' ? 'none' : '', this.selectedVideoSource.sourceId === null ? 'main' : '']])
   }, [$props.unsupportedFlagEmoji(this.selectedVideoSource.name) ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", {
     key: 0,
     innerHTML: $props.sourceFlagEmojiToPng(this.selectedVideoSource.name)
-  }, null, 8, VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_5)) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_6, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(this.selectedVideoSource.name), 1))], 2), VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_7]);
+  }, null, 8, VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_4)) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_5, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(this.selectedVideoSource.name), 1))], 2), VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_6]);
 }
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsVideoTrack.vue?vue&type=template&id=7ef173a6&scoped=true
 
@@ -14974,11 +14743,9 @@ const VideoPlayerControlsSettingsVideoTrack_exports_ = /*#__PURE__*/exportHelper
 /* harmony default export */ var VideoPlayerControlsSettingsVideoTrack = (VideoPlayerControlsSettingsVideoTrack_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsAudioTrack.vue?vue&type=template&id=b7f6245a&scoped=true
 
-
 var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-b7f6245a"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_1 = {
   class: "back-header mr-2"
 };
@@ -14989,32 +14756,27 @@ var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_tr
   key: 0,
   class: "badge bg-danger"
 };
-
-var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_4 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Audio Source: ");
-
-var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_5 = ["innerHTML"];
-var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_6 = {
+var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_4 = ["innerHTML"];
+var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_5 = {
   key: 1
 };
-
-var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_7 = /*#__PURE__*/VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_withScopeId(function () {
+var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_6 = /*#__PURE__*/VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", null, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "bi ml-viewer-bi-chevron-right ml-auto py-0"
   })], -1);
 });
-
 function VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     class: "dropdown-item d-flex align-items-center pr-0 justify-content-between",
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return _ctx.setDropup('audioTracks');
     })
-  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_2, [this.selectedAudioSource.name === 'none' ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]), VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_4]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_2, [this.selectedAudioSource.name === 'none' ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Audio Source: ")]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["dropdown-item-name mr-auto", [this.selectedAudioSource.name === 'none' ? 'none' : '', this.selectedAudioSource.sourceId === null ? 'main' : '']])
   }, [$props.unsupportedFlagEmoji(this.selectedAudioSource.name) ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", {
     key: 0,
     innerHTML: $props.sourceFlagEmojiToPng(this.selectedAudioSource.name)
-  }, null, 8, VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_5)) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_6, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(this.selectedAudioSource.name), 1))], 2), VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_7]);
+  }, null, 8, VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_4)) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_5, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(this.selectedAudioSource.name), 1))], 2), VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_6]);
 }
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsAudioTrack.vue?vue&type=template&id=b7f6245a&scoped=true
 
@@ -15052,21 +14814,17 @@ const VideoPlayerControlsSettingsAudioTrack_exports_ = /*#__PURE__*/exportHelper
 /* harmony default export */ var VideoPlayerControlsSettingsAudioTrack = (VideoPlayerControlsSettingsAudioTrack_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsQuality.vue?vue&type=template&id=87b9709e
 
-
 var VideoPlayerControlsSettingsQualityvue_type_template_id_87b9709e_hoisted_1 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", {
   class: "back-header mr-2"
 }, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
   class: "bi ml-viewer-bi-sliders"
 }), /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Video Quality: ")], -1);
-
 var VideoPlayerControlsSettingsQualityvue_type_template_id_87b9709e_hoisted_2 = {
   class: "dropdown-item-name mr-auto"
 };
-
 var VideoPlayerControlsSettingsQualityvue_type_template_id_87b9709e_hoisted_3 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", null, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
   class: "bi ml-viewer-bi-chevron-right ml-auto py-0"
 })], -1);
-
 function VideoPlayerControlsSettingsQualityvue_type_template_id_87b9709e_render(_ctx, _cache, $props, $setup, $data, $options) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     class: "dropdown-item d-flex align-items-center pr-0 justify-content-between",
@@ -15102,22 +14860,16 @@ const VideoPlayerControlsSettingsQuality_exports_ = /*#__PURE__*/exportHelper_de
 /* harmony default export */ var VideoPlayerControlsSettingsQuality = (VideoPlayerControlsSettingsQuality_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsStats.vue?vue&type=template&id=00e40a59&scoped=true
 
-
 var VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-00e40a59"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_hoisted_1 = /*#__PURE__*/VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "ml-viewer-bi-info-circle-fill align-middle control-icon"
   }, null, -1);
 });
-
-var VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_hoisted_2 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Media Stats ");
-
 function VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerStatsTable = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerStatsTable");
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["dropdown-item", {
       disabled: !_ctx.isLive
@@ -15125,7 +14877,7 @@ function VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_tr
     onClick: _cache[0] || (_cache[0] = function () {
       return $options.toggleStats && $options.toggleStats.apply($options, arguments);
     })
-  }, [VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_hoisted_1, VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_hoisted_2, $data.showStats ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Teleport"], {
+  }, [VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_hoisted_1, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Media Stats "), $data.showStats ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Teleport"], {
     key: 0,
     to: "#vplayer"
   }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerStatsTable, {
@@ -15137,11 +14889,9 @@ function VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_tr
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerStatsTable.vue?vue&type=template&id=3ed8c655&scoped=true
 
 
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-3ed8c655"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_1 = {
   class: "table table-sm table-dark table-borderless fixed-top"
 };
@@ -15149,17 +14899,14 @@ var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_2 = {
   key: 0,
   class: "d-flex align-items-center"
 };
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_3 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", null, "Source:", -1);
 });
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_4 = ["value"];
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_5 = {
   colspan: "2",
   class: "text-right"
 };
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_6 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("tr", {
     class: "row mx-0 text-left"
@@ -15171,18 +14918,15 @@ var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_6 = /
     class: "col-6"
   }, "Value")], -1);
 });
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_7 = {
   key: 0,
   class: "row mx-0"
 };
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_8 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Server Id", -1);
 });
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_9 = {
   class: "col-6"
 };
@@ -15190,13 +14934,11 @@ var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_10 = 
   key: 1,
   class: "row mx-0"
 };
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_11 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "RTT", -1);
 });
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_12 = {
   class: "col-6"
 };
@@ -15204,13 +14946,11 @@ var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_13 = 
   key: 2,
   class: "row mx-0"
 };
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_14 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Resolution", -1);
 });
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_15 = {
   class: "col-6"
 };
@@ -15218,13 +14958,11 @@ var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_16 = 
   key: 3,
   class: "row mx-0"
 };
-
-var _hoisted_17 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
+var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_17 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "FPS", -1);
 });
-
 var _hoisted_18 = {
   class: "col-6"
 };
@@ -15232,13 +14970,11 @@ var _hoisted_19 = {
   key: 4,
   class: "row mx-0"
 };
-
 var _hoisted_20 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Bitrate", -1);
 });
-
 var _hoisted_21 = {
   class: "col-6"
 };
@@ -15246,13 +14982,11 @@ var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_22 = 
   key: 5,
   class: "row mx-0"
 };
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_23 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Audio Bitrate", -1);
 });
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_24 = {
   class: "col-6"
 };
@@ -15260,13 +14994,11 @@ var _hoisted_25 = {
   key: 6,
   class: "row mx-0"
 };
-
 var _hoisted_26 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Total Received", -1);
 });
-
 var _hoisted_27 = {
   class: "col-6"
 };
@@ -15274,13 +15006,11 @@ var _hoisted_28 = {
   key: 7,
   class: "row mx-0"
 };
-
 var _hoisted_29 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Audio Total Received", -1);
 });
-
 var _hoisted_30 = {
   class: "col-6"
 };
@@ -15288,13 +15018,11 @@ var _hoisted_31 = {
   key: 8,
   class: "row mx-0"
 };
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_32 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Packet Loss", -1);
 });
-
 var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_33 = {
   class: "col-6"
 };
@@ -15302,13 +15030,11 @@ var VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_34 = 
   key: 9,
   class: "row mx-0"
 };
-
 var _hoisted_35 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Audio Packet Loss", -1);
 });
-
 var _hoisted_36 = {
   class: "col-6"
 };
@@ -15316,13 +15042,11 @@ var _hoisted_37 = {
   key: 10,
   class: "row mx-0"
 };
-
 var _hoisted_38 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Jitter", -1);
 });
-
 var _hoisted_39 = {
   class: "col-6"
 };
@@ -15330,13 +15054,11 @@ var _hoisted_40 = {
   key: 11,
   class: "row mx-0"
 };
-
 var _hoisted_41 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Audio Jitter", -1);
 });
-
 var _hoisted_42 = {
   class: "col-6"
 };
@@ -15344,85 +15066,71 @@ var _hoisted_43 = {
   key: 12,
   class: "row mx-0"
 };
-
 var _hoisted_44 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Capture timestamp", -1);
 });
-
 var _hoisted_45 = ["textContent"];
 var _hoisted_46 = {
   key: 13,
   class: "row mx-0"
 };
-
 var _hoisted_47 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Capture delta time", -1);
 });
-
 var _hoisted_48 = ["textContent"];
 var _hoisted_49 = {
   key: 14,
   class: "row mx-0"
 };
-
 var _hoisted_50 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Codecs", -1);
 });
-
 var _hoisted_51 = ["textContent"];
 var _hoisted_52 = {
   key: 15,
   class: "row mx-0"
 };
-
 var _hoisted_53 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6 text-break"
   }, "Timestamp", -1);
 });
-
 var _hoisted_54 = ["textContent"];
 var _hoisted_55 = {
   key: 16,
   class: "row mx-0"
 };
-
 var _hoisted_56 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6 text-break"
   }, "Server", -1);
 });
-
 var _hoisted_57 = ["textContent"];
 var _hoisted_58 = {
   key: 17,
   class: "row mx-0"
 };
-
 var _hoisted_59 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6 text-break"
   }, "Cluster", -1);
 });
-
 var _hoisted_60 = ["textContent"];
 var _hoisted_61 = {
   key: 18,
   class: "row mx-0"
 };
-
 var _hoisted_62 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-12 center"
   }, null, -1);
 });
-
 var _hoisted_63 = [_hoisted_62];
 var _hoisted_64 = {
   key: 19,
@@ -15434,7 +15142,6 @@ var _hoisted_65 = {
 };
 function VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _ctx$millicastView, _ctx$millicastView$si, _$options$video, _$options$video2, _$options$video3, _$options$video4, _$options$audio, _$options$video5, _$options$audio2, _$options$video6, _$options$audio3, _$options$video7, _$options$audio4;
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("table", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("thead", null, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("tr", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["row mx-0 align-items-center", $options.multiStatsAvailable ? 'justify-content-between' : 'justify-content-end'])
   }, [$options.multiStatsAvailable ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("th", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_2, [VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_3, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("select", {
@@ -15459,7 +15166,7 @@ function VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_render(_
     key: 0,
     style: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeStyle"])([_ctx.isMobile ? 'overflow-x: auto;' : 'overflow-x: hidden;']),
     class: "text-left videoStats"
-  }, [(_ctx$millicastView = _ctx.millicastView) !== null && _ctx$millicastView !== void 0 && (_ctx$millicastView$si = _ctx$millicastView.signaling) !== null && _ctx$millicastView$si !== void 0 && _ctx$millicastView$si.subscriberId ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_7, [VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_8, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_9, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(_ctx.millicastView.signaling.subscriberId), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $data.stats.currentRoundTripTime ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_10, [VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_11, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_12, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatMilliseconds($data.stats.currentRoundTripTime)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video = $options.video) !== null && _$options$video !== void 0 && _$options$video.frameWidth && (_$options$video2 = $options.video) !== null && _$options$video2 !== void 0 && _$options$video2.frameHeight ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_13, [VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_14, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_15, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])("".concat($options.video.frameWidth, "x").concat($options.video.frameHeight)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video3 = $options.video) !== null && _$options$video3 !== void 0 && _$options$video3.framesPerSecond ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_16, [_hoisted_17, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_18, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.video.framesPerSecond), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video4 = $options.video) !== null && _$options$video4 !== void 0 && _$options$video4.bitrate ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_19, [_hoisted_20, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_21, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatBitrate($options.video.bitrate)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$audio = $options.audio) !== null && _$options$audio !== void 0 && _$options$audio.bitrate ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_22, [VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_23, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_24, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatBitrate($options.audio.bitrate)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video5 = $options.video) !== null && _$options$video5 !== void 0 && _$options$video5.totalBytesReceived ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_25, [_hoisted_26, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_27, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatTotalBytes($options.video.totalBytesReceived)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$audio2 = $options.audio) !== null && _$options$audio2 !== void 0 && _$options$audio2.totalBytesReceived ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_28, [_hoisted_29, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_30, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatTotalBytes($options.audio.totalBytesReceived)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$video6 = $options.video) === null || _$options$video6 === void 0 ? void 0 : _$options$video6.totalPacketsLost) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_31, [VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_32, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_33, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.video.totalPacketsLost), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$audio3 = $options.audio) === null || _$options$audio3 === void 0 ? void 0 : _$options$audio3.totalPacketsLost) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_34, [_hoisted_35, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_36, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.audio.totalPacketsLost), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$video7 = $options.video) === null || _$options$video7 === void 0 ? void 0 : _$options$video7.jitter) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_37, [_hoisted_38, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_39, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatMilliseconds($options.video.jitter)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$audio4 = $options.audio) === null || _$options$audio4 === void 0 ? void 0 : _$options$audio4.jitter) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_40, [_hoisted_41, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_42, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatMilliseconds($options.audio.jitter)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $options.videoCaptureTimestamp ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_43, [_hoisted_44, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
+  }, [(_ctx$millicastView = _ctx.millicastView) !== null && _ctx$millicastView !== void 0 && (_ctx$millicastView$si = _ctx$millicastView.signaling) !== null && _ctx$millicastView$si !== void 0 && _ctx$millicastView$si.subscriberId ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_7, [VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_8, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_9, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(_ctx.millicastView.signaling.subscriberId), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $data.stats.currentRoundTripTime ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_10, [VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_11, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_12, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatMilliseconds($data.stats.currentRoundTripTime)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video = $options.video) !== null && _$options$video !== void 0 && _$options$video.frameWidth && (_$options$video2 = $options.video) !== null && _$options$video2 !== void 0 && _$options$video2.frameHeight ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_13, [VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_14, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_15, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])("".concat($options.video.frameWidth, "x").concat($options.video.frameHeight)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video3 = $options.video) !== null && _$options$video3 !== void 0 && _$options$video3.framesPerSecond ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_16, [VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_17, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_18, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.video.framesPerSecond), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video4 = $options.video) !== null && _$options$video4 !== void 0 && _$options$video4.bitrate ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_19, [_hoisted_20, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_21, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatBitrate($options.video.bitrate)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$audio = $options.audio) !== null && _$options$audio !== void 0 && _$options$audio.bitrate ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_22, [VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_23, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_24, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatBitrate($options.audio.bitrate)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video5 = $options.video) !== null && _$options$video5 !== void 0 && _$options$video5.totalBytesReceived ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_25, [_hoisted_26, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_27, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatTotalBytes($options.video.totalBytesReceived)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$audio2 = $options.audio) !== null && _$options$audio2 !== void 0 && _$options$audio2.totalBytesReceived ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_28, [_hoisted_29, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_30, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatTotalBytes($options.audio.totalBytesReceived)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$video6 = $options.video) === null || _$options$video6 === void 0 ? void 0 : _$options$video6.totalPacketsLost) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_31, [VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_32, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_33, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.video.totalPacketsLost), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$audio3 = $options.audio) === null || _$options$audio3 === void 0 ? void 0 : _$options$audio3.totalPacketsLost) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_3ed8c655_scoped_true_hoisted_34, [_hoisted_35, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_36, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.audio.totalPacketsLost), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$video7 = $options.video) === null || _$options$video7 === void 0 ? void 0 : _$options$video7.jitter) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_37, [_hoisted_38, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_39, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatMilliseconds($options.video.jitter)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$audio4 = $options.audio) === null || _$options$audio4 === void 0 ? void 0 : _$options$audio4.jitter) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_40, [_hoisted_41, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_42, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatMilliseconds($options.audio.jitter)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $options.videoCaptureTimestamp ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_43, [_hoisted_44, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     textContent: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.videoCaptureTimestamp),
     class: "col-6"
   }, null, 8, _hoisted_45)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $options.videoCaptureDelta ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_46, [_hoisted_47, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
@@ -15522,11 +15229,9 @@ var bitsUnitsStorage = ['bps', 'kbps', 'mbps', 'gbps'];
   },
   mounted: function mounted() {
     var _this = this;
-
     this.millicastView.webRTCPeer.initStats();
     this.millicastView.webRTCPeer.on('stats', function (peerStats) {
       var _peerStats$video, _peerStats$video$inbo, _window$peer, _window$peer$getRecei, _window$peer$getRecei2, _window$peer$getRecei3;
-
       (_peerStats$video = peerStats.video) === null || _peerStats$video === void 0 ? void 0 : (_peerStats$video$inbo = _peerStats$video.inbounds) === null || _peerStats$video$inbo === void 0 ? void 0 : _peerStats$video$inbo.forEach(function (stat, index) {
         if (stat.mid) {
           _this.midToStatsIndexMap[stat.mid] = index;
@@ -15557,7 +15262,6 @@ var bitsUnitsStorage = ['bps', 'kbps', 'mbps', 'gbps'];
     },
     handleSourceChange: function handleSourceChange() {
       var _this$selectedSourceM;
-
       var mid = (_this$selectedSourceM = this.selectedSourceMid) !== null && _this$selectedSourceM !== void 0 ? _this$selectedSourceM : 0;
       this.statsIndex = this.midToStatsIndexMap[mid];
     }
@@ -15572,83 +15276,63 @@ var bitsUnitsStorage = ['bps', 'kbps', 'mbps', 'gbps'];
     },
     audio: function audio() {
       var _this$stats$audio;
-
       var audio = (_this$stats$audio = this.stats.audio) === null || _this$stats$audio === void 0 ? void 0 : _this$stats$audio.inbounds;
-
       if ((audio === null || audio === void 0 ? void 0 : audio.length) > 0) {
         return audio[0];
       }
-
       return null;
     },
     video: function video() {
       var _this$stats$video;
-
       var video = (_this$stats$video = this.stats.video) === null || _this$stats$video === void 0 ? void 0 : _this$stats$video.inbounds;
       var videoLength = video === null || video === void 0 ? void 0 : video.length;
-
       if (videoLength) {
         return video[this.statsIndex > this.sourceRemoteTracks.length - 1 ? 0 : this.statsIndex];
       }
-
       return null;
     },
     codecs: function codecs() {
       var _this$video, _this$audio;
-
       var codecs = [];
-
       if ((_this$video = this.video) !== null && _this$video !== void 0 && _this$video.mimeType) {
         codecs.push(this.video.mimeType);
       }
-
       if ((_this$audio = this.audio) !== null && _this$audio !== void 0 && _this$audio.mimeType) {
         codecs.push(this.audio.mimeType);
       }
-
       return codecs.join();
     },
     timestamp: function timestamp() {
       var _this$video$timestamp, _this$video2, _this$audio2;
-
       var timestamp = (_this$video$timestamp = (_this$video2 = this.video) === null || _this$video2 === void 0 ? void 0 : _this$video2.timestamp) !== null && _this$video$timestamp !== void 0 ? _this$video$timestamp : (_this$audio2 = this.audio) === null || _this$audio2 === void 0 ? void 0 : _this$audio2.timestamp;
       return timestamp ? new Date(timestamp).toISOString() : null;
     },
     videoCaptureTimestamp: function videoCaptureTimestamp() {
       var _this$stats$videoSync, _this$stats$videoSync2, _this$stats$videoSync3, _this$stats$videoSync4;
-
       var timestamp;
-
       if ((_this$stats$videoSync = this.stats.videoSynchronizationSources) !== null && _this$stats$videoSync !== void 0 && (_this$stats$videoSync2 = _this$stats$videoSync[0]) !== null && _this$stats$videoSync2 !== void 0 && _this$stats$videoSync2.captureTimestamp && (_this$stats$videoSync3 = this.stats.videoSynchronizationSources) !== null && _this$stats$videoSync3 !== void 0 && (_this$stats$videoSync4 = _this$stats$videoSync3[0]) !== null && _this$stats$videoSync4 !== void 0 && _this$stats$videoSync4.timestamp) {
         var captureTime = formatNtpToEpoch(this.stats.videoSynchronizationSources[0].captureTimestamp);
         timestamp = new Date(captureTime).toISOString();
       }
-
       return timestamp;
     },
     videoCaptureDelta: function videoCaptureDelta() {
       var _this$stats$videoSync5, _this$stats$videoSync6, _this$stats$videoSync7, _this$stats$videoSync8;
-
       var delta;
-
       if ((_this$stats$videoSync5 = this.stats.videoSynchronizationSources) !== null && _this$stats$videoSync5 !== void 0 && (_this$stats$videoSync6 = _this$stats$videoSync5[0]) !== null && _this$stats$videoSync6 !== void 0 && _this$stats$videoSync6.captureTimestamp && (_this$stats$videoSync7 = this.stats.videoSynchronizationSources) !== null && _this$stats$videoSync7 !== void 0 && (_this$stats$videoSync8 = _this$stats$videoSync7[0]) !== null && _this$stats$videoSync8 !== void 0 && _this$stats$videoSync8.timestamp) {
         var _this$stats$videoSync9;
-
         var captureTime = formatNtpToEpoch(this.stats.videoSynchronizationSources[0].captureTimestamp);
         delta = ((_this$stats$videoSync9 = this.stats.videoSynchronizationSources) === null || _this$stats$videoSync9 === void 0 ? void 0 : _this$stats$videoSync9[0].timestamp) - captureTime;
         delta = "".concat(delta, " ms");
       }
-
       return delta;
     },
     serverId: function serverId() {
       var _this$millicastView, _this$millicastView$s;
-
       return (_this$millicastView = this.millicastView) === null || _this$millicastView === void 0 ? void 0 : (_this$millicastView$s = _this$millicastView.signaling) === null || _this$millicastView$s === void 0 ? void 0 : _this$millicastView$s.serverId;
     },
     clusterId: function clusterId() {
       var _this$millicastView2, _this$millicastView2$;
-
       return (_this$millicastView2 = this.millicastView) === null || _this$millicastView2 === void 0 ? void 0 : (_this$millicastView2$ = _this$millicastView2.signaling) === null || _this$millicastView2$ === void 0 ? void 0 : _this$millicastView2$.clusterId;
     },
     multiStatsAvailable: function multiStatsAvailable() {
@@ -15656,29 +15340,24 @@ var bitsUnitsStorage = ['bps', 'kbps', 'mbps', 'gbps'];
     }
   })
 });
-
 var formatBytesRecursive = function formatBytesRecursive(value) {
   var unitsStoragePosition = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
   var newValue = value / 1024;
-
   if (newValue < 1 || newValue > 1 && unitsStoragePosition + 1 > bytesUnitsStorage.length) {
     return "".concat(Math.round(value * 100) / 100, " ").concat(bytesUnitsStorage[unitsStoragePosition]);
   } else if (newValue > 1) {
     return formatBytesRecursive(newValue, unitsStoragePosition + 1);
   }
 };
-
 var formatBitsRecursive = function formatBitsRecursive(value) {
   var unitsStoragePosition = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
   var newValue = value / 1000;
-
   if (newValue < 1 || newValue > 1 && unitsStoragePosition + 1 > bitsUnitsStorage.length) {
     return "".concat(Math.round(value * 100) / 100, " ").concat(bitsUnitsStorage[unitsStoragePosition]);
   } else if (newValue > 1) {
     return formatBitsRecursive(newValue, unitsStoragePosition + 1);
   }
 };
-
 var formatNtpToEpoch = function formatNtpToEpoch(value) {
   return value - 2208988800000;
 };
@@ -15737,99 +15416,79 @@ var VideoPlayerControlsSettingsStatsvue_type_style_index_0_id_00e40a59_lang_scss
 const VideoPlayerControlsSettingsStats_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsSettingsStatsvue_type_script_lang_js, [['render',VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_render],['__scopeId',"data-v-00e40a59"]])
 
 /* harmony default export */ var VideoPlayerControlsSettingsStats = (VideoPlayerControlsSettingsStats_exports_);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsReportIssue.vue?vue&type=template&id=7153d1b1
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsReportIssue.vue?vue&type=template&id=d735932c
 
-
-var VideoPlayerControlsSettingsReportIssuevue_type_template_id_7153d1b1_hoisted_1 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
+var VideoPlayerControlsSettingsReportIssuevue_type_template_id_d735932c_hoisted_1 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
   class: "ml-viewer-bi-flag-fill align-middle control-icon"
 }, null, -1);
-
-var VideoPlayerControlsSettingsReportIssuevue_type_template_id_7153d1b1_hoisted_2 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Report Playback Issue ");
-
-function VideoPlayerControlsSettingsReportIssuevue_type_template_id_7153d1b1_render(_ctx, _cache, $props, $setup, $data, $options) {
+function VideoPlayerControlsSettingsReportIssuevue_type_template_id_d735932c_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerReportModal = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerReportModal");
-
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])((Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
+  return $data.showReportButton ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
+    key: 0,
     class: "dropdown-item",
     onClick: _cache[0] || (_cache[0] = function () {
       return $options.toggleReport && $options.toggleReport.apply($options, arguments);
     })
-  }, [VideoPlayerControlsSettingsReportIssuevue_type_template_id_7153d1b1_hoisted_1, VideoPlayerControlsSettingsReportIssuevue_type_template_id_7153d1b1_hoisted_2, $data.showReportModal ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Teleport"], {
+  }, [VideoPlayerControlsSettingsReportIssuevue_type_template_id_d735932c_hoisted_1, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Report Playback Issue "), $data.showReportModal ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Teleport"], {
     key: 0,
     to: "#vplayer"
   }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerReportModal, {
     streamId: $props.streamId,
     close: $options.toggleReport
-  }, null, 8, ["streamId", "close"])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 512)), [[external_commonjs_vue_commonjs2_vue_root_Vue_["vShow"], $data.showReportButton]]);
+  }, null, 8, ["streamId", "close"])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true);
 }
-// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsReportIssue.vue?vue&type=template&id=7153d1b1
+// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsReportIssue.vue?vue&type=template&id=d735932c
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerReportModal.vue?vue&type=template&id=5f453960&scoped=true
-
-
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerReportModal.vue?vue&type=template&id=2c22aaec&scoped=true
 
 
-var VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-5f453960"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
+
+var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_withScopeId = function _withScopeId(n) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-2c22aaec"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
-var VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_1 = {
+var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_1 = {
   class: "header"
 };
-
-var VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_2 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_withScopeId(function () {
+var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_2 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", {
     class: "ml-viewer-bi-flag-fill align-middle"
   }, null, -1);
 });
-
-var VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_3 = ["textContent"];
-var VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_4 = {
+var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_3 = ["textContent"];
+var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_4 = {
   class: "form-group"
 };
-
-var VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_5 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_withScopeId(function () {
+var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_5 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("label", {
     for: "name-input"
   }, "Name", -1);
 });
-
-var VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_6 = {
+var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_6 = {
   class: "form-group"
 };
-
-var VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_7 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_withScopeId(function () {
+var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_7 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("label", {
     for: "email-input"
   }, "Email", -1);
 });
-
-var VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_8 = {
+var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_8 = {
   class: "form-group"
 };
-
-var VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_9 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_withScopeId(function () {
+var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_9 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("label", {
     for: "description-input"
   }, "Description", -1);
 });
-
-var VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_10 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])("Cancel");
-
-var VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_11 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])("Submit");
-
-function VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_base_button = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("base-button");
-
   var _component_base_modal = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("base-modal");
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_base_modal, {
     toggle: $props.close
   }, {
     "modal-header": Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withCtx"])(function () {
-      return [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_1, [VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_2, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h3", {
+      return [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_1, [VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_2, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h3", {
         textContent: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($data.title)
-      }, null, 8, VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_3)])];
+      }, null, 8, VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_3)])];
     }),
     "modal-body": Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withCtx"])(function () {
       return [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("form", {
@@ -15837,7 +15496,7 @@ function VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_render(
         onSubmit: _cache[3] || (_cache[3] = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withModifiers"])(function () {
           return $options.sendReport && $options.sendReport.apply($options, arguments);
         }, ["prevent"]))
-      }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_4, [VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_5, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("input", {
+      }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_4, [VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_5, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("input", {
         type: "text",
         class: "form-control",
         id: "name-input",
@@ -15846,7 +15505,7 @@ function VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_render(
           return $data.report.name = $event;
         }),
         required: ""
-      }, null, 512), [[external_commonjs_vue_commonjs2_vue_root_Vue_["vModelText"], $data.report.name]])]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_6, [VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_7, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("input", {
+      }, null, 512), [[external_commonjs_vue_commonjs2_vue_root_Vue_["vModelText"], $data.report.name]])]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_6, [VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_7, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("input", {
         type: "email",
         class: "form-control",
         id: "email-input",
@@ -15855,7 +15514,7 @@ function VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_render(
           return $data.report.email = $event;
         }),
         required: ""
-      }, null, 512), [[external_commonjs_vue_commonjs2_vue_root_Vue_["vModelText"], $data.report.email]])]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_8, [VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_9, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("textarea", {
+      }, null, 512), [[external_commonjs_vue_commonjs2_vue_root_Vue_["vModelText"], $data.report.email]])]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_8, [VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_9, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("textarea", {
         class: "form-control",
         id: "description-input",
         rows: "4",
@@ -15871,7 +15530,7 @@ function VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_render(
         onClick: $props.close
       }, {
         default: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withCtx"])(function () {
-          return [VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_10];
+          return [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])("Cancel")];
         }),
         _: 1
       }, 8, ["onClick"]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_base_button, {
@@ -15881,7 +15540,7 @@ function VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_render(
         disabled: $data.isLoading
       }, {
         default: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withCtx"])(function () {
-          return [VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_hoisted_11];
+          return [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])("Submit")];
         }),
         _: 1
       }, 8, ["disabled"])];
@@ -15889,7 +15548,7 @@ function VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_render(
     _: 1
   }, 8, ["toggle"]);
 }
-// CONCATENATED MODULE: ./src/components/VideoPlayerReportModal.vue?vue&type=template&id=5f453960&scoped=true
+// CONCATENATED MODULE: ./src/components/VideoPlayerReportModal.vue?vue&type=template&id=2c22aaec&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.json.stringify.js
 var es_json_stringify = __webpack_require__("e9c4");
@@ -15937,76 +15596,60 @@ var es_json_stringify = __webpack_require__("e9c4");
   methods: {
     sendReport: function sendReport() {
       var _this = this;
-
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var log, i, toast, _this$millicastView$s, _this$millicastView, _this$millicastView$s2, _this$millicastView$s3, _this$millicastView2, _this$millicastView2$, headers, _err$response, message;
-
         return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!_this.isLoading) {
-                  _context.next = 2;
-                  break;
-                }
-
-                return _context.abrupt("return");
-
-              case 2:
-                log = millicast_umd["Logger"].getHistory();
-
-                for (i = 0; i < _this.localStats.length; i++) {
-                  log.push('[PeerConnectionStats] - ' + JSON.stringify(_this.localStats[i]));
-                }
-
-                _this.report.log = log;
-                toast = useToast();
-                _context.prev = 6;
-                _this.isLoading = true;
-                headers = {
-                  'Content-Type': 'application/json'
-                };
-                _this.report.serverId = (_this$millicastView$s = (_this$millicastView = _this.millicastView) === null || _this$millicastView === void 0 ? void 0 : (_this$millicastView$s2 = _this$millicastView.signaling) === null || _this$millicastView$s2 === void 0 ? void 0 : _this$millicastView$s2.serverId) !== null && _this$millicastView$s !== void 0 ? _this$millicastView$s : 'NOT_CONNECTED';
-                _this.report.clusterId = (_this$millicastView$s3 = (_this$millicastView2 = _this.millicastView) === null || _this$millicastView2 === void 0 ? void 0 : (_this$millicastView2$ = _this$millicastView2.signaling) === null || _this$millicastView2$ === void 0 ? void 0 : _this$millicastView2$.clusterId) !== null && _this$millicastView$s3 !== void 0 ? _this$millicastView$s3 : 'NOT_CONNECTED';
-                _context.next = 13;
-                return fetch("https://playback-report.millicast.com" + '/reports', {
-                  method: 'POST',
-                  headers: headers,
-                  body: JSON.stringify(_this.report)
-                });
-
-              case 13:
-                toast.success('Report sent successfully', {
-                  timeout: 3000
-                });
-                _context.next = 21;
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              if (!_this.isLoading) {
+                _context.next = 2;
                 break;
-
-              case 16:
-                _context.prev = 16;
-                _context.t0 = _context["catch"](6);
-                message = "Error: couldn't send report";
-
-                if ((_err$response = _context.t0.response) !== null && _err$response !== void 0 && _err$response.data) {
-                  message += ', ' + _context.t0.response.data;
-                }
-
-                toast.error(message, {
-                  timeout: 3000
-                });
-
-              case 21:
-                _context.prev = 21;
-                _this.isLoading = false;
-
-                _this.close();
-
-                return _context.finish(21);
-
-              case 25:
-              case "end":
-                return _context.stop();
-            }
+              }
+              return _context.abrupt("return");
+            case 2:
+              log = millicast_umd["Logger"].getHistory();
+              for (i = 0; i < _this.localStats.length; i++) {
+                log.push('[PeerConnectionStats] - ' + JSON.stringify(_this.localStats[i]));
+              }
+              _this.report.log = log;
+              toast = useToast();
+              _context.prev = 6;
+              _this.isLoading = true;
+              headers = {
+                'Content-Type': 'application/json'
+              };
+              _this.report.serverId = (_this$millicastView$s = (_this$millicastView = _this.millicastView) === null || _this$millicastView === void 0 ? void 0 : (_this$millicastView$s2 = _this$millicastView.signaling) === null || _this$millicastView$s2 === void 0 ? void 0 : _this$millicastView$s2.serverId) !== null && _this$millicastView$s !== void 0 ? _this$millicastView$s : 'NOT_CONNECTED';
+              _this.report.clusterId = (_this$millicastView$s3 = (_this$millicastView2 = _this.millicastView) === null || _this$millicastView2 === void 0 ? void 0 : (_this$millicastView2$ = _this$millicastView2.signaling) === null || _this$millicastView2$ === void 0 ? void 0 : _this$millicastView2$.clusterId) !== null && _this$millicastView$s3 !== void 0 ? _this$millicastView$s3 : 'NOT_CONNECTED';
+              _context.next = 13;
+              return fetch(_this.reportUrl + '/reports', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(_this.report)
+              });
+            case 13:
+              toast.success('Report sent successfully', {
+                timeout: 3000
+              });
+              _context.next = 21;
+              break;
+            case 16:
+              _context.prev = 16;
+              _context.t0 = _context["catch"](6);
+              message = "Error: couldn't send report";
+              if ((_err$response = _context.t0.response) !== null && _err$response !== void 0 && _err$response.data) {
+                message += ', ' + _context.t0.response.data;
+              }
+              toast.error(message, {
+                timeout: 3000
+              });
+            case 21:
+              _context.prev = 21;
+              _this.isLoading = false;
+              _this.close();
+              return _context.finish(21);
+            case 25:
+            case "end":
+              return _context.stop();
           }
         }, _callee, null, [[6, 16, 21, 25]]);
       }))();
@@ -16014,43 +15657,42 @@ var es_json_stringify = __webpack_require__("e9c4");
     statsHandler: function statsHandler(stats) {
       var MAX_STATS_LENGTH = 40;
       this.localStats.push(stats);
-
       if (this.localStats.length >= MAX_STATS_LENGTH) {
         this.localStats = this.localStats.slice(-MAX_STATS_LENGTH);
       }
     }
   },
-  computed: _extends({}, mapState('ViewConnection', {
+  computed: _extends(_extends({}, mapState('ViewConnection', {
     millicastView: function millicastView(state) {
       return state.millicastView;
+    }
+  })), mapState('Params', {
+    reportUrl: function reportUrl(state) {
+      return state.queryParams.reportUrl;
     }
   })),
   mounted: function mounted() {
     var _this$streamId, _this$streamId2, _this$millicastView3, _this$millicastView4, _this$millicastView4$;
-
     this.report.accountId = (_this$streamId = this.streamId) === null || _this$streamId === void 0 ? void 0 : _this$streamId.match(/^(.*?)\/.*$/)[1];
     this.report.streamId = (_this$streamId2 = this.streamId) === null || _this$streamId2 === void 0 ? void 0 : _this$streamId2.match(/^.*?\/(.*)$/)[1];
     this.report.url = window.location.href;
-
     if ((_this$millicastView3 = this.millicastView) !== null && _this$millicastView3 !== void 0 && _this$millicastView3.webRTCPeer && !((_this$millicastView4 = this.millicastView) !== null && _this$millicastView4 !== void 0 && (_this$millicastView4$ = _this$millicastView4.webRTCPeer) !== null && _this$millicastView4$ !== void 0 && _this$millicastView4$.peerConnectionStats)) {
       this.millicastView.webRTCPeer.initStats();
       this.statsInitialized = true;
     }
-
     this.millicastView.webRTCPeer.on('stats', this.statsHandler);
   },
   beforeUnmount: function beforeUnmount() {
     if (this.statsInitialized) {
       this.millicastView.webRTCPeer.stopStats();
     }
-
     this.millicastView.webRTCPeer.removeListener('stats', this.statsHandler);
   }
 });
 // CONCATENATED MODULE: ./src/components/VideoPlayerReportModal.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/components/VideoPlayerReportModal.vue?vue&type=style&index=0&id=5f453960&scoped=true&lang=css
-var VideoPlayerReportModalvue_type_style_index_0_id_5f453960_scoped_true_lang_css = __webpack_require__("3300");
+// EXTERNAL MODULE: ./src/components/VideoPlayerReportModal.vue?vue&type=style&index=0&id=2c22aaec&scoped=true&lang=css
+var VideoPlayerReportModalvue_type_style_index_0_id_2c22aaec_scoped_true_lang_css = __webpack_require__("363c");
 
 // CONCATENATED MODULE: ./src/components/VideoPlayerReportModal.vue
 
@@ -16060,7 +15702,7 @@ var VideoPlayerReportModalvue_type_style_index_0_id_5f453960_scoped_true_lang_cs
 
 
 
-const VideoPlayerReportModal_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerReportModalvue_type_script_lang_js, [['render',VideoPlayerReportModalvue_type_template_id_5f453960_scoped_true_render],['__scopeId',"data-v-5f453960"]])
+const VideoPlayerReportModal_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerReportModalvue_type_script_lang_js, [['render',VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_render],['__scopeId',"data-v-2c22aaec"]])
 
 /* harmony default export */ var VideoPlayerReportModal = (VideoPlayerReportModal_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsReportIssue.vue?vue&type=script&lang=js
@@ -16087,8 +15729,15 @@ const VideoPlayerReportModal_exports_ = /*#__PURE__*/exportHelper_default()(Vide
       this.setDropup('');
     }
   }),
-  mounted: function mounted() {
-    this.showReportButton = "https://playback-report.millicast.com";
+  computed: _extends({}, mapState('Params', {
+    reportUrl: function reportUrl(state) {
+      return state.queryParams.reportUrl;
+    }
+  })),
+  watch: {
+    reportUrl: function reportUrl(value) {
+      this.showReportButton = !!value;
+    }
   }
 });
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsReportIssue.vue?vue&type=script&lang=js
@@ -16099,22 +15748,19 @@ const VideoPlayerReportModal_exports_ = /*#__PURE__*/exportHelper_default()(Vide
 
 
 
-const VideoPlayerControlsSettingsReportIssue_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsSettingsReportIssuevue_type_script_lang_js, [['render',VideoPlayerControlsSettingsReportIssuevue_type_template_id_7153d1b1_render]])
+const VideoPlayerControlsSettingsReportIssue_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsSettingsReportIssuevue_type_script_lang_js, [['render',VideoPlayerControlsSettingsReportIssuevue_type_template_id_d735932c_render]])
 
 /* harmony default export */ var VideoPlayerControlsSettingsReportIssue = (VideoPlayerControlsSettingsReportIssue_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsDropdown.vue?vue&type=template&id=cf737074&scoped=true
 
-
 var VideoPlayerControlsSettingsDropdownvue_type_template_id_cf737074_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-cf737074"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsSettingsDropdownvue_type_template_id_cf737074_scoped_true_hoisted_1 = /*#__PURE__*/VideoPlayerControlsSettingsDropdownvue_type_template_id_cf737074_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "bi ml-viewer-bi-chevron-left p-0"
   }, null, -1);
 });
-
 var VideoPlayerControlsSettingsDropdownvue_type_template_id_cf737074_scoped_true_hoisted_2 = ["onClick"];
 var VideoPlayerControlsSettingsDropdownvue_type_template_id_cf737074_scoped_true_hoisted_3 = {
   class: "form-check p-0"
@@ -16198,11 +15844,9 @@ const VideoPlayerControlsSettingsDropdown_exports_ = /*#__PURE__*/exportHelper_d
 /* harmony default export */ var VideoPlayerControlsSettingsDropdown = (VideoPlayerControlsSettingsDropdown_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsSplitView.vue?vue&type=template&id=1dc7be3e
 
-
 var VideoPlayerControlsSettingsSplitViewvue_type_template_id_1dc7be3e_hoisted_1 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
   class: "bi-layout-sidebar-inset-reverse align-middle control-icon"
 }, null, -1);
-
 function VideoPlayerControlsSettingsSplitViewvue_type_template_id_1dc7be3e_render(_ctx, _cache, $props, $setup, $data, $options) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     class: "dropdown-item",
@@ -16325,8 +15969,9 @@ var package_0 = __webpack_require__("9224");
       var nAgt = navigator.userAgent;
       var isChrome = nAgt.indexOf('Chrome') !== -1;
       var isFlagEmoji = sourceId.match(/[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]/g) !== null;
-      var isWindows; // navigator.userAgentData is not supported for Firefox/Safari
+      var isWindows;
 
+      // navigator.userAgentData is not supported for Firefox/Safari
       if (isChrome) {
         isWindows = navigator.userAgentData.platform == 'Windows';
         return isFlagEmoji && isWindows;
@@ -16335,8 +15980,9 @@ var package_0 = __webpack_require__("9224");
       }
     },
     sourceFlagEmojiToPng: function sourceFlagEmojiToPng(sourceId) {
-      var selectedSourceFlagEmojis = sourceId.match(/[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]/g); // replace emojis  for img
+      var selectedSourceFlagEmojis = sourceId.match(/[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]/g);
 
+      // replace emojis  for img
       selectedSourceFlagEmojis.forEach(function (emoji) {
         // get emoji flag code, example france=fr
         var flagCode = Array.from(emoji, function (codeUnit) {
@@ -16356,7 +16002,6 @@ var package_0 = __webpack_require__("9224");
     dropup: function dropup(_dropup) {
       if (_dropup === 'videoTracks' || _dropup === 'audioTracks' || _dropup === 'qualities') {
         this.settingsWidth = this.$refs.settings.clientWidth + 'px';
-
         switch (_dropup) {
           case 'videoTracks':
             {
@@ -16364,101 +16009,83 @@ var package_0 = __webpack_require__("9224");
                 var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(source) {
                   var toast;
                   return _regeneratorRuntime().wrap(function _callee$(_context) {
-                    while (1) {
-                      switch (_context.prev = _context.next) {
-                        case 0:
-                          _context.prev = 0;
-                          _context.next = 3;
-                          return selectSource({
-                            kind: 'video',
-                            source: source
-                          });
-
-                        case 3:
-                          _context.next = 9;
-                          break;
-
-                        case 5:
-                          _context.prev = 5;
-                          _context.t0 = _context["catch"](0);
-                          toast = useToast();
-                          toast.error('There was an error selecting the desired source, try again', {
-                            timeout: 5000
-                          });
-
-                        case 9:
-                        case "end":
-                          return _context.stop();
-                      }
+                    while (1) switch (_context.prev = _context.next) {
+                      case 0:
+                        _context.prev = 0;
+                        _context.next = 3;
+                        return selectSource({
+                          kind: 'video',
+                          source: source
+                        });
+                      case 3:
+                        _context.next = 9;
+                        break;
+                      case 5:
+                        _context.prev = 5;
+                        _context.t0 = _context["catch"](0);
+                        toast = useToast();
+                        toast.error('There was an error selecting the desired source, try again', {
+                          timeout: 5000
+                        });
+                      case 9:
+                      case "end":
+                        return _context.stop();
                     }
                   }, _callee, null, [[0, 5]]);
                 }));
-
                 return function videoTrackChange(_x) {
                   return _ref.apply(this, arguments);
                 };
               }();
-
               this.setDropupSettings(this.selectedVideoSource, this.getVideoSources, 'Video Source', videoTrackChange, this.compareSources);
               break;
             }
-
           case 'audioTracks':
             {
               var audioTrackChange = /*#__PURE__*/function () {
                 var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(source) {
                   var toast;
                   return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-                    while (1) {
-                      switch (_context2.prev = _context2.next) {
-                        case 0:
-                          _context2.prev = 0;
-                          _context2.next = 3;
-                          return selectSource({
-                            kind: 'audio',
-                            source: source
-                          });
-
-                        case 3:
-                          _context2.next = 9;
-                          break;
-
-                        case 5:
-                          _context2.prev = 5;
-                          _context2.t0 = _context2["catch"](0);
-                          toast = useToast();
-                          toast.error('There was an error selecting the desired source, try again', {
-                            timeout: 5000
-                          });
-
-                        case 9:
-                        case "end":
-                          return _context2.stop();
-                      }
+                    while (1) switch (_context2.prev = _context2.next) {
+                      case 0:
+                        _context2.prev = 0;
+                        _context2.next = 3;
+                        return selectSource({
+                          kind: 'audio',
+                          source: source
+                        });
+                      case 3:
+                        _context2.next = 9;
+                        break;
+                      case 5:
+                        _context2.prev = 5;
+                        _context2.t0 = _context2["catch"](0);
+                        toast = useToast();
+                        toast.error('There was an error selecting the desired source, try again', {
+                          timeout: 5000
+                        });
+                      case 9:
+                      case "end":
+                        return _context2.stop();
                     }
                   }, _callee2, null, [[0, 5]]);
                 }));
-
                 return function audioTrackChange(_x2) {
                   return _ref2.apply(this, arguments);
                 };
               }();
-
               this.setDropupSettings(this.selectedAudioSource, this.getAudioSources, 'Audio Source', audioTrackChange, this.compareSources);
               break;
             }
-
           case 'qualities':
             {
               var qualityChange = function qualityChange(media) {
                 sdkManager_selectQuality(media);
               };
-
               this.setDropupSettings(this.selectedQuality, this.getActiveMedias, 'Video Quality', qualityChange, this.compareItems);
               break;
             }
         }
-
         this.showDropup = true;
       } else {
         this.showDropup = false;
@@ -16499,11 +16126,9 @@ const VideoPlayerControlsSettings_exports_ = /*#__PURE__*/exportHelper_default()
 /* harmony default export */ var VideoPlayerControlsSettings = (VideoPlayerControlsSettings_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsUserCount.vue?vue&type=template&id=48f1b614&scoped=true
 
-
 var VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-48f1b614"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_hoisted_1 = {
   key: 0,
   class: "align-middle"
@@ -16514,13 +16139,11 @@ var VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_hoiste
     "border": "0px"
   }
 };
-
 var VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_hoisted_3 = /*#__PURE__*/VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "bi ml-viewer-bi-person-fill"
   }, null, -1);
 });
-
 function VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   return $options.count ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("h4", VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_hoisted_2, [VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_hoisted_3, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" " + Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.count), 1)])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true);
 }
@@ -16534,7 +16157,6 @@ function VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_r
   computed: _extends(_extends({}, mapState('Controls', ['viewerCount'])), {}, {
     count: function count() {
       var _this$viewerCount;
-
       return (_this$viewerCount = this.viewerCount) === null || _this$viewerCount === void 0 ? void 0 : _this$viewerCount.toLocaleString('en');
     }
   })
@@ -16557,11 +16179,9 @@ const VideoPlayerControlsUserCount_exports_ = /*#__PURE__*/exportHelper_default(
 /* harmony default export */ var VideoPlayerControlsUserCount = (VideoPlayerControlsUserCount_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsVolume.vue?vue&type=template&id=0cf82b5a&scoped=true
 
-
 var VideoPlayerControlsVolumevue_type_template_id_0cf82b5a_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-0cf82b5a"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsVolumevue_type_template_id_0cf82b5a_scoped_true_hoisted_1 = {
   class: "d-inline"
 };
@@ -16612,7 +16232,6 @@ function VideoPlayerControlsVolumevue_type_template_id_0cf82b5a_scoped_true_rend
       } else if (this.muted) {
         this.toggleMuted();
       }
-
       this.setVideoVolume(newVolume);
     }
   },
@@ -16636,11 +16255,9 @@ function VideoPlayerControlsVolumevue_type_template_id_0cf82b5a_scoped_true_rend
   methods: _extends(_extends({}, mapMutations('Controls', ['setVideoMuted', 'setVideoVolume'])), {}, {
     toggleVolumeSlider: function toggleVolumeSlider() {
       var _this = this;
-
       if (this.showVolumeTimeout) {
         clearTimeout(this.showVolumeTimeout);
       }
-
       this.showVolume = true;
       this.showVolumeTimeout = setTimeout(function () {
         _this.showVolume = false;
@@ -16669,11 +16286,9 @@ const VideoPlayerControlsVolume_exports_ = /*#__PURE__*/exportHelper_default()(V
 /* harmony default export */ var VideoPlayerControlsVolume = (VideoPlayerControlsVolume_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=template&id=6e3117e0&scoped=true
 
-
 var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-6e3117e0"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_1 = {
   class: "row"
 };
@@ -16693,7 +16308,6 @@ var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoiste
   key: 1,
   class: "dropup"
 };
-
 var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_7 = /*#__PURE__*/VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: "dropdown-header d-flex m-0 col-12"
@@ -16701,20 +16315,13 @@ var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoiste
     class: "p-0 m-0"
   }, "Options")], -1);
 });
-
 function VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerControlsPlay = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsPlay");
-
   var _component_VideoPlayerControlsVolume = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsVolume");
-
   var _component_VideoPlayerControlsSettings = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettings");
-
   var _component_VideoPlayerControlsCast = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsCast");
-
   var _component_VideoPlayerControlsPip = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsPip");
-
   var _component_VideoPlayerControlsFullscreen = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsFullscreen");
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])([_ctx.isMobile ? 'col-7 text-left pr-0' : 'col-6 text-left'])
   }, [!$props.isConnected ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_2, [$props.showButton('play') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsPlay, {
@@ -16763,25 +16370,22 @@ function VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_r
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsCast.vue?vue&type=template&id=f9fa5040&scoped=true
 
-
 var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-f9fa5040"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_1 = {
+  ref: "cast"
+};
+var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_2 = {
   key: 0
 };
-
-var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_2 = /*#__PURE__*/VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_withScopeId(function () {
+var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_3 = /*#__PURE__*/VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", {
     class: "align-middle"
   }, "Cast", -1);
 });
-
-var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_3 = [VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_2];
+var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_4 = [VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_3];
 function VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_google_cast_launcher = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("google-cast-launcher");
-
   return _ctx.castAvailable && !_ctx.options.loading ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
     key: 0,
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])([_ctx.isMobile ? 'dropdown-item d-flex row mx-0' : 'mobile-setting']),
@@ -16792,9 +16396,7 @@ function VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_render
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])([_ctx.isMobile ? '' : 'mobile-setting'])
   }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["align-middle control-icon", _ctx.isMobile ? 'mobile-icon' : 'h3'])
-  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_google_cast_launcher, {
-    ref: "cast"
-  }, null, 512)], 2)], 2), _ctx.isMobile ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_1, VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 2)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true);
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("google-cast-launcher", VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_1, null, 512)], 2)], 2), _ctx.isMobile ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_2, VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_4)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 2)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true);
 }
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsCast.vue?vue&type=template&id=f9fa5040&scoped=true
 
@@ -16884,7 +16486,6 @@ const VideoPlayerControlsCast_exports_ = /*#__PURE__*/exportHelper_default()(Vid
   })), {}, {
     isVideoTag: function isVideoTag() {
       var _this$video;
-
       return ((_this$video = this.video) === null || _this$video === void 0 ? void 0 : _this$video.nodeName) === 'VIDEO';
     },
     pipEnabled: function pipEnabled() {
@@ -16895,16 +16496,13 @@ const VideoPlayerControlsCast_exports_ = /*#__PURE__*/exportHelper_default()(Vid
   beforeMount: function beforeMount() {
     return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return setCast();
-
-            case 2:
-            case "end":
-              return _context.stop();
-          }
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return setCast();
+          case 2:
+          case "end":
+            return _context.stop();
         }
       }, _callee);
     }))();
@@ -16968,8 +16566,7 @@ const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default(
   },
   mounted: function mounted() {
     var _screen$orientation,
-        _this = this;
-
+      _this = this;
     (_screen$orientation = screen.orientation) === null || _screen$orientation === void 0 ? void 0 : _screen$orientation.addEventListener('change', this.handleOrientationChange);
     this.controlsTimeout = setTimeout(function () {
       _this.show = false;
@@ -17066,13 +16663,11 @@ const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default(
       if (this.controlsTimeout) {
         clearTimeout(this.controlsTimeout);
       }
-
       this.show = true;
       this.hideControls();
     },
     hideControls: function hideControls() {
       var _this2 = this;
-
       if (!this.playing || this.dropup !== '') return;
       this.controlsTimeout = setTimeout(function () {
         _this2.show = false;
@@ -17080,46 +16675,38 @@ const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default(
     },
     showButton: function showButton(button) {
       var showButton = !this.queryParams.hideButtons.includes(button);
-
       if (showButton && button === 'fullscreen') {
         var _document$getElementB, _player, _player2;
-
         var player = (_document$getElementB = document.getElementById('player')) !== null && _document$getElementB !== void 0 ? _document$getElementB : document.getElementById('player2');
-
         if (!player) {
           // Temporarly create a video element to check if the browser supports fullscreen (iPhone fallback)
           player = document.createElement('video');
         }
-
         showButton && (showButton = document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled || ((_player = player) === null || _player === void 0 ? void 0 : _player.requestFullscreen) || ((_player2 = player) === null || _player2 === void 0 ? void 0 : _player2.webkitEnterFullscreen));
-
         if (!showButton) {
           console.warn('Fullscreen disabled due to incompatibility with the browser.');
         }
       }
-
       return showButton;
     },
     handleOrientationChange: function handleOrientationChange() {
       var orientation = screen.orientation.type;
-
       if (orientation === 'portrait-primary' && getFullscreenElement() && !this.mobileFullscreen) {
-        this.leaveFullScreen(); // portrait mode
+        this.leaveFullScreen();
+        // portrait mode
       } else if (orientation === 'landscape-primary') {
         this.goFullScreen();
       }
     },
     goFullScreen: function goFullScreen() {
       var _document$getElementB2, _ref, _ref2, _ref3, _playerDiv$requestFul, _playerDiv$requestFul2, _playerDiv$webkitRequ, _playerDiv$mozRequest, _playerDiv$msRequestF, _videoPlayer$webkitEn;
-
-      var playerDiv = document.getElementById('vplayer'); //Fallback for when requestFullScreen is not avaiable in a div but it is for a video tag
-
+      var playerDiv = document.getElementById('vplayer');
+      //Fallback for when requestFullScreen is not avaiable in a div but it is for a video tag
       var videoPlayer = (_document$getElementB2 = document.getElementById('player')) !== null && _document$getElementB2 !== void 0 ? _document$getElementB2 : document.getElementById('player2');
       (_ref = (_ref2 = (_ref3 = (_playerDiv$requestFul = playerDiv === null || playerDiv === void 0 ? void 0 : (_playerDiv$requestFul2 = playerDiv.requestFullscreen) === null || _playerDiv$requestFul2 === void 0 ? void 0 : _playerDiv$requestFul2.call(playerDiv)) !== null && _playerDiv$requestFul !== void 0 ? _playerDiv$requestFul : playerDiv === null || playerDiv === void 0 ? void 0 : (_playerDiv$webkitRequ = playerDiv.webkitRequestFullscreen) === null || _playerDiv$webkitRequ === void 0 ? void 0 : _playerDiv$webkitRequ.call(playerDiv)) !== null && _ref3 !== void 0 ? _ref3 : playerDiv === null || playerDiv === void 0 ? void 0 : (_playerDiv$mozRequest = playerDiv.mozRequestFullScreen) === null || _playerDiv$mozRequest === void 0 ? void 0 : _playerDiv$mozRequest.call(playerDiv)) !== null && _ref2 !== void 0 ? _ref2 : playerDiv === null || playerDiv === void 0 ? void 0 : (_playerDiv$msRequestF = playerDiv.msRequestFullscreen) === null || _playerDiv$msRequestF === void 0 ? void 0 : _playerDiv$msRequestF.call(playerDiv)) !== null && _ref !== void 0 ? _ref : videoPlayer === null || videoPlayer === void 0 ? void 0 : (_videoPlayer$webkitEn = videoPlayer.webkitEnterFullscreen) === null || _videoPlayer$webkitEn === void 0 ? void 0 : _videoPlayer$webkitEn.call(videoPlayer);
     },
     leaveFullScreen: function leaveFullScreen() {
       var _ref4, _ref5, _document$exitFullscr, _document$exitFullscr2, _document, _document$webkitExitF, _document2, _document$mozCancelFu, _document3, _document$msExitFulls, _document4;
-
       (_ref4 = (_ref5 = (_document$exitFullscr = (_document$exitFullscr2 = (_document = document).exitFullscreen) === null || _document$exitFullscr2 === void 0 ? void 0 : _document$exitFullscr2.call(_document)) !== null && _document$exitFullscr !== void 0 ? _document$exitFullscr : (_document$webkitExitF = (_document2 = document).webkitExitFullscreen) === null || _document$webkitExitF === void 0 ? void 0 : _document$webkitExitF.call(_document2)) !== null && _ref5 !== void 0 ? _ref5 : (_document$mozCancelFu = (_document3 = document).mozCancelFullScreen) === null || _document$mozCancelFu === void 0 ? void 0 : _document$mozCancelFu.call(_document3)) !== null && _ref4 !== void 0 ? _ref4 : (_document$msExitFulls = (_document4 = document).msExitFullscreen) === null || _document$msExitFulls === void 0 ? void 0 : _document$msExitFulls.call(_document4);
     },
     tapUnmute: function tapUnmute() {
@@ -17139,7 +16726,6 @@ const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default(
       if (document.pictureInPictureElement) {
         document.exitPictureInPicture();
       }
-
       if (!getFullscreenElement()) {
         this.mobileFullscreen = true;
         this.goFullScreen();
@@ -17183,14 +16769,13 @@ const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default(
     }
   }
 });
-
 var getFullscreenElement = function getFullscreenElement() {
   return document.fullscreenElement || document.webkitFullscreenElement;
 };
 // CONCATENATED MODULE: ./src/components/VideoPlayerContainer.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/components/VideoPlayerContainer.vue?vue&type=style&index=0&id=a613ee1c&lang=scss&scoped=true
-var VideoPlayerContainervue_type_style_index_0_id_a613ee1c_lang_scss_scoped_true = __webpack_require__("8f10");
+// EXTERNAL MODULE: ./src/components/VideoPlayerContainer.vue?vue&type=style&index=0&id=573bd532&lang=scss&scoped=true
+var VideoPlayerContainervue_type_style_index_0_id_573bd532_lang_scss_scoped_true = __webpack_require__("5fae");
 
 // CONCATENATED MODULE: ./src/components/VideoPlayerContainer.vue
 
@@ -17200,7 +16785,7 @@ var VideoPlayerContainervue_type_style_index_0_id_a613ee1c_lang_scss_scoped_true
 
 
 
-const VideoPlayerContainer_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerContainervue_type_script_lang_js, [['render',VideoPlayerContainervue_type_template_id_a613ee1c_scoped_true_render],['__scopeId',"data-v-a613ee1c"]])
+const VideoPlayerContainer_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerContainervue_type_script_lang_js, [['render',VideoPlayerContainervue_type_template_id_573bd532_scoped_true_render],['__scopeId',"data-v-573bd532"]])
 
 /* harmony default export */ var VideoPlayerContainer = (VideoPlayerContainer_exports_);
 // EXTERNAL MODULE: ./node_modules/bootstrap-icons/font/bootstrap-icons.css
@@ -17227,6 +16812,7 @@ var css_element_queries = __webpack_require__("87d4");
 
 
 
+
 /* harmony default export */ var Appvue_type_script_lang_js = ({
   name: 'App',
   components: {
@@ -17238,53 +16824,61 @@ var css_element_queries = __webpack_require__("87d4");
   methods: _extends(_extends({}, mapMutations('Controls', ['setMobile'])), {}, {
     updateParams: function updateParams() {
       if (this.paramsOptions) {
-        var _this$paramsOptions, _this$paramsOptions2, _this$paramsOptions$a, _this$paramsOptions3, _this$paramsOptions4, _this$paramsOptions5, _this$paramsOptions6, _this$paramsOptions$h;
-
+        var _this$paramsOptions, _this$paramsOptions2, _this$paramsOptions$a, _this$paramsOptions3, _this$paramsOptions4, _this$paramsOptions5, _this$paramsOptions6, _this$paramsOptions$h, _this$paramsOptions$a2, _this$paramsOptions$m, _this$paramsOptions$c, _this$paramsOptions$r;
         setUserParams({
           streamId: ((_this$paramsOptions = this.paramsOptions) === null || _this$paramsOptions === void 0 ? void 0 : _this$paramsOptions.accountId) + '/' + ((_this$paramsOptions2 = this.paramsOptions) === null || _this$paramsOptions2 === void 0 ? void 0 : _this$paramsOptions2.streamName),
           audioOnly: (_this$paramsOptions$a = (_this$paramsOptions3 = this.paramsOptions) === null || _this$paramsOptions3 === void 0 ? void 0 : _this$paramsOptions3.audioOnly) !== null && _this$paramsOptions$a !== void 0 ? _this$paramsOptions$a : false,
           token: (_this$paramsOptions4 = this.paramsOptions) === null || _this$paramsOptions4 === void 0 ? void 0 : _this$paramsOptions4.token,
           image: (_this$paramsOptions5 = this.paramsOptions) === null || _this$paramsOptions5 === void 0 ? void 0 : _this$paramsOptions5.image,
           directorUrl:  false ? undefined : null,
-          hideButtons: (_this$paramsOptions$h = this.paramsOptions.hideButtons) !== null && _this$paramsOptions$h !== void 0 ? _this$paramsOptions$h : []
+          hideButtons: this.paramsOptions.controls === false ? availableControls : (_this$paramsOptions$h = this.paramsOptions.hideButtons) !== null && _this$paramsOptions$h !== void 0 ? _this$paramsOptions$h : [],
+          autoplay: (_this$paramsOptions$a2 = this.paramsOptions.autoplay) !== null && _this$paramsOptions$a2 !== void 0 ? _this$paramsOptions$a2 : true,
+          muted: (_this$paramsOptions$m = this.paramsOptions.muted) !== null && _this$paramsOptions$m !== void 0 ? _this$paramsOptions$m : false,
+          chromecastId: (_this$paramsOptions$c = this.paramsOptions.chromecastId) !== null && _this$paramsOptions$c !== void 0 ? _this$paramsOptions$c : null,
+          reportUrl: (_this$paramsOptions$r = this.paramsOptions.reportUrl) !== null && _this$paramsOptions$r !== void 0 ? _this$paramsOptions$r : null
         });
       }
     }
   }),
   mounted: function mounted() {
     var _this = this;
-
     return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-      var myContainer, toast;
+      var myContainer, toast, plugin, debuggerVar;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              myContainer = document.getElementById('viewer-container');
-              _context.next = 3;
-              return useToast();
-
-            case 3:
-              toast = _context.sent;
-              toast.updateDefaults({
-                container: myContainer,
-                containerClassName: 'toast-custom'
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            myContainer = document.getElementById('viewer-container');
+            _context.next = 3;
+            return useToast();
+          case 3:
+            toast = _context.sent;
+            toast.updateDefaults({
+              container: myContainer,
+              containerClassName: 'toast-custom'
+            });
+            _this.updateParams();
+            css_element_queries["ElementQueries"].listen();
+            css_element_queries["ElementQueries"].init();
+            window.addEventListener('load', function () {
+              new css_element_queries["ResizeSensor"](myContainer, function () {
+                _this.setMobile(myContainer.clientWidth <= 575);
               });
+            });
 
-              _this.updateParams();
+            // API for Chromecast
+            plugin = document.createElement("script");
+            plugin.setAttribute("src", "//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1");
+            plugin.async = true;
+            document.head.appendChild(plugin);
 
-              css_element_queries["ElementQueries"].listen();
-              css_element_queries["ElementQueries"].init();
-              window.addEventListener('load', function () {
-                new css_element_queries["ResizeSensor"](myContainer, function () {
-                  _this.setMobile(myContainer.clientWidth <= 575);
-                });
-              });
-
-            case 9:
-            case "end":
-              return _context.stop();
-          }
+            // debugging
+            debuggerVar = document.createElement("script");
+            debuggerVar.setAttribute("src", "//www.gstatic.com/cast/sdk/libs/devtools/debug_layer/caf_receiver_logger.js");
+            debuggerVar.async = true;
+            document.head.appendChild(debuggerVar);
+          case 17:
+          case "end":
+            return _context.stop();
         }
       }, _callee);
     }))();
@@ -17297,8 +16891,8 @@ var css_element_queries = __webpack_require__("87d4");
 });
 // CONCATENATED MODULE: ./src/App.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/App.vue?vue&type=style&index=0&id=5c2a5d4d&scoped=true&lang=css
-var Appvue_type_style_index_0_id_5c2a5d4d_scoped_true_lang_css = __webpack_require__("c13f");
+// EXTERNAL MODULE: ./src/App.vue?vue&type=style&index=0&id=1c4d6198&scoped=true&lang=css
+var Appvue_type_style_index_0_id_1c4d6198_scoped_true_lang_css = __webpack_require__("f3eb");
 
 // CONCATENATED MODULE: ./src/App.vue
 
@@ -17308,16 +16902,14 @@ var Appvue_type_style_index_0_id_5c2a5d4d_scoped_true_lang_css = __webpack_requi
 
 
 
-const App_exports_ = /*#__PURE__*/exportHelper_default()(Appvue_type_script_lang_js, [['render',render],['__scopeId',"data-v-5c2a5d4d"]])
+const App_exports_ = /*#__PURE__*/exportHelper_default()(Appvue_type_script_lang_js, [['render',render],['__scopeId',"data-v-1c4d6198"]])
 
 /* harmony default export */ var App = (App_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/UI/BaseModal.vue?vue&type=template&id=742b9a28&scoped=true
 
-
 var BaseModalvue_type_template_id_742b9a28_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-742b9a28"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_1 = {
   class: "modal fade show",
   tabindex: "-1",
@@ -17339,13 +16931,11 @@ var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_4 = {
   class: "modal-header"
 };
 var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_5 = ["textContent"];
-
 var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_6 = /*#__PURE__*/BaseModalvue_type_template_id_742b9a28_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", {
     "aria-hidden": "true"
   }, "×", -1);
 });
-
 var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_7 = [BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_6];
 var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_8 = {
   class: "modal-body"
@@ -17353,12 +16943,8 @@ var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_8 = {
 var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_9 = {
   class: "modal-footer"
 };
-
-var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_10 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])("OK");
-
 function BaseModalvue_type_template_id_742b9a28_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_base_button = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("base-button");
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_1, [(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Teleport"], {
     to: "#viewer-container"
   }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
@@ -17385,7 +16971,7 @@ function BaseModalvue_type_template_id_742b9a28_scoped_true_render(_ctx, _cache,
       onClick: $props.toggle
     }, {
       default: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withCtx"])(function () {
-        return [BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_10];
+        return [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])("OK")];
       }),
       _: 1
     }, 8, ["onClick"])];
@@ -17462,21 +17048,17 @@ const BaseButton_exports_ = /*#__PURE__*/exportHelper_default()(BaseButtonvue_ty
 
 
 
-
 var filterBeforeCreate = function filterBeforeCreate(toast, toasts) {
   if (toasts.filter(function (t) {
     return t.type === toast.type;
   }).length !== 0) {
     return false;
   }
-
   return toast;
 };
-
 /* harmony default export */ var index_0 = ({
   install: function install(vue, options) {
-    var _options$audioOnly, _options$hideButtons, _options$autoplay, _options$muted;
-
+    var _options$audioOnly, _options$hideButtons, _options$autoplay, _options$muted, _options$chromecastId, _options$reportUrl;
     if (!options.store) {
       vue.use(src_store);
     } else {
@@ -17486,7 +17068,6 @@ var filterBeforeCreate = function filterBeforeCreate(toast, toasts) {
       options.store.registerModule('Sources', modules_sources);
       options.store.registerModule('ViewConnection', viewConnection);
     }
-
     setUserParams({
       streamId: (options === null || options === void 0 ? void 0 : options.accountId) + '/' + (options === null || options === void 0 ? void 0 : options.streamName),
       audioOnly: (_options$audioOnly = options.audioOnly) !== null && _options$audioOnly !== void 0 ? _options$audioOnly : false,
@@ -17495,7 +17076,9 @@ var filterBeforeCreate = function filterBeforeCreate(toast, toasts) {
       directorUrl:  false ? undefined : null,
       hideButtons: (_options$hideButtons = options.hideButtons) !== null && _options$hideButtons !== void 0 ? _options$hideButtons : [],
       autoplay: (_options$autoplay = options === null || options === void 0 ? void 0 : options.autoplay) !== null && _options$autoplay !== void 0 ? _options$autoplay : true,
-      muted: (_options$muted = options === null || options === void 0 ? void 0 : options.muted) !== null && _options$muted !== void 0 ? _options$muted : false
+      muted: (_options$muted = options === null || options === void 0 ? void 0 : options.muted) !== null && _options$muted !== void 0 ? _options$muted : false,
+      chromecastId: (_options$chromecastId = options === null || options === void 0 ? void 0 : options.chromecastId) !== null && _options$chromecastId !== void 0 ? _options$chromecastId : null,
+      reportUrl: (_options$reportUrl = options === null || options === void 0 ? void 0 : options.reportUrl) !== null && _options$reportUrl !== void 0 ? _options$reportUrl : null
     });
     vue.use(src_default, {
       transition: 'Vue-Toastification__fade',
@@ -17657,7 +17240,7 @@ module.exports = {
 /***/ "fdbf":
 /***/ (function(module, exports, __webpack_require__) {
 
-/* eslint-disable es-x/no-symbol -- required for testing */
+/* eslint-disable es/no-symbol -- required for testing */
 var NATIVE_SYMBOL = __webpack_require__("04f8");
 
 module.exports = NATIVE_SYMBOL

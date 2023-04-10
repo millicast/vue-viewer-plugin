@@ -1,6 +1,6 @@
 import store from '../store'
 
-// const availableControls = ['play', 'volume', 'pip', 'fullscreen', 'cast', 'liveBadge', 'userCount', 'settings']
+export const availableControls = ['play', 'volume', 'pip', 'fullscreen', 'cast', 'liveBadge', 'userCount', 'settings']
 
 export const defaultOptions = {
   audioOnly: false,
@@ -13,9 +13,10 @@ export const defaultOptions = {
   placeholderImg: null,
   streamId: null,
   token: null,
-  disableSettings: false,
   forcePlayoutDelay: false,
   multisource: false
+  chromecastId: null,
+  reportUrl: null
 }
 
 export default function setUserParams({
@@ -28,9 +29,10 @@ export default function setUserParams({
   hideButtons,
   autoplay,
   muted,
-  disableSettings,
   noDelay,
   multisource
+  chromecastId,
+  reportUrl
 }) {
   const options = {}
 
@@ -43,7 +45,6 @@ export default function setUserParams({
   options.hideButtons = hideButtons ?? []
   options.autoplay = autoplay ?? true
   options.muted = muted ?? false
-  options.disableSettings = disableSettings ?? false
   options.multisource = multisource ?? false
   if (multisource) {
     store.commit('Controls/setIsSplittedView', true)
@@ -51,5 +52,8 @@ export default function setUserParams({
   if (noDelay) {
     options.forcePlayoutDelay = { min: 0, max: 0 }
   }
+  options.chromecastId = chromecastId ?? null
+  options.reportUrl = reportUrl ?? null
+
   store.commit('Params/setQueryParams', { ...defaultOptions, ...options })
 }

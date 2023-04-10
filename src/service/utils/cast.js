@@ -1,11 +1,16 @@
-import store from '../../store'
+import store from '../../store/index.js'
 import { connectToStream, stopStream } from '../sdkManager'
 const { commit, state } = store
-const receiverApplicationId = process.env.VUE_APP_CHROMECAST_ID
 let castContext = null
 let castSession = null
+let receiverApplicationId = null
 
 export const handleSetCast = async () => {
+  while (!receiverApplicationId){
+    await new Promise(r => setTimeout(r, 20));
+    receiverApplicationId = state.Params.queryParams.chromecastId
+  }
+
   const castStateListener = async (castState) => {
     const { cast } = window
     switch (castState) {
@@ -38,9 +43,9 @@ export const handleSetCast = async () => {
   }
 
   window['__onGCastApiAvailable'] = async (isAvailable) => {
-    if (isAvailable) {
+    if (isAvailable) {  
       setTimeout(async () => {
-        //isAvaiable is returning true but window.cast is null if we don't use a timer for some reason
+        // isAvaiable is returning true but window.cast is null if we don't use a timer for some reason
         castContext = await window.cast.framework.CastContext.getInstance()
         if (window.chrome.cast && window.chrome.cast.AutoJoinPolicy) {
           castContext.setOptions({
@@ -86,5 +91,7 @@ export const sendLoadRequest = async () => {
     stopStream()
     commit('Controls/setCastDevice', castSession.getCastDevice())
     commit('Controls/setCastIsConnected', true)
+  }).catch((error) => {
+    console.log(error)
   })
 }
