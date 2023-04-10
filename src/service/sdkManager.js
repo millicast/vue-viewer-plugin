@@ -25,7 +25,6 @@ export const setVideoPlayer = ({
     commit('Controls/setCurrentElementRef', videoPlayer.id)
   }
   if (srcObject) {
-    commit('Controls/setSrcObject', srcObject)
     commit('Controls/setVideoSource', srcObject)
   }
   if (volume) commit('Controls/setVideoVolume', volume)

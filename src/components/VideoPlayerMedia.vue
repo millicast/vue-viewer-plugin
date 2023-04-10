@@ -100,6 +100,7 @@ export default {
       currentElementRef: (state) => state.currentElementRef,
       isMigrating: (state) => state.isMigrating,
       isSplittedView: (state) => state.isSplittedView,
+      previousSplitState: state => state.previousSplitState,
     }),
     ...mapState('Params', {
       queryParams: (state) => state.queryParams,
@@ -146,6 +147,14 @@ export default {
       if (isReconnecting) {
         this.setIsSplittedView(false)
         toast.warning(`Connection lost. Retrying...`)
+      } else {
+        const setSplitView = (state) => {
+          if (['connected'].includes(state)) {
+            this.setIsSplittedView(this.previousSplitState)
+            this.millicastView.removeListener('connectionStateChange', setSplitView)
+          }
+        }
+        this.millicastView.on('connectionStateChange', setSplitView)
       }
     },
     displayAudioOnly: async function () {

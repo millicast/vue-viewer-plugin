@@ -8,6 +8,7 @@
 import VideoPlayerContainer from './components/VideoPlayerContainer.vue'
 import { useToast } from 'vue-toastification'
 import setUserParams from './service/userParams'
+import { availableControls } from './service/userParams'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'vue-toastification/dist/index.css'
@@ -32,13 +33,20 @@ export default {
             '/' +
             this.paramsOptions?.streamName,
           audioOnly: this.paramsOptions?.audioOnly ?? false,
+          videoOnly: this.paramsOptions?.videoOnly ?? false,
           token: this.paramsOptions?.token,
           image: this.paramsOptions?.image,
           directorUrl:
             process.env.NODE_ENV !== 'production'
               ? this.paramsOptions?.directorUrl
               : null,
-          hideButtons: this.paramsOptions.hideButtons ?? [],
+          hideButtons: this.paramsOptions.controls === false ? availableControls : (this.paramsOptions.hideButtons ?? []),
+          autoplay: this.paramsOptions.autoplay ?? true,
+          muted: this.paramsOptions.muted ?? false,
+          chromecastId: this.paramsOptions.chromecastId ?? null,
+          reportUrl: this.paramsOptions.reportUrl ?? null,
+          noDelay: this.paramsOptions?.noDelay ?? false,
+          multisource: this.paramsOptions?.multisource ?? false
         })
       }
     },
@@ -59,6 +67,15 @@ export default {
         this.setMobile(myContainer.clientWidth <= 575)
       })
     })
+
+    // API for Chromecast
+    const plugin = document.createElement("script");
+    plugin.setAttribute(
+      "src",
+      "//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"
+    );
+    plugin.async = true;
+    document.head.appendChild(plugin);
   },
   watch: {
     paramsOptions() {
