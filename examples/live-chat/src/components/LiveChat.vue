@@ -97,6 +97,11 @@
       </div>
     </div>
   </div>
+  <div v-else>
+    <div class="alert alert-danger fade show">
+      You have not settled your PubNub credentials in the .ENV file.
+    </div>
+  </div>
 </template>
 
 <script>

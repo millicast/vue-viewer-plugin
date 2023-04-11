@@ -116,6 +116,9 @@ export default {
   methods: {
     ...mapMutations('Controls', ['setDropup', 'toggleFullscreen']),
   },
+  methods: {
+    ...mapMutations('Controls', ['setDropup', 'toggleFullscreen']),
+  },
   async beforeMount() {
     await setCast()
   },

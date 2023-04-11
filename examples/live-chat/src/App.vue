@@ -11,6 +11,11 @@
       <template v-if="millicastSettled">
         <VideoPlayer :paramsOptions="streamId" class="video-container" />
       </template>
+      <template v-else>
+        <div class="alert alert-danger fade show" role="alert">
+          You have not settled your Millicast credentials in the .ENV file.
+        </div>
+      </template>
     </div>
     <LiveChat />
   </div>
