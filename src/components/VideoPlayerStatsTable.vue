@@ -135,9 +135,9 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import { formatBitsRecursive } from '../service/utils/layers'
 
 const bytesUnitsStorage = ['B', 'KB', 'MB', 'GB', 'TB']
-const bitsUnitsStorage = ['bps', 'kbps', 'mbps', 'gbps']
 
 export default {
   name: 'VideoPlayerStatsTable',
@@ -289,20 +289,6 @@ const formatBytesRecursive = (value, unitsStoragePosition = 0) => {
     }`
   } else if (newValue > 1) {
     return formatBytesRecursive(newValue, unitsStoragePosition + 1)
-  }
-}
-
-const formatBitsRecursive = (value, unitsStoragePosition = 0) => {
-  const newValue = value / 1000
-  if (
-    newValue < 1 ||
-    (newValue > 1 && unitsStoragePosition + 1 > bitsUnitsStorage.length)
-  ) {
-    return `${Math.round(value * 100) / 100} ${
-      bitsUnitsStorage[unitsStoragePosition]
-    }`
-  } else if (newValue > 1) {
-    return formatBitsRecursive(newValue, unitsStoragePosition + 1)
   }
 }
 

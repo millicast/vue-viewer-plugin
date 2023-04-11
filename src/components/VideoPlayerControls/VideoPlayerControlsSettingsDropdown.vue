@@ -21,7 +21,7 @@
             :class="[item?.sourceId === null ? 'main' : '']"
           >
             <div
-              v-if="unsupportedFlagEmoji(item?.name)"
+              v-if="item?.name ? unsupportedFlagEmoji(item.name): false"
               v-html="sourceFlagEmojiToPng(item?.name)"
             ></div>
             <div v-else>{{ item?.name }}</div>
