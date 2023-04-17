@@ -13,7 +13,7 @@
         class="player"
         :class="{
           show: show,
-          'mv-col-9 limit-screen': sourceRemoteTracks.length && isSplittedView,
+          'mv-col-9': sourceRemoteTracks.length && isSplittedView,
         }"
         @dblclick="toggleFullscreen"
       >

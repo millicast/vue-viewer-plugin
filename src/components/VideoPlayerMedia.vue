@@ -210,6 +210,7 @@ span {
   background: rgba(0, 0, 0, 0.288);
   padding: 4px 8px;
   font-size: 0.875rem;
+  font-weight: bold;
   line-height: 1.15rem;
   border-radius: 2px;
 
