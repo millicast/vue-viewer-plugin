@@ -52,8 +52,8 @@ export default function setUserParams({
   if (noDelay) {
     options.forcePlayoutDelay = { min: 0, max: 0 }
   }
-  options.chromecastId = chromecastId ?? null
-  options.reportUrl = reportUrl ?? null
+  options.chromecastId = chromecastId ?? process.env.VUE_APP_CHROMECAST_ID
+  options.reportUrl = reportUrl ?? process.env.VUE_APP_DEFAULT_REPORT_URL
 
   store.commit('Params/setQueryParams', { ...defaultOptions, ...options })
 }
