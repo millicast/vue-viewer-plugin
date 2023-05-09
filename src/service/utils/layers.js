@@ -1,11 +1,13 @@
 import store from '../../store'
 const { commit, state } = store
+const bitsUnitsStorage = ['bps', 'kbps', 'mbps', 'gbps']
 
 export const updateLayers = (evntData) => {
   const { data } = evntData
   const activeQualities = []
   const inactiveQualities = []
-  const encodings = Object.values(data.medias)
+  const mainSource = {'0': data.medias[0]};
+  const encodings = Object.values(mainSource)
   encodings.forEach((encoding) => {
     if (
       encoding?.active.length === 1 &&
@@ -59,6 +61,11 @@ export const updateLayers = (evntData) => {
     activeQualities[1].name = 'Medium'
     activeQualities[2].name = 'Low'
     activeQualities.unshift({ name: 'Auto' })
+  } else if (activeQualities.length >= 4) {
+    activeQualities.forEach((quality) => {
+      quality.name = formatBitsRecursive(quality.bitrate)
+    })
+    activeQualities.unshift({name: 'Auto'})
   }
 
   if (activeQualities.length != state.Layers.medias.active.length) {
@@ -90,4 +97,13 @@ export const handleSelectQuality = (media) => {
       : {}
   state.ViewConnection.millicastView.select(data)
   commit('Layers/selectQuality', media)
+}
+
+export const formatBitsRecursive = (value, unitsStoragePosition = 0) => {
+  const newValue = value / 1000
+  if ((newValue < 1) || (newValue > 1 && (unitsStoragePosition + 1) > bitsUnitsStorage.length)) {
+    return `${Math.round(value * 100) / 100} ${bitsUnitsStorage[unitsStoragePosition]}`
+  } else if (newValue > 1) {
+    return formatBitsRecursive(newValue, unitsStoragePosition + 1)
+  }
 }
