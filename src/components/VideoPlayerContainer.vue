@@ -50,7 +50,8 @@
             </div>
           </div>
     <div 
-      class="mx-0" style="height: 100%"
+      class="mx-0"
+      :id="!isGrid && isSplittedView ? 'lcontainer' : ''"
       :class="isGrid && isSplittedView ? 'grid-container': 'row list-container'"
       >
         <div
@@ -504,15 +505,9 @@ const getFullscreenElement = () => {
   cursor: default;
 }
 
-.grid-container [max-width~='575.9px'] {
-    display: block;
-  }
-.grid-player, .grid-item [max-width~='575.9px']{
-  padding-bottom: 20px;
-}
-
-.grid-container[min-width~='576px'] and [max-width~='767.9px'] {
-  display: -webkit-inline-box;
+.grid-container[max-width~='575.98px'] {
+  grid-template-columns: 1fr;
+  gap: 10px;
 }
 
 #vplayer[max-width~='991.98px'] :deep(.side-panel){
@@ -530,9 +525,13 @@ const getFullscreenElement = () => {
   display: flex;
 }
 
-#vplayer[max-width~='575.98px'] :deep(.list-container){
-  height: 100%;
+#lcontainer[max-width~='575.98px'] {
+  height: fit-content !important;
   margin: 0
+}
+
+#vplayer[max-width~='575.98px'] {
+  height: fit-content
 }
 
 .limit-screen[max-width~='575.98px']{
