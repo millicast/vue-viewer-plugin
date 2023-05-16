@@ -46,7 +46,8 @@ export default {
           chromecastId: this.paramsOptions.chromecastId ?? null,
           reportUrl: this.paramsOptions.reportUrl ?? null,
           noDelay: this.paramsOptions?.noDelay ?? false,
-          multisource: this.paramsOptions?.multisource ?? false
+          multisource: this.paramsOptions?.multisource ?? false,
+          layout: this.paramsOptions?.layout ?? null
         })
       }
     },
@@ -87,12 +88,10 @@ export default {
 
 <style scoped>
 #viewer-container {
-  display: inline-block;
   background-color: #000;
   color: white;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   width: 100%;
-  height: 100%;
 }
 
 #viewer-container[min-width~='576px'] :deep(.mv-col-12) {
@@ -120,7 +119,6 @@ export default {
 #viewer-container[max-width~='575px'] :deep(.mv-col-6) {
   -webkit-flex: 0 0 50%;
   flex: 0 0 50%;
-  max-width: 50%;
 
   position: relative;
   width: 100%;
@@ -141,14 +139,7 @@ export default {
 
 #viewer-container[min-width~='576px'] :deep(.side-panel) {
   height: 100%;
-}
-
-#viewer-container[max-width~='575px'] :deep(.side-panel) {
-  height: 35%;
-}
-
-#viewer-container[max-width~='575px'] :deep(.limit-screen) {
-  height: 65%;
+  max-height: 65%
 }
 
 #viewer-container[min-width~='992px'] :deep(.side-source) {
@@ -162,6 +153,24 @@ export default {
 #viewer-container[max-width~='575px'] :deep(.dropdown-menu) {
   width: 15rem;
 }
+
+#viewer-container[max-width~='575.9px'] {
+  position: relative;
+  align-self: center;
+  height: 100%;
+  display: flex;
+}
+
+#viewer-container [max-width~='575.9px'] :deep(.list-side){
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+  }
+  
+#viewer-container [max-width~='575.9px'] :deep(.list-item){
+    padding-right: 7.5px;
+    padding-left: 7.5px;
+    max-width: 100%;
+  }
 
 .Vue-Toastification__container {
   padding: 0 !important;
@@ -177,4 +186,8 @@ export default {
   top: 0;
   background: none;
 }
+
+#app[max-width~='767.9px'] {
+    overflow: auto;
+  }
 </style>

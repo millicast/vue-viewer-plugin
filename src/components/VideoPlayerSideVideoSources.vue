@@ -1,23 +1,28 @@
 <template>
-  <ul class="row my-1 mx-0 p-0" style="width: 100%">
-    <li
-      class="mv-col-6 mv-col-12 mb-1 side-source"
+  <div 
+    :class="{
+      'sources': isGrid,
+      'list-side  justify-content-center' : !isGrid}" 
+  >
+    <div
+      :class="isGrid ? 'grid-item' : 'list-item mv-col-6 mv-col-lg-12 mv-col-sm-12'"
       :style="'scroll-snap-align: end'"
       v-for="(source, index) in sourceRemoteTracks"
       :key="'p' + index"
     >
-      <div class="videoText" :style="'height:100%'">
+      <div class="videoText" :class="isGrid ? 'videoGrid' : '' ">
         <video
           v-on:click="switchProjection(index)"
           :id="'sidePlayer' + source.sourceId"
           :ref="'sidePlayer' + source.sourceId"
+          :class="!isGrid && isSplittedView ? 'hires-class': ''"
         ></video>
         <span :id="'sideLabel' + source.transceiver?.mid">{{
           source.sourceId
         }}</span>
       </div>
-    </li>
-  </ul>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -39,12 +44,15 @@ export default {
   },
   computed: {
     ...mapState('Sources', ['sourceRemoteTracks', 'videoSources']),
+    ...mapState("Controls", {fullscreen: state => state.fullscreen, isGrid: state => state.isGrid, isSplittedView: state => state.isSplittedView}),
     ...mapGetters('Sources', ['getVideoHasMain']),
     ...mapState('ViewConnection', {
       millicastView: (state) => state.millicastView,
     }),
   },
   async mounted() {
+    selectSource({kind: 'video',source: this.videoSources[0]})
+    this.setMainLabel('Main')
     this.sourceRemoteTracks.forEach(
       async (_, index) => await projectRemoteTracks(index)
     )
@@ -55,7 +63,8 @@ export default {
     },
   },
   methods: {
-    ...mapMutations('Sources', ['setMainLabel']),
+    ...mapMutations("Controls", ["toggleFullscreen", "setIsSplittedView"]),
+    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel']),
     async switchProjection(index) {
       await nextTick()
 
@@ -101,6 +110,9 @@ export default {
 
       this.setMainLabel(source.sourceId ?? 'Main')
       await selectSource({ kind: source.trackId, source })
+      if (this.isGrid) {
+        this.setIsSplittedView(false)
+      }
     },
   },
 }
@@ -110,6 +122,7 @@ export default {
 video {
   height: 100%;
   width: 100%;
+  align-self: center;
   cursor: pointer;
   border-radius: 0.25rem;
   object-fit: cover;
@@ -142,6 +155,12 @@ li {
   position: relative;
 }
 
+.videoGrid {
+  display: grid;
+}
+.grid-item {
+  align-self: center;
+}
 .list-group-item {
   background-color: transparent;
   padding: 0%;
