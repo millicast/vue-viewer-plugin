@@ -6,7 +6,7 @@ export const updateLayers = (evntData) => {
   const { data } = evntData
   const activeQualities = []
   const inactiveQualities = []
-  const mainSource = {'0': data.medias[0]};
+  const mainSource = {'0': data.medias[0]}
   const encodings = Object.values(mainSource)
   encodings.forEach((encoding) => {
     if (
