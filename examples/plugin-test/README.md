@@ -1,20 +1,20 @@
 # plugin-test
 
-This project is a plugin that allows testing integration with vue viewer plugin.
+This sample app will allow you to test the integration with the Vue viewer plugin.
 
 ## Environment Setup
 
-Before you can use the plugin, you'll need to set up some environment variables in the `.env` file. Follow these steps:
+Before you can use the plugin, you will need to set up some environment variables in the `.env` file. Follow these steps:
 
 1. Copy the `examples/plugin-test/.env.sample` file.
 
 2. Rename it to `.env`.
 
-3. Set the following enviroment variables according to your Millicast account and stream name:
+3. Set the following enviroment variables according to your Dolby Real Time Streaming account id and stream name:
 
-    -  `VUE_APP_MILLICAST_ACCOUNT_ID` - Dolby.io account id
+    -  `VUE_APP_MILLICAST_ACCOUNT_ID` - Dolby Real Time Streaming account id
 
-    -  `VUE_APP_MILLICAST_STREAM_NAME` - Dolby s stream name
+    -  `VUE_APP_MILLICAST_STREAM_NAME` - Dolby Real Time Streaming stream name
 
 ## Project setup
 ```
