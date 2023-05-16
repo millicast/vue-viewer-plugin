@@ -43,8 +43,8 @@ export default {
       hideButtons: options.hideButtons ?? [],
       autoplay: options?.autoplay ?? true,
       muted: options?.muted ?? false,
-      chromecastId: options?.chromecastId ?? null,
-      reportUrl: options?.reportUrl ?? null
+      chromecastId: options?.chromecastId ?? process.env.VUE_APP_DEFAULT_CHROMECAST_ID,
+      reportUrl: options?.reportUrl ?? process.env.VUE_APP_DEFAULT_REPORT_URL
     })
 
     vue.use(toast, {
