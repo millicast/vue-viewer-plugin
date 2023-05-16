@@ -16,8 +16,8 @@ export default {
   data() {
     return {
       viewerPluginParams: {
-        accountId: process.env.VUE_APP_MILLICAST_ACCOUNT_ID,
-        streamName: process.env.VUE_APP_MILLICAST_STREAM_NAME,
+        accountId: process.env.VUE_APP_DOLBY_RTS_ACCOUNT_ID,
+        streamName: process.env.VUE_APP_DOLBY_RTS_STREAM_NAME,
         autoplay: false,
         hideButtons: [],
       }
