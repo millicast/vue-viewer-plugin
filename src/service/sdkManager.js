@@ -151,7 +151,10 @@ const updateInactiveBroadcastState = (event) => {
 }
 
 const updateLayersBroadcastState = (event) => {
-  layers.updateLayers(event)
+  if ('0' in event.data.medias) 
+    layers.updateLayers(event)
+  else
+    layers.deleteLayers()
 }
 
 const updateViewerCount = (event) => {
