@@ -34,7 +34,10 @@ export default {
   },
   computed: {
     ...mapState('Params', {
-      reportUrl: (state) => state.queryParams.reportUrl
+      reportUrl(state) {
+        this.showReportButton = !!state.queryParams.reportUrl
+        return state.queryParams.reportUrl
+      }
     }),
   },
   watch: {

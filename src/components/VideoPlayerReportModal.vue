@@ -14,7 +14,7 @@
             type="text"
             class="form-control"
             id="name-input"
-            placeholder="Name Lastname"
+            placeholder="Full name"
             v-model="report.name"
             required
           />
