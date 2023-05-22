@@ -356,6 +356,7 @@ const getFullscreenElement = () => {
   max-width: 80%;
   margin: auto;
   align-content: center;
+  overflow: auto;
 }
 
 .spinner-container {
@@ -465,7 +466,7 @@ const getFullscreenElement = () => {
 
 .side-panel {
   border-radius: 0.4rem;
-  background: rgba(255, 255, 255, 0.013);
+  background: none;
   padding-right: 0;
   height: fit-content;
   width: 100%;
@@ -505,7 +506,12 @@ const getFullscreenElement = () => {
   cursor: default;
 }
 
+.grid-container[max-width~='645.9px'] {
+  display: -webkit-inline-box;
+}
+
 .grid-container[max-width~='575.98px'] {
+  display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
 }

@@ -251,6 +251,6 @@ span {
 .grid-player {
   width: 100%;
   align-self: center;
-  position:relative;
+  position: relative;
 }
 </style>

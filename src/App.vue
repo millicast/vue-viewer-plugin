@@ -161,14 +161,14 @@ export default {
   display: flex;
 }
 
-#viewer-container [max-width~='575.9px'] :deep(.list-side){
+#viewer-container[max-width~='575.9px'] :deep(.list-side) {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     padding: 5px 15px;
   }
   
-#viewer-container [max-width~='575.9px'] :deep(.list-item){
+#viewer-container[max-width~='575.9px'] :deep(.list-item){
     padding: 0;
     max-width: 100%;
   }
