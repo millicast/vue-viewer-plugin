@@ -1,6 +1,5 @@
 <template>
   <div
-    style="height: 100%"
     :class="{
       'align-self-center': isSplittedView,
       'container-fluid align-container': !isGrid,
@@ -340,7 +339,6 @@ const getFullscreenElement = () => {
 .player {
   position: relative;
   width: 100%;
-  height: 100%;
   cursor: none;
   overflow: hidden;
   &.show {
@@ -356,7 +354,6 @@ const getFullscreenElement = () => {
   max-width: 80%;
   margin: auto;
   align-content: center;
-  overflow: auto;
 }
 
 .spinner-container {
@@ -499,6 +496,10 @@ const getFullscreenElement = () => {
 }
 .ml-viewer {
   text-align: -webkit-center;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
 }
 .ml-viewer-bi-volume-mute-fill {
   color: white;
@@ -506,11 +507,11 @@ const getFullscreenElement = () => {
   cursor: default;
 }
 
-.grid-container[max-width~='645.9px'] {
+.grid-container[max-width~='600px'] {
   display: -webkit-inline-box;
 }
 
-.grid-container[max-width~='575.98px'] {
+.grid-container[max-width~='429.98px'] {
   display: grid;
   grid-template-columns: 1fr;
   gap: 10px;
@@ -521,26 +522,30 @@ const getFullscreenElement = () => {
     align-self: center;
 }
 
-#vplayer[max-width~='575.98px'] :deep(.align-container){
+#vplayer[max-width~='429.98px'] :deep(.align-container){
   height: 100%;
 }
 
-#vplayer[max-width~='575.98px'] :deep(.side-panel){
+#vplayer[max-width~='429.98px'] :deep(.side-panel){
   scroll-snap-type: y mandatory;
   max-height: 65%;
   display: flex;
 }
 
-#lcontainer[max-width~='575.98px'] {
+#lcontainer {
+  height: auto
+}
+
+#lcontainer[max-width~='429.98px'] {
   height: fit-content !important;
   margin: 0
 }
 
-#vplayer[max-width~='575.98px'] {
+#vplayer[max-width~='429.98px'] {
   height: fit-content
 }
 
-.limit-screen[max-width~='575.98px']{
+.limit-screen[max-width~='429.98px']{
   padding: 5px 15px;
   position: relative;
   height: 100%;

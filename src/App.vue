@@ -65,7 +65,7 @@ export default {
     ElementQueries.init()
     window.addEventListener('load', () => {
       new ResizeSensor(myContainer, () => {
-        this.setMobile(myContainer.clientWidth <= 575)
+        this.setMobile(myContainer.clientWidth <= 429)
       })
     })
 
@@ -94,7 +94,7 @@ export default {
   width: 100%;
 }
 
-#viewer-container[min-width~='576px'] :deep(.mv-col-12) {
+#viewer-container[min-width~='430px'] :deep(.mv-col-12) {
   -webkit-flex: 0 0 100%;
   flex: 0 0 100%;
   max-width: 100%;
@@ -105,7 +105,7 @@ export default {
   padding-left: 15px;
 }
 
-#viewer-container[min-width~='576px'] :deep(.mv-col-9) {
+#viewer-container[min-width~='430px'] :deep(.mv-col-9) {
   -webkit-flex: 0 0 75%;
   flex: 0 0 75%;
   max-width: 75%;
@@ -116,7 +116,7 @@ export default {
   padding-left: 15px;
 }
 
-#viewer-container[max-width~='575px'] :deep(.mv-col-6) {
+#viewer-container[max-width~='429px'] :deep(.mv-col-6) {
   -webkit-flex: 0 0 50%;
   flex: 0 0 50%;
 
@@ -126,7 +126,7 @@ export default {
   padding-left: 15px;
 }
 
-#viewer-container[min-width~='576px'] :deep(.mv-col-3) {
+#viewer-container[min-width~='430px'] :deep(.mv-col-3) {
   -webkit-flex: 0 0 25%;
   flex: 0 0 25%;
   max-width: 25%;
@@ -137,7 +137,7 @@ export default {
   padding-left: 15px;
 }
 
-#viewer-container[min-width~='576px'] :deep(.side-panel) {
+#viewer-container[min-width~='430px'] :deep(.side-panel) {
   height: 100%;
   max-height: 65%
 }
@@ -150,25 +150,25 @@ export default {
   height: 7rem;
 }
 
-#viewer-container[max-width~='575px'] :deep(.dropdown-menu) {
+#viewer-container[max-width~='429px'] :deep(.dropdown-menu) {
   width: 15rem;
 }
 
-#viewer-container[max-width~='575.9px'] {
+#viewer-container[max-width~='429.9px'] {
   position: relative;
   align-self: center;
   height: 100%;
   display: flex;
 }
 
-#viewer-container[max-width~='575.9px'] :deep(.list-side) {
+#viewer-container[max-width~='429.9px'] :deep(.list-side) {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 10px;
     padding: 5px 15px;
   }
   
-#viewer-container[max-width~='575.9px'] :deep(.list-item){
+#viewer-container[max-width~='429.9px'] :deep(.list-item){
     padding: 0;
     max-width: 100%;
   }
@@ -190,5 +190,5 @@ export default {
 
 #app[max-width~='767.9px'] {
     overflow: auto;
-  }
+}
 </style>
