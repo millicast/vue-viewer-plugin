@@ -1,11 +1,9 @@
 <template>
   <div 
-    :class="{
-      'sources': isGrid,
-      'list-side  justify-content-center' : !isGrid}" 
+    :class="isGrid ? 'sources' : 'list-side'" 
   >
     <div
-      :class="isGrid ? 'grid-item' : 'list-item mv-col-6 mv-col-lg-12 mv-col-sm-12'"
+      :class="isGrid ? 'grid-item' : 'list-item'"
       :style="'scroll-snap-align: end'"
       v-for="(source, index) in sourceRemoteTracks"
       :key="'p' + index"
@@ -169,5 +167,9 @@ li {
 
 li {
   height: 9rem;
+}
+
+.list-side {
+  margin: auto;
 }
 </style>

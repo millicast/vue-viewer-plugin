@@ -1,7 +1,5 @@
 <template>
-  <div id="viewer-container">
-    <VideoPlayerContainer class="ml-viewer" />
-  </div>
+    <VideoPlayerContainer id="viewer-container"/>
 </template>
 
 <script>
@@ -92,6 +90,11 @@ export default {
   color: white;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   width: 100%;
+  height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  padding: 0;
 }
 
 #viewer-container[min-width~='430px'] :deep(.mv-col-12) {
@@ -109,7 +112,6 @@ export default {
   -webkit-flex: 0 0 75%;
   flex: 0 0 75%;
   max-width: 75%;
-
   position: relative;
   width: 100%;
   padding-right: 15px;
@@ -130,16 +132,14 @@ export default {
   -webkit-flex: 0 0 25%;
   flex: 0 0 25%;
   max-width: 25%;
-
   position: relative;
   width: 100%;
   padding-right: 15px;
-  padding-left: 15px;
 }
 
 #viewer-container[min-width~='430px'] :deep(.side-panel) {
   height: 100%;
-  max-height: 65%
+  display: flex;
 }
 
 #viewer-container[min-width~='992px'] :deep(.side-source) {
@@ -162,16 +162,15 @@ export default {
 }
 
 #viewer-container[max-width~='429.9px'] :deep(.list-side) {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    padding: 5px 15px;
-  }
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
   
 #viewer-container[max-width~='429.9px'] :deep(.list-item){
-    padding: 0;
-    max-width: 100%;
-  }
+  padding: 0;
+  max-width: 100%;
+}
 
 .Vue-Toastification__container {
   padding: 0 !important;
@@ -188,7 +187,7 @@ export default {
   background: none;
 }
 
-#app[max-width~='767.9px'] {
+#plugin[max-width~='767.9px'] {
     overflow: auto;
 }
 </style>

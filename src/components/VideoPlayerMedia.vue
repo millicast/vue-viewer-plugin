@@ -14,7 +14,7 @@
       ref="player"
       :poster="queryParams.placeholderImg"
       :class="{ 'display: none;': currentElementRef === 'player2' }"
-      :style="isGrid ? 'vertical-align: bottom' : ''"
+      :style="(isGrid ? 'vertical-align: bottom' : '') + (isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0')"
     ></video>
   </template>
   <template v-if="isMigrating || currentElementRef === 'player2'">

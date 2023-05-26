@@ -1,13 +1,10 @@
 <template>
   <div
-    :class="{
-      'align-self-center': isSplittedView,
-      'container-fluid align-container': !isGrid,
-      'align-self-center': isSplittedView && !isGrid,
-    }"
+    class="videoPlayerContainer container-fluid align-container"
     :style="isGrid && !isSplittedView ? 'display: contents' : ''"
     @mousemove="showControls"
   >
+    <!-- SPINNER -->
     <div
       class="overlay spinner-container"
       v-if="isLoading"
@@ -16,79 +13,83 @@
         <span class="sr-only">Loading...</span>
       </div>
     </div>
+    <!-- CONTROLS -->
     <div id="controls" class="controls" v-if="queryParams.controls && show">
-          <div class="container-fluid pt-3 gradient-top controls-top fixed-top">
-            <div class="row">
-              <div class="col-6 text-left">
-                <VideoPlayerControlsUserCount v-if="showButton('userCount')" />
-              </div>
-              <div class="col-6 text-right">
-                <VideoPlayerControlsBadge v-if="showButton('liveBadge')" />
-              </div>
-            </div>
+      <div class="container-fluid pt-3 gradient-top controls-top">
+        <div class="row">
+          <div class="col-6 text-left">
+            <VideoPlayerControlsUserCount v-if="showButton('userCount')" />
           </div>
-          <div class="container-fluid pb-2 gradient-bottom controls-bottom fixed-bottom">
-            <VideoPlayerControlsContainer
-              :isConnected="cast.isConnected"
-              :showButton="showButton"
-              :currentTime="currentTime"
-              :streamId="queryParams.streamId"
-            />
+          <div class="col-6 text-right">
+            <VideoPlayerControlsBadge v-if="showButton('liveBadge')" />
           </div>
+        </div>
       </div>
-      <div
-            v-if="autoPlayMuted && isLive"
-            @click="tapUnmute"
-            class="overlay tap-unmute d-flex align-items-center justify-content-center"
-          >
-            <div>
-              <div class="d-flex justify-content-center">
-                <i class="ml-viewer-bi-volume-mute-fill pb-0"></i>
-              </div>
-              <p class="text-center tap-text">Tap to unmute</p>
-            </div>
-          </div>
+      <div class="container-fluid pb-2 gradient-bottom controls-bottom">
+        <VideoPlayerControlsContainer
+          :isConnected="cast.isConnected"
+          :showButton="showButton"
+          :currentTime="currentTime"
+          :streamId="queryParams.streamId"
+        />
+      </div>
+    </div>
+    <!-- TAP TO UNMUTE OVERLAY -->
+    <div
+      v-if="autoPlayMuted && isLive"
+      @click="tapUnmute"
+      class="overlay tap-unmute d-flex align-items-center justify-content-center"
+    >
+      <div>
+        <div class="d-flex justify-content-center">
+          <i class="ml-viewer-bi-volume-mute-fill pb-0"></i>
+        </div>
+        <p class="text-center tap-text">Tap to unmute</p>
+      </div>
+    </div>
+    <!-- VIDEOS -->
     <div 
       class="mx-0"
       :id="!isGrid && isSplittedView ? 'lcontainer' : ''"
-      :class="isGrid && isSplittedView ? 'grid-container': 'row list-container'"
+      :class="isGrid && isSplittedView ? 'grid-container': 'list-container'"
+    >
+      <div
+        id="vplayer"
+        ref="player"
+        class="player"
+        :class="{
+          show: show,
+          'limit-screen': sourceRemoteTracks.length && isSplittedView && !isGrid,
+          'grid-player': sourceRemoteTracks.length && isSplittedView && isGrid
+        }"
+        :style="{
+        cursor: isGrid? 'pointer' : '',
+        }"
+        @dblclick="toggleFullscreen"
       >
-        <div
-          id="vplayer"
-          ref="player"
-          class="player"
-          :class="{
-            show: show,
-            'mv-col-9 limit-screen': sourceRemoteTracks.length && isSplittedView && !isGrid,
-            'grid-player': sourceRemoteTracks.length && isSplittedView && isGrid
-          }"
-          :style="{
-          cursor: isGrid? 'pointer' : '',
-          }"
-          @dblclick="toggleFullscreen"
-        >
         <div
           @click="handleWholeScreen"
           :style="{
-            display: !isSplittedView && isGrid ? 'flex' : 'flex',
-            height: !isSplittedView ? '100vh' : '',
+            display: 'flex',
+            height: !isSplittedView ? '100%' : '',
+            width: '100%'
           }"
         >
           <VideoPlayerMedia ref="element" />
         </div>
 
-          <div
-            class="overlay d-flex flex-row justify-content-center align-items-center"
-            v-if="cast.device"
-          >
-            <div class="d-flex flex-column ml-3">
-              <h3>Casting to</h3>
-              <h1 class="font-weight-bold">{{ cast.device.friendlyName }}</h1>
-            </div>
+        <div
+          class="overlay d-flex flex-row justify-content-center align-items-center"
+          v-if="cast.device"
+        >
+          <div class="d-flex flex-column ml-3">
+            <h3>Casting to</h3>
+            <h1 class="font-weight-bold">{{ cast.device.friendlyName }}</h1>
           </div>
         </div>
+      </div>
       <div
-        :class="!isGrid ? 'side-panel overflow-auto sc1 mv-col-3': ''"
+        :class="!isGrid ? 'side-panel overflow-auto sc1': ''"
         :style="!isGrid ? 'scroll-snap-type: y mandatory': 'display: contents'"
         v-if="sourceRemoteTracks.length && isSplittedView"
         @mousemove="showControls"
@@ -350,7 +351,6 @@ const getFullscreenElement = () => {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 20px;
-  padding: 20px 0;
   max-width: 80%;
   margin: auto;
   align-content: center;
@@ -465,7 +465,7 @@ const getFullscreenElement = () => {
   border-radius: 0.4rem;
   background: none;
   padding-right: 0;
-  height: fit-content;
+  height: 100%;
   width: 100%;
   align-self: center
 }
@@ -497,17 +497,21 @@ const getFullscreenElement = () => {
 .ml-viewer {
   text-align: -webkit-center;
   height: 100%;
-  justify-content: center;
-  align-items: center;
-  display: flex;
+  
+  padding: 0;
 }
+
 .ml-viewer-bi-volume-mute-fill {
   color: white;
   font-size: 6rem;
   cursor: default;
 }
 
-.grid-container[max-width~='600px'] {
+.videoPlayerContainer {
+  overflow: hidden;
+}
+
+.videoPlayerContainer[min-width~='430px'][max-width~='700px'] :deep(.grid-container) {
   display: -webkit-inline-box;
 }
 
@@ -518,8 +522,7 @@ const getFullscreenElement = () => {
 }
 
 #vplayer[max-width~='991.98px'] :deep(.side-panel){
-  max-height: 71vh;
-    align-self: center;
+  align-self: center;
 }
 
 #vplayer[max-width~='429.98px'] :deep(.align-container){
@@ -528,28 +531,35 @@ const getFullscreenElement = () => {
 
 #vplayer[max-width~='429.98px'] :deep(.side-panel){
   scroll-snap-type: y mandatory;
-  max-height: 65%;
   display: flex;
 }
 
 #lcontainer {
-  height: auto
+  height: 100%;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  grid-template-rows: auto;
+  gap: 10px;
+  padding: 10px;
 }
 
 #lcontainer[max-width~='429.98px'] {
-  height: fit-content !important;
-  margin: 0
+  grid-template-columns: 1fr;
+  gap: 10px
 }
 
-#vplayer[max-width~='429.98px'] {
-  height: fit-content
+#lcontainer[max-width~='429.98px'] :deep(#vplayer) {
+  align-items: end;
+  margin: 0;
 }
 
-.limit-screen[max-width~='429.98px']{
-  padding: 5px 15px;
-  position: relative;
-  height: 100%;
-  max-height: 35%
+#vplayer {
+  display: flex;
+  margin: auto;
+}
+
+.list-container {
+  width: 100%;
 }
 
 </style>
