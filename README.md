@@ -37,6 +37,12 @@ At the end of the file `App.vue`, you must include the following dependecy:
 </style>
 ```
 
+Or simply by adding the following dependecy at the beginning of the file `main.js`:
+
+```html
+import "@millicast/vue-viewer-plugin/dist/millicast-vue-viewer-plugin.css"
+```
+
 Once this is done, you are ready to use the plugin in any Vue file of your project as a component.
 
 ### Configuration Parameters
