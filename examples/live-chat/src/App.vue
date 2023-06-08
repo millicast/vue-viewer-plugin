@@ -58,5 +58,5 @@ export default {
 </style>
 
 <style>
-@import '@millicast/vue-viewer-plugin/dist/millicast-vue-viewer-plugin.css';
+  @import '@millicast/vue-viewer-plugin/dist/millicast-vue-viewer-plugin.css';
 </style>

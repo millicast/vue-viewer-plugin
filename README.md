@@ -37,6 +37,12 @@ At the end of the file `App.vue`, you must include the following dependecy:
 </style>
 ```
 
+Or simply by adding the following dependecy at the beginning of the file `main.js`:
+
+```html
+import "@millicast/vue-viewer-plugin/dist/millicast-vue-viewer-plugin.css"
+```
+
 Once this is done, you are ready to use the plugin in any Vue file of your project as a component.
 
 ### Configuration Parameters
@@ -81,7 +87,9 @@ In case you want to disable all buttons at once, you can simply pass the paremet
 - Remember that `accountId` and `streamName` are the only requeried parameters.
 - At the moment, this plugin allows **only one** instantiation of the component at a time by project.
 
-## Example App
+## Example Apps
+
+## Live Chat Example
 
 An example app is also provided which integrates a [PubNub](https://www.pubnub.com/docs/) based live chat, this example can be found in the `examples/live-chat` folder.
 
@@ -96,6 +104,11 @@ npm run serve
 ```
 
 This will install the dependencies and run the app.
+
+## Plugin Test App
+
+An example of a interactive and resizable sample app using the vue viewer plugin can be found in the `examples/plugin-test` folder.
+This app is for testing purposes.
 
 # Contribute
 

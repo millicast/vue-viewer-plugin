@@ -15,6 +15,12 @@ import { mapMutations } from 'vuex'
 
 export default {
   name: 'App',
+  data() {
+    return {
+      chromecastIdDefault: null,
+      reportUrlDefault: null
+    }
+  },
   components: {
     VideoPlayerContainer,
   },
@@ -41,8 +47,8 @@ export default {
           hideButtons: this.paramsOptions.controls === false ? availableControls : (this.paramsOptions.hideButtons ?? []),
           autoplay: this.paramsOptions.autoplay ?? true,
           muted: this.paramsOptions.muted ?? false,
-          chromecastId: this.paramsOptions.chromecastId ?? null,
-          reportUrl: this.paramsOptions.reportUrl ?? null,
+          chromecastId: this.paramsOptions.chromecastId ?? this.chromecastIdDefault,
+          reportUrl: this.paramsOptions.reportUrl ?? this.reportUrlDefault,
           noDelay: this.paramsOptions?.noDelay ?? false,
           multisource: this.paramsOptions?.multisource ?? false,
           layout: this.paramsOptions?.layout ?? null
@@ -51,6 +57,9 @@ export default {
     },
   },
   async mounted() {
+    this.chromecastIdDefault = process.env.VUE_APP_DEFAULT_CHROMECAST_ID
+    this.reportUrlDefault = process.env.VUE_APP_DEFAULT_REPORT_URL
+
     const myContainer = document.getElementById('viewer-container')
     const toast = await useToast()
     toast.updateDefaults({
