@@ -172,4 +172,13 @@ li {
 .list-side {
   margin: auto;
 }
+
+.list-item {
+    line-height: 0;
+    padding-bottom: 10px;
+}
+
+.list-item:last-child {
+    padding-bottom: 0px;
+}
 </style>

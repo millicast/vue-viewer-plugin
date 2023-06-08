@@ -1,7 +1,6 @@
 <template>
   <div
-    class="videoPlayerContainer container-fluid align-container"
-    :style="isGrid && !isSplittedView ? 'display: contents' : ''"
+    class="container-fluid align-container"
     @mousemove="showControls"
   >
     <!-- SPINNER -->
@@ -11,27 +10,6 @@
     >
       <div class="spinner-border text-light" role="status">
         <span class="sr-only">Loading...</span>
-      </div>
-    </div>
-    <!-- CONTROLS -->
-    <div id="controls" class="controls" v-if="queryParams.controls && show">
-      <div class="container-fluid pt-3 gradient-top controls-top">
-        <div class="row">
-          <div class="col-6 text-left">
-            <VideoPlayerControlsUserCount v-if="showButton('userCount')" />
-          </div>
-          <div class="col-6 text-right">
-            <VideoPlayerControlsBadge v-if="showButton('liveBadge')" />
-          </div>
-        </div>
-      </div>
-      <div class="container-fluid pb-2 gradient-bottom controls-bottom">
-        <VideoPlayerControlsContainer
-          :isConnected="cast.isConnected"
-          :showButton="showButton"
-          :currentTime="currentTime"
-          :streamId="queryParams.streamId"
-        />
       </div>
     </div>
     <!-- TAP TO UNMUTE OVERLAY -->
@@ -47,12 +25,13 @@
         <p class="text-center tap-text">Tap to unmute</p>
       </div>
     </div>
-    <!-- VIDEOS -->
+    <!-- SOURCES -->
     <div 
       class="mx-0"
       :id="!isGrid && isSplittedView ? 'lcontainer' : ''"
       :class="isGrid && isSplittedView ? 'grid-container': 'list-container'"
-    >
+      >
+      <!-- MAIN SOURCE -->
       <div
         id="vplayer"
         ref="player"
@@ -67,17 +46,50 @@
         }"
         @dblclick="toggleFullscreen"
       >
+        <!-- SOURCE -->
         <div
+          id="main-source"
           @click="handleWholeScreen"
           :style="{
-            display: 'flex',
-            height: !isSplittedView ? '100%' : '',
-            width: '100%'
+            height: !isSplittedView ? '100%' : ''
           }"
         >
           <VideoPlayerMedia ref="element" />
         </div>
-
+        <!-- CONTROLS -->
+        <div 
+          id="controls" 
+          class="controls" 
+          v-if="queryParams.controls"
+        > 
+          <!-- TOP CONTROLS -->
+          <div 
+            class="gradient-top controls-top container-fluid pt-3"
+            :class="{ hide: !show }"
+          >
+            <div class="row">
+              <div class="col-6 text-left">
+                <VideoPlayerControlsUserCount v-if="showButton('userCount')" />
+              </div>
+              <div class="col-6 text-right">
+                <VideoPlayerControlsBadge v-if="showButton('liveBadge')" />
+              </div>
+            </div>
+          </div>
+          <!-- BOTTOM CONTROLS -->
+          <div
+            :class="{ hide: !show }" 
+            class="gradient-bottom controls-bottom container-fluid pb-3"
+          >
+            <VideoPlayerControlsContainer
+              :isConnected="cast.isConnected"
+              :showButton="showButton"
+              :currentTime="currentTime"
+              :streamId="queryParams.streamId"
+            />
+          </div>
+        </div>
+        <!-- CASTING TO -->
         <div
           class="overlay d-flex flex-row justify-content-center align-items-center"
           v-if="cast.device"
@@ -88,6 +100,7 @@
           </div>
         </div>
       </div>
+      <!-- SIDE SOURCES -->
       <div
         :class="!isGrid ? 'side-panel overflow-auto sc1': ''"
         :style="!isGrid ? 'scroll-snap-type: y mandatory': 'display: contents'"
@@ -341,19 +354,21 @@ const getFullscreenElement = () => {
   position: relative;
   width: 100%;
   cursor: none;
-  overflow: hidden;
   &.show {
     cursor: auto;
   }
 }
 
 .grid-container {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  max-width: 80%;
+  gap: 10px;
   margin: auto;
-  align-content: center;
+  overflow: auto;
+  max-height: 100%;
+  padding: 10px;
+  flex-grow: 0.6;
 }
 
 .spinner-container {
@@ -387,8 +402,8 @@ const getFullscreenElement = () => {
   transition: top 0.3s ease-in-out;
   top: -10rem;
 
-  &.show {
-    top: 0;
+  &.hide {
+    display: none;
   }
 }
 
@@ -402,8 +417,8 @@ const getFullscreenElement = () => {
   transition: bottom 0.3s ease-in-out;
   bottom: -10rem;
 
-  &.show {
-    bottom: 0;
+  &.hide {
+    display: none;
   }
 }
 
@@ -448,15 +463,17 @@ const getFullscreenElement = () => {
 }
 
 .controls-top {
-  position: absolute;
+  position: fixed;
   top: 0;
+  right: 0;
   margin-bottom: -55px;
   z-index: 1;
 }
 
 .controls-bottom {
-  position: absolute;
+  position: fixed;
   bottom: 0;
+  right: 0;
   margin-top: -50px;
   z-index: 1;
 }
@@ -507,14 +524,6 @@ const getFullscreenElement = () => {
   cursor: default;
 }
 
-.videoPlayerContainer {
-  overflow: hidden;
-}
-
-.videoPlayerContainer[min-width~='430px'][max-width~='700px'] :deep(.grid-container) {
-  display: -webkit-inline-box;
-}
-
 .grid-container[max-width~='429.98px'] {
   display: grid;
   grid-template-columns: 1fr;
@@ -535,6 +544,7 @@ const getFullscreenElement = () => {
 }
 
 #lcontainer {
+  position: relative;
   height: 100%;
   display: grid;
   grid-template-columns: 3fr 1fr;
@@ -554,6 +564,7 @@ const getFullscreenElement = () => {
 }
 
 #vplayer {
+  position: relative;
   display: flex;
   margin: auto;
 }
@@ -562,4 +573,9 @@ const getFullscreenElement = () => {
   width: 100%;
 }
 
+#main-source {
+  display: flex;
+  width: 100%;
+  z-index: 1;
+}
 </style>

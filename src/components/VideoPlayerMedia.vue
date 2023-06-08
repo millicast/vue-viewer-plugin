@@ -14,7 +14,7 @@
       ref="player"
       :poster="queryParams.placeholderImg"
       :class="{ 'display: none;': currentElementRef === 'player2' }"
-      :style="(isGrid ? 'vertical-align: bottom' : '') + (isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0')"
+      :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
     ></video>
   </template>
   <template v-if="isMigrating || currentElementRef === 'player2'">
@@ -32,10 +32,10 @@
       ref="player2"
       :poster="queryParams.placeholderImg"
       :class="{ 'display: none;': currentElementRef === 'player' }"
-      :style="isGrid ? 'vertical-align: bottom' : ''"
+      :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
     ></video>
   </template>
-  <span v-if="sourceRemoteTracks.length && isSplittedView"
+  <span v-if="sourceRemoteTracks.length && isSplittedView && !fullscreen"
     :class="isGrid ? 'grid-label' : 'list-label'"
   >{{
     this.mainLabel
@@ -105,7 +105,8 @@ export default {
       isMigrating: (state) => state.isMigrating,
       isSplittedView: (state) => state.isSplittedView,
       previousSplitState: state => state.previousSplitState,
-      isGrid: state => state.isGrid
+      isGrid: state => state.isGrid,
+      fullscreen: (state) => state.fullscreen,
     }),
     ...mapState('Params', {
       queryParams: (state) => state.queryParams,
@@ -203,7 +204,7 @@ export default {
 <style scoped>
 video {
   width: 100%;
-  height: 100%;
+  max-height: 100vh;
   pointer-events: none;
   border-radius: 0.25rem
 }
@@ -234,7 +235,6 @@ span {
   color: #FFF;
   background: rgba(0, 0, 0, 0.288);
   padding: 4px 8px;
-  font-family: 'Open Sans';
   font-size: .875rem;
   font-weight: 400;
   line-height: 1.15rem;
