@@ -555,7 +555,7 @@ const getFullscreenElement = () => {
 
 #lcontainer[max-width~='429.98px'] {
   grid-template-columns: 1fr;
-  gap: 10px
+  gap: 10px;
 }
 
 #lcontainer[max-width~='429.98px'] :deep(#vplayer) {

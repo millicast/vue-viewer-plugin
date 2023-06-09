@@ -206,7 +206,7 @@ video {
   width: 100%;
   max-height: 100vh;
   pointer-events: none;
-  border-radius: 0.25rem
+  border-radius: 0.25rem;
 }
 
 span {
