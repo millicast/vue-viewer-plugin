@@ -1,6 +1,6 @@
 <template>
   <a class="dropdown-item" @click="setIsSplittedView(!isSplittedView)">
-    <i class="bi-layout-sidebar-inset-reverse align-middle control-icon"></i>
+    <i class="ml-viewer-bi-layout-sidebar-inset-reverse align-middle control-icon"></i>
     {{ isSplittedView ? 'Hide' : 'Show' }} Multi View
   </a>
 </template>

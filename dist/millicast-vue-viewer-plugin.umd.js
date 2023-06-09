@@ -129,15 +129,16 @@ var Queue = function () {
 Queue.prototype = {
   add: function (item) {
     var entry = { item: item, next: null };
-    if (this.head) this.tail.next = entry;
+    var tail = this.tail;
+    if (tail) tail.next = entry;
     else this.head = entry;
     this.tail = entry;
   },
   get: function () {
     var entry = this.head;
     if (entry) {
-      this.head = entry.next;
-      if (this.tail === entry) this.tail = null;
+      var next = this.head = entry.next;
+      if (next === null) this.tail = null;
       return entry.item;
     }
   }
@@ -148,17 +149,10 @@ module.exports = Queue;
 
 /***/ }),
 
-/***/ "02e5":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "0366":
 /***/ (function(module, exports, __webpack_require__) {
 
-var uncurryThis = __webpack_require__("e330");
+var uncurryThis = __webpack_require__("4625");
 var aCallable = __webpack_require__("59ed");
 var NATIVE_BIND = __webpack_require__("40d5");
 
@@ -190,16 +184,21 @@ module.exports = !!firefox && +firefox[1];
 /***/ "04f8":
 /***/ (function(module, exports, __webpack_require__) {
 
-/* eslint-disable es-x/no-symbol -- required for testing */
+/* eslint-disable es/no-symbol -- required for testing */
 var V8_VERSION = __webpack_require__("2d00");
 var fails = __webpack_require__("d039");
+var global = __webpack_require__("da84");
 
-// eslint-disable-next-line es-x/no-object-getownpropertysymbols -- required for testing
+var $String = global.String;
+
+// eslint-disable-next-line es/no-object-getownpropertysymbols -- required for testing
 module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
   var symbol = Symbol();
   // Chrome 38 Symbol has incorrect toString conversion
   // `get-own-property-symbols` polyfill symbols converted to object are not Symbol instances
-  return !String(symbol) || !(Object(symbol) instanceof Symbol) ||
+  // nb: Do not call `String` directly to avoid this being optimized out to `symbol+''` which will,
+  // of course, fail.
+  return !$String(symbol) || !(Object(symbol) instanceof Symbol) ||
     // Chrome 38-40 symbols are not inherited from DOM collections prototypes to instances
     !Symbol.sham && V8_VERSION && V8_VERSION < 41;
 });
@@ -210,7 +209,7 @@ module.exports = !!Object.getOwnPropertySymbols && !fails(function () {
 /***/ "057f":
 /***/ (function(module, exports, __webpack_require__) {
 
-/* eslint-disable es-x/no-object-getownpropertynames -- safe */
+/* eslint-disable es/no-object-getownpropertynames -- safe */
 var classof = __webpack_require__("c6b6");
 var toIndexedObject = __webpack_require__("fc6a");
 var $getOwnPropertyNames = __webpack_require__("241c").f;
@@ -249,7 +248,7 @@ var toPropertyKey = __webpack_require__("a04b");
 var hasOwn = __webpack_require__("1a2d");
 var IE8_DOM_DEFINE = __webpack_require__("0cfb");
 
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // `Object.getOwnPropertyDescriptor` method
@@ -354,7 +353,7 @@ module.exports = function (originalArray) {
 
 var NATIVE_SYMBOL = __webpack_require__("04f8");
 
-/* eslint-disable es-x/no-symbol -- safe */
+/* eslint-disable es/no-symbol -- safe */
 module.exports = NATIVE_SYMBOL && !!Symbol['for'] && !!Symbol.keyFor;
 
 
@@ -383,6 +382,7 @@ var floor = Math.floor;
 var charAt = uncurryThis(''.charAt);
 var replace = uncurryThis(''.replace);
 var stringSlice = uncurryThis(''.slice);
+// eslint-disable-next-line redos/no-vulnerable -- safe
 var SUBSTITUTION_SYMBOLS = /\$([$&'`]|\d{1,2}|<[^>]*>)/g;
 var SUBSTITUTION_SYMBOLS_NO_NAMED = /\$([$&'`]|\d{1,2})/g;
 
@@ -475,7 +475,7 @@ var createElement = __webpack_require__("cc12");
 
 // Thanks to IE8 for its funny defineProperty
 module.exports = !DESCRIPTORS && !fails(function () {
-  // eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
+  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty(createElement('div'), 'a', {
     get: function () { return 7; }
   }).a != 7;
@@ -493,6 +493,7 @@ var $Error = Error;
 var replace = uncurryThis(''.replace);
 
 var TEST = (function (arg) { return String($Error(arg).stack); })('zxcasd');
+// eslint-disable-next-line redos/no-vulnerable -- safe
 var V8_OR_CHAKRA_STACK_ENTRY = /\n\s*at [^:]*:[^\n]*/;
 var IS_V8_OR_CHAKRA_STACK = V8_OR_CHAKRA_STACK_ENTRY.test(TEST);
 
@@ -607,6 +608,7 @@ $({ target: 'Object', stat: true }, {
 /***/ "13d2":
 /***/ (function(module, exports, __webpack_require__) {
 
+var uncurryThis = __webpack_require__("e330");
 var fails = __webpack_require__("d039");
 var isCallable = __webpack_require__("1626");
 var hasOwn = __webpack_require__("1a2d");
@@ -617,8 +619,12 @@ var InternalStateModule = __webpack_require__("69f3");
 
 var enforceInternalState = InternalStateModule.enforce;
 var getInternalState = InternalStateModule.get;
-// eslint-disable-next-line es-x/no-object-defineproperty -- safe
+var $String = String;
+// eslint-disable-next-line es/no-object-defineproperty -- safe
 var defineProperty = Object.defineProperty;
+var stringSlice = uncurryThis(''.slice);
+var replace = uncurryThis(''.replace);
+var join = uncurryThis([].join);
 
 var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
   return defineProperty(function () { /* empty */ }, 'length', { value: 8 }).length !== 8;
@@ -627,8 +633,8 @@ var CONFIGURABLE_LENGTH = DESCRIPTORS && !fails(function () {
 var TEMPLATE = String(String).split('String');
 
 var makeBuiltIn = module.exports = function (value, name, options) {
-  if (String(name).slice(0, 7) === 'Symbol(') {
-    name = '[' + String(name).replace(/^Symbol\(([^)]*)\)/, '$1') + ']';
+  if (stringSlice($String(name), 0, 7) === 'Symbol(') {
+    name = '[' + replace($String(name), /^Symbol\(([^)]*)\)/, '$1') + ']';
   }
   if (options && options.getter) name = 'get ' + name;
   if (options && options.setter) name = 'set ' + name;
@@ -647,7 +653,7 @@ var makeBuiltIn = module.exports = function (value, name, options) {
   } catch (error) { /* empty */ }
   var state = enforceInternalState(value);
   if (!hasOwn(state, 'source')) {
-    state.source = TEMPLATE.join(typeof name == 'string' ? name : '');
+    state.source = join(TEMPLATE, typeof name == 'string' ? name : '');
   } return value;
 };
 
@@ -705,18 +711,20 @@ var INCORRECT_TO_LENGTH = fails(function () {
 
 // V8 and Safari <= 15.4, FF < 23 throws InternalError
 // https://bugs.chromium.org/p/v8/issues/detail?id=12681
-var SILENT_ON_NON_WRITABLE_LENGTH = !function () {
+var properErrorOnNonWritableLength = function () {
   try {
-    // eslint-disable-next-line es-x/no-object-defineproperty -- safe
+    // eslint-disable-next-line es/no-object-defineproperty -- safe
     Object.defineProperty([], 'length', { writable: false }).push();
   } catch (error) {
     return error instanceof TypeError;
   }
-}();
+};
+
+var FORCED = INCORRECT_TO_LENGTH || !properErrorOnNonWritableLength();
 
 // `Array.prototype.push` method
 // https://tc39.es/ecma262/#sec-array.prototype.push
-$({ target: 'Array', proto: true, arity: 1, forced: INCORRECT_TO_LENGTH || SILENT_ON_NON_WRITABLE_LENGTH }, {
+$({ target: 'Array', proto: true, arity: 1, forced: FORCED }, {
   // eslint-disable-next-line no-unused-vars -- required for `.length`
   push: function push(item) {
     var O = toObject(this);
@@ -731,17 +739,6 @@ $({ target: 'Array', proto: true, arity: 1, forced: INCORRECT_TO_LENGTH || SILEN
     return len;
   }
 });
-
-
-/***/ }),
-
-/***/ "14dd":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerSideVideoSources_vue_vue_type_style_index_0_id_bcbd0770_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("02e5");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerSideVideoSources_vue_vue_type_style_index_0_id_bcbd0770_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerSideVideoSources_vue_vue_type_style_index_0_id_bcbd0770_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
 
 
 /***/ }),
@@ -854,19 +851,8 @@ var STRICT_METHOD = arrayMethodIsStrict('forEach');
 // https://tc39.es/ecma262/#sec-array.prototype.foreach
 module.exports = !STRICT_METHOD ? function forEach(callbackfn /* , thisArg */) {
   return $forEach(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
-// eslint-disable-next-line es-x/no-array-prototype-foreach -- safe
+// eslint-disable-next-line es/no-array-prototype-foreach -- safe
 } : [].forEach;
-
-
-/***/ }),
-
-/***/ "1997":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerMedia_vue_vue_type_style_index_0_id_2882a204_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("cac7");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerMedia_vue_vue_type_style_index_0_id_2882a204_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerMedia_vue_vue_type_style_index_0_id_2882a204_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
 
 
 /***/ }),
@@ -896,7 +882,7 @@ var hasOwnProperty = uncurryThis({}.hasOwnProperty);
 
 // `HasOwnProperty` abstract operation
 // https://tc39.es/ecma262/#sec-hasownproperty
-// eslint-disable-next-line es-x/no-object-hasown -- safe
+// eslint-disable-next-line es/no-object-hasown -- safe
 module.exports = Object.hasOwn || function hasOwn(it, key) {
   return hasOwnProperty(toObject(it), key);
 };
@@ -935,7 +921,7 @@ try {
   iteratorWithReturn[ITERATOR] = function () {
     return this;
   };
-  // eslint-disable-next-line es-x/no-array-from, no-throw-literal -- required for testing
+  // eslint-disable-next-line es/no-array-from, no-throw-literal -- required for testing
   Array.from(iteratorWithReturn, function () { throw 2; });
 } catch (error) { /* empty */ }
 
@@ -964,6 +950,7 @@ module.exports = function (exec, SKIP_CLOSING) {
 
 var userAgent = __webpack_require__("342f");
 
+// eslint-disable-next-line redos/no-vulnerable -- safe
 module.exports = /(?:ipad|iphone|ipod).*applewebkit/i.test(userAgent);
 
 
@@ -1009,6 +996,24 @@ module.exports = function (METHOD_NAME) {
   });
 };
 
+
+/***/ }),
+
+/***/ "1f9a":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerReportModal_vue_vue_type_style_index_0_id_4b8eac50_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("267b");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerReportModal_vue_vue_type_style_index_0_id_4b8eac50_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerReportModal_vue_vue_type_style_index_0_id_4b8eac50_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
+
+/***/ }),
+
+/***/ "21c2":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -1189,21 +1194,10 @@ var hiddenKeys = enumBugKeys.concat('length', 'prototype');
 
 // `Object.getOwnPropertyNames` method
 // https://tc39.es/ecma262/#sec-object.getownpropertynames
-// eslint-disable-next-line es-x/no-object-getownpropertynames -- safe
+// eslint-disable-next-line es/no-object-getownpropertynames -- safe
 exports.f = Object.getOwnPropertyNames || function getOwnPropertyNames(O) {
   return internalObjectKeys(O, hiddenKeys);
 };
-
-
-/***/ }),
-
-/***/ "24fe":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_30df5c10_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("55d2");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_30df5c10_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_30df5c10_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
 
 
 /***/ }),
@@ -1277,7 +1271,7 @@ if (NOT_GENERIC || INCORRECT_NAME) {
 "use strict";
 
 var getBuiltIn = __webpack_require__("d066");
-var definePropertyModule = __webpack_require__("9bf2");
+var defineBuiltInAccessor = __webpack_require__("edd0");
 var wellKnownSymbol = __webpack_require__("b622");
 var DESCRIPTORS = __webpack_require__("83ab");
 
@@ -1285,16 +1279,22 @@ var SPECIES = wellKnownSymbol('species');
 
 module.exports = function (CONSTRUCTOR_NAME) {
   var Constructor = getBuiltIn(CONSTRUCTOR_NAME);
-  var defineProperty = definePropertyModule.f;
 
   if (DESCRIPTORS && Constructor && !Constructor[SPECIES]) {
-    defineProperty(Constructor, SPECIES, {
+    defineBuiltInAccessor(Constructor, SPECIES, {
       configurable: true,
       get: function () { return this; }
     });
   }
 };
 
+
+/***/ }),
+
+/***/ "267b":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -1739,7 +1739,7 @@ var FunctionPrototype = Function.prototype;
 var apply = FunctionPrototype.apply;
 var call = FunctionPrototype.call;
 
-// eslint-disable-next-line es-x/no-reflect -- safe
+// eslint-disable-next-line es/no-reflect -- safe
 module.exports = typeof Reflect == 'object' && Reflect.apply || (NATIVE_BIND ? call.bind(apply) : function () {
   return call.apply(apply, arguments);
 });
@@ -1773,12 +1773,12 @@ var String = global.String;
 var counter = 0;
 var queue = {};
 var ONREADYSTATECHANGE = 'onreadystatechange';
-var location, defer, channel, port;
+var $location, defer, channel, port;
 
-try {
+fails(function () {
   // Deno throws a ReferenceError on `location` access without `--location` flag
-  location = global.location;
-} catch (error) { /* empty */ }
+  $location = global.location;
+});
 
 var run = function (id) {
   if (hasOwn(queue, id)) {
@@ -1794,13 +1794,13 @@ var runner = function (id) {
   };
 };
 
-var listener = function (event) {
+var eventListener = function (event) {
   run(event.data);
 };
 
-var post = function (id) {
+var globalPostMessageDefer = function (id) {
   // old engines have not location.origin
-  global.postMessage(String(id), location.protocol + '//' + location.host);
+  global.postMessage(String(id), $location.protocol + '//' + $location.host);
 };
 
 // Node.js 0.9+ & IE10+ has setImmediate, otherwise:
@@ -1833,7 +1833,7 @@ if (!set || !clear) {
   } else if (MessageChannel && !IS_IOS) {
     channel = new MessageChannel();
     port = channel.port2;
-    channel.port1.onmessage = listener;
+    channel.port1.onmessage = eventListener;
     defer = bind(port.postMessage, port);
   // Browsers with postMessage, skip WebWorkers
   // IE8 has postMessage, but it's sync & typeof its postMessage is 'object'
@@ -1841,11 +1841,11 @@ if (!set || !clear) {
     global.addEventListener &&
     isCallable(global.postMessage) &&
     !global.importScripts &&
-    location && location.protocol !== 'file:' &&
-    !fails(post)
+    $location && $location.protocol !== 'file:' &&
+    !fails(globalPostMessageDefer)
   ) {
-    defer = post;
-    global.addEventListener('message', listener, false);
+    defer = globalPostMessageDefer;
+    global.addEventListener('message', eventListener, false);
   // IE8-
   } else if (ONREADYSTATECHANGE in createElement('script')) {
     defer = function (id) {
@@ -1939,11 +1939,9 @@ $({ target: 'Object', stat: true, forced: FAILS_ON_PRIMITIVES, sham: !CORRECT_PR
 /***/ }),
 
 /***/ "342f":
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-var getBuiltIn = __webpack_require__("d066");
-
-module.exports = getBuiltIn('navigator', 'userAgent') || '';
+module.exports = typeof navigator != 'undefined' && String(navigator.userAgent) || '';
 
 
 /***/ }),
@@ -2016,14 +2014,10 @@ module.exports = function (it) {
 
 /***/ }),
 
-/***/ "363c":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ "36f7":
+/***/ (function(module, exports, __webpack_require__) {
 
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerReportModal_vue_vue_type_style_index_0_id_2c22aaec_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("6066");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerReportModal_vue_vue_type_style_index_0_id_2c22aaec_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerReportModal_vue_vue_type_style_index_0_id_2c22aaec_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
-
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -2039,7 +2033,7 @@ var objectKeys = __webpack_require__("df75");
 
 // `Object.defineProperties` method
 // https://tc39.es/ecma262/#sec-object.defineproperties
-// eslint-disable-next-line es-x/no-object-defineproperties -- safe
+// eslint-disable-next-line es/no-object-defineproperties -- safe
 exports.f = DESCRIPTORS && !V8_PROTOTYPE_DEFINE_BUG ? Object.defineProperties : function defineProperties(O, Properties) {
   anObject(O);
   var props = toIndexedObject(Properties);
@@ -2063,7 +2057,7 @@ var DESCRIPTORS = __webpack_require__("83ab");
 var isArray = __webpack_require__("e8b5");
 
 var $TypeError = TypeError;
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // Safari < 13 does not throw an error in this case
@@ -2071,7 +2065,7 @@ var SILENT_ON_NON_WRITABLE_LENGTH_SET = DESCRIPTORS && !function () {
   // makes no sense without proper strict mode support
   if (this !== undefined) return true;
   try {
-    // eslint-disable-next-line es-x/no-object-defineproperty -- safe
+    // eslint-disable-next-line es/no-object-defineproperty -- safe
     Object.defineProperty([], 'length', { writable: false }).length = 1;
   } catch (error) {
     return error instanceof TypeError;
@@ -2138,18 +2132,20 @@ var doesNotExceedSafeInteger = __webpack_require__("3511");
 var INCORRECT_RESULT = [].unshift(0) !== 1;
 
 // V8 ~ Chrome < 71 and Safari <= 15.4, FF < 23 throws InternalError
-var SILENT_ON_NON_WRITABLE_LENGTH = !function () {
+var properErrorOnNonWritableLength = function () {
   try {
-    // eslint-disable-next-line es-x/no-object-defineproperty -- safe
+    // eslint-disable-next-line es/no-object-defineproperty -- safe
     Object.defineProperty([], 'length', { writable: false }).unshift();
   } catch (error) {
     return error instanceof TypeError;
   }
-}();
+};
+
+var FORCED = INCORRECT_RESULT || !properErrorOnNonWritableLength();
 
 // `Array.prototype.unshift` method
 // https://tc39.es/ecma262/#sec-array.prototype.unshift
-$({ target: 'Array', proto: true, arity: 1, forced: INCORRECT_RESULT || SILENT_ON_NON_WRITABLE_LENGTH }, {
+$({ target: 'Array', proto: true, arity: 1, forced: FORCED }, {
   // eslint-disable-next-line no-unused-vars -- required for `.length`
   unshift: function unshift(item) {
     var O = toObject(this);
@@ -2226,7 +2222,7 @@ module.exports = {};
 var fails = __webpack_require__("d039");
 
 module.exports = !fails(function () {
-  // eslint-disable-next-line es-x/no-function-prototype-bind -- safe
+  // eslint-disable-next-line es/no-function-prototype-bind -- safe
   var test = (function () { /* empty */ }).bind();
   // eslint-disable-next-line no-prototype-builtins -- safe
   return typeof test != 'function' || test.hasOwnProperty('prototype');
@@ -2245,7 +2241,7 @@ var forEach = __webpack_require__("17c2");
 
 // `Array.prototype.forEach` method
 // https://tc39.es/ecma262/#sec-array.prototype.foreach
-// eslint-disable-next-line es-x/no-array-prototype-foreach -- safe
+// eslint-disable-next-line es/no-array-prototype-foreach -- safe
 $({ target: 'Array', proto: true, forced: [].forEach != forEach }, {
   forEach: forEach
 });
@@ -2354,15 +2350,13 @@ module.exports = function (key) {
 /***/ }),
 
 /***/ "44de":
-/***/ (function(module, exports, __webpack_require__) {
-
-var global = __webpack_require__("da84");
+/***/ (function(module, exports) {
 
 module.exports = function (a, b) {
-  var console = global.console;
-  if (console && console.error) {
+  try {
+    // eslint-disable-next-line no-console -- safe
     arguments.length == 1 ? console.error(a) : console.error(a, b);
-  }
+  } catch (error) { /* empty */ }
 };
 
 
@@ -2405,6 +2399,22 @@ $({ target: 'Array', proto: true, forced: !STRICT_METHOD }, {
     return $some(this, callbackfn, arguments.length > 1 ? arguments[1] : undefined);
   }
 });
+
+
+/***/ }),
+
+/***/ "4625":
+/***/ (function(module, exports, __webpack_require__) {
+
+var classofRaw = __webpack_require__("c6b6");
+var uncurryThis = __webpack_require__("e330");
+
+module.exports = function (fn) {
+  // Nashorn bug:
+  //   https://github.com/zloirock/core-js/issues/1128
+  //   https://github.com/zloirock/core-js/issues/1130
+  if (classofRaw(fn) === 'Function') return uncurryThis(fn);
+};
 
 
 /***/ }),
@@ -2570,17 +2580,6 @@ module.exports = function (input, pref) {
   if (pref !== 'string' && isCallable(fn = input.toString) && !isObject(val = call(fn, input))) return val;
   throw $TypeError("Can't convert object to primitive value");
 };
-
-
-/***/ }),
-
-/***/ "49c8":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsSettingsDropdown_vue_vue_type_style_index_0_id_3f20d85f_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("bf18");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsSettingsDropdown_vue_vue_type_style_index_0_id_3f20d85f_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsSettingsDropdown_vue_vue_type_style_index_0_id_3f20d85f_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
 
 
 /***/ }),
@@ -3062,13 +3061,6 @@ fixRegExpWellKnownSymbolLogic('replace', function (_, nativeReplace, maybeCallNa
 
 /***/ }),
 
-/***/ "55d2":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "5646":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3085,10 +3077,10 @@ var store = __webpack_require__("c6cd");
 (module.exports = function (key, value) {
   return store[key] || (store[key] = value !== undefined ? value : {});
 })('versions', []).push({
-  version: '3.25.2',
+  version: '3.30.2',
   mode: IS_PURE ? 'pure' : 'global',
-  copyright: '© 2014-2022 Denis Pushkarev (zloirock.ru)',
-  license: 'https://github.com/zloirock/core-js/blob/v3.25.2/LICENSE',
+  copyright: '© 2014-2023 Denis Pushkarev (zloirock.ru)',
+  license: 'https://github.com/zloirock/core-js/blob/v3.30.2/LICENSE',
   source: 'https://github.com/zloirock/core-js'
 });
 
@@ -3177,16 +3169,15 @@ var toString = __webpack_require__("577e");
 var whitespaces = __webpack_require__("5899");
 
 var replace = uncurryThis(''.replace);
-var whitespace = '[' + whitespaces + ']';
-var ltrim = RegExp('^' + whitespace + whitespace + '*');
-var rtrim = RegExp(whitespace + whitespace + '*$');
+var ltrim = RegExp('^[' + whitespaces + ']+');
+var rtrim = RegExp('(^|[^' + whitespaces + '])[' + whitespaces + ']+$');
 
 // `String.prototype.{ trim, trimStart, trimEnd, trimLeft, trimRight }` methods implementation
 var createMethod = function (TYPE) {
   return function ($this) {
     var string = toString(requireObjectCoercible($this));
     if (TYPE & 1) string = replace(string, ltrim, '');
-    if (TYPE & 2) string = replace(string, rtrim, '');
+    if (TYPE & 2) string = replace(string, rtrim, '$1');
     return string;
   };
 };
@@ -3302,7 +3293,7 @@ var DESCRIPTORS = __webpack_require__("83ab");
 var hasOwn = __webpack_require__("1a2d");
 
 var FunctionPrototype = Function.prototype;
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor;
 
 var EXISTS = hasOwn(FunctionPrototype, 'name');
@@ -3632,18 +3623,11 @@ module.exports = FORCED_PROMISE_CONSTRUCTOR || !checkCorrectnessOfIteration(func
 /***/ "605d":
 /***/ (function(module, exports, __webpack_require__) {
 
-var classof = __webpack_require__("c6b6");
-var global = __webpack_require__("da84");
+/* WEBPACK VAR INJECTION */(function(process) {var classof = __webpack_require__("c6b6");
 
-module.exports = classof(global.process) == 'process';
+module.exports = typeof process != 'undefined' && classof(process) == 'process';
 
-
-/***/ }),
-
-/***/ "6066":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("4362")))
 
 /***/ }),
 
@@ -3675,9 +3659,9 @@ var propertyIsEnumerableModule = __webpack_require__("d1e7");
 var toObject = __webpack_require__("7b0b");
 var IndexedObject = __webpack_require__("44ad");
 
-// eslint-disable-next-line es-x/no-object-assign -- safe
+// eslint-disable-next-line es/no-object-assign -- safe
 var $assign = Object.assign;
-// eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
+// eslint-disable-next-line es/no-object-defineproperty -- required for testing
 var defineProperty = Object.defineProperty;
 var concat = uncurryThis([].concat);
 
@@ -3697,7 +3681,7 @@ module.exports = !$assign || fails(function () {
   // should work with symbols and should have deterministic property order (V8 bug)
   var A = {};
   var B = {};
-  // eslint-disable-next-line es-x/no-symbol -- safe
+  // eslint-disable-next-line es/no-symbol -- safe
   var symbol = Symbol();
   var alphabet = 'abcdefghijklmnopqrst';
   A[symbol] = 7;
@@ -3730,7 +3714,7 @@ module.exports = !$assign || fails(function () {
 
 var global = __webpack_require__("da84");
 
-// eslint-disable-next-line es-x/no-object-defineproperty -- safe
+// eslint-disable-next-line es/no-object-defineproperty -- safe
 var defineProperty = Object.defineProperty;
 
 module.exports = function (key, value) {
@@ -3850,17 +3834,6 @@ module.exports = function (originalArray, length) {
 
 /***/ }),
 
-/***/ "6833":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerContainer_vue_vue_type_style_index_0_id_1d5dabce_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("c0d5");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerContainer_vue_vue_type_style_index_0_id_1d5dabce_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerContainer_vue_vue_type_style_index_0_id_1d5dabce_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
-
-
-/***/ }),
-
 /***/ "68ee":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -3925,7 +3898,6 @@ module.exports = !construct || fails(function () {
 
 var NATIVE_WEAK_MAP = __webpack_require__("cdce");
 var global = __webpack_require__("da84");
-var uncurryThis = __webpack_require__("e330");
 var isObject = __webpack_require__("861d");
 var createNonEnumerableProperty = __webpack_require__("9112");
 var hasOwn = __webpack_require__("1a2d");
@@ -3953,20 +3925,22 @@ var getterFor = function (TYPE) {
 
 if (NATIVE_WEAK_MAP || shared.state) {
   var store = shared.state || (shared.state = new WeakMap());
-  var wmget = uncurryThis(store.get);
-  var wmhas = uncurryThis(store.has);
-  var wmset = uncurryThis(store.set);
+  /* eslint-disable no-self-assign -- prototype methods protection */
+  store.get = store.get;
+  store.has = store.has;
+  store.set = store.set;
+  /* eslint-enable no-self-assign -- prototype methods protection */
   set = function (it, metadata) {
-    if (wmhas(store, it)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
+    if (store.has(it)) throw TypeError(OBJECT_ALREADY_INITIALIZED);
     metadata.facade = it;
-    wmset(store, it, metadata);
+    store.set(it, metadata);
     return metadata;
   };
   get = function (it) {
-    return wmget(store, it) || {};
+    return store.get(it) || {};
   };
   has = function (it) {
-    return wmhas(store, it);
+    return store.has(it);
   };
 } else {
   var STATE = sharedKey('state');
@@ -4031,6 +4005,26 @@ exports.default = (sfc, props) => {
 
 /* global Deno -- Deno case */
 module.exports = typeof Deno == 'object' && Deno && typeof Deno.version == 'object';
+
+
+/***/ }),
+
+/***/ "6f19":
+/***/ (function(module, exports, __webpack_require__) {
+
+var createNonEnumerableProperty = __webpack_require__("9112");
+var clearErrorStack = __webpack_require__("0d26");
+var ERROR_STACK_INSTALLABLE = __webpack_require__("b980");
+
+// non-standard V8
+var captureStackTrace = Error.captureStackTrace;
+
+module.exports = function (error, C, stack, dropEntries) {
+  if (ERROR_STACK_INSTALLABLE) {
+    if (captureStackTrace) captureStackTrace(error, C);
+    else createNonEnumerableProperty(error, 'stack', clearErrorStack(stack, dropEntries));
+  }
+};
 
 
 /***/ }),
@@ -4148,11 +4142,38 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ "7282":
+/***/ (function(module, exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__("e330");
+var aCallable = __webpack_require__("59ed");
+
+module.exports = function (object, key, method) {
+  try {
+    // eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
+    return uncurryThis(aCallable(Object.getOwnPropertyDescriptor(object, key)[method]));
+  } catch (error) { /* empty */ }
+};
+
+
+/***/ }),
+
 /***/ "7418":
 /***/ (function(module, exports) {
 
-// eslint-disable-next-line es-x/no-object-getownpropertysymbols -- safe
+// eslint-disable-next-line es/no-object-getownpropertysymbols -- safe
 exports.f = Object.getOwnPropertySymbols;
+
+
+/***/ }),
+
+/***/ "7442":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsSettingsDropdown_vue_vue_type_style_index_0_id_491ccd6e_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("f45e");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsSettingsDropdown_vue_vue_type_style_index_0_id_491ccd6e_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsSettingsDropdown_vue_vue_type_style_index_0_id_491ccd6e_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
 
 
 /***/ }),
@@ -4296,7 +4317,7 @@ hiddenKeys[IE_PROTO] = true;
 
 // `Object.create` method
 // https://tc39.es/ecma262/#sec-object.create
-// eslint-disable-next-line es-x/no-object-create -- safe
+// eslint-disable-next-line es/no-object-create -- safe
 module.exports = Object.create || function create(O, Properties) {
   var result;
   if (O !== null) {
@@ -4336,7 +4357,7 @@ var fails = __webpack_require__("d039");
 
 // Detect IE8's incomplete defineProperty implementation
 module.exports = !fails(function () {
-  // eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
+  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty({}, 1, { get: function () { return 7; } })[1] != 7;
 });
 
@@ -4385,17 +4406,6 @@ module.exports = {
     ResizeSensor: __webpack_require__("2ad6"),
     ElementQueries: __webpack_require__("ae72")
 };
-
-
-/***/ }),
-
-/***/ "87fa":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsSettings_vue_vue_type_style_index_0_id_5b688000_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("9f09");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsSettings_vue_vue_type_style_index_0_id_5b688000_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsSettings_vue_vue_type_style_index_0_id_5b688000_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
 
 
 /***/ }),
@@ -4450,6 +4460,7 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__8bbf__;
 var documentAll = typeof document == 'object' && document.all;
 
 // https://tc39.es/ecma262/#sec-IsHTMLDDA-internal-slot
+// eslint-disable-next-line unicorn/no-typeof-undefined -- required for testing
 var IS_HTMLDDA = typeof documentAll == 'undefined' && documentAll !== undefined;
 
 module.exports = {
@@ -4691,6 +4702,17 @@ module.exports = isForced;
 
 /***/ }),
 
+/***/ "967a":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsSettings_vue_vue_type_style_index_0_id_dba89080_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("f719");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsSettings_vue_vue_type_style_index_0_id_dba89080_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerControlsSettings_vue_vue_type_style_index_0_id_dba89080_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
+
+/***/ }),
+
 /***/ "97de":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4727,15 +4749,13 @@ var IS_CONCAT_SPREADABLE_SUPPORT = V8_VERSION >= 51 || !fails(function () {
   return array.concat()[0] !== array;
 });
 
-var SPECIES_SUPPORT = arrayMethodHasSpeciesSupport('concat');
-
 var isConcatSpreadable = function (O) {
   if (!isObject(O)) return false;
   var spreadable = O[IS_CONCAT_SPREADABLE];
   return spreadable !== undefined ? !!spreadable : isArray(O);
 };
 
-var FORCED = !IS_CONCAT_SPREADABLE_SUPPORT || !SPECIES_SUPPORT;
+var FORCED = !IS_CONCAT_SPREADABLE_SUPPORT || !arrayMethodHasSpeciesSupport('concat');
 
 // `Array.prototype.concat` method
 // https://tc39.es/ecma262/#sec-array.prototype.concat
@@ -4814,9 +4834,9 @@ var anObject = __webpack_require__("825a");
 var toPropertyKey = __webpack_require__("a04b");
 
 var $TypeError = TypeError;
-// eslint-disable-next-line es-x/no-object-defineproperty -- safe
+// eslint-disable-next-line es/no-object-defineproperty -- safe
 var $defineProperty = Object.defineProperty;
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var $getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 var ENUMERABLE = 'enumerable';
 var CONFIGURABLE = 'configurable';
@@ -4854,7 +4874,7 @@ exports.f = DESCRIPTORS ? V8_PROTOTYPE_DEFINE_BUG ? function defineProperty(O, P
 
 /***/ }),
 
-/***/ "9f09":
+/***/ "9f02":
 /***/ (function(module, exports, __webpack_require__) {
 
 // extracted by mini-css-extract-plugin
@@ -4928,15 +4948,26 @@ var arrayMethodIsStrict = __webpack_require__("a640");
 var nativeJoin = uncurryThis([].join);
 
 var ES3_STRINGS = IndexedObject != Object;
-var STRICT_METHOD = arrayMethodIsStrict('join', ',');
+var FORCED = ES3_STRINGS || !arrayMethodIsStrict('join', ',');
 
 // `Array.prototype.join` method
 // https://tc39.es/ecma262/#sec-array.prototype.join
-$({ target: 'Array', proto: true, forced: ES3_STRINGS || !STRICT_METHOD }, {
+$({ target: 'Array', proto: true, forced: FORCED }, {
   join: function join(separator) {
     return nativeJoin(toIndexedObject(this), separator === undefined ? ',' : separator);
   }
 });
+
+
+/***/ }),
+
+/***/ "a3c7":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerSideVideoSources_vue_vue_type_style_index_0_id_7e1ea391_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("36f7");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerSideVideoSources_vue_vue_type_style_index_0_id_7e1ea391_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerSideVideoSources_vue_vue_type_style_index_0_id_7e1ea391_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
 
 
 /***/ }),
@@ -5047,7 +5078,7 @@ var from = __webpack_require__("4df4");
 var checkCorrectnessOfIteration = __webpack_require__("1c7e");
 
 var INCORRECT_ITERATION = !checkCorrectnessOfIteration(function (iterable) {
-  // eslint-disable-next-line es-x/no-array-from -- required for testing
+  // eslint-disable-next-line es/no-array-from -- required for testing
   Array.from(iterable);
 });
 
@@ -5105,7 +5136,7 @@ var nativeErrorToString = Error.prototype.toString;
 var INCORRECT_TO_STRING = fails(function () {
   if (DESCRIPTORS) {
     // Chrome 32- incorrectly call accessor
-    // eslint-disable-next-line es-x/no-object-defineproperty -- safe
+    // eslint-disable-next-line es/no-object-defineproperty -- safe
     var object = create(Object.defineProperty({}, 'name', { get: function () {
       return this === object;
     } }));
@@ -5226,6 +5257,17 @@ var toISOString = __webpack_require__("64e5");
 $({ target: 'Date', proto: true, forced: Date.prototype.toISOString !== toISOString }, {
   toISOString: toISOString
 });
+
+
+/***/ }),
+
+/***/ "ad4b":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerContainer_vue_vue_type_style_index_0_id_eb9152ec_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("9f02");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerContainer_vue_vue_type_style_index_0_id_eb9152ec_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerContainer_vue_vue_type_style_index_0_id_eb9152ec_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
 
 
 /***/ }),
@@ -5864,7 +5906,7 @@ var BUGGY_SAFARI_ITERATORS = false;
 // https://tc39.es/ecma262/#sec-%iteratorprototype%-object
 var IteratorPrototype, PrototypeOfArrayIteratorPrototype, arrayIterator;
 
-/* eslint-disable es-x/no-array-prototype-keys -- safe */
+/* eslint-disable es/no-array-prototype-keys -- safe */
 if ([].keys) {
   arrayIterator = [].keys();
   // Safari 8 has buggy iterators w/o `next`
@@ -5925,7 +5967,7 @@ var fails = __webpack_require__("d039");
 // V8 ~ Chrome 36-
 // https://bugs.chromium.org/p/v8/issues/detail?id=3334
 module.exports = DESCRIPTORS && fails(function () {
-  // eslint-disable-next-line es-x/no-object-defineproperty -- required for testing
+  // eslint-disable-next-line es/no-object-defineproperty -- required for testing
   return Object.defineProperty(function () { /* empty */ }, 'prototype', {
     value: 42,
     writable: false
@@ -5971,7 +6013,7 @@ var floor = Math.floor;
 
 // `Math.trunc` method
 // https://tc39.es/ecma262/#sec-math.trunc
-// eslint-disable-next-line es-x/no-math-trunc -- safe
+// eslint-disable-next-line es/no-math-trunc -- safe
 module.exports = Math.trunc || function trunc(x) {
   var n = +x;
   return (n > 0 ? floor : ceil)(n);
@@ -6016,6 +6058,7 @@ var global = __webpack_require__("da84");
 var bind = __webpack_require__("0366");
 var getOwnPropertyDescriptor = __webpack_require__("06cf").f;
 var macrotask = __webpack_require__("2cf4").set;
+var Queue = __webpack_require__("01b4");
 var IS_IOS = __webpack_require__("1cdc");
 var IS_IOS_PEBBLE = __webpack_require__("d4c3");
 var IS_WEBOS_WEBKIT = __webpack_require__("a4b4");
@@ -6027,26 +6070,22 @@ var process = global.process;
 var Promise = global.Promise;
 // Node.js 11 shows ExperimentalWarning on getting `queueMicrotask`
 var queueMicrotaskDescriptor = getOwnPropertyDescriptor(global, 'queueMicrotask');
-var queueMicrotask = queueMicrotaskDescriptor && queueMicrotaskDescriptor.value;
-
-var flush, head, last, notify, toggle, node, promise, then;
+var microtask = queueMicrotaskDescriptor && queueMicrotaskDescriptor.value;
+var notify, toggle, node, promise, then;
 
 // modern engines have queueMicrotask method
-if (!queueMicrotask) {
-  flush = function () {
+if (!microtask) {
+  var queue = new Queue();
+
+  var flush = function () {
     var parent, fn;
     if (IS_NODE && (parent = process.domain)) parent.exit();
-    while (head) {
-      fn = head.fn;
-      head = head.next;
-      try {
-        fn();
-      } catch (error) {
-        if (head) notify();
-        else last = undefined;
-        throw error;
-      }
-    } last = undefined;
+    while (fn = queue.get()) try {
+      fn();
+    } catch (error) {
+      if (queue.head) notify();
+      throw error;
+    }
     if (parent) parent.enter();
   };
 
@@ -6081,22 +6120,20 @@ if (!queueMicrotask) {
   // - onreadystatechange
   // - setTimeout
   } else {
-    // strange IE + webpack dev server bug - use .bind(global)
+    // `webpack` dev server bug on IE global methods - use bind(fn, global)
     macrotask = bind(macrotask, global);
     notify = function () {
       macrotask(flush);
     };
   }
+
+  microtask = function (fn) {
+    if (!queue.head) notify();
+    queue.add(fn);
+  };
 }
 
-module.exports = queueMicrotask || function (fn) {
-  var task = { fn: fn, next: undefined };
-  if (last) last.next = task;
-  if (!head) {
-    head = task;
-    notify();
-  } last = task;
-};
+module.exports = microtask;
 
 
 /***/ }),
@@ -6111,21 +6148,15 @@ var uid = __webpack_require__("90e3");
 var NATIVE_SYMBOL = __webpack_require__("04f8");
 var USE_SYMBOL_AS_UID = __webpack_require__("fdbf");
 
-var WellKnownSymbolsStore = shared('wks');
 var Symbol = global.Symbol;
-var symbolFor = Symbol && Symbol['for'];
-var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol : Symbol && Symbol.withoutSetter || uid;
+var WellKnownSymbolsStore = shared('wks');
+var createWellKnownSymbol = USE_SYMBOL_AS_UID ? Symbol['for'] || Symbol : Symbol && Symbol.withoutSetter || uid;
 
 module.exports = function (name) {
-  if (!hasOwn(WellKnownSymbolsStore, name) || !(NATIVE_SYMBOL || typeof WellKnownSymbolsStore[name] == 'string')) {
-    var description = 'Symbol.' + name;
-    if (NATIVE_SYMBOL && hasOwn(Symbol, name)) {
-      WellKnownSymbolsStore[name] = Symbol[name];
-    } else if (USE_SYMBOL_AS_UID && symbolFor) {
-      WellKnownSymbolsStore[name] = symbolFor(description);
-    } else {
-      WellKnownSymbolsStore[name] = createWellKnownSymbol(description);
-    }
+  if (!hasOwn(WellKnownSymbolsStore, name)) {
+    WellKnownSymbolsStore[name] = NATIVE_SYMBOL && hasOwn(Symbol, name)
+      ? Symbol[name]
+      : createWellKnownSymbol('Symbol.' + name);
   } return WellKnownSymbolsStore[name];
 };
 
@@ -6279,18 +6310,11 @@ var createPropertyDescriptor = __webpack_require__("5c6c");
 module.exports = !fails(function () {
   var error = Error('a');
   if (!('stack' in error)) return true;
-  // eslint-disable-next-line es-x/no-object-defineproperty -- safe
+  // eslint-disable-next-line es/no-object-defineproperty -- safe
   Object.defineProperty(error, 'stack', createPropertyDescriptor(1, 7));
   return error.stack !== 7;
 });
 
-
-/***/ }),
-
-/***/ "bf18":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -6334,13 +6358,6 @@ module.exports = function (input, pref) {
   return ordinaryToPrimitive(input, pref);
 };
 
-
-/***/ }),
-
-/***/ "c0d5":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -6568,6 +6585,7 @@ var FIND_INDEX = 'findIndex';
 var SKIPS_HOLES = true;
 
 // Shouldn't skip holes
+// eslint-disable-next-line es/no-array-prototype-findindex -- testing
 if (FIND_INDEX in []) Array(1)[FIND_INDEX](function () { SKIPS_HOLES = false; });
 
 // `Array.prototype.findIndex` method
@@ -6627,20 +6645,20 @@ module.exports = g;
 
 "use strict";
 
-/* eslint-disable es-x/no-array-prototype-indexof -- required for testing */
+/* eslint-disable es/no-array-prototype-indexof -- required for testing */
 var $ = __webpack_require__("23e7");
-var uncurryThis = __webpack_require__("e330");
+var uncurryThis = __webpack_require__("4625");
 var $indexOf = __webpack_require__("4d64").indexOf;
 var arrayMethodIsStrict = __webpack_require__("a640");
 
 var nativeIndexOf = uncurryThis([].indexOf);
 
 var NEGATIVE_ZERO = !!nativeIndexOf && 1 / nativeIndexOf([1], 1, -0) < 0;
-var STRICT_METHOD = arrayMethodIsStrict('indexOf');
+var FORCED = NEGATIVE_ZERO || !arrayMethodIsStrict('indexOf');
 
 // `Array.prototype.indexOf` method
 // https://tc39.es/ecma262/#sec-array.prototype.indexof
-$({ target: 'Array', proto: true, forced: NEGATIVE_ZERO || !STRICT_METHOD }, {
+$({ target: 'Array', proto: true, forced: FORCED }, {
   indexOf: function indexOf(searchElement /* , fromIndex = 0 */) {
     var fromIndex = arguments.length > 1 ? arguments[1] : undefined;
     return NEGATIVE_ZERO
@@ -6692,6 +6710,7 @@ var addToUnscopables = __webpack_require__("44d2");
 
 // FF99+ bug
 var BROKEN_ON_SPARSE = fails(function () {
+  // eslint-disable-next-line es/no-array-prototype-includes -- detection
   return !Array(1).includes();
 });
 
@@ -6706,13 +6725,6 @@ $({ target: 'Array', proto: true, forced: BROKEN_ON_SPARSE }, {
 // https://tc39.es/ecma262/#sec-array.prototype-@@unscopables
 addToUnscopables('includes');
 
-
-/***/ }),
-
-/***/ "cac7":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -6809,7 +6821,7 @@ var assign = __webpack_require__("60da");
 
 // `Object.assign` method
 // https://tc39.es/ecma262/#sec-object.assign
-// eslint-disable-next-line es-x/no-object-assign -- required for testing
+// eslint-disable-next-line es/no-object-assign -- required for testing
 $({ target: 'Object', stat: true, arity: 2, forced: Object.assign !== assign }, {
   assign: assign
 });
@@ -6852,6 +6864,17 @@ module.exports = function (C, x) {
   resolve(x);
   return promiseCapability.promise;
 };
+
+
+/***/ }),
+
+/***/ "cf1e":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_9a08bfee_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("f3a9");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_9a08bfee_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_9a08bfee_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
 
 
 /***/ }),
@@ -6901,7 +6924,7 @@ module.exports = function (namespace, method) {
 "use strict";
 
 var $propertyIsEnumerable = {}.propertyIsEnumerable;
-// eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
+// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var getOwnPropertyDescriptor = Object.getOwnPropertyDescriptor;
 
 // Nashorn ~ JDK8 bug
@@ -6943,21 +6966,20 @@ defineWellKnownSymbol('iterator');
 /***/ (function(module, exports, __webpack_require__) {
 
 /* eslint-disable no-proto -- safe */
-var uncurryThis = __webpack_require__("e330");
+var uncurryThisAccessor = __webpack_require__("7282");
 var anObject = __webpack_require__("825a");
 var aPossiblePrototype = __webpack_require__("3bbe");
 
 // `Object.setPrototypeOf` method
 // https://tc39.es/ecma262/#sec-object.setprototypeof
 // Works with __proto__ only. Old v8 can't work with null proto objects.
-// eslint-disable-next-line es-x/no-object-setprototypeof -- safe
+// eslint-disable-next-line es/no-object-setprototypeof -- safe
 module.exports = Object.setPrototypeOf || ('__proto__' in {} ? function () {
   var CORRECT_SETTER = false;
   var test = {};
   var setter;
   try {
-    // eslint-disable-next-line es-x/no-object-getownpropertydescriptor -- safe
-    setter = uncurryThis(Object.getOwnPropertyDescriptor(Object.prototype, '__proto__').set);
+    setter = uncurryThisAccessor(Object.prototype, '__proto__', 'set');
     setter(test, []);
     CORRECT_SETTER = test instanceof Array;
   } catch (error) { /* empty */ }
@@ -7029,9 +7051,8 @@ module.exports = function (target, TAG, STATIC) {
 /***/ (function(module, exports, __webpack_require__) {
 
 var userAgent = __webpack_require__("342f");
-var global = __webpack_require__("da84");
 
-module.exports = /ipad|iphone|ipod/i.test(userAgent) && global.Pebble !== undefined;
+module.exports = /ipad|iphone|ipod/i.test(userAgent) && typeof Pebble != 'undefined';
 
 
 /***/ }),
@@ -7067,7 +7088,7 @@ module.exports = function (passed, required) {
 
 // TODO: Remove from `core-js@4` since it's moved to entry points
 __webpack_require__("ac1f");
-var uncurryThis = __webpack_require__("e330");
+var uncurryThis = __webpack_require__("4625");
 var defineBuiltIn = __webpack_require__("cb2d");
 var regexpExec = __webpack_require__("9263");
 var fails = __webpack_require__("d039");
@@ -7234,6 +7255,7 @@ var exportWebAssemblyErrorCauseWrapper = function (ERROR_NAME, wrapper) {
   }
 };
 
+// https://tc39.es/ecma262/#sec-nativeerror
 // https://github.com/tc39/proposal-error-cause
 exportGlobalErrorCauseWrapper('Error', function (init) {
   return function Error(message) { return apply(init, this, arguments); };
@@ -7299,6 +7321,7 @@ var definePropertyModule = __webpack_require__("9bf2");
 var definePropertiesModule = __webpack_require__("37e8");
 var propertyIsEnumerableModule = __webpack_require__("d1e7");
 var defineBuiltIn = __webpack_require__("cb2d");
+var defineBuiltInAccessor = __webpack_require__("edd0");
 var shared = __webpack_require__("5692");
 var sharedKey = __webpack_require__("f772");
 var hiddenKeys = __webpack_require__("d012");
@@ -7470,7 +7493,7 @@ if (!NATIVE_SYMBOL) {
 
   if (DESCRIPTORS) {
     // https://github.com/tc39/proposal-Symbol-description
-    nativeDefineProperty(SymbolPrototype, 'description', {
+    defineBuiltInAccessor(SymbolPrototype, 'description', {
       configurable: true,
       get: function description() {
         return getInternalState(this).description;
@@ -7538,14 +7561,14 @@ hiddenKeys[HIDDEN] = true;
 
 // https://github.com/zloirock/core-js/issues/86#issuecomment-115759028
 module.exports =
-  // eslint-disable-next-line es-x/no-global-this -- safe
+  // eslint-disable-next-line es/no-global-this -- safe
   check(typeof globalThis == 'object' && globalThis) ||
   check(typeof window == 'object' && window) ||
   // eslint-disable-next-line no-restricted-globals -- safe
   check(typeof self == 'object' && self) ||
   check(typeof global == 'object' && global) ||
   // eslint-disable-next-line no-new-func -- fallback
-  (function () { return this; })() || Function('return this')();
+  (function () { return this; })() || this || Function('return this')();
 
 /* WEBPACK VAR INJECTION */}.call(this, __webpack_require__("c8ba")))
 
@@ -7658,7 +7681,7 @@ var enumBugKeys = __webpack_require__("7839");
 
 // `Object.keys` method
 // https://tc39.es/ecma262/#sec-object.keys
-// eslint-disable-next-line es-x/no-object-keys -- safe
+// eslint-disable-next-line es/no-object-keys -- safe
 module.exports = Object.keys || function keys(O) {
   return internalObjectKeys(O, enumBugKeys);
 };
@@ -8000,7 +8023,7 @@ var hasOwn = __webpack_require__("1a2d");
 var isCallable = __webpack_require__("1626");
 var isPrototypeOf = __webpack_require__("3a9b");
 var toString = __webpack_require__("577e");
-var defineProperty = __webpack_require__("9bf2").f;
+var defineBuiltInAccessor = __webpack_require__("edd0");
 var copyConstructorProperties = __webpack_require__("e893");
 
 var NativeSymbol = global.Symbol;
@@ -8033,7 +8056,7 @@ if (DESCRIPTORS && isCallable(NativeSymbol) && (!('description' in SymbolPrototy
   var replace = uncurryThis(''.replace);
   var stringSlice = uncurryThis(''.slice);
 
-  defineProperty(SymbolPrototype, 'description', {
+  defineBuiltInAccessor(SymbolPrototype, 'description', {
     configurable: true,
     get: function description() {
       var symbol = thisSymbolValue(this);
@@ -8085,7 +8108,7 @@ var ObjectPrototype = $Object.prototype;
 
 // `Object.getPrototypeOf` method
 // https://tc39.es/ecma262/#sec-object.getprototypeof
-// eslint-disable-next-line es-x/no-object-getprototypeof -- safe
+// eslint-disable-next-line es/no-object-getprototypeof -- safe
 module.exports = CORRECT_PROTOTYPE_GETTER ? $Object.getPrototypeOf : function (O) {
   var object = toObject(O);
   if (hasOwn(object, IE_PROTO)) return object[IE_PROTO];
@@ -8106,7 +8129,7 @@ var fails = __webpack_require__("d039");
 module.exports = !fails(function () {
   function F() { /* empty */ }
   F.prototype.constructor = null;
-  // eslint-disable-next-line es-x/no-object-getprototypeof -- required for testing
+  // eslint-disable-next-line es/no-object-getprototypeof -- required for testing
   return Object.getPrototypeOf(new F()) !== F.prototype;
 });
 
@@ -8198,20 +8221,53 @@ if (!IS_PURE && DESCRIPTORS && values.name !== 'values') try {
 
 /***/ }),
 
+/***/ "e267":
+/***/ (function(module, exports, __webpack_require__) {
+
+var uncurryThis = __webpack_require__("e330");
+var isArray = __webpack_require__("e8b5");
+var isCallable = __webpack_require__("1626");
+var classof = __webpack_require__("c6b6");
+var toString = __webpack_require__("577e");
+
+var push = uncurryThis([].push);
+
+module.exports = function (replacer) {
+  if (isCallable(replacer)) return replacer;
+  if (!isArray(replacer)) return;
+  var rawLength = replacer.length;
+  var keys = [];
+  for (var i = 0; i < rawLength; i++) {
+    var element = replacer[i];
+    if (typeof element == 'string') push(keys, element);
+    else if (typeof element == 'number' || classof(element) == 'Number' || classof(element) == 'String') push(keys, toString(element));
+  }
+  var keysLength = keys.length;
+  var root = true;
+  return function (key, value) {
+    if (root) {
+      root = false;
+      return value;
+    }
+    if (isArray(this)) return value;
+    for (var j = 0; j < keysLength; j++) if (keys[j] === key) return value;
+  };
+};
+
+
+/***/ }),
+
 /***/ "e330":
 /***/ (function(module, exports, __webpack_require__) {
 
 var NATIVE_BIND = __webpack_require__("40d5");
 
 var FunctionPrototype = Function.prototype;
-var bind = FunctionPrototype.bind;
 var call = FunctionPrototype.call;
-var uncurryThis = NATIVE_BIND && bind.bind(call, call);
+var uncurryThisWithBind = NATIVE_BIND && FunctionPrototype.bind.bind(call, call);
 
-module.exports = NATIVE_BIND ? function (fn) {
-  return fn && uncurryThis(fn);
-} : function (fn) {
-  return fn && function () {
+module.exports = NATIVE_BIND ? uncurryThisWithBind : function (fn) {
+  return function () {
     return call.apply(fn, arguments);
   };
 };
@@ -8227,6 +8283,17 @@ var toString = __webpack_require__("577e");
 module.exports = function (argument, $default) {
   return argument === undefined ? arguments.length < 2 ? '' : $default : toString(argument);
 };
+
+
+/***/ }),
+
+/***/ "e3b5":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerMedia_vue_vue_type_style_index_0_id_2831c45e_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("21c2");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerMedia_vue_vue_type_style_index_0_id_2831c45e_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerMedia_vue_vue_type_style_index_0_id_2831c45e_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
 
 
 /***/ }),
@@ -8263,8 +8330,7 @@ var proxyAccessor = __webpack_require__("aeb0");
 var inheritIfRequired = __webpack_require__("7156");
 var normalizeStringArgument = __webpack_require__("e391");
 var installErrorCause = __webpack_require__("ab36");
-var clearErrorStack = __webpack_require__("0d26");
-var ERROR_STACK_INSTALLABLE = __webpack_require__("b980");
+var installErrorStack = __webpack_require__("6f19");
 var DESCRIPTORS = __webpack_require__("83ab");
 var IS_PURE = __webpack_require__("c430");
 
@@ -8290,7 +8356,7 @@ module.exports = function (FULL_NAME, wrapper, FORCED, IS_AGGREGATE_ERROR) {
     var message = normalizeStringArgument(IS_AGGREGATE_ERROR ? b : a, undefined);
     var result = IS_AGGREGATE_ERROR ? new OriginalError(a) : new OriginalError();
     if (message !== undefined) createNonEnumerableProperty(result, 'message', message);
-    if (ERROR_STACK_INSTALLABLE) createNonEnumerableProperty(result, 'stack', clearErrorStack(result.stack, 2));
+    installErrorStack(result, WrappedError, result.stack, 2);
     if (this && isPrototypeOf(OriginalErrorPrototype, this)) inheritIfRequired(result, this, WrappedError);
     if (arguments.length > OPTIONS_POSITION) installErrorCause(result, arguments[OPTIONS_POSITION]);
     return result;
@@ -8380,7 +8446,7 @@ var classof = __webpack_require__("c6b6");
 
 // `IsArray` abstract operation
 // https://tc39.es/ecma262/#sec-isarray
-// eslint-disable-next-line es-x/no-array-isarray -- safe
+// eslint-disable-next-line es/no-array-isarray -- safe
 module.exports = Array.isArray || function isArray(argument) {
   return classof(argument) == 'Array';
 };
@@ -8414,13 +8480,13 @@ var apply = __webpack_require__("2ba4");
 var call = __webpack_require__("c65b");
 var uncurryThis = __webpack_require__("e330");
 var fails = __webpack_require__("d039");
-var isArray = __webpack_require__("e8b5");
 var isCallable = __webpack_require__("1626");
-var isObject = __webpack_require__("861d");
 var isSymbol = __webpack_require__("d9b5");
 var arraySlice = __webpack_require__("f36a");
+var getReplacerFunction = __webpack_require__("e267");
 var NATIVE_SYMBOL = __webpack_require__("04f8");
 
+var $String = String;
 var $stringify = getBuiltIn('JSON', 'stringify');
 var exec = uncurryThis(/./.exec);
 var charAt = uncurryThis(''.charAt);
@@ -8450,13 +8516,13 @@ var ILL_FORMED_UNICODE = fails(function () {
 
 var stringifyWithSymbolsFix = function (it, replacer) {
   var args = arraySlice(arguments);
-  var $replacer = replacer;
-  if (!isObject(replacer) && it === undefined || isSymbol(it)) return; // IE8 returns string on undefined
-  if (!isArray(replacer)) replacer = function (key, value) {
-    if (isCallable($replacer)) value = call($replacer, this, key, value);
+  var $replacer = getReplacerFunction(replacer);
+  if (!isCallable($replacer) && (it === undefined || isSymbol(it))) return; // IE8 returns string on undefined
+  args[1] = function (key, value) {
+    // some old implementations (like WebKit) could pass numbers as keys
+    if (isCallable($replacer)) value = call($replacer, this, $String(key), value);
     if (!isSymbol(value)) return value;
   };
-  args[1] = replacer;
   return apply($stringify, null, args);
 };
 
@@ -8501,10 +8567,25 @@ module.exports = IS_PURE || !fails(function () {
   if (WEBKIT && WEBKIT < 535) return;
   var key = Math.random();
   // In FF throws only define methods
-  // eslint-disable-next-line no-undef, no-useless-call, es-x/no-legacy-object-prototype-accessor-methods -- required for testing
+  // eslint-disable-next-line no-undef, no-useless-call, es/no-legacy-object-prototype-accessor-methods -- required for testing
   __defineSetter__.call(null, key, function () { /* empty */ });
   delete global[key];
 });
+
+
+/***/ }),
+
+/***/ "edd0":
+/***/ (function(module, exports, __webpack_require__) {
+
+var makeBuiltIn = __webpack_require__("13d2");
+var defineProperty = __webpack_require__("9bf2");
+
+module.exports = function (target, name, descriptor) {
+  if (descriptor.get) makeBuiltIn(descriptor.get, name, { getter: true });
+  if (descriptor.set) makeBuiltIn(descriptor.set, name, { setter: true });
+  return defineProperty.f(target, name, descriptor);
+};
 
 
 /***/ }),
@@ -8571,6 +8652,20 @@ module.exports = uncurryThis([].slice);
 
 /***/ }),
 
+/***/ "f3a9":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
+/***/ "f45e":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "f5b2":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -8623,6 +8718,13 @@ module.exports = TO_STRING_TAG_SUPPORT ? classofRaw : function (it) {
     : (result = classofRaw(O)) == 'Object' && isCallable(O.callee) ? 'Arguments' : result;
 };
 
+
+/***/ }),
+
+/***/ "f719":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -8684,24 +8786,16 @@ var es_object_to_string = __webpack_require__("d3b7");
 // EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","root":"Vue"}
 var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__("8bbf");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/App.vue?vue&type=template&id=30df5c10&scoped=true
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/App.vue?vue&type=template&id=9a08bfee&scoped=true
 
-
-var Appvue_type_template_id_30df5c10_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-30df5c10"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
-};
-
-var _hoisted_1 = {
-  id: "viewer-container"
-};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerContainer = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerContainer");
-
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", _hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerContainer, {
-    class: "ml-viewer"
-  })]);
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerContainer, {
+    class: "ml-viewer",
+    id: "viewer-container"
+  });
 }
-// CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=30df5c10&scoped=true
+// CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=9a08bfee&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__("a4d3");
@@ -8733,17 +8827,17 @@ var es_json_to_string_tag = __webpack_require__("0c47");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.math.to-string-tag.js
 var es_math_to_string_tag = __webpack_require__("23dc");
 
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
-var es_error_cause = __webpack_require__("d9e2");
-
-// EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.to-string.js
-var es_error_to_string = __webpack_require__("d401");
-
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.get-prototype-of.js
 var es_object_get_prototype_of = __webpack_require__("3410");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.for-each.js
 var es_array_for_each = __webpack_require__("4160");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.cause.js
+var es_error_cause = __webpack_require__("d9e2");
+
+// EXTERNAL MODULE: ./node_modules/core-js/modules/es.error.to-string.js
+var es_error_to_string = __webpack_require__("d401");
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.push.js
 var es_array_push = __webpack_require__("14d9");
@@ -8805,20 +8899,21 @@ function _typeof(obj) {
 
 function _regeneratorRuntime() {
   "use strict";
-  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
 
+  /*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
   _regeneratorRuntime = function _regeneratorRuntime() {
     return exports;
   };
-
   var exports = {},
-      Op = Object.prototype,
-      hasOwn = Op.hasOwnProperty,
-      $Symbol = "function" == typeof Symbol ? Symbol : {},
-      iteratorSymbol = $Symbol.iterator || "@@iterator",
-      asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
-      toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
-
+    Op = Object.prototype,
+    hasOwn = Op.hasOwnProperty,
+    defineProperty = Object.defineProperty || function (obj, key, desc) {
+      obj[key] = desc.value;
+    },
+    $Symbol = "function" == typeof Symbol ? Symbol : {},
+    iteratorSymbol = $Symbol.iterator || "@@iterator",
+    asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator",
+    toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
   function define(obj, key, value) {
     return Object.defineProperty(obj, key, {
       value: value,
@@ -8827,7 +8922,6 @@ function _regeneratorRuntime() {
       writable: !0
     }), obj[key];
   }
-
   try {
     define({}, "");
   } catch (err) {
@@ -8835,54 +8929,14 @@ function _regeneratorRuntime() {
       return obj[key] = value;
     };
   }
-
   function wrap(innerFn, outerFn, self, tryLocsList) {
     var protoGenerator = outerFn && outerFn.prototype instanceof Generator ? outerFn : Generator,
-        generator = Object.create(protoGenerator.prototype),
-        context = new Context(tryLocsList || []);
-    return generator._invoke = function (innerFn, self, context) {
-      var state = "suspendedStart";
-      return function (method, arg) {
-        if ("executing" === state) throw new Error("Generator is already running");
-
-        if ("completed" === state) {
-          if ("throw" === method) throw arg;
-          return doneResult();
-        }
-
-        for (context.method = method, context.arg = arg;;) {
-          var delegate = context.delegate;
-
-          if (delegate) {
-            var delegateResult = maybeInvokeDelegate(delegate, context);
-
-            if (delegateResult) {
-              if (delegateResult === ContinueSentinel) continue;
-              return delegateResult;
-            }
-          }
-
-          if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
-            if ("suspendedStart" === state) throw state = "completed", context.arg;
-            context.dispatchException(context.arg);
-          } else "return" === context.method && context.abrupt("return", context.arg);
-          state = "executing";
-          var record = tryCatch(innerFn, self, context);
-
-          if ("normal" === record.type) {
-            if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
-            return {
-              value: record.arg,
-              done: context.done
-            };
-          }
-
-          "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
-        }
-      };
-    }(innerFn, self, context), generator;
+      generator = Object.create(protoGenerator.prototype),
+      context = new Context(tryLocsList || []);
+    return defineProperty(generator, "_invoke", {
+      value: makeInvokeMethod(innerFn, self, context)
+    }), generator;
   }
-
   function tryCatch(fn, obj, arg) {
     try {
       return {
@@ -8896,25 +8950,19 @@ function _regeneratorRuntime() {
       };
     }
   }
-
   exports.wrap = wrap;
   var ContinueSentinel = {};
-
   function Generator() {}
-
   function GeneratorFunction() {}
-
   function GeneratorFunctionPrototype() {}
-
   var IteratorPrototype = {};
   define(IteratorPrototype, iteratorSymbol, function () {
     return this;
   });
   var getProto = Object.getPrototypeOf,
-      NativeIteratorPrototype = getProto && getProto(getProto(values([])));
+    NativeIteratorPrototype = getProto && getProto(getProto(values([])));
   NativeIteratorPrototype && NativeIteratorPrototype !== Op && hasOwn.call(NativeIteratorPrototype, iteratorSymbol) && (IteratorPrototype = NativeIteratorPrototype);
   var Gp = GeneratorFunctionPrototype.prototype = Generator.prototype = Object.create(IteratorPrototype);
-
   function defineIteratorMethods(prototype) {
     ["next", "throw", "return"].forEach(function (method) {
       define(prototype, method, function (arg) {
@@ -8922,14 +8970,12 @@ function _regeneratorRuntime() {
       });
     });
   }
-
   function AsyncIterator(generator, PromiseImpl) {
     function invoke(method, arg, resolve, reject) {
       var record = tryCatch(generator[method], generator, arg);
-
       if ("throw" !== record.type) {
         var result = record.arg,
-            value = result.value;
+          value = result.value;
         return value && "object" == _typeof(value) && hasOwn.call(value, "__await") ? PromiseImpl.resolve(value.__await).then(function (value) {
           invoke("next", value, resolve, reject);
         }, function (err) {
@@ -8940,92 +8986,109 @@ function _regeneratorRuntime() {
           return invoke("throw", error, resolve, reject);
         });
       }
-
       reject(record.arg);
     }
-
     var previousPromise;
-
-    this._invoke = function (method, arg) {
-      function callInvokeWithMethodAndArg() {
-        return new PromiseImpl(function (resolve, reject) {
-          invoke(method, arg, resolve, reject);
-        });
+    defineProperty(this, "_invoke", {
+      value: function value(method, arg) {
+        function callInvokeWithMethodAndArg() {
+          return new PromiseImpl(function (resolve, reject) {
+            invoke(method, arg, resolve, reject);
+          });
+        }
+        return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
       }
-
-      return previousPromise = previousPromise ? previousPromise.then(callInvokeWithMethodAndArg, callInvokeWithMethodAndArg) : callInvokeWithMethodAndArg();
+    });
+  }
+  function makeInvokeMethod(innerFn, self, context) {
+    var state = "suspendedStart";
+    return function (method, arg) {
+      if ("executing" === state) throw new Error("Generator is already running");
+      if ("completed" === state) {
+        if ("throw" === method) throw arg;
+        return doneResult();
+      }
+      for (context.method = method, context.arg = arg;;) {
+        var delegate = context.delegate;
+        if (delegate) {
+          var delegateResult = maybeInvokeDelegate(delegate, context);
+          if (delegateResult) {
+            if (delegateResult === ContinueSentinel) continue;
+            return delegateResult;
+          }
+        }
+        if ("next" === context.method) context.sent = context._sent = context.arg;else if ("throw" === context.method) {
+          if ("suspendedStart" === state) throw state = "completed", context.arg;
+          context.dispatchException(context.arg);
+        } else "return" === context.method && context.abrupt("return", context.arg);
+        state = "executing";
+        var record = tryCatch(innerFn, self, context);
+        if ("normal" === record.type) {
+          if (state = context.done ? "completed" : "suspendedYield", record.arg === ContinueSentinel) continue;
+          return {
+            value: record.arg,
+            done: context.done
+          };
+        }
+        "throw" === record.type && (state = "completed", context.method = "throw", context.arg = record.arg);
+      }
     };
   }
-
   function maybeInvokeDelegate(delegate, context) {
-    var method = delegate.iterator[context.method];
-
-    if (undefined === method) {
-      if (context.delegate = null, "throw" === context.method) {
-        if (delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method)) return ContinueSentinel;
-        context.method = "throw", context.arg = new TypeError("The iterator does not provide a 'throw' method");
-      }
-
-      return ContinueSentinel;
-    }
-
+    var methodName = context.method,
+      method = delegate.iterator[methodName];
+    if (undefined === method) return context.delegate = null, "throw" === methodName && delegate.iterator["return"] && (context.method = "return", context.arg = undefined, maybeInvokeDelegate(delegate, context), "throw" === context.method) || "return" !== methodName && (context.method = "throw", context.arg = new TypeError("The iterator does not provide a '" + methodName + "' method")), ContinueSentinel;
     var record = tryCatch(method, delegate.iterator, context.arg);
     if ("throw" === record.type) return context.method = "throw", context.arg = record.arg, context.delegate = null, ContinueSentinel;
     var info = record.arg;
     return info ? info.done ? (context[delegate.resultName] = info.value, context.next = delegate.nextLoc, "return" !== context.method && (context.method = "next", context.arg = undefined), context.delegate = null, ContinueSentinel) : info : (context.method = "throw", context.arg = new TypeError("iterator result is not an object"), context.delegate = null, ContinueSentinel);
   }
-
   function pushTryEntry(locs) {
     var entry = {
       tryLoc: locs[0]
     };
     1 in locs && (entry.catchLoc = locs[1]), 2 in locs && (entry.finallyLoc = locs[2], entry.afterLoc = locs[3]), this.tryEntries.push(entry);
   }
-
   function resetTryEntry(entry) {
     var record = entry.completion || {};
     record.type = "normal", delete record.arg, entry.completion = record;
   }
-
   function Context(tryLocsList) {
     this.tryEntries = [{
       tryLoc: "root"
     }], tryLocsList.forEach(pushTryEntry, this), this.reset(!0);
   }
-
   function values(iterable) {
     if (iterable) {
       var iteratorMethod = iterable[iteratorSymbol];
       if (iteratorMethod) return iteratorMethod.call(iterable);
       if ("function" == typeof iterable.next) return iterable;
-
       if (!isNaN(iterable.length)) {
         var i = -1,
-            next = function next() {
-          for (; ++i < iterable.length;) {
-            if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
-          }
-
-          return next.value = undefined, next.done = !0, next;
-        };
-
+          next = function next() {
+            for (; ++i < iterable.length;) if (hasOwn.call(iterable, i)) return next.value = iterable[i], next.done = !1, next;
+            return next.value = undefined, next.done = !0, next;
+          };
         return next.next = next;
       }
     }
-
     return {
       next: doneResult
     };
   }
-
   function doneResult() {
     return {
       value: undefined,
       done: !0
     };
   }
-
-  return GeneratorFunction.prototype = GeneratorFunctionPrototype, define(Gp, "constructor", GeneratorFunctionPrototype), define(GeneratorFunctionPrototype, "constructor", GeneratorFunction), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
+  return GeneratorFunction.prototype = GeneratorFunctionPrototype, defineProperty(Gp, "constructor", {
+    value: GeneratorFunctionPrototype,
+    configurable: !0
+  }), defineProperty(GeneratorFunctionPrototype, "constructor", {
+    value: GeneratorFunction,
+    configurable: !0
+  }), GeneratorFunction.displayName = define(GeneratorFunctionPrototype, toStringTagSymbol, "GeneratorFunction"), exports.isGeneratorFunction = function (genFun) {
     var ctor = "function" == typeof genFun && genFun.constructor;
     return !!ctor && (ctor === GeneratorFunction || "GeneratorFunction" === (ctor.displayName || ctor.name));
   }, exports.mark = function (genFun) {
@@ -9046,27 +9109,21 @@ function _regeneratorRuntime() {
     return this;
   }), define(Gp, "toString", function () {
     return "[object Generator]";
-  }), exports.keys = function (object) {
-    var keys = [];
-
-    for (var key in object) {
-      keys.push(key);
-    }
-
+  }), exports.keys = function (val) {
+    var object = Object(val),
+      keys = [];
+    for (var key in object) keys.push(key);
     return keys.reverse(), function next() {
       for (; keys.length;) {
         var key = keys.pop();
         if (key in object) return next.value = key, next.done = !1, next;
       }
-
       return next.done = !0, next;
     };
   }, exports.values = values, Context.prototype = {
     constructor: Context,
     reset: function reset(skipTempReset) {
-      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) {
-        "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
-      }
+      if (this.prev = 0, this.next = 0, this.sent = this._sent = undefined, this.done = !1, this.delegate = null, this.method = "next", this.arg = undefined, this.tryEntries.forEach(resetTryEntry), !skipTempReset) for (var name in this) "t" === name.charAt(0) && hasOwn.call(this, name) && !isNaN(+name.slice(1)) && (this[name] = undefined);
     },
     stop: function stop() {
       this.done = !0;
@@ -9077,20 +9134,16 @@ function _regeneratorRuntime() {
     dispatchException: function dispatchException(exception) {
       if (this.done) throw exception;
       var context = this;
-
       function handle(loc, caught) {
         return record.type = "throw", record.arg = exception, context.next = loc, caught && (context.method = "next", context.arg = undefined), !!caught;
       }
-
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i],
-            record = entry.completion;
+          record = entry.completion;
         if ("root" === entry.tryLoc) return handle("end");
-
         if (entry.tryLoc <= this.prev) {
           var hasCatch = hasOwn.call(entry, "catchLoc"),
-              hasFinally = hasOwn.call(entry, "finallyLoc");
-
+            hasFinally = hasOwn.call(entry, "finallyLoc");
           if (hasCatch && hasFinally) {
             if (this.prev < entry.catchLoc) return handle(entry.catchLoc, !0);
             if (this.prev < entry.finallyLoc) return handle(entry.finallyLoc);
@@ -9106,13 +9159,11 @@ function _regeneratorRuntime() {
     abrupt: function abrupt(type, arg) {
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
-
         if (entry.tryLoc <= this.prev && hasOwn.call(entry, "finallyLoc") && this.prev < entry.finallyLoc) {
           var finallyEntry = entry;
           break;
         }
       }
-
       finallyEntry && ("break" === type || "continue" === type) && finallyEntry.tryLoc <= arg && arg <= finallyEntry.finallyLoc && (finallyEntry = null);
       var record = finallyEntry ? finallyEntry.completion : {};
       return record.type = type, record.arg = arg, finallyEntry ? (this.method = "next", this.next = finallyEntry.finallyLoc, ContinueSentinel) : this.complete(record);
@@ -9130,19 +9181,15 @@ function _regeneratorRuntime() {
     "catch": function _catch(tryLoc) {
       for (var i = this.tryEntries.length - 1; i >= 0; --i) {
         var entry = this.tryEntries[i];
-
         if (entry.tryLoc === tryLoc) {
           var record = entry.completion;
-
           if ("throw" === record.type) {
             var thrown = record.arg;
             resetTryEntry(entry);
           }
-
           return thrown;
         }
       }
-
       throw new Error("illegal catch attempt");
     },
     delegateYield: function delegateYield(iterable, resultName, nextLoc) {
@@ -9157,7 +9204,6 @@ function _regeneratorRuntime() {
 // CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
 
 
-
 function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
   try {
     var info = gen[key](arg);
@@ -9166,29 +9212,24 @@ function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) {
     reject(error);
     return;
   }
-
   if (info.done) {
     resolve(value);
   } else {
     Promise.resolve(value).then(_next, _throw);
   }
 }
-
 function _asyncToGenerator(fn) {
   return function () {
     var self = this,
-        args = arguments;
+      args = arguments;
     return new Promise(function (resolve, reject) {
       var gen = fn.apply(self, args);
-
       function _next(value) {
         asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value);
       }
-
       function _throw(err) {
         asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err);
       }
-
       _next(undefined);
     });
   };
@@ -9202,57 +9243,26 @@ function _extends() {
   _extends = Object.assign ? Object.assign.bind() : function (target) {
     for (var i = 1; i < arguments.length; i++) {
       var source = arguments[i];
-
       for (var key in source) {
         if (Object.prototype.hasOwnProperty.call(source, key)) {
           target[key] = source[key];
         }
       }
     }
-
     return target;
   };
   return _extends.apply(this, arguments);
 }
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerContainer.vue?vue&type=template&id=1d5dabce&scoped=true
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerContainer.vue?vue&type=template&id=eb9152ec&scoped=true
 
-
-var VideoPlayerContainervue_type_template_id_1d5dabce_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-1d5dabce"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
+var VideoPlayerContainervue_type_template_id_eb9152ec_scoped_true_withScopeId = function _withScopeId(n) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-eb9152ec"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
-var VideoPlayerContainervue_type_template_id_1d5dabce_scoped_true_hoisted_1 = {
-  class: "row mx-0",
-  style: {
-    "height": "100%"
-  }
-};
-var _hoisted_2 = {
+var _hoisted_1 = {
   key: 0,
-  id: "controls",
-  class: "controls"
+  class: "overlay spinner-container"
 };
-var _hoisted_3 = {
-  class: "container-fluid pt-3 gradient-top controls-top"
-};
-var _hoisted_4 = {
-  class: "row"
-};
-var _hoisted_5 = {
-  class: "col-6 text-left"
-};
-var _hoisted_6 = {
-  class: "col-6 text-right"
-};
-var _hoisted_7 = {
-  class: "container-fluid pb-2 gradient-bottom controls-bottom"
-};
-var _hoisted_8 = {
-  key: 1,
-  class: "overlay d-flex justify-content-center align-items-center"
-};
-
-var _hoisted_9 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_1d5dabce_scoped_true_withScopeId(function () {
+var _hoisted_2 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_eb9152ec_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: "spinner-border text-light",
     role: "status"
@@ -9260,25 +9270,8 @@ var _hoisted_9 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_1d5dabce_
     class: "sr-only"
   }, "Loading...")], -1);
 });
-
-var _hoisted_10 = [_hoisted_9];
-var _hoisted_11 = {
-  key: 2,
-  class: "overlay d-flex flex-row justify-content-center align-items-center"
-};
-var _hoisted_12 = {
-  class: "d-flex flex-column ml-3"
-};
-
-var _hoisted_13 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_1d5dabce_scoped_true_withScopeId(function () {
-  return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h3", null, "Casting to", -1);
-});
-
-var _hoisted_14 = {
-  class: "font-weight-bold"
-};
-
-var _hoisted_15 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_1d5dabce_scoped_true_withScopeId(function () {
+var _hoisted_3 = [_hoisted_2];
+var _hoisted_4 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_eb9152ec_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", null, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: "d-flex justify-content-center"
   }, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
@@ -9287,66 +9280,108 @@ var _hoisted_15 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_1d5dabce
     class: "text-center tap-text"
   }, "Tap to unmute")], -1);
 });
-
-var _hoisted_16 = [_hoisted_15];
-function VideoPlayerContainervue_type_template_id_1d5dabce_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
-  var _component_VideoPlayerControlsUserCount = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsUserCount");
-
-  var _component_VideoPlayerControlsBadge = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsBadge");
-
-  var _component_VideoPlayerControlsContainer = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsContainer");
-
+var _hoisted_5 = [_hoisted_4];
+var _hoisted_6 = ["id"];
+var _hoisted_7 = {
+  key: 0,
+  id: "controls",
+  class: "controls"
+};
+var _hoisted_8 = {
+  class: "row"
+};
+var _hoisted_9 = {
+  class: "col-6 text-left"
+};
+var _hoisted_10 = {
+  class: "col-6 text-right"
+};
+var _hoisted_11 = {
+  key: 1,
+  class: "overlay d-flex flex-row justify-content-center align-items-center"
+};
+var _hoisted_12 = {
+  class: "d-flex flex-column ml-3"
+};
+var _hoisted_13 = /*#__PURE__*/VideoPlayerContainervue_type_template_id_eb9152ec_scoped_true_withScopeId(function () {
+  return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h3", null, "Casting to", -1);
+});
+var _hoisted_14 = {
+  class: "font-weight-bold"
+};
+function VideoPlayerContainervue_type_template_id_eb9152ec_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerMedia = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerMedia");
-
+  var _component_VideoPlayerControlsUserCount = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsUserCount");
+  var _component_VideoPlayerControlsBadge = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsBadge");
+  var _component_VideoPlayerControlsContainer = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsContainer");
   var _component_VideoPlayerSideVideoSources = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerSideVideoSources");
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
-    style: {
-      "height": "100%"
-    },
-    class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])({
-      'align-self-center': _ctx.isSplittedView
-    }),
-    onMousemove: _cache[3] || (_cache[3] = function () {
+    class: "container-fluid align-container",
+    onMousemove: _cache[4] || (_cache[4] = function () {
       return $options.showControls && $options.showControls.apply($options, arguments);
     })
-  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerContainervue_type_template_id_1d5dabce_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
-    id: "vplayer",
-    ref: "player",
-    class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["player", {
-      show: $data.show,
-      'mv-col-9': _ctx.sourceRemoteTracks.length && _ctx.isSplittedView
-    }]),
-    onDblclick: _cache[1] || (_cache[1] = function () {
-      return _ctx.toggleFullscreen && _ctx.toggleFullscreen.apply(_ctx, arguments);
-    })
-  }, [_ctx.queryParams.controls && $data.show ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", _hoisted_2, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", _hoisted_3, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", _hoisted_4, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", _hoisted_5, [$options.showButton('userCount') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsUserCount, {
-    key: 0
-  })) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", _hoisted_6, [$options.showButton('liveBadge') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsBadge, {
-    key: 0
-  })) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)])])]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", _hoisted_7, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerControlsContainer, {
-    isConnected: $data.cast.isConnected,
-    showButton: $options.showButton,
-    currentTime: $options.currentTime,
-    streamId: _ctx.queryParams.streamId
-  }, null, 8, ["isConnected", "showButton", "currentTime", "streamId"])])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerMedia, {
-    ref: "element"
-  }, null, 512), _ctx.isLoading ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", _hoisted_8, _hoisted_10)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $data.cast.device ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", _hoisted_11, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", _hoisted_12, [_hoisted_13, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h1", _hoisted_14, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($data.cast.device.friendlyName), 1)])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), _ctx.autoPlayMuted && _ctx.isLive ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
-    key: 3,
+  }, [_ctx.isLoading ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", _hoisted_1, _hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), _ctx.autoPlayMuted && _ctx.isLive ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
+    key: 1,
     onClick: _cache[0] || (_cache[0] = function () {
       return $options.tapUnmute && $options.tapUnmute.apply($options, arguments);
     }),
     class: "overlay tap-unmute d-flex align-items-center justify-content-center"
-  }, _hoisted_16)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 34), _ctx.sourceRemoteTracks.length && _ctx.isSplittedView ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
+  }, _hoisted_5)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+    class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["mx-0", _ctx.isGrid && _ctx.isSplittedView ? 'grid-container' : 'list-container']),
+    id: !_ctx.isGrid && _ctx.isSplittedView ? 'lcontainer' : ''
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+    id: "vplayer",
+    ref: "player",
+    class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["player", {
+      show: $data.show,
+      'limit-screen': _ctx.sourceRemoteTracks.length && _ctx.isSplittedView && !_ctx.isGrid,
+      'grid-player': _ctx.sourceRemoteTracks.length && _ctx.isSplittedView && _ctx.isGrid
+    }]),
+    style: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeStyle"])({
+      cursor: _ctx.isGrid ? 'pointer' : ''
+    }),
+    onDblclick: _cache[2] || (_cache[2] = function () {
+      return _ctx.toggleFullscreen && _ctx.toggleFullscreen.apply(_ctx, arguments);
+    })
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+    id: "main-source",
+    onClick: _cache[1] || (_cache[1] = function () {
+      return $options.handleWholeScreen && $options.handleWholeScreen.apply($options, arguments);
+    }),
+    style: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeStyle"])({
+      height: !_ctx.isSplittedView ? '100%' : ''
+    })
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerMedia, {
+    ref: "element"
+  }, null, 512)], 4), _ctx.queryParams.controls ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", _hoisted_7, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+    class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["gradient-top controls-top container-fluid pt-3", {
+      hide: !$data.show
+    }])
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", _hoisted_8, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", _hoisted_9, [$options.showButton('userCount') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsUserCount, {
+    key: 0
+  })) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", _hoisted_10, [$options.showButton('liveBadge') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsBadge, {
+    key: 0
+  })) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)])])], 2), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+    class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])([{
+      hide: !$data.show
+    }, "gradient-bottom controls-bottom container-fluid pb-3"])
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerControlsContainer, {
+    isConnected: $data.cast.isConnected,
+    showButton: $options.showButton,
+    currentTime: $options.currentTime,
+    streamId: _ctx.queryParams.streamId
+  }, null, 8, ["isConnected", "showButton", "currentTime", "streamId"])], 2)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $data.cast.device ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", _hoisted_11, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", _hoisted_12, [_hoisted_13, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h1", _hoisted_14, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($data.cast.device.friendlyName), 1)])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 38), _ctx.sourceRemoteTracks.length && _ctx.isSplittedView ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
     key: 0,
-    class: "side-panel overflow-auto sc1 mv-col-3",
-    style: 'scroll-snap-type: y mandatory',
-    onMousemove: _cache[2] || (_cache[2] = function () {
+    class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(!_ctx.isGrid ? 'side-panel overflow-auto sc1' : ''),
+    style: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeStyle"])(!_ctx.isGrid ? 'scroll-snap-type: y mandatory' : 'display: contents'),
+    onMousemove: _cache[3] || (_cache[3] = function () {
       return $options.showControls && $options.showControls.apply($options, arguments);
     })
-  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerSideVideoSources)], 32)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)])], 34);
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerSideVideoSources, {
+    class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(_ctx.isGrid ? 'side-sources' : '')
+  }, null, 8, ["class"])], 38)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 10, _hoisted_6)], 32);
 }
-// CONCATENATED MODULE: ./src/components/VideoPlayerContainer.vue?vue&type=template&id=1d5dabce&scoped=true
+// CONCATENATED MODULE: ./src/components/VideoPlayerContainer.vue?vue&type=template&id=eb9152ec&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.includes.js
 var es_array_includes = __webpack_require__("caad");
@@ -9354,19 +9389,14 @@ var es_array_includes = __webpack_require__("caad");
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.string.includes.js
 var es_string_includes = __webpack_require__("2532");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerMedia.vue?vue&type=template&id=2882a204&scoped=true
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerMedia.vue?vue&type=template&id=2831c45e&scoped=true
 
-
-var VideoPlayerMediavue_type_template_id_2882a204_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-2882a204"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
+var VideoPlayerMediavue_type_template_id_2831c45e_scoped_true_withScopeId = function _withScopeId(n) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-2831c45e"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
-var VideoPlayerMediavue_type_template_id_2882a204_scoped_true_hoisted_1 = ["poster"];
-var VideoPlayerMediavue_type_template_id_2882a204_scoped_true_hoisted_2 = ["poster"];
-var VideoPlayerMediavue_type_template_id_2882a204_scoped_true_hoisted_3 = {
-  key: 2
-};
-function VideoPlayerMediavue_type_template_id_2882a204_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+var VideoPlayerMediavue_type_template_id_2831c45e_scoped_true_hoisted_1 = ["poster"];
+var VideoPlayerMediavue_type_template_id_2831c45e_scoped_true_hoisted_2 = ["poster"];
+function VideoPlayerMediavue_type_template_id_2831c45e_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Fragment"], null, [_ctx.isMigrating || _ctx.currentElementRef === 'player' ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Fragment"], {
     key: 0
   }, [$options.displayAudioOnly ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("audio", {
@@ -9385,8 +9415,9 @@ function VideoPlayerMediavue_type_template_id_2882a204_scoped_true_render(_ctx, 
     poster: _ctx.queryParams.placeholderImg,
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])({
       'display: none;': _ctx.currentElementRef === 'player2'
-    })
-  }, null, 10, VideoPlayerMediavue_type_template_id_2882a204_scoped_true_hoisted_1))], 64)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), _ctx.isMigrating || _ctx.currentElementRef === 'player2' ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Fragment"], {
+    }),
+    style: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeStyle"])(_ctx.isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0')
+  }, null, 14, VideoPlayerMediavue_type_template_id_2831c45e_scoped_true_hoisted_1))], 64)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), _ctx.isMigrating || _ctx.currentElementRef === 'player2' ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Fragment"], {
     key: 1
   }, [$options.displayAudioOnly ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("audio", {
     key: 0,
@@ -9404,10 +9435,14 @@ function VideoPlayerMediavue_type_template_id_2882a204_scoped_true_render(_ctx, 
     poster: _ctx.queryParams.placeholderImg,
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])({
       'display: none;': _ctx.currentElementRef === 'player'
-    })
-  }, null, 10, VideoPlayerMediavue_type_template_id_2882a204_scoped_true_hoisted_2))], 64)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), _ctx.sourceRemoteTracks.length && _ctx.isSplittedView ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerMediavue_type_template_id_2882a204_scoped_true_hoisted_3, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(this.mainLabel), 1)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 64);
+    }),
+    style: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeStyle"])(_ctx.isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0')
+  }, null, 14, VideoPlayerMediavue_type_template_id_2831c45e_scoped_true_hoisted_2))], 64)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), _ctx.sourceRemoteTracks.length && _ctx.isSplittedView && !_ctx.fullscreen ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", {
+    key: 2,
+    class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(_ctx.isGrid ? 'grid-label' : 'list-label')
+  }, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(this.mainLabel), 3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 64);
 }
-// CONCATENATED MODULE: ./src/components/VideoPlayerMedia.vue?vue&type=template&id=2882a204&scoped=true
+// CONCATENATED MODULE: ./src/components/VideoPlayerMedia.vue?vue&type=template&id=2831c45e&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/@millicast/sdk/dist/millicast.umd.js
 var millicast_umd = __webpack_require__("e014");
@@ -9567,8 +9602,8 @@ function setupDevtoolsPlugin(pluginDescriptor, setupFn) {
 
 // CONCATENATED MODULE: ./node_modules/vuex/dist/vuex.esm-browser.js
 /*!
- * vuex v4.0.2
- * (c) 2021 Evan You
+ * vuex v4.1.0
+ * (c) 2022 Evan You
  * @license MIT
  */
 
@@ -9685,6 +9720,7 @@ function resetStore (store, hot) {
 
 function resetStoreState (store, state, hot) {
   var oldState = store._state;
+  var oldScope = store._scope;
 
   // bind store public getters
   store.getters = {};
@@ -9692,22 +9728,33 @@ function resetStoreState (store, state, hot) {
   store._makeLocalGettersCache = Object.create(null);
   var wrappedGetters = store._wrappedGetters;
   var computedObj = {};
-  forEachValue(wrappedGetters, function (fn, key) {
-    // use computed to leverage its lazy-caching mechanism
-    // direct inline function use will lead to closure preserving oldState.
-    // using partial to return function with only arguments preserved in closure environment.
-    computedObj[key] = partial(fn, store);
-    Object.defineProperty(store.getters, key, {
-      // TODO: use `computed` when it's possible. at the moment we can't due to
-      // https://github.com/vuejs/vuex/pull/1883
-      get: function () { return computedObj[key](); },
-      enumerable: true // for local getters
+  var computedCache = {};
+
+  // create a new effect scope and create computed object inside it to avoid
+  // getters (computed) getting destroyed on component unmount.
+  var scope = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["effectScope"])(true);
+
+  scope.run(function () {
+    forEachValue(wrappedGetters, function (fn, key) {
+      // use computed to leverage its lazy-caching mechanism
+      // direct inline function use will lead to closure preserving oldState.
+      // using partial to return function with only arguments preserved in closure environment.
+      computedObj[key] = partial(fn, store);
+      computedCache[key] = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["computed"])(function () { return computedObj[key](); });
+      Object.defineProperty(store.getters, key, {
+        get: function () { return computedCache[key].value; },
+        enumerable: true // for local getters
+      });
     });
   });
 
   store._state = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["reactive"])({
     data: state
   });
+
+  // register the newly created effect scope to the store so that we can
+  // dispose the effects when this method runs again in the future.
+  store._scope = scope;
 
   // enable strict mode for new state
   if (store.strict) {
@@ -9722,6 +9769,11 @@ function resetStoreState (store, state, hot) {
         oldState.data = null;
       });
     }
+  }
+
+  // dispose previously registered effect scope if there is one.
+  if (oldScope) {
+    oldScope.stop();
   }
 }
 
@@ -10471,6 +10523,12 @@ var Store = function Store (options) {
   this._modulesNamespaceMap = Object.create(null);
   this._subscribers = [];
   this._makeLocalGettersCache = Object.create(null);
+
+  // EffectScope instance. when registering new getters, we wrap them inside
+  // EffectScope so that getters (computed) would not be destroyed on
+  // component unmount.
+  this._scope = null;
+
   this._devtools = devtools;
 
   // bind commit and dispatch to self
@@ -11012,7 +11070,7 @@ function pad (num, maxLength) {
 }
 
 var vuex_esm_browser_index = {
-  version: '4.0.2',
+  version: '4.1.0',
   Store: Store,
   storeKey: storeKey,
   createStore: createStore,
@@ -11058,8 +11116,7 @@ var defaulState = {
   mutations: {
     setSelectedSource: function setSelectedSource(state, _ref) {
       var kind = _ref.kind,
-          selectedSource = _ref.selectedSource;
-
+        selectedSource = _ref.selectedSource;
       if (kind === 'video') {
         state.selectedVideoSource = selectedSource;
       } else if (kind === 'audio') {
@@ -11068,8 +11125,7 @@ var defaulState = {
     },
     setSources: function setSources(state, _ref2) {
       var kind = _ref2.kind,
-          sources = _ref2.sources;
-
+        sources = _ref2.sources;
       if (kind === 'video') {
         state.videoSources = sources;
       } else if (kind === 'audio') {
@@ -11083,25 +11139,23 @@ var defaulState = {
       state.isAudioOnly = isAudioOnly;
     },
     addSourceRemoteTrack: function addSourceRemoteTrack(state, sourceRemoteTrack) {
-      state.sourceRemoteTracks.push(sourceRemoteTrack); //I know that is video source because we don't implement multi audio
-
+      state.sourceRemoteTracks.push(sourceRemoteTrack);
+      //I know that is video source because we don't implement multi audio
       var sid = state.videoSources.findIndex(function (v) {
         return v.sourceId === sourceRemoteTrack.sourceId;
       });
-
       if (sid !== -1) {
         state.videoSources[sid].mid = sourceRemoteTrack.transceiver.mid;
       }
     },
     replaceSourceRemoteTrack: function replaceSourceRemoteTrack(state, _ref3) {
       var sourceRemoteTrack = _ref3.sourceRemoteTrack,
-          remoteTrackIndex = _ref3.remoteTrackIndex;
-      state.sourceRemoteTracks[remoteTrackIndex] = sourceRemoteTrack; //I know that is video source because we don't implement multi audio
-
+        remoteTrackIndex = _ref3.remoteTrackIndex;
+      state.sourceRemoteTracks[remoteTrackIndex] = sourceRemoteTrack;
+      //I know that is video source because we don't implement multi audio
       var sid = state.videoSources.findIndex(function (v) {
         return v.sourceId === sourceRemoteTrack.sourceId;
       });
-
       if (sid !== -1) {
         state.videoSources[sid].mid = sourceRemoteTrack.transceiver.mid;
       }
@@ -11110,7 +11164,6 @@ var defaulState = {
       var remoteToDeleteIndex = state.sourceRemoteTracks.findIndex(function (remoteTrack) {
         return remoteTrack.sourceId === sourceId;
       });
-
       if (remoteToDeleteIndex !== -1) {
         state.sourceRemoteTracks.splice(remoteToDeleteIndex, 1);
       }
@@ -11199,7 +11252,8 @@ var controls_defaulState = {
   viewerMigratingEvent: false,
   migrateListenerIsSet: false,
   isSplittedView: false,
-  previousSplitState: false
+  previousSplitState: false,
+  isGrid: false
 };
 /* harmony default export */ var controls = ({
   namespaced: true,
@@ -11255,7 +11309,6 @@ var controls_defaulState = {
       if (!isLive && document.pictureInPictureElement) {
         document.exitPictureInPicture();
       }
-
       state.isLive = isLive;
     },
     setIsLoading: function setIsLoading(state, isLoading) {
@@ -11285,7 +11338,7 @@ var controls_defaulState = {
     },
     handleReconnection: function handleReconnection(state, _ref) {
       var error = _ref.error,
-          timeout = _ref.timeout;
+        timeout = _ref.timeout;
       state.reconnection.error = error;
       state.reconnection.timeout = timeout;
       state.reconnection.status = true;
@@ -11311,6 +11364,9 @@ var controls_defaulState = {
       if (!state.isMigrating) {
         state.previousSplitState = previousSplitState;
       }
+    },
+    setIsGrid: function setIsGrid(state, isGrid) {
+      state.isGrid = isGrid;
     }
   },
   getters: {}
@@ -11361,22 +11417,24 @@ var defaultOptions = {
   forcePlayoutDelay: false,
   multisource: false,
   chromecastId: null,
-  reportUrl: null
+  reportUrl: null,
+  layout: null
 };
 function setUserParams(_ref) {
   var streamId = _ref.streamId,
-      audioOnly = _ref.audioOnly,
-      videoOnly = _ref.videoOnly,
-      token = _ref.token,
-      image = _ref.image,
-      directorUrl = _ref.directorUrl,
-      hideButtons = _ref.hideButtons,
-      autoplay = _ref.autoplay,
-      muted = _ref.muted,
-      noDelay = _ref.noDelay,
-      multisource = _ref.multisource,
-      chromecastId = _ref.chromecastId,
-      reportUrl = _ref.reportUrl;
+    audioOnly = _ref.audioOnly,
+    videoOnly = _ref.videoOnly,
+    token = _ref.token,
+    image = _ref.image,
+    directorUrl = _ref.directorUrl,
+    hideButtons = _ref.hideButtons,
+    autoplay = _ref.autoplay,
+    muted = _ref.muted,
+    noDelay = _ref.noDelay,
+    multisource = _ref.multisource,
+    chromecastId = _ref.chromecastId,
+    reportUrl = _ref.reportUrl,
+    layout = _ref.layout;
   var options = {};
   options.streamId = streamId;
   options.videoOnly = videoOnly !== null && videoOnly !== void 0 ? videoOnly : false;
@@ -11388,20 +11446,21 @@ function setUserParams(_ref) {
   options.autoplay = autoplay !== null && autoplay !== void 0 ? autoplay : true;
   options.muted = muted !== null && muted !== void 0 ? muted : false;
   options.multisource = multisource !== null && multisource !== void 0 ? multisource : false;
-
+  options.layout = layout;
   if (multisource) {
     src_store.commit('Controls/setIsSplittedView', true);
   }
-
   if (noDelay) {
     options.forcePlayoutDelay = {
       min: 0,
       max: 0
     };
   }
-
-  options.chromecastId = chromecastId !== null && chromecastId !== void 0 ? chromecastId : null;
-  options.reportUrl = reportUrl !== null && reportUrl !== void 0 ? reportUrl : null;
+  options.chromecastId = chromecastId !== null && chromecastId !== void 0 ? chromecastId : Object({"NODE_ENV":"production","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).VUE_APP_CHROMECAST_ID;
+  options.reportUrl = reportUrl !== null && reportUrl !== void 0 ? reportUrl : "https://playback-report.millicast.com";
+  if (options.layout && options.layout === 'grid') {
+    src_store.commit('Controls/setIsGrid', true);
+  }
   src_store.commit('Params/setQueryParams', _extends(_extends({}, defaultOptions), options));
 }
 // CONCATENATED MODULE: ./src/store/modules/params.js
@@ -11446,12 +11505,10 @@ var params_defaulState = {
 var params_state = src_store.state;
 var getAccountId = function getAccountId() {
   var _state$Params$queryPa, _state$Params$queryPa2;
-
   return (_state$Params$queryPa = params_state.Params.queryParams.streamId) === null || _state$Params$queryPa === void 0 ? void 0 : (_state$Params$queryPa2 = _state$Params$queryPa.match(/^(.*?)\/.*$/)) === null || _state$Params$queryPa2 === void 0 ? void 0 : _state$Params$queryPa2[1];
 };
 var getStreamName = function getStreamName() {
   var _state$Params$queryPa3, _state$Params$queryPa4;
-
   return (_state$Params$queryPa3 = params_state.Params.queryParams.streamId) === null || _state$Params$queryPa3 === void 0 ? void 0 : (_state$Params$queryPa4 = _state$Params$queryPa3.match(/^.*?\/(.*)$/)) === null || _state$Params$queryPa4 === void 0 ? void 0 : _state$Params$queryPa4[1];
 };
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.object.define-getter.js
@@ -11586,124 +11643,98 @@ var can_autoplay_es_index = { audio: audio, video: can_autoplay_es_video };
 
 
 var commit = src_store.commit,
-    viewConnection_state = src_store.state;
-
+  viewConnection_state = src_store.state;
 
 var setEnvironment = function setEnvironment() {
   viewConnection_setDirectorEndpoint();
   viewConnection_setLiveDomain();
   viewConnection_setPeerConnection();
 };
-
 var viewConnection_setDirectorEndpoint = function setDirectorEndpoint() {
-  if (Object({"NODE_ENV":"production","BASE_URL":"/"}).VUE_APP_DIRECTOR_ENDPOINT || viewConnection_state.Params.queryParams.directorUrl) {
+  if (Object({"NODE_ENV":"production","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).VUE_APP_DIRECTOR_ENDPOINT || viewConnection_state.Params.queryParams.directorUrl) {
     var _state$Params$queryPa;
-
-    millicast_umd["Director"].setEndpoint((_state$Params$queryPa = viewConnection_state.Params.queryParams.directorUrl) !== null && _state$Params$queryPa !== void 0 ? _state$Params$queryPa : Object({"NODE_ENV":"production","BASE_URL":"/"}).VUE_APP_DIRECTOR_ENDPOINT);
+    millicast_umd["Director"].setEndpoint((_state$Params$queryPa = viewConnection_state.Params.queryParams.directorUrl) !== null && _state$Params$queryPa !== void 0 ? _state$Params$queryPa : Object({"NODE_ENV":"production","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).VUE_APP_DIRECTOR_ENDPOINT);
   }
 };
-
 var viewConnection_setLiveDomain = function setLiveDomain() {
-  if (Object({"NODE_ENV":"production","BASE_URL":"/"}).VUE_APP_LIVEWS_ENDPOINT) {
-    millicast_umd["Director"].setLiveDomain(Object({"NODE_ENV":"production","BASE_URL":"/"}).VUE_APP_LIVEWS_ENDPOINT);
+  if (Object({"NODE_ENV":"production","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).VUE_APP_LIVEWS_ENDPOINT) {
+    millicast_umd["Director"].setLiveDomain(Object({"NODE_ENV":"production","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).VUE_APP_LIVEWS_ENDPOINT);
   }
 };
-
 var viewConnection_setPeerConnection = function setPeerConnection() {
-  if (Object({"NODE_ENV":"production","BASE_URL":"/"}).VUE_APP_TURN_ENDPOINT) {
-    millicast_umd["PeerConnection"].setTurnServerLocation(Object({"NODE_ENV":"production","BASE_URL":"/"}).VUE_APP_TURN_ENDPOINT);
+  if (Object({"NODE_ENV":"production","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).VUE_APP_TURN_ENDPOINT) {
+    millicast_umd["PeerConnection"].setTurnServerLocation(Object({"NODE_ENV":"production","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).VUE_APP_TURN_ENDPOINT);
   }
 };
-
 var viewConnection_handleInitViewConnection = function handleInitViewConnection(accountId, streamName) {
   if (!streamName || !accountId) {
     throw new Error('Stream ID not provided.');
   }
-
   setEnvironment();
-
   var tokenGenerator = function tokenGenerator() {
     return millicast_umd["Director"].getSubscriber(streamName, accountId, viewConnection_state.Params.queryParams.token);
   };
-
   var millicastView = new millicast_umd["View"](streamName, tokenGenerator);
   window.millicastView = millicastView;
-
   window.__defineGetter__('peer', function () {
     return millicastView.getRTCPeerConnection();
   });
-
   commit('ViewConnection/setMillicastView', millicastView);
 };
 var handleConnectToStream = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
     var millicastView, connectOptions, _e$response, _e$response$data, _e$response$data$data, message;
-
     return _regeneratorRuntime().wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            millicastView = viewConnection_state.ViewConnection.millicastView;
-
-            if (!millicastView.isActive()) {
-              _context.next = 3;
-              break;
-            }
-
-            return _context.abrupt("return");
-
-          case 3:
-            _context.prev = 3;
-            _context.next = 6;
-            return setCanAutoPlayStream();
-
-          case 6:
-            connectOptions = {
-              events: ['active', 'inactive', 'layers', 'viewercount'],
-              absCaptureTime: true
-            };
-            if (viewConnection_state.Params.queryParams.audioOnly) connectOptions.disableVideo = true;
-            if (viewConnection_state.Params.queryParams.videoOnly) connectOptions.disableAudio = true;
-            if (viewConnection_state.Params.queryParams.forcePlayoutDelay) connectOptions.forcePlayoutDelay = viewConnection_state.Params.queryParams.forcePlayoutDelay;
-            _context.next = 12;
-            return millicastView.connect(connectOptions);
-
-          case 12:
-            addSignalingMigrateListener();
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          millicastView = viewConnection_state.ViewConnection.millicastView;
+          if (!millicastView.isActive()) {
+            _context.next = 3;
+            break;
+          }
+          return _context.abrupt("return");
+        case 3:
+          _context.prev = 3;
+          _context.next = 6;
+          return setCanAutoPlayStream();
+        case 6:
+          connectOptions = {
+            events: ['active', 'inactive', 'layers', 'viewercount'],
+            absCaptureTime: true
+          };
+          if (viewConnection_state.Params.queryParams.audioOnly) connectOptions.disableVideo = true;
+          if (viewConnection_state.Params.queryParams.videoOnly) connectOptions.disableAudio = true;
+          if (viewConnection_state.Params.queryParams.forcePlayoutDelay) connectOptions.forcePlayoutDelay = viewConnection_state.Params.queryParams.forcePlayoutDelay;
+          _context.next = 12;
+          return millicastView.connect(connectOptions);
+        case 12:
+          addSignalingMigrateListener();
+          _context.next = 25;
+          break;
+        case 15:
+          _context.prev = 15;
+          _context.t0 = _context["catch"](3);
+          message = (_e$response = _context.t0.response) === null || _e$response === void 0 ? void 0 : (_e$response$data = _e$response.data) === null || _e$response$data === void 0 ? void 0 : (_e$response$data$data = _e$response$data.data) === null || _e$response$data$data === void 0 ? void 0 : _e$response$data$data.message;
+          commit('Controls/setIsLoading', false);
+          commit('Controls/setIsLive', false);
+          millicastView.reconnect();
+          if (message) {
+            _context.next = 23;
+            break;
+          }
+          return _context.abrupt("return");
+        case 23:
+          if (message.toLowerCase().includes('stream not being published')) {
             _context.next = 25;
             break;
-
-          case 15:
-            _context.prev = 15;
-            _context.t0 = _context["catch"](3);
-            message = (_e$response = _context.t0.response) === null || _e$response === void 0 ? void 0 : (_e$response$data = _e$response.data) === null || _e$response$data === void 0 ? void 0 : (_e$response$data$data = _e$response$data.data) === null || _e$response$data$data === void 0 ? void 0 : _e$response$data$data.message;
-            commit('Controls/setIsLoading', false);
-            commit('Controls/setIsLive', false);
-            millicastView.reconnect();
-
-            if (message) {
-              _context.next = 23;
-              break;
-            }
-
-            return _context.abrupt("return");
-
-          case 23:
-            if (message.toLowerCase().includes('stream not being published')) {
-              _context.next = 25;
-              break;
-            }
-
-            throw new Error("".concat(message.charAt(0).toUpperCase()).concat(message.slice(1)));
-
-          case 25:
-          case "end":
-            return _context.stop();
-        }
+          }
+          throw new Error("".concat(message.charAt(0).toUpperCase()).concat(message.slice(1)));
+        case 25:
+        case "end":
+          return _context.stop();
       }
     }, _callee, null, [[3, 15]]);
   }));
-
   return function handleConnectToStream() {
     return _ref.apply(this, arguments);
   };
@@ -11713,171 +11744,139 @@ var viewConnection_setTrackEvent = function setTrackEvent() {
   millicastView.on('track', /*#__PURE__*/function () {
     var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(event) {
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              if (!event.streams.length) {
-                _context2.next = 3;
-                break;
-              }
-
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            if (!event.streams.length) {
               _context2.next = 3;
-              return setStream(event.streams[0]);
-
-            case 3:
-              if (!viewConnection_state.ViewConnection.trackEvent[event.track.kind].transceiver[0]) {
-                viewConnection_state.ViewConnection.trackEvent[event.track.kind].transceiver[0] = event.transceiver;
-              } else {
-                viewConnection_state.ViewConnection.trackEvent[event.track.kind].transceiver.push(event.transceiver);
-              }
-
-              viewConnection_state.ViewConnection.trackEvent[event.track.kind].track = true;
-
-            case 5:
-            case "end":
-              return _context2.stop();
-          }
+              break;
+            }
+            _context2.next = 3;
+            return setStream(event.streams[0]);
+          case 3:
+            if (!viewConnection_state.ViewConnection.trackEvent[event.track.kind].transceiver[0]) {
+              viewConnection_state.ViewConnection.trackEvent[event.track.kind].transceiver[0] = event.transceiver;
+            } else {
+              viewConnection_state.ViewConnection.trackEvent[event.track.kind].transceiver.push(event.transceiver);
+            }
+            viewConnection_state.ViewConnection.trackEvent[event.track.kind].track = true;
+          case 5:
+          case "end":
+            return _context2.stop();
         }
       }, _callee2);
     }));
-
     return function (_x) {
       return _ref2.apply(this, arguments);
     };
   }());
 };
-
 var setStream = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(entrySrcObject) {
     var video, opositeElementRef, mediaTag;
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            video = viewConnection_state.Controls.video;
-            addSignalingMigrateListener();
-            commit('Controls/setSrcObject', entrySrcObject); //If we already had a a stream and is not migrating then we ignore it (Firefox addRemoteTrack issue)
-
-            if (!(video.srcObject && video.srcObject.id !== entrySrcObject.id && !viewConnection_state.Controls.viewerMigratingEvent)) {
-              _context4.next = 5;
-              break;
-            }
-
-            return _context4.abrupt("return");
-
-          case 5:
-            if (!(video.srcObject && video.srcObject.id !== entrySrcObject.id && viewConnection_state.Controls.viewerMigratingEvent)) {
-              _context4.next = 24;
-              break;
-            }
-
-            commit('Controls/setPreviousSplitState', viewConnection_state.Controls.isSplittedView);
-            commit('Controls/setIsMigrating', true);
-            commit('Controls/setIsSplittedView', false);
-            _context4.next = 11;
-            return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
-
-          case 11:
-            opositeElementRef = viewConnection_state.Controls.currentElementRef === 'player' ? 'player2' : 'player';
-            mediaTag = document.getElementById(opositeElementRef);
-            mediaTag.srcObject = entrySrcObject;
-            mediaTag.autoplay = viewConnection_state.Controls.playing;
-            mediaTag.muted = viewConnection_state.Controls.muted;
-            removeVideoPauseListeners();
-            addVideoEventListeners(mediaTag);
-            mediaTag.onloadedmetadata = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-              return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-                while (1) {
-                  switch (_context3.prev = _context3.next) {
-                    case 0:
-                      commit('Controls/setVideo', mediaTag);
-                      commit('Controls/setCurrentElementRef', opositeElementRef);
-                      commit('Controls/setIsMigrating', false);
-                      commit('Controls/setIsSplittedView', viewConnection_state.Controls.previousSplitState);
-
-                      if (document.pictureInPictureElement) {
-                        mediaTag.requestPictureInPicture();
-                      }
-
-                    case 5:
-                    case "end":
-                      return _context3.stop();
-                  }
-                }
-              }, _callee3);
-            }));
-            commit('Controls/setViewerMigratingEvent', false);
-            commit('Controls/setMigrateListenerIsSet', false); //We have to set the listener again since the signaling attribute of millicastView is changed after the migrate.
-
-            addSignalingMigrateListener();
-            _context4.next = 25;
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          video = viewConnection_state.Controls.video;
+          addSignalingMigrateListener();
+          commit('Controls/setSrcObject', entrySrcObject);
+          //If we already had a a stream and is not migrating then we ignore it (Firefox addRemoteTrack issue)
+          if (!(video.srcObject && video.srcObject.id !== entrySrcObject.id && !viewConnection_state.Controls.viewerMigratingEvent)) {
+            _context4.next = 5;
             break;
-
-          case 24:
-            setVideoPlayer({
-              videoPlayer: video,
-              srcObject: entrySrcObject
-            });
-
-          case 25:
-          case "end":
-            return _context4.stop();
-        }
+          }
+          return _context4.abrupt("return");
+        case 5:
+          if (!(video.srcObject && video.srcObject.id !== entrySrcObject.id && viewConnection_state.Controls.viewerMigratingEvent)) {
+            _context4.next = 24;
+            break;
+          }
+          commit('Controls/setPreviousSplitState', viewConnection_state.Controls.isSplittedView);
+          commit('Controls/setIsMigrating', true);
+          commit('Controls/setIsSplittedView', false);
+          _context4.next = 11;
+          return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
+        case 11:
+          opositeElementRef = viewConnection_state.Controls.currentElementRef === 'player' ? 'player2' : 'player';
+          mediaTag = document.getElementById(opositeElementRef);
+          mediaTag.srcObject = entrySrcObject;
+          mediaTag.autoplay = viewConnection_state.Controls.playing;
+          mediaTag.muted = viewConnection_state.Controls.muted;
+          removeVideoPauseListeners();
+          addVideoEventListeners(mediaTag);
+          mediaTag.onloadedmetadata = /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+            return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+              while (1) switch (_context3.prev = _context3.next) {
+                case 0:
+                  commit('Controls/setVideo', mediaTag);
+                  commit('Controls/setCurrentElementRef', opositeElementRef);
+                  commit('Controls/setIsMigrating', false);
+                  commit('Controls/setIsSplittedView', viewConnection_state.Controls.previousSplitState);
+                  if (document.pictureInPictureElement) {
+                    mediaTag.requestPictureInPicture();
+                  }
+                case 5:
+                case "end":
+                  return _context3.stop();
+              }
+            }, _callee3);
+          }));
+          commit('Controls/setViewerMigratingEvent', false);
+          commit('Controls/setMigrateListenerIsSet', false);
+          //We have to set the listener again since the signaling attribute of millicastView is changed after the migrate.
+          addSignalingMigrateListener();
+          _context4.next = 25;
+          break;
+        case 24:
+          setVideoPlayer({
+            videoPlayer: video,
+            srcObject: entrySrcObject
+          });
+        case 25:
+        case "end":
+          return _context4.stop();
       }
     }, _callee4);
   }));
-
   return function setStream(_x2) {
     return _ref3.apply(this, arguments);
   };
 }();
-
 var setCanAutoPlayStream = /*#__PURE__*/function () {
   var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
     var canAutoPlayVideo, muted;
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-      while (1) {
-        switch (_context5.prev = _context5.next) {
-          case 0:
-            commit('Controls/setVideoAutoplay', viewConnection_state.Params.queryParams.autoplay);
-
-            if (!viewConnection_state.Params.queryParams.autoplay) {
-              _context5.next = 8;
-              break;
-            }
-
-            _context5.next = 4;
-            return can_autoplay_es.video({
-              muted: viewConnection_state.Params.queryParams.muted
-            });
-
-          case 4:
-            canAutoPlayVideo = _context5.sent;
-            muted = !viewConnection_state.Params.queryParams.muted ? !canAutoPlayVideo.result : viewConnection_state.Params.queryParams.muted;
-            commit('Controls/setVideoMuted', muted);
-            commit('Controls/setAutoPlayMuted', muted);
-
-          case 8:
-          case "end":
-            return _context5.stop();
-        }
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          commit('Controls/setVideoAutoplay', viewConnection_state.Params.queryParams.autoplay);
+          if (!viewConnection_state.Params.queryParams.autoplay) {
+            _context5.next = 8;
+            break;
+          }
+          _context5.next = 4;
+          return can_autoplay_es.video({
+            muted: viewConnection_state.Params.queryParams.muted
+          });
+        case 4:
+          canAutoPlayVideo = _context5.sent;
+          muted = !viewConnection_state.Params.queryParams.muted ? !canAutoPlayVideo.result : viewConnection_state.Params.queryParams.muted;
+          commit('Controls/setVideoMuted', muted);
+          commit('Controls/setAutoPlayMuted', muted);
+        case 8:
+        case "end":
+          return _context5.stop();
       }
     }, _callee5);
   }));
-
   return function setCanAutoPlayStream() {
     return _ref5.apply(this, arguments);
   };
 }();
-
 var setReconnect = function setReconnect() {
   var _state$ViewConnection;
-
   viewConnection_state.ViewConnection.eventListeners.reconnect = (_state$ViewConnection = viewConnection_state.ViewConnection.eventListeners.reconnect) !== null && _state$ViewConnection !== void 0 ? _state$ViewConnection : viewConnection_state.ViewConnection.millicastView.on('reconnect', function (_ref6) {
     var timeout = _ref6.timeout,
-        error = _ref6.error;
+      error = _ref6.error;
     var errorMessage = error === null || error === void 0 ? void 0 : error.toString().toLowerCase();
-
     if (errorMessage !== null && errorMessage !== void 0 && errorMessage.toLowerCase().includes('stream not being published')) {
       commit('Controls/setIsLoading', false);
       commit('Controls/setIsLive', false);
@@ -11897,19 +11896,17 @@ var setReconnect = function setReconnect() {
 };
 var handleStopStream = function handleStopStream() {
   var _state$ViewConnection2;
-
   (_state$ViewConnection2 = viewConnection_state.ViewConnection.millicastView) === null || _state$ViewConnection2 === void 0 ? void 0 : _state$ViewConnection2.stop();
   commit('Controls/setVideoSource', null);
   commit('Controls/setSrcObject', null);
 };
-
 var addSignalingMigrateListener = function addSignalingMigrateListener() {
   if (!viewConnection_state.Controls.viewerMigratingEvent && !viewConnection_state.Controls.migrateListenerIsSet && viewConnection_state.ViewConnection.millicastView.signaling) {
     setTimeout(function () {
       viewConnection_state.ViewConnection.millicastView.signaling.on('migrate', function () {
         commit('Controls/setViewerMigratingEvent', true);
-      }); // Avoid setting the event listener more than once
-
+      });
+      // Avoid setting the event listener more than once
       commit('Controls/setMigrateListenerIsSet', true);
     }, 50); //We have to set a timeout because it takes a while before the millicastView signaling instance changes on migrate.
   }
@@ -11931,7 +11928,7 @@ var es_array_unshift = __webpack_require__("3c65");
 
 
 var cast_commit = src_store.commit,
-    cast_state = src_store.state;
+  cast_state = src_store.state;
 var castContext = null;
 var castSession = null;
 var receiverApplicationId = null;
@@ -11939,187 +11936,147 @@ var handleSetCast = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5() {
     var castStateListener, sessionListener;
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-      while (1) {
-        switch (_context5.prev = _context5.next) {
-          case 0:
-            if (receiverApplicationId) {
-              _context5.next = 6;
-              break;
-            }
-
-            _context5.next = 3;
-            return new Promise(function (r) {
-              return setTimeout(r, 20);
-            });
-
-          case 3:
-            receiverApplicationId = cast_state.Params.queryParams.chromecastId;
-            _context5.next = 0;
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          if (receiverApplicationId) {
+            _context5.next = 6;
             break;
-
-          case 6:
-            castStateListener = /*#__PURE__*/function () {
-              var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(castState) {
-                var _window, cast;
-
-                return _regeneratorRuntime().wrap(function _callee$(_context) {
-                  while (1) {
-                    switch (_context.prev = _context.next) {
-                      case 0:
-                        _window = window, cast = _window.cast;
-                        _context.t0 = castState;
-                        _context.next = _context.t0 === cast.framework.CastState.NO_DEVICES_AVAILABLE ? 4 : _context.t0 === cast.framework.CastState.NOT_CONNECTED ? 6 : _context.t0 === cast.framework.CastState.CONNECTED ? 8 : 11;
-                        break;
-
-                      case 4:
-                        cast_commit('Controls/setCastAvailable', false);
-                        return _context.abrupt("break", 12);
-
-                      case 6:
-                        cast_commit('Controls/setCastAvailable', true);
-                        return _context.abrupt("break", 12);
-
-                      case 8:
-                        _context.next = 10;
-                        return sendLoadRequest();
-
-                      case 10:
-                        return _context.abrupt("break", 12);
-
-                      case 11:
-                        return _context.abrupt("break", 12);
-
-                      case 12:
-                      case "end":
-                        return _context.stop();
-                    }
-                  }
-                }, _callee);
-              }));
-
-              return function castStateListener(_x) {
-                return _ref2.apply(this, arguments);
-              };
-            }();
-
-            sessionListener = function sessionListener(event) {
-              var _window2 = window,
-                  cast = _window2.cast;
-
-              switch (event.sessionState) {
-                case cast.framework.SessionState.SESSION_ENDED:
-                  castSession = null;
-                  connectToStream(); // Change to new connect
-
-                  cast_commit('Controls/setCastIsConnected', false);
-                  break;
-
-                default:
-                  break;
-              }
+          }
+          _context5.next = 3;
+          return new Promise(function (r) {
+            return setTimeout(r, 20);
+          });
+        case 3:
+          receiverApplicationId = cast_state.Params.queryParams.chromecastId;
+          _context5.next = 0;
+          break;
+        case 6:
+          castStateListener = /*#__PURE__*/function () {
+            var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(castState) {
+              var _window, cast;
+              return _regeneratorRuntime().wrap(function _callee$(_context) {
+                while (1) switch (_context.prev = _context.next) {
+                  case 0:
+                    _window = window, cast = _window.cast;
+                    _context.t0 = castState;
+                    _context.next = _context.t0 === cast.framework.CastState.NO_DEVICES_AVAILABLE ? 4 : _context.t0 === cast.framework.CastState.NOT_CONNECTED ? 6 : _context.t0 === cast.framework.CastState.CONNECTED ? 8 : 11;
+                    break;
+                  case 4:
+                    cast_commit('Controls/setCastAvailable', false);
+                    return _context.abrupt("break", 12);
+                  case 6:
+                    cast_commit('Controls/setCastAvailable', true);
+                    return _context.abrupt("break", 12);
+                  case 8:
+                    _context.next = 10;
+                    return sendLoadRequest();
+                  case 10:
+                    return _context.abrupt("break", 12);
+                  case 11:
+                    return _context.abrupt("break", 12);
+                  case 12:
+                  case "end":
+                    return _context.stop();
+                }
+              }, _callee);
+            }));
+            return function castStateListener(_x) {
+              return _ref2.apply(this, arguments);
             };
-
-            window['__onGCastApiAvailable'] = /*#__PURE__*/function () {
-              var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(isAvailable) {
-                return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-                  while (1) {
-                    switch (_context4.prev = _context4.next) {
-                      case 0:
-                        if (isAvailable) {
-                          setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
-                            var _window$cast$framewor, CAST_STATE_CHANGED, SESSION_STATE_CHANGED;
-
-                            return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-                              while (1) {
-                                switch (_context3.prev = _context3.next) {
-                                  case 0:
-                                    _context3.next = 2;
-                                    return window.cast.framework.CastContext.getInstance();
-
-                                  case 2:
-                                    castContext = _context3.sent;
-
-                                    if (!(window.chrome.cast && window.chrome.cast.AutoJoinPolicy)) {
-                                      _context3.next = 12;
-                                      break;
-                                    }
-
-                                    castContext.setOptions({
-                                      autoJoinPolicy: window.chrome.cast.AutoJoinPolicy.PAGE_SCOPED,
-                                      receiverApplicationId: receiverApplicationId
-                                    });
-                                    _window$cast$framewor = window.cast.framework.CastContextEventType, CAST_STATE_CHANGED = _window$cast$framewor.CAST_STATE_CHANGED, SESSION_STATE_CHANGED = _window$cast$framewor.SESSION_STATE_CHANGED;
-                                    _context3.next = 8;
-                                    return castContext.addEventListener(CAST_STATE_CHANGED, /*#__PURE__*/function () {
-                                      var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref5) {
-                                        var castState;
-                                        return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-                                          while (1) {
-                                            switch (_context2.prev = _context2.next) {
-                                              case 0:
-                                                castState = _ref5.castState;
-                                                _context2.next = 3;
-                                                return castStateListener(castState);
-
-                                              case 3:
-                                                return _context2.abrupt("return", _context2.sent);
-
-                                              case 4:
-                                              case "end":
-                                                return _context2.stop();
-                                            }
-                                          }
-                                        }, _callee2);
-                                      }));
-
-                                      return function (_x3) {
-                                        return _ref6.apply(this, arguments);
-                                      };
-                                    }());
-
-                                  case 8:
-                                    _context3.next = 10;
-                                    return castContext.addEventListener(SESSION_STATE_CHANGED, function (e) {
-                                      return sessionListener(e);
-                                    });
-
-                                  case 10:
-                                    _context3.next = 13;
-                                    break;
-
-                                  case 12:
-                                    cast_commit('Controls/setCastAvailable', false);
-
-                                  case 13:
-                                  case "end":
-                                    return _context3.stop();
-                                }
+          }();
+          sessionListener = function sessionListener(event) {
+            var _window2 = window,
+              cast = _window2.cast;
+            switch (event.sessionState) {
+              case cast.framework.SessionState.SESSION_ENDED:
+                castSession = null;
+                connectToStream();
+                // Change to new connect
+                cast_commit('Controls/setCastIsConnected', false);
+                break;
+              default:
+                break;
+            }
+          };
+          window['__onGCastApiAvailable'] = /*#__PURE__*/function () {
+            var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(isAvailable) {
+              return _regeneratorRuntime().wrap(function _callee4$(_context4) {
+                while (1) switch (_context4.prev = _context4.next) {
+                  case 0:
+                    if (isAvailable) {
+                      setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
+                        var _window$cast$framewor, CAST_STATE_CHANGED, SESSION_STATE_CHANGED;
+                        return _regeneratorRuntime().wrap(function _callee3$(_context3) {
+                          while (1) switch (_context3.prev = _context3.next) {
+                            case 0:
+                              _context3.next = 2;
+                              return window.cast.framework.CastContext.getInstance();
+                            case 2:
+                              castContext = _context3.sent;
+                              if (!(window.chrome.cast && window.chrome.cast.AutoJoinPolicy)) {
+                                _context3.next = 12;
+                                break;
                               }
-                            }, _callee3);
-                          })), 20);
-                        }
-
-                      case 1:
-                      case "end":
-                        return _context4.stop();
+                              castContext.setOptions({
+                                autoJoinPolicy: window.chrome.cast.AutoJoinPolicy.PAGE_SCOPED,
+                                receiverApplicationId: receiverApplicationId
+                              });
+                              _window$cast$framewor = window.cast.framework.CastContextEventType, CAST_STATE_CHANGED = _window$cast$framewor.CAST_STATE_CHANGED, SESSION_STATE_CHANGED = _window$cast$framewor.SESSION_STATE_CHANGED;
+                              _context3.next = 8;
+                              return castContext.addEventListener(CAST_STATE_CHANGED, /*#__PURE__*/function () {
+                                var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(_ref5) {
+                                  var castState;
+                                  return _regeneratorRuntime().wrap(function _callee2$(_context2) {
+                                    while (1) switch (_context2.prev = _context2.next) {
+                                      case 0:
+                                        castState = _ref5.castState;
+                                        _context2.next = 3;
+                                        return castStateListener(castState);
+                                      case 3:
+                                        return _context2.abrupt("return", _context2.sent);
+                                      case 4:
+                                      case "end":
+                                        return _context2.stop();
+                                    }
+                                  }, _callee2);
+                                }));
+                                return function (_x3) {
+                                  return _ref6.apply(this, arguments);
+                                };
+                              }());
+                            case 8:
+                              _context3.next = 10;
+                              return castContext.addEventListener(SESSION_STATE_CHANGED, function (e) {
+                                return sessionListener(e);
+                              });
+                            case 10:
+                              _context3.next = 13;
+                              break;
+                            case 12:
+                              cast_commit('Controls/setCastAvailable', false);
+                            case 13:
+                            case "end":
+                              return _context3.stop();
+                          }
+                        }, _callee3);
+                      })), 20);
                     }
-                  }
-                }, _callee4);
-              }));
-
-              return function (_x2) {
-                return _ref3.apply(this, arguments);
-              };
-            }();
-
-          case 9:
-          case "end":
-            return _context5.stop();
-        }
+                  case 1:
+                  case "end":
+                    return _context4.stop();
+                }
+              }, _callee4);
+            }));
+            return function (_x2) {
+              return _ref3.apply(this, arguments);
+            };
+          }();
+        case 9:
+        case "end":
+          return _context5.stop();
       }
     }, _callee5);
   }));
-
   return function handleSetCast() {
     return _ref.apply(this, arguments);
   };
@@ -12127,50 +12084,43 @@ var handleSetCast = /*#__PURE__*/function () {
 var sendLoadRequest = /*#__PURE__*/function () {
   var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
     var _state$ViewConnection, _state$ViewConnection2, _state$ViewConnection3, _state$ViewConnection4, _state$ViewConnection5, _state$ViewConnection6;
-
     var _window3, chrome, _state$Controls$castO, streamId, token, multiSourceOptions, mediaInfo, loadRequest;
-
     return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-      while (1) {
-        switch (_context6.prev = _context6.next) {
-          case 0:
-            _window3 = window, chrome = _window3.chrome;
-            _state$Controls$castO = cast_state.Controls.castOptions, streamId = _state$Controls$castO.streamId, token = _state$Controls$castO.token;
-            multiSourceOptions = {
-              audioSource: cast_state.Sources.selectedAudioSource,
-              videoSource: cast_state.Sources.selectedVideoSource,
-              audioMediaId: (_state$ViewConnection = (_state$ViewConnection2 = cast_state.ViewConnection.trackEvent) === null || _state$ViewConnection2 === void 0 ? void 0 : (_state$ViewConnection3 = _state$ViewConnection2.audio) === null || _state$ViewConnection3 === void 0 ? void 0 : _state$ViewConnection3.transceiver.mid) !== null && _state$ViewConnection !== void 0 ? _state$ViewConnection : null,
-              videoMediaId: (_state$ViewConnection4 = (_state$ViewConnection5 = cast_state.ViewConnection.trackEvent) === null || _state$ViewConnection5 === void 0 ? void 0 : (_state$ViewConnection6 = _state$ViewConnection5.video) === null || _state$ViewConnection6 === void 0 ? void 0 : _state$ViewConnection6.transceiver.mid) !== null && _state$ViewConnection4 !== void 0 ? _state$ViewConnection4 : null
-            };
-            _context6.next = 5;
-            return castContext.getCurrentSession();
-
-          case 5:
-            castSession = _context6.sent;
-            mediaInfo = new chrome.cast.media.MediaInfo(streamId, '');
-            mediaInfo.customData = {
-              streamId: streamId,
-              token: token,
-              multiSourceOptions: multiSourceOptions
-            };
-            mediaInfo.streamType = chrome.cast.media.StreamType.LIVE;
-            loadRequest = new chrome.cast.media.LoadRequest(mediaInfo);
-            castSession.loadMedia(loadRequest).then(function () {
-              stopStream();
-              cast_commit('Controls/setCastDevice', castSession.getCastDevice());
-              cast_commit('Controls/setCastIsConnected', true);
-            }).catch(function (error) {
-              console.log(error);
-            });
-
-          case 11:
-          case "end":
-            return _context6.stop();
-        }
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          _window3 = window, chrome = _window3.chrome;
+          _state$Controls$castO = cast_state.Controls.castOptions, streamId = _state$Controls$castO.streamId, token = _state$Controls$castO.token;
+          multiSourceOptions = {
+            audioSource: cast_state.Sources.selectedAudioSource,
+            videoSource: cast_state.Sources.selectedVideoSource,
+            audioMediaId: (_state$ViewConnection = (_state$ViewConnection2 = cast_state.ViewConnection.trackEvent) === null || _state$ViewConnection2 === void 0 ? void 0 : (_state$ViewConnection3 = _state$ViewConnection2.audio) === null || _state$ViewConnection3 === void 0 ? void 0 : _state$ViewConnection3.transceiver.mid) !== null && _state$ViewConnection !== void 0 ? _state$ViewConnection : null,
+            videoMediaId: (_state$ViewConnection4 = (_state$ViewConnection5 = cast_state.ViewConnection.trackEvent) === null || _state$ViewConnection5 === void 0 ? void 0 : (_state$ViewConnection6 = _state$ViewConnection5.video) === null || _state$ViewConnection6 === void 0 ? void 0 : _state$ViewConnection6.transceiver.mid) !== null && _state$ViewConnection4 !== void 0 ? _state$ViewConnection4 : null
+          };
+          _context6.next = 5;
+          return castContext.getCurrentSession();
+        case 5:
+          castSession = _context6.sent;
+          mediaInfo = new chrome.cast.media.MediaInfo(streamId, '');
+          mediaInfo.customData = {
+            streamId: streamId,
+            token: token,
+            multiSourceOptions: multiSourceOptions
+          };
+          mediaInfo.streamType = chrome.cast.media.StreamType.LIVE;
+          loadRequest = new chrome.cast.media.LoadRequest(mediaInfo);
+          castSession.loadMedia(loadRequest).then(function () {
+            stopStream();
+            cast_commit('Controls/setCastDevice', castSession.getCastDevice());
+            cast_commit('Controls/setCastIsConnected', true);
+          }).catch(function (error) {
+            console.log(error);
+          });
+        case 11:
+        case "end":
+          return _context6.stop();
       }
     }, _callee6);
   }));
-
   return function sendLoadRequest() {
     return _ref7.apply(this, arguments);
   };
@@ -12197,7 +12147,7 @@ var es_parse_int = __webpack_require__("e25e");
 
 
 var layers_commit = src_store.commit,
-    layers_state = src_store.state;
+  layers_state = src_store.state;
 var bitsUnitsStorage = ['bps', 'kbps', 'mbps', 'gbps'];
 var updateLayers = function updateLayers(evntData) {
   var data = evntData.data;
@@ -12209,10 +12159,8 @@ var updateLayers = function updateLayers(evntData) {
   var encodings = Object.values(mainSource);
   encodings.forEach(function (encoding) {
     var _encoding$active$;
-
     if ((encoding === null || encoding === void 0 ? void 0 : encoding.active.length) === 1 && (encoding === null || encoding === void 0 ? void 0 : (_encoding$active$ = encoding.active[0]) === null || _encoding$active$ === void 0 ? void 0 : _encoding$active$.layers.length) > 1) {
       var _encoding$active$2, _encoding$active$2$la, _encoding$inactive$, _encoding$inactive$$l;
-
       (_encoding$active$2 = encoding.active[0]) === null || _encoding$active$2 === void 0 ? void 0 : (_encoding$active$2$la = _encoding$active$2.layers) === null || _encoding$active$2$la === void 0 ? void 0 : _encoding$active$2$la.forEach(function (quality) {
         if (!activeQualities.some(function (info) {
           return info.spatialLayerId === quality.spatialLayerId;
@@ -12232,7 +12180,6 @@ var updateLayers = function updateLayers(evntData) {
       });
     } else {
       var _encoding$active, _encoding$inactive;
-
       (_encoding$active = encoding.active) === null || _encoding$active === void 0 ? void 0 : _encoding$active.forEach(function (quality) {
         if (!activeQualities.some(function (info) {
           return info.id === quality.id;
@@ -12254,7 +12201,6 @@ var updateLayers = function updateLayers(evntData) {
   activeQualities.sort(function (a, b) {
     return b.bitrate - a.bitrate;
   });
-
   if (activeQualities.length === 2) {
     activeQualities[0].name = 'High';
     activeQualities[1].name = 'Low';
@@ -12276,13 +12222,11 @@ var updateLayers = function updateLayers(evntData) {
       name: 'Auto'
     });
   }
-
   if (activeQualities.length != layers_state.Layers.medias.active.length) {
     layers_commit('Layers/setSelectedQuality', {
       name: 'Auto'
     });
   }
-
   layers_commit('Layers/setMedias', {
     active: activeQualities,
     inactive: inactiveQualities
@@ -12300,11 +12244,9 @@ var deleteLayers = function deleteLayers() {
 var handleSelectQuality = function handleSelectQuality(media) {
   var selectedData = {};
   selectedData.encodingId = media.id;
-
   if (!selectedData.encodingId && media.spatialLayerId !== null) {
     selectedData.spatialLayerId = parseInt(media.spatialLayerId);
   }
-
   var data = selectedData.encodingId || selectedData.encodingId === 0 || selectedData.spatialLayerId || selectedData.spatialLayerId === 0 ? selectedData : {};
   layers_state.ViewConnection.millicastView.select(data);
   layers_commit('Layers/selectQuality', media);
@@ -12312,7 +12254,6 @@ var handleSelectQuality = function handleSelectQuality(media) {
 var formatBitsRecursive = function formatBitsRecursive(value) {
   var unitsStoragePosition = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
   var newValue = value / 1000;
-
   if (newValue < 1 || newValue > 1 && unitsStoragePosition + 1 > bitsUnitsStorage.length) {
     return "".concat(Math.round(value * 100) / 100, " ").concat(bitsUnitsStorage[unitsStoragePosition]);
   } else if (newValue > 1) {
@@ -12335,8 +12276,8 @@ var formatBitsRecursive = function formatBitsRecursive(value) {
 
 
 var sources_commit = src_store.commit,
-    sources_state = src_store.state,
-    getters = src_store.getters;
+  sources_state = src_store.state,
+  getters = src_store.getters;
 
 
 var getTracks = function getTracks(data) {
@@ -12345,98 +12286,80 @@ var getTracks = function getTracks(data) {
     if (e.media === 'video') {
       addRemoteTracks(sourceId);
       addSource('video', sourceId, e.trackId);
-
       if (sources_state.Sources.videoSources.length === 1) {
         sources_commit('Sources/setIsAudioOnly', false);
       }
     }
-
     if (e.media === 'audio') {
       addSource('audio', sourceId, e.trackId);
-
       if (sources_state.Sources.audioSources.length === 1) {
         sources_commit('Sources/setIsAudioOnly', sources_state.Sources.videoSources.length ? false : true);
       }
     }
   });
-
   if (tracksAvailableAndMainNotExists()) {
     setTimeout(processTrackWarning, 1000);
   } else if (sources_state.Controls.trackWarning) {
     sources_commit('Controls/setTrackWarning', false);
   }
 };
-
 var addRemoteTracks = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(sourceId) {
     var remoteTrackIndex, mediaStream;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            if (sourceId) {
-              _context2.next = 2;
-              break;
-            }
-
-            return _context2.abrupt("return");
-
-          case 2:
-            remoteTrackIndex = sources_state.Sources.sourceRemoteTracks.findIndex(function (t) {
-              return t.sourceId === sourceId;
-            });
-            mediaStream = new MediaStream();
-            setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
-              var transceiver, sourceRemoteTrack;
-              return _regeneratorRuntime().wrap(function _callee$(_context) {
-                while (1) {
-                  switch (_context.prev = _context.next) {
-                    case 0:
-                      _context.next = 2;
-                      return sources_state.ViewConnection.millicastView.addRemoteTrack('video', [mediaStream]);
-
-                    case 2:
-                      transceiver = _context.sent;
-                      sourceRemoteTrack = {
-                        transceiver: transceiver,
-                        mediaStream: mediaStream,
-                        sourceId: sourceId
-                      };
-
-                      if (remoteTrackIndex !== -1) {
-                        sources_commit('Sources/replaceSourceRemoteTrack', {
-                          sourceRemoteTrack: sourceRemoteTrack,
-                          remoteTrackIndex: remoteTrackIndex
-                        });
-                      } else {
-                        sources_commit('Sources/addSourceRemoteTrack', sourceRemoteTrack);
-                      }
-
-                    case 5:
-                    case "end":
-                      return _context.stop();
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          if (sourceId) {
+            _context2.next = 2;
+            break;
+          }
+          return _context2.abrupt("return");
+        case 2:
+          remoteTrackIndex = sources_state.Sources.sourceRemoteTracks.findIndex(function (t) {
+            return t.sourceId === sourceId;
+          });
+          mediaStream = new MediaStream();
+          setTimeout( /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
+            var transceiver, sourceRemoteTrack;
+            return _regeneratorRuntime().wrap(function _callee$(_context) {
+              while (1) switch (_context.prev = _context.next) {
+                case 0:
+                  _context.next = 2;
+                  return sources_state.ViewConnection.millicastView.addRemoteTrack('video', [mediaStream]);
+                case 2:
+                  transceiver = _context.sent;
+                  sourceRemoteTrack = {
+                    transceiver: transceiver,
+                    mediaStream: mediaStream,
+                    sourceId: sourceId
+                  };
+                  if (remoteTrackIndex !== -1) {
+                    sources_commit('Sources/replaceSourceRemoteTrack', {
+                      sourceRemoteTrack: sourceRemoteTrack,
+                      remoteTrackIndex: remoteTrackIndex
+                    });
+                  } else {
+                    sources_commit('Sources/addSourceRemoteTrack', sourceRemoteTrack);
                   }
-                }
-              }, _callee);
-            })), 50); //We have to set a timeout because it takes a while before the millicastView signaling instance changes on migrate.
-
-          case 5:
-          case "end":
-            return _context2.stop();
-        }
+                case 5:
+                case "end":
+                  return _context.stop();
+              }
+            }, _callee);
+          })), 50); //We have to set a timeout because it takes a while before the millicastView signaling instance changes on migrate.
+        case 5:
+        case "end":
+          return _context2.stop();
       }
     }, _callee2);
   }));
-
   return function addRemoteTracks(_x) {
     return _ref.apply(this, arguments);
   };
 }();
-
 var tracksAvailableAndMainNotExists = function tracksAvailableAndMainNotExists() {
   return !getters['Sources/getVideoHasMain'] && sources_state.Sources.videoSources.length || !getters['Sources/getAudioHasMain'] && sources_state.Sources.audioSources.length;
 };
-
 var addSource = function addSource(kind, sourceId, trackId) {
   var source = {
     name: sourceId === null ? 'Main' : sourceId,
@@ -12445,14 +12368,12 @@ var addSource = function addSource(kind, sourceId, trackId) {
   };
   var sourceToUse = kind === 'video' ? sources_state.Sources.videoSources : sources_state.Sources.audioSources;
   var sources = Array.from(sourceToUse);
-
   if (!sources.some(function (e) {
     return e.sourceId === source.sourceId;
   })) {
     if (source.sourceId === null) {
       sources.unshift(source);
       var selectedMediaSource = kind === 'video' ? sources_state.Sources.selectedVideoSource : sources_state.Sources.selectedAudioSource;
-
       if (selectedMediaSource.name === 'none') {
         sources_commit('Sources/setSelectedSource', {
           kind: kind,
@@ -12462,24 +12383,20 @@ var addSource = function addSource(kind, sourceId, trackId) {
     } else {
       sources.push(source);
     }
-
     sources_commit('Sources/setSources', {
       kind: kind,
       sources: sources
     });
   }
 };
-
 var processTrackWarning = function processTrackWarning() {
   if (tracksAvailableAndMainNotExists() && !sources_state.Sources.trackWarning) {
     if (sources_state.Controls.dropup === '') {
       sources_commit('Controls/setDropup', 'settings');
     }
-
     sources_commit('Controls/setTrackWarning', true);
   }
 };
-
 var handleDeleteSource = function handleDeleteSource(sourceId) {
   var videoIndex = sources_state.Sources.videoSources.findIndex(function (source) {
     return source.sourceId === sourceId;
@@ -12487,27 +12404,22 @@ var handleDeleteSource = function handleDeleteSource(sourceId) {
   var audioIndex = sources_state.Sources.audioSources.findIndex(function (source) {
     return source.sourceId === sourceId;
   });
-
   if (videoIndex !== -1) {
     deleteSource('video', sourceId);
-
     if (!sources_state.Sources.videoSources.length) {
       sources_commit('Sources/setIsAudioOnly', true);
     }
   }
-
   if (audioIndex !== -1) {
     deleteSource('audio', sourceId);
   }
 };
-
 var deleteSource = function deleteSource(kind, sourceId) {
   var selectedSource = kind === 'video' ? sources_state.Sources.selectedVideoSource : sources_state.Sources.selectedAudioSource;
   var sourcesToUse = kind === 'video' ? sources_state.Sources.videoSources : sources_state.Sources.audioSources;
   sourcesToUse = sourcesToUse.filter(function (source) {
     return source.sourceId !== sourceId;
   });
-
   if (sourceId === selectedSource.sourceId) {
     if (sourcesToUse.findIndex(function (source) {
       return source.sourceId === null;
@@ -12520,7 +12432,6 @@ var deleteSource = function deleteSource(kind, sourceId) {
       };
     }
   }
-
   sources_commit('Sources/removeSourceRemoteTrack', sourceId);
   sources_commit('Sources/setSources', {
     kind: kind,
@@ -12531,151 +12442,123 @@ var deleteSource = function deleteSource(kind, sourceId) {
     source: selectedSource
   });
 };
-
 var handleSelectSource = /*#__PURE__*/function () {
   var _ref4 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(_ref3) {
     var kind, source, track, selectedSource;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            kind = _ref3.kind, source = _ref3.source;
-            track = null;
-            selectedSource = null;
-
-            if (kind === 'video') {
-              deleteLayers();
-              track = sources_state.ViewConnection.trackEvent.video.track;
-              selectedSource = sources_state.Sources.selectedAudioSource;
-            } else if (kind === 'audio') {
-              track = sources_state.ViewConnection.trackEvent.audio.track;
-              selectedSource = sources_state.Sources.selectedVideoSource;
-            }
-
-            sources_commit('Sources/setSelectedSource', {
-              kind: kind,
-              selectedSource: source
-            });
-
-            if (!(source && (source === null || source === void 0 ? void 0 : source.name) !== 'none' && track)) {
-              _context3.next = 9;
-              break;
-            }
-
-            _context3.next = 8;
-            return project({
-              kind: kind,
-              source: source
-            });
-
-          case 8:
-            if (selectedSource.name !== 'none') {
-              sources_commit('Controls/setTrackWarning', false);
-            }
-
-          case 9:
-          case "end":
-            return _context3.stop();
-        }
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          kind = _ref3.kind, source = _ref3.source;
+          track = null;
+          selectedSource = null;
+          if (kind === 'video') {
+            deleteLayers();
+            track = sources_state.ViewConnection.trackEvent.video.track;
+            selectedSource = sources_state.Sources.selectedAudioSource;
+          } else if (kind === 'audio') {
+            track = sources_state.ViewConnection.trackEvent.audio.track;
+            selectedSource = sources_state.Sources.selectedVideoSource;
+          }
+          sources_commit('Sources/setSelectedSource', {
+            kind: kind,
+            selectedSource: source
+          });
+          if (!(source && (source === null || source === void 0 ? void 0 : source.name) !== 'none' && track)) {
+            _context3.next = 9;
+            break;
+          }
+          _context3.next = 8;
+          return project({
+            kind: kind,
+            source: source
+          });
+        case 8:
+          if (selectedSource.name !== 'none') {
+            sources_commit('Controls/setTrackWarning', false);
+          }
+        case 9:
+        case "end":
+          return _context3.stop();
       }
     }, _callee3);
   }));
-
   return function handleSelectSource(_x2) {
     return _ref4.apply(this, arguments);
   };
 }();
-
 var project = /*#__PURE__*/function () {
   var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(_ref5) {
     var kind, source, sourceId, sources, transceiver, _state$ViewConnection, _state$ViewConnection2, _state$ViewConnection3, _state$ViewConnection4, _transceiver$mid, _transceiver, mediaId;
-
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            kind = _ref5.kind, source = _ref5.source;
-            sourceId = source === null || source === void 0 ? void 0 : source.sourceId;
-            sources = null;
-            transceiver = null;
-
-            if (kind === 'video') {
-              sources = sources_state.Sources.videoSources;
-              transceiver = (_state$ViewConnection = sources_state.ViewConnection.trackEvent) === null || _state$ViewConnection === void 0 ? void 0 : (_state$ViewConnection2 = _state$ViewConnection.video) === null || _state$ViewConnection2 === void 0 ? void 0 : _state$ViewConnection2.transceiver;
-            } else if (kind === 'audio') {
-              sources = sources_state.Sources.audioSources;
-              transceiver = (_state$ViewConnection3 = sources_state.ViewConnection.trackEvent) === null || _state$ViewConnection3 === void 0 ? void 0 : (_state$ViewConnection4 = _state$ViewConnection3.audio) === null || _state$ViewConnection4 === void 0 ? void 0 : _state$ViewConnection4.transceiver;
-            }
-
-            if (!(source.name !== 'none' && !(sourceId === null && !sources.length) && !sources_state.Controls.castIsConnected)) {
-              _context4.next = 11;
-              break;
-            }
-
-            mediaId = (_transceiver$mid = (_transceiver = transceiver) === null || _transceiver === void 0 ? void 0 : _transceiver.mid) !== null && _transceiver$mid !== void 0 ? _transceiver$mid : null;
-            _context4.next = 9;
-            return sources_state.ViewConnection.millicastView.project(sourceId, [{
-              trackId: source.trackId,
-              mediaId: mediaId
-            }]);
-
-          case 9:
-            _context4.next = 17;
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          kind = _ref5.kind, source = _ref5.source;
+          sourceId = source === null || source === void 0 ? void 0 : source.sourceId;
+          sources = null;
+          transceiver = null;
+          if (kind === 'video') {
+            sources = sources_state.Sources.videoSources;
+            transceiver = (_state$ViewConnection = sources_state.ViewConnection.trackEvent) === null || _state$ViewConnection === void 0 ? void 0 : (_state$ViewConnection2 = _state$ViewConnection.video) === null || _state$ViewConnection2 === void 0 ? void 0 : _state$ViewConnection2.transceiver;
+          } else if (kind === 'audio') {
+            sources = sources_state.Sources.audioSources;
+            transceiver = (_state$ViewConnection3 = sources_state.ViewConnection.trackEvent) === null || _state$ViewConnection3 === void 0 ? void 0 : (_state$ViewConnection4 = _state$ViewConnection3.audio) === null || _state$ViewConnection4 === void 0 ? void 0 : _state$ViewConnection4.transceiver;
+          }
+          if (!(source.name !== 'none' && !(sourceId === null && !sources.length) && !sources_state.Controls.castIsConnected)) {
+            _context4.next = 11;
             break;
-
-          case 11:
-            if (!sources_state.Controls.castIsConnected) {
-              _context4.next = 15;
-              break;
-            }
-
-            sendLoadRequest();
-            _context4.next = 17;
+          }
+          mediaId = (_transceiver$mid = (_transceiver = transceiver) === null || _transceiver === void 0 ? void 0 : _transceiver.mid) !== null && _transceiver$mid !== void 0 ? _transceiver$mid : null;
+          _context4.next = 9;
+          return sources_state.ViewConnection.millicastView.project(sourceId, [{
+            trackId: source.trackId,
+            mediaId: mediaId
+          }]);
+        case 9:
+          _context4.next = 17;
+          break;
+        case 11:
+          if (!sources_state.Controls.castIsConnected) {
+            _context4.next = 15;
             break;
-
-          case 15:
-            _context4.next = 17;
-            return handleSelectSource({
-              kind: kind,
-              source: source
-            });
-
-          case 17:
-          case "end":
-            return _context4.stop();
-        }
+          }
+          sendLoadRequest();
+          _context4.next = 17;
+          break;
+        case 15:
+          _context4.next = 17;
+          return handleSelectSource({
+            kind: kind,
+            source: source
+          });
+        case 17:
+        case "end":
+          return _context4.stop();
       }
     }, _callee4);
   }));
-
   return function project(_x3) {
     return _ref6.apply(this, arguments);
   };
 }();
-
 var handleProjectVideo = /*#__PURE__*/function () {
   var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(what, where, index) {
     var sideLabel;
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-      while (1) {
-        switch (_context5.prev = _context5.next) {
-          case 0:
-            sideLabel = 'sideLabel' + where;
-            document.getElementById(sideLabel).textContent = what !== null && what !== void 0 ? what : 'Main';
-            _context5.next = 4;
-            return sources_state.ViewConnection.millicastView.project(what, [{
-              trackId: sources_state.Sources.videoSources[index].trackId,
-              mediaId: where
-            }]);
-
-          case 4:
-          case "end":
-            return _context5.stop();
-        }
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          sideLabel = 'sideLabel' + where;
+          document.getElementById(sideLabel).textContent = what !== null && what !== void 0 ? what : 'Main';
+          _context5.next = 4;
+          return sources_state.ViewConnection.millicastView.project(what, [{
+            trackId: sources_state.Sources.videoSources[index].trackId,
+            mediaId: where
+          }]);
+        case 4:
+        case "end":
+          return _context5.stop();
       }
     }, _callee5);
   }));
-
   return function handleProjectVideo(_x4, _x5, _x6) {
     return _ref7.apply(this, arguments);
   };
@@ -12683,41 +12566,32 @@ var handleProjectVideo = /*#__PURE__*/function () {
 var handleProjectRemoteTracks = /*#__PURE__*/function () {
   var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6(index) {
     var _state$Sources$source, _state$Sources$source2;
-
     var newSourceRemoteTrackIndex, vidId, sidePlayerId;
     return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-      while (1) {
-        switch (_context6.prev = _context6.next) {
-          case 0:
-            _context6.next = 2;
-            return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
-
-          case 2:
-            newSourceRemoteTrackIndex = index;
-            vidId = index + sources_state.Sources.videoSources.length - sources_state.Sources.sourceRemoteTracks.length;
-
-            if (!(newSourceRemoteTrackIndex < 0)) {
-              _context6.next = 6;
-              break;
-            }
-
-            return _context6.abrupt("return");
-
-          case 6:
-            sidePlayerId = 'sidePlayer' + sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].sourceId;
-            document.getElementById(sidePlayerId).srcObject = sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].mediaStream;
-            handleProjectVideo(sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].sourceId, (_state$Sources$source = (_state$Sources$source2 = sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].transceiver) === null || _state$Sources$source2 === void 0 ? void 0 : _state$Sources$source2.mid) !== null && _state$Sources$source !== void 0 ? _state$Sources$source : null, vidId);
-            document.getElementById(sidePlayerId).muted = true;
-            document.getElementById(sidePlayerId).play();
-
-          case 11:
-          case "end":
-            return _context6.stop();
-        }
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          _context6.next = 2;
+          return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
+        case 2:
+          newSourceRemoteTrackIndex = index;
+          vidId = index + sources_state.Sources.videoSources.length - sources_state.Sources.sourceRemoteTracks.length;
+          if (!(newSourceRemoteTrackIndex < 0)) {
+            _context6.next = 6;
+            break;
+          }
+          return _context6.abrupt("return");
+        case 6:
+          sidePlayerId = 'sidePlayer' + sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].sourceId;
+          document.getElementById(sidePlayerId).srcObject = sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].mediaStream;
+          handleProjectVideo(sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].sourceId, (_state$Sources$source = (_state$Sources$source2 = sources_state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].transceiver) === null || _state$Sources$source2 === void 0 ? void 0 : _state$Sources$source2.mid) !== null && _state$Sources$source !== void 0 ? _state$Sources$source : null, vidId);
+          document.getElementById(sidePlayerId).muted = true;
+          document.getElementById(sidePlayerId).play();
+        case 11:
+        case "end":
+          return _context6.stop();
       }
     }, _callee6);
   }));
-
   return function handleProjectRemoteTracks(_x7) {
     return _ref8.apply(this, arguments);
   };
@@ -12730,29 +12604,29 @@ var handleProjectRemoteTracks = /*#__PURE__*/function () {
 
 
 
- //Import Vuex Store.
 
+
+//Import Vuex Store.
 
 var sdkManager_commit = src_store.commit,
-    sdkManager_state = src_store.state; // VIDEO PLAYER
-// Similar logic to playerChange event
+  sdkManager_state = src_store.state;
 
+// VIDEO PLAYER
+
+// Similar logic to playerChange event
 var setVideoPlayer = function setVideoPlayer(_ref) {
   var videoPlayer = _ref.videoPlayer,
-      srcObject = _ref.srcObject,
-      volume = _ref.volume,
-      muted = _ref.muted,
-      autoplay = _ref.autoplay;
-
+    srcObject = _ref.srcObject,
+    volume = _ref.volume,
+    muted = _ref.muted,
+    autoplay = _ref.autoplay;
   if (videoPlayer) {
     sdkManager_commit('Controls/setVideo', videoPlayer);
     sdkManager_commit('Controls/setCurrentElementRef', videoPlayer.id);
   }
-
   if (srcObject) {
     sdkManager_commit('Controls/setVideoSource', srcObject);
   }
-
   if (volume) sdkManager_commit('Controls/setVideoVolume', volume);
   if (muted) sdkManager_commit('Controls/setVideoMuted', muted);
   if (autoplay) sdkManager_commit('Controls/setVideoAutoplay', autoplay);
@@ -12762,14 +12636,11 @@ var addVideoEventListeners = function addVideoEventListeners(video) {
   video.onplay = function () {
     return sdkManager_commit('Controls/setPlaying', true);
   };
-
   video.addEventListener('emptied', pauseControlListener);
   video.addEventListener('pause', pauseControlListener);
-
   video.onenterpictureinpicture = function () {
     return sdkManager_commit('Controls/setPip', true);
   };
-
   video.onleavepictureinpicture = function () {
     return sdkManager_commit('Controls/setPip', false);
   };
@@ -12778,15 +12649,14 @@ var removeVideoPauseListeners = function removeVideoPauseListeners() {
   sdkManager_state.Controls.video.removeEventListener('emptied', pauseControlListener);
   sdkManager_state.Controls.video.removeEventListener('pause', pauseControlListener);
 };
-
 var pauseControlListener = function pauseControlListener() {
   sdkManager_commit('Controls/setPlaying', false);
-}; // SDK VIEW MODULE INITIALIZATION
-
+};
+// SDK VIEW MODULE INITIALIZATION
 
 var sdkManager_initViewModule = function initViewModule() {
   //Expose Viewer version and SDK Logger into the console
-  window.Version = Object({"NODE_ENV":"production","BASE_URL":"/"}).PACKAGE_VERSION;
+  window.Version = Object({"NODE_ENV":"production","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).PACKAGE_VERSION;
   window.Logger = millicast_umd["Logger"];
   var accountId = getAccountId();
   var streamName = getStreamName();
@@ -12796,19 +12666,15 @@ var sdkManager_initViewModule = function initViewModule() {
 var connectToStream = /*#__PURE__*/function () {
   var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
     return _regeneratorRuntime().wrap(function _callee$(_context) {
-      while (1) {
-        switch (_context.prev = _context.next) {
-          case 0:
-            handleConnectToStream();
-
-          case 1:
-          case "end":
-            return _context.stop();
-        }
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          handleConnectToStream();
+        case 1:
+        case "end":
+          return _context.stop();
       }
     }, _callee);
   }));
-
   return function connectToStream() {
     return _ref2.apply(this, arguments);
   };
@@ -12816,94 +12682,76 @@ var connectToStream = /*#__PURE__*/function () {
 var stopStream = /*#__PURE__*/function () {
   var _ref3 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-      while (1) {
-        switch (_context2.prev = _context2.next) {
-          case 0:
-            handleStopStream();
-
-          case 1:
-          case "end":
-            return _context2.stop();
-        }
+      while (1) switch (_context2.prev = _context2.next) {
+        case 0:
+          handleStopStream();
+        case 1:
+        case "end":
+          return _context2.stop();
       }
     }, _callee2);
   }));
-
   return function stopStream() {
     return _ref3.apply(this, arguments);
   };
 }();
-
 var sdkManager_setViewerEvents = function setViewerEvents() {
   viewConnection_setTrackEvent();
   setBroadcastEvent();
-}; // BROADCAST EVENTS
+};
 
+// BROADCAST EVENTS
 
 var setBroadcastEvent = function setBroadcastEvent() {
   var _state$ViewConnection;
-
   //todo: catch user count event and set it in Vuex
   var millicastView = sdkManager_state.ViewConnection.millicastView;
   sdkManager_state.ViewConnection.eventListeners.broadcastEvent = (_state$ViewConnection = sdkManager_state.ViewConnection.eventListeners.broadcastEvent) !== null && _state$ViewConnection !== void 0 ? _state$ViewConnection : millicastView.on('broadcastEvent', function (event) {
     var name = event.name;
-
     switch (name) {
       case 'active':
         sdkManager_updateActiveBroadcastState(event);
         break;
-
       case 'stopped':
         updateStoppedBroadcastState(event);
         break;
-
       case 'inactive':
         sdkManager_updateInactiveBroadcastState(event);
         break;
-
       case 'layers':
         sdkManager_updateLayersBroadcastState(event);
         break;
-
       case 'viewercount':
         updateViewerCount(event);
         break;
-
       default:
         break;
     }
   });
 };
-
 var sdkManager_updateActiveBroadcastState = function updateActiveBroadcastState(event) {
   getTracks(event.data);
   sdkManager_commit('Controls/setIsLoading', false);
   sdkManager_commit('Controls/setIsLive', true);
   setReconnect();
-
   if (!sdkManager_state.Controls.video.srcObject) {
     sdkManager_commit('Controls/setVideoSource', sdkManager_state.Controls.srcObject);
   }
 };
-
 var updateStoppedBroadcastState = function updateStoppedBroadcastState() {
   sdkManager_commit('Controls/setIsLoading', false);
   sdkManager_commit('Controls/setIsLive', false);
 };
-
 var sdkManager_updateInactiveBroadcastState = function updateInactiveBroadcastState(event) {
   var _data$sourceId;
-
   var data = event.data;
   var selectedVideoSource = sdkManager_state.Sources.selectedVideoSource;
   var selectedAudioSource = sdkManager_state.Sources.selectedAudioSource;
   var trackWarning = (selectedVideoSource.sourceId === null || selectedAudioSource.sourceId === null) && data.sourceId === null;
   handleDeleteSource((_data$sourceId = data === null || data === void 0 ? void 0 : data.sourceId) !== null && _data$sourceId !== void 0 ? _data$sourceId : null);
-
   if (!event.data.streamId) {
     sdkManager_commit('Controls/setUserCount', null);
   }
-
   if (sdkManager_state.Sources.videoSources.length + sdkManager_state.Sources.audioSources.length === 0) {
     deleteLayers();
     sdkManager_commit('Controls/setTrackWarning', false);
@@ -12914,45 +12762,44 @@ var sdkManager_updateInactiveBroadcastState = function updateInactiveBroadcastSt
     if (sdkManager_state.Controls.dropup === '') {
       sdkManager_commit('Controls/setDropup', 'settings');
     }
-
     sdkManager_commit('Controls/setTrackWarning', trackWarning);
   }
 };
-
 var sdkManager_updateLayersBroadcastState = function updateLayersBroadcastState(event) {
   if ('0' in event.data.medias) updateLayers(event);else deleteLayers();
 };
-
 var updateViewerCount = function updateViewerCount(event) {
   sdkManager_commit('Controls/setViewerCount', event.data.viewercount);
-}; // LAYERS
+};
 
+// LAYERS
 
 var sdkManager_selectQuality = function selectQuality(media) {
   handleSelectQuality(media);
-}; // SOURCES
+};
+
+// SOURCES
 
 var selectSource = /*#__PURE__*/function () {
   var _ref5 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3(_ref4) {
     var kind, source;
     return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-      while (1) {
-        switch (_context3.prev = _context3.next) {
-          case 0:
-            kind = _ref4.kind, source = _ref4.source;
-            handleSelectSource({
-              kind: kind,
-              source: source
-            });
-
-          case 2:
-          case "end":
-            return _context3.stop();
-        }
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          kind = _ref4.kind, source = _ref4.source;
+          _context3.next = 3;
+          return handleSelectSource({
+            kind: kind,
+            source: source
+          });
+        case 3:
+          return _context3.abrupt("return", _context3.sent);
+        case 4:
+        case "end":
+          return _context3.stop();
       }
     }, _callee3);
   }));
-
   return function selectSource(_x) {
     return _ref5.apply(this, arguments);
   };
@@ -12960,19 +12807,15 @@ var selectSource = /*#__PURE__*/function () {
 var projectRemoteTracks = /*#__PURE__*/function () {
   var _ref6 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4(index) {
     return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-      while (1) {
-        switch (_context4.prev = _context4.next) {
-          case 0:
-            handleProjectRemoteTracks(index);
-
-          case 1:
-          case "end":
-            return _context4.stop();
-        }
+      while (1) switch (_context4.prev = _context4.next) {
+        case 0:
+          handleProjectRemoteTracks(index);
+        case 1:
+        case "end":
+          return _context4.stop();
       }
     }, _callee4);
   }));
-
   return function projectRemoteTracks(_x2) {
     return _ref6.apply(this, arguments);
   };
@@ -12980,40 +12823,34 @@ var projectRemoteTracks = /*#__PURE__*/function () {
 var projectVideo = /*#__PURE__*/function () {
   var _ref7 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee5(what, where, index) {
     return _regeneratorRuntime().wrap(function _callee5$(_context5) {
-      while (1) {
-        switch (_context5.prev = _context5.next) {
-          case 0:
-            handleProjectVideo(what, where, index);
-
-          case 1:
-          case "end":
-            return _context5.stop();
-        }
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          handleProjectVideo(what, where, index);
+        case 1:
+        case "end":
+          return _context5.stop();
       }
     }, _callee5);
   }));
-
   return function projectVideo(_x3, _x4, _x5) {
     return _ref7.apply(this, arguments);
   };
-}(); // CAST
+}();
+
+// CAST
 
 var setCast = /*#__PURE__*/function () {
   var _ref8 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee6() {
     return _regeneratorRuntime().wrap(function _callee6$(_context6) {
-      while (1) {
-        switch (_context6.prev = _context6.next) {
-          case 0:
-            handleSetCast();
-
-          case 1:
-          case "end":
-            return _context6.stop();
-        }
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          handleSetCast();
+        case 1:
+        case "end":
+          return _context6.stop();
       }
     }, _callee6);
   }));
-
   return function setCast() {
     return _ref8.apply(this, arguments);
   };
@@ -13498,7 +13335,7 @@ var VtErrorIcon_default = {};
 
 // vue:/Users/maronato/Developer/vue-toastification/src/components/icons/VtErrorIcon.vue?vue&type=template
 
-var dist_hoisted_15 = {
+var _hoisted_15 = {
   "aria-hidden": "true",
   focusable: "false",
   "data-prefix": "fas",
@@ -13516,7 +13353,7 @@ var _hoisted_34 = [
   _hoisted_24
 ];
 function render6(_ctx, _cache) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("svg", dist_hoisted_15, _hoisted_34);
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("svg", _hoisted_15, _hoisted_34);
 }
 
 // vue:/Users/maronato/Developer/vue-toastification/src/components/icons/VtErrorIcon.vue
@@ -13779,7 +13616,7 @@ var VtToast_default = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["defi
 
 // vue:/Users/maronato/Developer/vue-toastification/src/components/VtToast.vue?vue&type=template
 
-var dist_hoisted_16 = ["role"];
+var _hoisted_16 = ["role"];
 function render8(_ctx, _cache) {
   const _component_Icon = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("Icon");
   const _component_CloseButton = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("CloseButton");
@@ -13806,7 +13643,7 @@ function render8(_ctx, _cache) {
         key: 1,
         "toast-id": _ctx.id
       }, _ctx.hasProp(_ctx.content, "props") ? _ctx.content.props : {}, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toHandlers"])(_ctx.hasProp(_ctx.content, "listeners") ? _ctx.content.listeners : {}), { onCloseToast: _ctx.closeToast }), null, 16, ["toast-id", "onCloseToast"]))
-    ], 10, dist_hoisted_16),
+    ], 10, _hoisted_16),
     !!_ctx.closeButton ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_CloseButton, {
       key: 1,
       component: _ctx.closeButton,
@@ -14122,26 +13959,22 @@ var src_default = VueToastificationPlugin;
   },
   mounted: function mounted() {
     var _this = this;
-
     return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var player;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              player = document.getElementById(_this.currentElementRef);
-              setVideoPlayer({
-                videoPlayer: player,
-                srcObject: null,
-                volume: 1,
-                muted: _this.queryParams.muted,
-                autoplay: _this.queryParams.autoplay
-              });
-
-            case 2:
-            case "end":
-              return _context.stop();
-          }
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            player = document.getElementById(_this.currentElementRef);
+            setVideoPlayer({
+              videoPlayer: player,
+              srcObject: null,
+              volume: 1,
+              muted: _this.queryParams.muted,
+              autoplay: _this.queryParams.autoplay
+            });
+          case 2:
+          case "end":
+            return _context.stop();
         }
       }, _callee);
     }))();
@@ -14209,6 +14042,12 @@ var src_default = VueToastificationPlugin;
     },
     previousSplitState: function previousSplitState(state) {
       return state.previousSplitState;
+    },
+    isGrid: function isGrid(state) {
+      return state.isGrid;
+    },
+    fullscreen: function fullscreen(state) {
+      return state.fullscreen;
     }
   })), mapState('Params', {
     queryParams: function queryParams(state) {
@@ -14222,7 +14061,6 @@ var src_default = VueToastificationPlugin;
   methods: _extends(_extends(_extends(_extends(_extends(_extends({}, mapMutations('Sources', ['addVideoSource', 'addAudioSource', 'setStream'])), mapMutations('Layers', ['addLayers', 'selectQuality', 'deleteLayers'])), mapMutations('Controls', ['setVideoMuted', 'setDropup', 'setTrackWarning', 'stopVideo', 'setAutoPlayMuted', 'userParamOptions', 'setIsSplittedView'])), mapMutations('ViewConnection', ['setMillicastView'])), mapActions('Sources', ['updateBroadcastState'])), {}, {
     stop: function stop() {
       var _this$millicastView;
-
       (_this$millicastView = this.millicastView) === null || _this$millicastView === void 0 ? void 0 : _this$millicastView.stop();
       this.stopCurrentVideo();
     },
@@ -14234,10 +14072,8 @@ var src_default = VueToastificationPlugin;
   watch: {
     reconnectionStatus: function reconnectionStatus(isReconnecting) {
       var _this2 = this;
-
       var toast = useToast();
       toast.clear();
-
       if (isReconnecting) {
         this.setIsSplittedView(false);
         toast.warning("Connection lost. Retrying...");
@@ -14245,11 +14081,9 @@ var src_default = VueToastificationPlugin;
         var setSplitView = function setSplitView(state) {
           if (['connected'].includes(state)) {
             _this2.setIsSplittedView(_this2.previousSplitState);
-
             _this2.millicastView.removeListener('connectionStateChange', setSplitView);
           }
         };
-
         this.millicastView.on('connectionStateChange', setSplitView);
       }
     },
@@ -14257,87 +14091,71 @@ var src_default = VueToastificationPlugin;
       var _displayAudioOnly = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
         var srcObject, volume, muted, autoplay, player;
         return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-          while (1) {
-            switch (_context2.prev = _context2.next) {
-              case 0:
-                //If the flag changes we have to set the same events and src to the new tag
-                //Get current params from previous video/audio tag
-                srcObject = this.video.srcObject;
-                volume = this.video.volume;
-                muted = this.video.muted;
-                autoplay = this.video.autoplay; //Render new tag
-
-                _context2.next = 6;
-                return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
-
-              case 6:
-                //Set new tag params
-                player = document.getElementById(this.currentElementRef);
-                setVideoPlayer({
-                  videoPlayer: player,
-                  srcObject: srcObject,
-                  volume: volume,
-                  muted: muted,
-                  autoplay: autoplay
-                });
-
-              case 8:
-              case "end":
-                return _context2.stop();
-            }
+          while (1) switch (_context2.prev = _context2.next) {
+            case 0:
+              //If the flag changes we have to set the same events and src to the new tag
+              //Get current params from previous video/audio tag
+              srcObject = this.video.srcObject;
+              volume = this.video.volume;
+              muted = this.video.muted;
+              autoplay = this.video.autoplay; //Render new tag
+              _context2.next = 6;
+              return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
+            case 6:
+              //Set new tag params
+              player = document.getElementById(this.currentElementRef);
+              setVideoPlayer({
+                videoPlayer: player,
+                srcObject: srcObject,
+                volume: volume,
+                muted: muted,
+                autoplay: autoplay
+              });
+            case 8:
+            case "end":
+              return _context2.stop();
           }
         }, _callee2, this);
       }));
-
       function displayAudioOnly() {
         return _displayAudioOnly.apply(this, arguments);
       }
-
       return displayAudioOnly;
     }(),
     queryParams: function queryParams() {
       var _this3 = this;
-
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
         var toast;
         return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return stopStream();
-
-              case 2:
-                _context3.next = 4;
-                return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
-
-              case 4:
-                _context3.next = 6;
-                return useToast();
-
-              case 6:
-                toast = _context3.sent;
-                sdkManager_initViewModule();
-                _context3.prev = 8;
-                _context3.next = 11;
-                return connectToStream();
-
-              case 11:
-                setTimeout(function () {
-                  _this3.setAutoPlayMuted(false);
-                }, 6000);
-                _context3.next = 17;
-                break;
-
-              case 14:
-                _context3.prev = 14;
-                _context3.t0 = _context3["catch"](8);
-                toast.error(_context3.t0.message);
-
-              case 17:
-              case "end":
-                return _context3.stop();
-            }
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return stopStream();
+            case 2:
+              _context3.next = 4;
+              return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
+            case 4:
+              _context3.next = 6;
+              return useToast();
+            case 6:
+              toast = _context3.sent;
+              sdkManager_initViewModule();
+              _context3.prev = 8;
+              _context3.next = 11;
+              return connectToStream();
+            case 11:
+              setTimeout(function () {
+                _this3.setAutoPlayMuted(false);
+              }, 6000);
+              _context3.next = 17;
+              break;
+            case 14:
+              _context3.prev = 14;
+              _context3.t0 = _context3["catch"](8);
+              toast.error(_context3.t0.message);
+            case 17:
+            case "end":
+              return _context3.stop();
           }
         }, _callee3, null, [[8, 14]]);
       }))();
@@ -14346,8 +14164,8 @@ var src_default = VueToastificationPlugin;
 });
 // CONCATENATED MODULE: ./src/components/VideoPlayerMedia.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/components/VideoPlayerMedia.vue?vue&type=style&index=0&id=2882a204&scoped=true&lang=css
-var VideoPlayerMediavue_type_style_index_0_id_2882a204_scoped_true_lang_css = __webpack_require__("1997");
+// EXTERNAL MODULE: ./src/components/VideoPlayerMedia.vue?vue&type=style&index=0&id=2831c45e&scoped=true&lang=css
+var VideoPlayerMediavue_type_style_index_0_id_2831c45e_scoped_true_lang_css = __webpack_require__("e3b5");
 
 // EXTERNAL MODULE: ./node_modules/vue-loader-v16/dist/exportHelper.js
 var exportHelper = __webpack_require__("6b0d");
@@ -14361,49 +14179,41 @@ var exportHelper_default = /*#__PURE__*/__webpack_require__.n(exportHelper);
 
 
 
-const __exports__ = /*#__PURE__*/exportHelper_default()(VideoPlayerMediavue_type_script_lang_js, [['render',VideoPlayerMediavue_type_template_id_2882a204_scoped_true_render],['__scopeId',"data-v-2882a204"]])
+const __exports__ = /*#__PURE__*/exportHelper_default()(VideoPlayerMediavue_type_script_lang_js, [['render',VideoPlayerMediavue_type_template_id_2831c45e_scoped_true_render],['__scopeId',"data-v-2831c45e"]])
 
 /* harmony default export */ var VideoPlayerMedia = (__exports__);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerSideVideoSources.vue?vue&type=template&id=bcbd0770&scoped=true
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerSideVideoSources.vue?vue&type=template&id=7e1ea391&scoped=true
 
-
-var VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-bcbd0770"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
+var VideoPlayerSideVideoSourcesvue_type_template_id_7e1ea391_scoped_true_withScopeId = function _withScopeId(n) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-7e1ea391"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
-var VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_hoisted_1 = {
-  class: "row my-1 mx-0 p-0",
-  style: {
-    "width": "100%"
-  }
-};
-var VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_hoisted_2 = {
-  class: "videoText",
-  style: 'height:100%'
-};
-var VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_hoisted_3 = ["onClick", "id"];
-var VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_hoisted_4 = ["id"];
-function VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("ul", VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_hoisted_1, [(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(true), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Fragment"], null, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["renderList"])(_ctx.sourceRemoteTracks, function (source, index) {
+var VideoPlayerSideVideoSourcesvue_type_template_id_7e1ea391_scoped_true_hoisted_1 = ["onClick", "id"];
+var VideoPlayerSideVideoSourcesvue_type_template_id_7e1ea391_scoped_true_hoisted_2 = ["id"];
+function VideoPlayerSideVideoSourcesvue_type_template_id_7e1ea391_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
+    class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(_ctx.isGrid ? 'sources' : 'list-side')
+  }, [(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(true), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Fragment"], null, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["renderList"])(_ctx.sourceRemoteTracks, function (source, index) {
     var _source$transceiver;
-
-    return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("li", {
-      class: "mv-col-6 mv-col-12 mb-1 side-source",
+    return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
+      class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(_ctx.isGrid ? 'grid-item' : 'list-item'),
       style: 'scroll-snap-align: end',
       key: 'p' + index
-    }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_hoisted_2, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("video", {
+    }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+      class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["videoText", _ctx.isGrid ? 'videoGrid' : ''])
+    }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("video", {
       onClick: function onClick($event) {
         return $options.switchProjection(index);
       },
       id: 'sidePlayer' + source.sourceId,
       ref_for: true,
-      ref: 'sidePlayer' + source.sourceId
-    }, null, 8, VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_hoisted_3), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", {
+      ref: 'sidePlayer' + source.sourceId,
+      class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(!_ctx.isGrid && _ctx.isSplittedView ? 'hires-class' : '')
+    }, null, 10, VideoPlayerSideVideoSourcesvue_type_template_id_7e1ea391_scoped_true_hoisted_1), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", {
       id: 'sideLabel' + ((_source$transceiver = source.transceiver) === null || _source$transceiver === void 0 ? void 0 : _source$transceiver.mid)
-    }, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(source.sourceId), 9, VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_hoisted_4)])]);
-  }), 128))]);
+    }, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(source.sourceId), 9, VideoPlayerSideVideoSourcesvue_type_template_id_7e1ea391_scoped_true_hoisted_2)], 2)], 2);
+  }), 128))], 2);
 }
-// CONCATENATED MODULE: ./src/components/VideoPlayerSideVideoSources.vue?vue&type=template&id=bcbd0770&scoped=true
+// CONCATENATED MODULE: ./src/components/VideoPlayerSideVideoSources.vue?vue&type=template&id=7e1ea391&scoped=true
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerSideVideoSources.vue?vue&type=script&lang=js
 
@@ -14423,48 +14233,54 @@ function VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_re
       indexMainMediaSource: 0
     };
   },
-  computed: _extends(_extends(_extends({}, mapState('Sources', ['sourceRemoteTracks', 'videoSources'])), mapGetters('Sources', ['getVideoHasMain'])), mapState('ViewConnection', {
+  computed: _extends(_extends(_extends(_extends({}, mapState('Sources', ['sourceRemoteTracks', 'videoSources'])), mapState("Controls", {
+    fullscreen: function fullscreen(state) {
+      return state.fullscreen;
+    },
+    isGrid: function isGrid(state) {
+      return state.isGrid;
+    },
+    isSplittedView: function isSplittedView(state) {
+      return state.isSplittedView;
+    }
+  })), mapGetters('Sources', ['getVideoHasMain'])), mapState('ViewConnection', {
     millicastView: function millicastView(state) {
       return state.millicastView;
     }
   })),
   mounted: function mounted() {
     var _this = this;
-
     return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2() {
       return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-        while (1) {
-          switch (_context2.prev = _context2.next) {
-            case 0:
-              _this.sourceRemoteTracks.forEach( /*#__PURE__*/function () {
-                var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_, index) {
-                  return _regeneratorRuntime().wrap(function _callee$(_context) {
-                    while (1) {
-                      switch (_context.prev = _context.next) {
-                        case 0:
-                          _context.next = 2;
-                          return projectRemoteTracks(index);
-
-                        case 2:
-                          return _context.abrupt("return", _context.sent);
-
-                        case 3:
-                        case "end":
-                          return _context.stop();
-                      }
-                    }
-                  }, _callee);
-                }));
-
-                return function (_x, _x2) {
-                  return _ref.apply(this, arguments);
-                };
-              }());
-
-            case 1:
-            case "end":
-              return _context2.stop();
-          }
+        while (1) switch (_context2.prev = _context2.next) {
+          case 0:
+            selectSource({
+              kind: 'video',
+              source: _this.videoSources[0]
+            });
+            _this.setMainLabel('Main');
+            _this.sourceRemoteTracks.forEach( /*#__PURE__*/function () {
+              var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(_, index) {
+                return _regeneratorRuntime().wrap(function _callee$(_context) {
+                  while (1) switch (_context.prev = _context.next) {
+                    case 0:
+                      _context.next = 2;
+                      return projectRemoteTracks(index);
+                    case 2:
+                      return _context.abrupt("return", _context.sent);
+                    case 3:
+                    case "end":
+                      return _context.stop();
+                  }
+                }, _callee);
+              }));
+              return function (_x, _x2) {
+                return _ref.apply(this, arguments);
+              };
+            }());
+          case 3:
+          case "end":
+            return _context2.stop();
         }
       }, _callee2);
     }))();
@@ -14473,78 +14289,67 @@ function VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_re
     'sourceRemoteTracks.length': function () {
       var _sourceRemoteTracksLength = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee3() {
         return _regeneratorRuntime().wrap(function _callee3$(_context3) {
-          while (1) {
-            switch (_context3.prev = _context3.next) {
-              case 0:
-                _context3.next = 2;
-                return projectRemoteTracks(this.sourceRemoteTracks.length - 1);
-
-              case 2:
-              case "end":
-                return _context3.stop();
-            }
+          while (1) switch (_context3.prev = _context3.next) {
+            case 0:
+              _context3.next = 2;
+              return projectRemoteTracks(this.sourceRemoteTracks.length - 1);
+            case 2:
+            case "end":
+              return _context3.stop();
           }
         }, _callee3, this);
       }));
-
       function sourceRemoteTracksLength() {
         return _sourceRemoteTracksLength.apply(this, arguments);
       }
-
       return sourceRemoteTracksLength;
     }()
   },
-  methods: _extends(_extends({}, mapMutations('Sources', ['setMainLabel'])), {}, {
+  methods: _extends(_extends(_extends({}, mapMutations("Controls", ["toggleFullscreen", "setIsSplittedView"])), mapMutations('Sources', ['setMainLabel', 'setPreviousMainLabel'])), {}, {
     switchProjection: function switchProjection(index) {
       var _this2 = this;
-
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee4() {
         var _source$sourceId;
-
         var vidId, source, _this2$sourceRemoteTr, _this2$sourceRemoteTr2, _this2$sourceRemoteTr3, _this2$sourceRemoteTr4;
-
         return _regeneratorRuntime().wrap(function _callee4$(_context4) {
-          while (1) {
-            switch (_context4.prev = _context4.next) {
-              case 0:
-                _context4.next = 2;
-                return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
-
-              case 2:
-                // select the source in the dropdown
-                vidId = index + _this2.videoSources.length - _this2.sourceRemoteTracks.length;
-                source = _this2.videoSources[vidId];
-
-                if (_this2.getVideoHasMain) {
-                  if (_this2.indexSourceProjectedInMain === null) {
-                    // the one projected is the main and want to project a small one
-                    projectVideo(null, (_this2$sourceRemoteTr = _this2.sourceRemoteTracks[index].transceiver) === null || _this2$sourceRemoteTr === void 0 ? void 0 : _this2$sourceRemoteTr.mid, vidId);
-                    _this2.indexSourceProjectedInMain = index;
-                  } else if (_this2.indexSourceProjectedInMain === index) {
-                    // is being projected a small video and want to switch to main with this one
-                    projectVideo(_this2.sourceRemoteTracks[index].sourceId, (_this2$sourceRemoteTr2 = _this2.sourceRemoteTracks[index].transceiver) === null || _this2$sourceRemoteTr2 === void 0 ? void 0 : _this2$sourceRemoteTr2.mid, vidId);
-                    _this2.indexSourceProjectedInMain = null;
-                    source = _this2.videoSources[_this2.indexMainMediaSource];
-                  } else {
-                    // is being projected a small video but want to project another small one
-                    projectVideo(null, (_this2$sourceRemoteTr3 = _this2.sourceRemoteTracks[index].transceiver) === null || _this2$sourceRemoteTr3 === void 0 ? void 0 : _this2$sourceRemoteTr3.mid, vidId);
-                    projectVideo(_this2.sourceRemoteTracks[_this2.indexSourceProjectedInMain].sourceId, (_this2$sourceRemoteTr4 = _this2.sourceRemoteTracks[_this2.indexSourceProjectedInMain].transceiver) === null || _this2$sourceRemoteTr4 === void 0 ? void 0 : _this2$sourceRemoteTr4.mid, vidId);
-                    _this2.indexSourceProjectedInMain = index;
-                  }
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              _context4.next = 2;
+              return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["nextTick"])();
+            case 2:
+              // select the source in the dropdown
+              vidId = index + _this2.videoSources.length - _this2.sourceRemoteTracks.length;
+              source = _this2.videoSources[vidId];
+              if (_this2.getVideoHasMain) {
+                if (_this2.indexSourceProjectedInMain === null) {
+                  // the one projected is the main and want to project a small one
+                  projectVideo(null, (_this2$sourceRemoteTr = _this2.sourceRemoteTracks[index].transceiver) === null || _this2$sourceRemoteTr === void 0 ? void 0 : _this2$sourceRemoteTr.mid, vidId);
+                  _this2.indexSourceProjectedInMain = index;
+                } else if (_this2.indexSourceProjectedInMain === index) {
+                  // is being projected a small video and want to switch to main with this one
+                  projectVideo(_this2.sourceRemoteTracks[index].sourceId, (_this2$sourceRemoteTr2 = _this2.sourceRemoteTracks[index].transceiver) === null || _this2$sourceRemoteTr2 === void 0 ? void 0 : _this2$sourceRemoteTr2.mid, vidId);
+                  _this2.indexSourceProjectedInMain = null;
+                  source = _this2.videoSources[_this2.indexMainMediaSource];
+                } else {
+                  // is being projected a small video but want to project another small one
+                  projectVideo(null, (_this2$sourceRemoteTr3 = _this2.sourceRemoteTracks[index].transceiver) === null || _this2$sourceRemoteTr3 === void 0 ? void 0 : _this2$sourceRemoteTr3.mid, vidId);
+                  projectVideo(_this2.sourceRemoteTracks[_this2.indexSourceProjectedInMain].sourceId, (_this2$sourceRemoteTr4 = _this2.sourceRemoteTracks[_this2.indexSourceProjectedInMain].transceiver) === null || _this2$sourceRemoteTr4 === void 0 ? void 0 : _this2$sourceRemoteTr4.mid, vidId);
+                  _this2.indexSourceProjectedInMain = index;
                 }
-
-                _this2.setMainLabel((_source$sourceId = source.sourceId) !== null && _source$sourceId !== void 0 ? _source$sourceId : 'Main');
-
-                _context4.next = 8;
-                return selectSource({
-                  kind: source.trackId,
-                  source: source
-                });
-
-              case 8:
-              case "end":
-                return _context4.stop();
-            }
+              }
+              _this2.setMainLabel((_source$sourceId = source.sourceId) !== null && _source$sourceId !== void 0 ? _source$sourceId : 'Main');
+              _context4.next = 8;
+              return selectSource({
+                kind: source.trackId,
+                source: source
+              });
+            case 8:
+              if (_this2.isGrid) {
+                _this2.setIsSplittedView(false);
+              }
+            case 9:
+            case "end":
+              return _context4.stop();
           }
         }, _callee4);
       }))();
@@ -14553,8 +14358,8 @@ function VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_re
 });
 // CONCATENATED MODULE: ./src/components/VideoPlayerSideVideoSources.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/components/VideoPlayerSideVideoSources.vue?vue&type=style&index=0&id=bcbd0770&scoped=true&lang=css
-var VideoPlayerSideVideoSourcesvue_type_style_index_0_id_bcbd0770_scoped_true_lang_css = __webpack_require__("14dd");
+// EXTERNAL MODULE: ./src/components/VideoPlayerSideVideoSources.vue?vue&type=style&index=0&id=7e1ea391&scoped=true&lang=css
+var VideoPlayerSideVideoSourcesvue_type_style_index_0_id_7e1ea391_scoped_true_lang_css = __webpack_require__("a3c7");
 
 // CONCATENATED MODULE: ./src/components/VideoPlayerSideVideoSources.vue
 
@@ -14564,7 +14369,7 @@ var VideoPlayerSideVideoSourcesvue_type_style_index_0_id_bcbd0770_scoped_true_la
 
 
 
-const VideoPlayerSideVideoSources_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerSideVideoSourcesvue_type_script_lang_js, [['render',VideoPlayerSideVideoSourcesvue_type_template_id_bcbd0770_scoped_true_render],['__scopeId',"data-v-bcbd0770"]])
+const VideoPlayerSideVideoSources_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerSideVideoSourcesvue_type_script_lang_js, [['render',VideoPlayerSideVideoSourcesvue_type_template_id_7e1ea391_scoped_true_render],['__scopeId',"data-v-7e1ea391"]])
 
 /* harmony default export */ var VideoPlayerSideVideoSources = (VideoPlayerSideVideoSources_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsBadge.vue?vue&type=template&id=11dcaf08
@@ -14618,9 +14423,6 @@ const VideoPlayerControlsBadge_exports_ = /*#__PURE__*/exportHelper_default()(Vi
 /* harmony default export */ var VideoPlayerControlsBadge = (VideoPlayerControlsBadge_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsFullscreen.vue?vue&type=template&id=d39d68da
 
-
-var VideoPlayerControlsFullscreenvue_type_template_id_d39d68da_hoisted_1 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Full Screen ");
-
 function VideoPlayerControlsFullscreenvue_type_template_id_d39d68da_render(_ctx, _cache, $props, $setup, $data, $options) {
   return _ctx.isMobile ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     key: 0,
@@ -14633,7 +14435,7 @@ function VideoPlayerControlsFullscreenvue_type_template_id_d39d68da_render(_ctx,
       'ml-viewer-bi-fullscreen': !$data.fullscreen,
       'ml-viewer-bi-fullscreen-exit': $data.fullscreen
     }])
-  }, null, 2), VideoPlayerControlsFullscreenvue_type_template_id_d39d68da_hoisted_1])) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("i", {
+  }, null, 2), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Full Screen ")])) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("i", {
     key: 1,
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["h3 align-middle control-icon", {
       'ml-viewer-bi-fullscreen': !$data.fullscreen,
@@ -14661,18 +14463,14 @@ function VideoPlayerControlsFullscreenvue_type_template_id_d39d68da_render(_ctx,
   },
   mounted: function mounted() {
     var _this = this,
-        _document$getElementB;
-
+      _document$getElementB;
     document.onfullscreenchange = function () {
       _this.fullscreen = !!document.fullscreenElement;
     };
-
     var player = (_document$getElementB = document.getElementById('player')) !== null && _document$getElementB !== void 0 ? _document$getElementB : document.getElementById('player2');
-
     player.onwebkitfullscreenchange = function () {
       _this.fullscreen = player.fullscreenElement;
     };
-
     this.fullscreen = !!document.fullscreenElement || player.fullscreenElement;
   },
   computed: _extends({}, mapState('Controls', {
@@ -14694,13 +14492,6 @@ const VideoPlayerControlsFullscreen_exports_ = /*#__PURE__*/exportHelper_default
 /* harmony default export */ var VideoPlayerControlsFullscreen = (VideoPlayerControlsFullscreen_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsPip.vue?vue&type=template&id=63e7514d&scoped=true
 
-
-var VideoPlayerControlsPipvue_type_template_id_63e7514d_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-63e7514d"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
-};
-
-var VideoPlayerControlsPipvue_type_template_id_63e7514d_scoped_true_hoisted_1 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Miniplayer ");
-
 function VideoPlayerControlsPipvue_type_template_id_63e7514d_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   return _ctx.isMobile ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     key: 0,
@@ -14713,7 +14504,7 @@ function VideoPlayerControlsPipvue_type_template_id_63e7514d_scoped_true_render(
       'ml-viewer-bi-pip': !_ctx.pip,
       'ml-viewer-bi-pip-fill': _ctx.pip
     }])
-  }, null, 2), VideoPlayerControlsPipvue_type_template_id_63e7514d_scoped_true_hoisted_1])) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
+  }, null, 2), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Miniplayer ")])) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
     key: 1,
     class: "mobile-setting",
     onClick: _cache[1] || (_cache[1] = function () {
@@ -14805,48 +14596,37 @@ function VideoPlayerControlsPlayvue_type_template_id_11fee096_render(_ctx, _cach
     togglePlay: function () {
       var _togglePlay = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var _this$video;
-
         return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!this.playing) {
-                  _context.next = 5;
-                  break;
-                }
-
-                _context.next = 3;
-                return this.video.pause();
-
-              case 3:
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              if (!this.playing) {
+                _context.next = 5;
+                break;
+              }
+              _context.next = 3;
+              return this.video.pause();
+            case 3:
+              _context.next = 10;
+              break;
+            case 5:
+              if (!(((_this$video = this.video) === null || _this$video === void 0 ? void 0 : _this$video.srcObject) !== null)) {
                 _context.next = 10;
                 break;
-
-              case 5:
-                if (!(((_this$video = this.video) === null || _this$video === void 0 ? void 0 : _this$video.srcObject) !== null)) {
-                  _context.next = 10;
-                  break;
-                }
-
-                _context.next = 8;
-                return connectToStream();
-
-              case 8:
-                _context.next = 10;
-                return this.video.play();
-
-              case 10:
-              case "end":
-                return _context.stop();
-            }
+              }
+              _context.next = 8;
+              return connectToStream();
+            case 8:
+              _context.next = 10;
+              return this.video.play();
+            case 10:
+            case "end":
+              return _context.stop();
           }
         }, _callee, this);
       }));
-
       function togglePlay() {
         return _togglePlay.apply(this, arguments);
       }
-
       return togglePlay;
     }()
   }
@@ -14862,59 +14642,47 @@ function VideoPlayerControlsPlayvue_type_template_id_11fee096_render(_ctx, _cach
 const VideoPlayerControlsPlay_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsPlayvue_type_script_lang_js, [['render',VideoPlayerControlsPlayvue_type_template_id_11fee096_render]])
 
 /* harmony default export */ var VideoPlayerControlsPlay = (VideoPlayerControlsPlay_exports_);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettings.vue?vue&type=template&id=5b688000&scoped=true
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettings.vue?vue&type=template&id=dba89080&scoped=true
 
-
-var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-5b688000"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
+var VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_withScopeId = function _withScopeId(n) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-dba89080"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
-var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_1 = {
+var VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_hoisted_1 = {
   class: "dropup"
 };
-var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_2 = {
+var VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_hoisted_2 = {
   key: 0,
   class: "badge bg-light ms-2"
 };
-
-var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_3 = /*#__PURE__*/VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_withScopeId(function () {
+var VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_hoisted_3 = /*#__PURE__*/VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "bi ml-viewer-bi-exclamation-circle-fill p-0"
   }, null, -1);
 });
-
-var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_4 = [VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_3];
-var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_5 = {
+var VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_hoisted_4 = [VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_hoisted_3];
+var VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_hoisted_5 = {
   class: "dropdown-header d-flex m-0 col-12"
 };
-
-var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_6 = /*#__PURE__*/VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_withScopeId(function () {
+var VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_hoisted_6 = /*#__PURE__*/VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h6", {
     class: "p-0 m-0"
   }, "Settings", -1);
 });
-
-var VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_7 = {
+var VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_hoisted_7 = {
   class: "p-0 ml-auto",
   style: {
     "color": "#9e9e9e"
   }
 };
-function VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerControlsSettingsQuality = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsQuality");
-
+  var _component_VideoPlayerControlsSettingsLayout = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsLayout");
   var _component_VideoPlayerControlsSettingsSplitView = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsSplitView");
-
   var _component_VideoPlayerControlsSettingsVideoTrack = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsVideoTrack");
-
   var _component_VideoPlayerControlsSettingsAudioTrack = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsAudioTrack");
-
   var _component_VideoPlayerControlsSettingsStats = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsStats");
-
   var _component_VideoPlayerControlsSettingsReportIssue = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsReportIssue");
-
   var _component_VideoPlayerControlsSettingsDropdown = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettingsDropdown");
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Fragment"], null, [_ctx.dropup !== '' ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Teleport"], {
     key: 0,
     to: "#viewer-container"
@@ -14923,12 +14691,12 @@ function VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_re
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return _ctx.setDropup('');
     })
-  })])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
+  })])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "ml-viewer-bi-gear-fill h3 align-middle control-icon",
     onClick: _cache[1] || (_cache[1] = function ($event) {
       return _ctx.setDropup('settings');
     })
-  }, [_ctx.trackWarning ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_2, VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_4)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+  }, [_ctx.trackWarning ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_hoisted_2, VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_hoisted_4)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     ref: "settings",
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["dropdown-menu dropdown-menu-right", {
       show: _ctx.dropup === 'settings'
@@ -14936,16 +14704,18 @@ function VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_re
     style: {
       "margin-bottom": "0.9rem"
     }
-  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_5, [VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_6, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_hoisted_7, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($data.viewerVersion), 1)]), _ctx.getActiveMedias.length > 1 ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettingsQuality, {
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_hoisted_5, [VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_hoisted_6, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_hoisted_7, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($data.viewerVersion), 1)]), _ctx.getActiveMedias.length > 1 ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettingsQuality, {
     key: 0
-  })) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), _ctx.getVideoSources.length > 1 ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettingsSplitView, {
+  })) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), _ctx.getVideoSources.length > 1 && _ctx.isSplittedView ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettingsLayout, {
     key: 1
+  })) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), _ctx.getVideoSources.length > 1 ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettingsSplitView, {
+    key: 2
   })) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), _ctx.getVideoSources.length > 1 || !_ctx.getVideoHasMain && _ctx.getVideoSources.length ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettingsVideoTrack, {
-    key: 2,
+    key: 3,
     unsupportedFlagEmoji: $options.unsupportedFlagEmoji,
     sourceFlagEmojiToPng: $options.sourceFlagEmojiToPng
   }, null, 8, ["unsupportedFlagEmoji", "sourceFlagEmojiToPng"])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), _ctx.getAudioSources.length > 1 || !_ctx.getAudioHasMain && _ctx.getAudioSources.length ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsSettingsAudioTrack, {
-    key: 3,
+    key: 4,
     unsupportedFlagEmoji: $options.unsupportedFlagEmoji,
     sourceFlagEmojiToPng: $options.sourceFlagEmojiToPng
   }, null, 8, ["unsupportedFlagEmoji", "sourceFlagEmojiToPng"])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerControlsSettingsStats), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerControlsSettingsReportIssue, {
@@ -14969,7 +14739,7 @@ function VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_re
     sourceFlagEmojiToPng: $options.sourceFlagEmojiToPng
   }, null, 8, ["selected", "items", "compare", "handleClick", "title", "unsupportedFlagEmoji", "sourceFlagEmojiToPng"])], 6)])], 64);
 }
-// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettings.vue?vue&type=template&id=5b688000&scoped=true
+// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettings.vue?vue&type=template&id=dba89080&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.array.index-of.js
 var es_array_index_of = __webpack_require__("c975");
@@ -14988,11 +14758,9 @@ var es_string_replace = __webpack_require__("5319");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsVideoTrack.vue?vue&type=template&id=7ef173a6&scoped=true
 
-
 var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-7ef173a6"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_1 = {
   class: "back-header mr-2"
 };
@@ -15003,34 +14771,29 @@ var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_tr
   key: 0,
   class: "badge bg-danger"
 };
-
-var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_4 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Video Source: ");
-
-var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_5 = ["innerHTML"];
-var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_6 = {
+var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_4 = ["innerHTML"];
+var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_5 = {
   key: 1
 };
-
-var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_7 = /*#__PURE__*/VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_withScopeId(function () {
+var VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_6 = /*#__PURE__*/VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: "back-arrow"
   }, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "bi ml-viewer-bi-chevron-right ml-auto py-0"
   })], -1);
 });
-
 function VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     class: "dropdown-item d-flex align-items-center pr-0 justify-content-between",
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return _ctx.setDropup('videoTracks');
     })
-  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_2, [this.selectedVideoSource.name === 'none' ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]), VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_4]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_2, [this.selectedVideoSource.name === 'none' ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Video Source: ")]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["dropdown-item-name mr-auto", [this.selectedVideoSource.name === 'none' ? 'none' : '', this.selectedVideoSource.sourceId === null ? 'main' : '']])
   }, [$props.unsupportedFlagEmoji(this.selectedVideoSource.name) ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", {
     key: 0,
     innerHTML: $props.sourceFlagEmojiToPng(this.selectedVideoSource.name)
-  }, null, 8, VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_5)) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_6, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(this.selectedVideoSource.name), 1))], 2), VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_7]);
+  }, null, 8, VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_4)) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_5, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(this.selectedVideoSource.name), 1))], 2), VideoPlayerControlsSettingsVideoTrackvue_type_template_id_7ef173a6_scoped_true_hoisted_6]);
 }
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsVideoTrack.vue?vue&type=template&id=7ef173a6&scoped=true
 
@@ -15068,11 +14831,9 @@ const VideoPlayerControlsSettingsVideoTrack_exports_ = /*#__PURE__*/exportHelper
 /* harmony default export */ var VideoPlayerControlsSettingsVideoTrack = (VideoPlayerControlsSettingsVideoTrack_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsAudioTrack.vue?vue&type=template&id=b7f6245a&scoped=true
 
-
 var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-b7f6245a"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_1 = {
   class: "back-header mr-2"
 };
@@ -15083,32 +14844,27 @@ var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_tr
   key: 0,
   class: "badge bg-danger"
 };
-
-var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_4 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Audio Source: ");
-
-var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_5 = ["innerHTML"];
-var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_6 = {
+var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_4 = ["innerHTML"];
+var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_5 = {
   key: 1
 };
-
-var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_7 = /*#__PURE__*/VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_withScopeId(function () {
+var VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_6 = /*#__PURE__*/VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", null, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "bi ml-viewer-bi-chevron-right ml-auto py-0"
   })], -1);
 });
-
 function VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     class: "dropdown-item d-flex align-items-center pr-0 justify-content-between",
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return _ctx.setDropup('audioTracks');
     })
-  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_2, [this.selectedAudioSource.name === 'none' ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]), VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_4]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_2, [this.selectedAudioSource.name === 'none' ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Audio Source: ")]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["dropdown-item-name mr-auto", [this.selectedAudioSource.name === 'none' ? 'none' : '', this.selectedAudioSource.sourceId === null ? 'main' : '']])
   }, [$props.unsupportedFlagEmoji(this.selectedAudioSource.name) ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", {
     key: 0,
     innerHTML: $props.sourceFlagEmojiToPng(this.selectedAudioSource.name)
-  }, null, 8, VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_5)) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_6, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(this.selectedAudioSource.name), 1))], 2), VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_7]);
+  }, null, 8, VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_4)) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("span", VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_5, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(this.selectedAudioSource.name), 1))], 2), VideoPlayerControlsSettingsAudioTrackvue_type_template_id_b7f6245a_scoped_true_hoisted_6]);
 }
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsAudioTrack.vue?vue&type=template&id=b7f6245a&scoped=true
 
@@ -15146,21 +14902,17 @@ const VideoPlayerControlsSettingsAudioTrack_exports_ = /*#__PURE__*/exportHelper
 /* harmony default export */ var VideoPlayerControlsSettingsAudioTrack = (VideoPlayerControlsSettingsAudioTrack_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsQuality.vue?vue&type=template&id=87b9709e
 
-
 var VideoPlayerControlsSettingsQualityvue_type_template_id_87b9709e_hoisted_1 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", {
   class: "back-header mr-2"
 }, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
   class: "bi ml-viewer-bi-sliders"
 }), /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Video Quality: ")], -1);
-
 var VideoPlayerControlsSettingsQualityvue_type_template_id_87b9709e_hoisted_2 = {
   class: "dropdown-item-name mr-auto"
 };
-
 var VideoPlayerControlsSettingsQualityvue_type_template_id_87b9709e_hoisted_3 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", null, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
   class: "bi ml-viewer-bi-chevron-right ml-auto py-0"
 })], -1);
-
 function VideoPlayerControlsSettingsQualityvue_type_template_id_87b9709e_render(_ctx, _cache, $props, $setup, $data, $options) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     class: "dropdown-item d-flex align-items-center pr-0 justify-content-between",
@@ -15196,22 +14948,16 @@ const VideoPlayerControlsSettingsQuality_exports_ = /*#__PURE__*/exportHelper_de
 /* harmony default export */ var VideoPlayerControlsSettingsQuality = (VideoPlayerControlsSettingsQuality_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsStats.vue?vue&type=template&id=00e40a59&scoped=true
 
-
 var VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-00e40a59"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_hoisted_1 = /*#__PURE__*/VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "ml-viewer-bi-info-circle-fill align-middle control-icon"
   }, null, -1);
 });
-
-var VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_hoisted_2 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Media Stats ");
-
 function VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerStatsTable = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerStatsTable");
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["dropdown-item", {
       disabled: !_ctx.isLive
@@ -15219,7 +14965,7 @@ function VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_tr
     onClick: _cache[0] || (_cache[0] = function () {
       return $options.toggleStats && $options.toggleStats.apply($options, arguments);
     })
-  }, [VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_hoisted_1, VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_hoisted_2, $data.showStats ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Teleport"], {
+  }, [VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_hoisted_1, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Media Stats "), $data.showStats ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Teleport"], {
     key: 0,
     to: "#vplayer"
   }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerStatsTable, {
@@ -15231,11 +14977,9 @@ function VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_tr
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerStatsTable.vue?vue&type=template&id=80d372f0&scoped=true
 
 
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-80d372f0"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_1 = {
   class: "table table-sm table-dark table-borderless fixed-top"
 };
@@ -15243,17 +14987,14 @@ var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_2 = {
   key: 0,
   class: "d-flex align-items-center"
 };
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_3 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", null, "Source:", -1);
 });
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_4 = ["value"];
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_5 = {
   colspan: "2",
   class: "text-right"
 };
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_6 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("tr", {
     class: "row mx-0 text-left"
@@ -15265,18 +15006,15 @@ var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_6 = /
     class: "col-6"
   }, "Value")], -1);
 });
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_7 = {
   key: 0,
   class: "row mx-0"
 };
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_8 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Server Id", -1);
 });
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_9 = {
   class: "col-6"
 };
@@ -15284,13 +15022,11 @@ var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_10 = 
   key: 1,
   class: "row mx-0"
 };
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_11 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "RTT", -1);
 });
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_12 = {
   class: "col-6"
 };
@@ -15298,13 +15034,11 @@ var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_13 = 
   key: 2,
   class: "row mx-0"
 };
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_14 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Resolution", -1);
 });
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_15 = {
   class: "col-6"
 };
@@ -15312,13 +15046,11 @@ var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_16 = 
   key: 3,
   class: "row mx-0"
 };
-
 var _hoisted_17 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "FPS", -1);
 });
-
 var _hoisted_18 = {
   class: "col-6"
 };
@@ -15326,13 +15058,11 @@ var _hoisted_19 = {
   key: 4,
   class: "row mx-0"
 };
-
 var _hoisted_20 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Bitrate", -1);
 });
-
 var _hoisted_21 = {
   class: "col-6"
 };
@@ -15340,13 +15070,11 @@ var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_22 = 
   key: 5,
   class: "row mx-0"
 };
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_23 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Audio Bitrate", -1);
 });
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_24 = {
   class: "col-6"
 };
@@ -15354,13 +15082,11 @@ var _hoisted_25 = {
   key: 6,
   class: "row mx-0"
 };
-
 var _hoisted_26 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Total Received", -1);
 });
-
 var _hoisted_27 = {
   class: "col-6"
 };
@@ -15368,13 +15094,11 @@ var _hoisted_28 = {
   key: 7,
   class: "row mx-0"
 };
-
 var _hoisted_29 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Audio Total Received", -1);
 });
-
 var _hoisted_30 = {
   class: "col-6"
 };
@@ -15382,13 +15106,11 @@ var _hoisted_31 = {
   key: 8,
   class: "row mx-0"
 };
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_32 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Packet Loss", -1);
 });
-
 var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_33 = {
   class: "col-6"
 };
@@ -15396,13 +15118,11 @@ var VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_34 = 
   key: 9,
   class: "row mx-0"
 };
-
 var _hoisted_35 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Audio Packet Loss", -1);
 });
-
 var _hoisted_36 = {
   class: "col-6"
 };
@@ -15410,13 +15130,11 @@ var _hoisted_37 = {
   key: 10,
   class: "row mx-0"
 };
-
 var _hoisted_38 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Jitter", -1);
 });
-
 var _hoisted_39 = {
   class: "col-6"
 };
@@ -15424,13 +15142,11 @@ var _hoisted_40 = {
   key: 11,
   class: "row mx-0"
 };
-
 var _hoisted_41 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Audio Jitter", -1);
 });
-
 var _hoisted_42 = {
   class: "col-6"
 };
@@ -15438,85 +15154,71 @@ var _hoisted_43 = {
   key: 12,
   class: "row mx-0"
 };
-
 var _hoisted_44 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Capture timestamp", -1);
 });
-
 var _hoisted_45 = ["textContent"];
 var _hoisted_46 = {
   key: 13,
   class: "row mx-0"
 };
-
 var _hoisted_47 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Capture delta time", -1);
 });
-
 var _hoisted_48 = ["textContent"];
 var _hoisted_49 = {
   key: 14,
   class: "row mx-0"
 };
-
 var _hoisted_50 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Codecs", -1);
 });
-
 var _hoisted_51 = ["textContent"];
 var _hoisted_52 = {
   key: 15,
   class: "row mx-0"
 };
-
 var _hoisted_53 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6 text-break"
   }, "Timestamp", -1);
 });
-
 var _hoisted_54 = ["textContent"];
 var _hoisted_55 = {
   key: 16,
   class: "row mx-0"
 };
-
 var _hoisted_56 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6 text-break"
   }, "Server", -1);
 });
-
 var _hoisted_57 = ["textContent"];
 var _hoisted_58 = {
   key: 17,
   class: "row mx-0"
 };
-
 var _hoisted_59 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6 text-break"
   }, "Cluster", -1);
 });
-
 var _hoisted_60 = ["textContent"];
 var _hoisted_61 = {
   key: 18,
   class: "row mx-0"
 };
-
 var _hoisted_62 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-12 center"
   }, null, -1);
 });
-
 var _hoisted_63 = [_hoisted_62];
 var _hoisted_64 = {
   key: 19,
@@ -15528,7 +15230,6 @@ var _hoisted_65 = {
 };
 function VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _ctx$millicastView, _ctx$millicastView$si, _$options$video, _$options$video2, _$options$video3, _$options$video4, _$options$audio, _$options$video5, _$options$audio2, _$options$video6, _$options$audio3, _$options$video7, _$options$audio4;
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("table", VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("thead", null, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("tr", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["row mx-0 align-items-center", $options.multiStatsAvailable ? 'justify-content-between' : 'justify-content-end'])
   }, [$options.multiStatsAvailable ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("th", VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_2, [VideoPlayerStatsTablevue_type_template_id_80d372f0_scoped_true_hoisted_3, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("select", {
@@ -15616,11 +15317,9 @@ var bytesUnitsStorage = ['B', 'KB', 'MB', 'GB', 'TB'];
   },
   mounted: function mounted() {
     var _this = this;
-
     this.millicastView.webRTCPeer.initStats();
     this.millicastView.webRTCPeer.on('stats', function (peerStats) {
       var _peerStats$video, _peerStats$video$inbo, _window$peer, _window$peer$getRecei, _window$peer$getRecei2, _window$peer$getRecei3;
-
       (_peerStats$video = peerStats.video) === null || _peerStats$video === void 0 ? void 0 : (_peerStats$video$inbo = _peerStats$video.inbounds) === null || _peerStats$video$inbo === void 0 ? void 0 : _peerStats$video$inbo.forEach(function (stat, index) {
         if (stat.mid) {
           _this.midToStatsIndexMap[stat.mid] = index;
@@ -15651,7 +15350,6 @@ var bytesUnitsStorage = ['B', 'KB', 'MB', 'GB', 'TB'];
     },
     handleSourceChange: function handleSourceChange() {
       var _this$selectedSourceM;
-
       var mid = (_this$selectedSourceM = this.selectedSourceMid) !== null && _this$selectedSourceM !== void 0 ? _this$selectedSourceM : 0;
       this.statsIndex = this.midToStatsIndexMap[mid];
     }
@@ -15666,83 +15364,63 @@ var bytesUnitsStorage = ['B', 'KB', 'MB', 'GB', 'TB'];
     },
     audio: function audio() {
       var _this$stats$audio;
-
       var audio = (_this$stats$audio = this.stats.audio) === null || _this$stats$audio === void 0 ? void 0 : _this$stats$audio.inbounds;
-
       if ((audio === null || audio === void 0 ? void 0 : audio.length) > 0) {
         return audio[0];
       }
-
       return null;
     },
     video: function video() {
       var _this$stats$video;
-
       var video = (_this$stats$video = this.stats.video) === null || _this$stats$video === void 0 ? void 0 : _this$stats$video.inbounds;
       var videoLength = video === null || video === void 0 ? void 0 : video.length;
-
       if (videoLength) {
         return video[this.statsIndex > this.sourceRemoteTracks.length - 1 ? 0 : this.statsIndex];
       }
-
       return null;
     },
     codecs: function codecs() {
       var _this$video, _this$audio;
-
       var codecs = [];
-
       if ((_this$video = this.video) !== null && _this$video !== void 0 && _this$video.mimeType) {
         codecs.push(this.video.mimeType);
       }
-
       if ((_this$audio = this.audio) !== null && _this$audio !== void 0 && _this$audio.mimeType) {
         codecs.push(this.audio.mimeType);
       }
-
       return codecs.join();
     },
     timestamp: function timestamp() {
       var _this$video$timestamp, _this$video2, _this$audio2;
-
       var timestamp = (_this$video$timestamp = (_this$video2 = this.video) === null || _this$video2 === void 0 ? void 0 : _this$video2.timestamp) !== null && _this$video$timestamp !== void 0 ? _this$video$timestamp : (_this$audio2 = this.audio) === null || _this$audio2 === void 0 ? void 0 : _this$audio2.timestamp;
       return timestamp ? new Date(timestamp).toISOString() : null;
     },
     videoCaptureTimestamp: function videoCaptureTimestamp() {
       var _this$stats$videoSync, _this$stats$videoSync2, _this$stats$videoSync3, _this$stats$videoSync4;
-
       var timestamp;
-
       if ((_this$stats$videoSync = this.stats.videoSynchronizationSources) !== null && _this$stats$videoSync !== void 0 && (_this$stats$videoSync2 = _this$stats$videoSync[0]) !== null && _this$stats$videoSync2 !== void 0 && _this$stats$videoSync2.captureTimestamp && (_this$stats$videoSync3 = this.stats.videoSynchronizationSources) !== null && _this$stats$videoSync3 !== void 0 && (_this$stats$videoSync4 = _this$stats$videoSync3[0]) !== null && _this$stats$videoSync4 !== void 0 && _this$stats$videoSync4.timestamp) {
         var captureTime = formatNtpToEpoch(this.stats.videoSynchronizationSources[0].captureTimestamp);
         timestamp = new Date(captureTime).toISOString();
       }
-
       return timestamp;
     },
     videoCaptureDelta: function videoCaptureDelta() {
       var _this$stats$videoSync5, _this$stats$videoSync6, _this$stats$videoSync7, _this$stats$videoSync8;
-
       var delta;
-
       if ((_this$stats$videoSync5 = this.stats.videoSynchronizationSources) !== null && _this$stats$videoSync5 !== void 0 && (_this$stats$videoSync6 = _this$stats$videoSync5[0]) !== null && _this$stats$videoSync6 !== void 0 && _this$stats$videoSync6.captureTimestamp && (_this$stats$videoSync7 = this.stats.videoSynchronizationSources) !== null && _this$stats$videoSync7 !== void 0 && (_this$stats$videoSync8 = _this$stats$videoSync7[0]) !== null && _this$stats$videoSync8 !== void 0 && _this$stats$videoSync8.timestamp) {
         var _this$stats$videoSync9;
-
         var captureTime = formatNtpToEpoch(this.stats.videoSynchronizationSources[0].captureTimestamp);
         delta = ((_this$stats$videoSync9 = this.stats.videoSynchronizationSources) === null || _this$stats$videoSync9 === void 0 ? void 0 : _this$stats$videoSync9[0].timestamp) - captureTime;
         delta = "".concat(delta, " ms");
       }
-
       return delta;
     },
     serverId: function serverId() {
       var _this$millicastView, _this$millicastView$s;
-
       return (_this$millicastView = this.millicastView) === null || _this$millicastView === void 0 ? void 0 : (_this$millicastView$s = _this$millicastView.signaling) === null || _this$millicastView$s === void 0 ? void 0 : _this$millicastView$s.serverId;
     },
     clusterId: function clusterId() {
       var _this$millicastView2, _this$millicastView2$;
-
       return (_this$millicastView2 = this.millicastView) === null || _this$millicastView2 === void 0 ? void 0 : (_this$millicastView2$ = _this$millicastView2.signaling) === null || _this$millicastView2$ === void 0 ? void 0 : _this$millicastView2$.clusterId;
     },
     multiStatsAvailable: function multiStatsAvailable() {
@@ -15750,18 +15428,15 @@ var bytesUnitsStorage = ['B', 'KB', 'MB', 'GB', 'TB'];
     }
   })
 });
-
 var formatBytesRecursive = function formatBytesRecursive(value) {
   var unitsStoragePosition = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 0;
   var newValue = value / 1024;
-
   if (newValue < 1 || newValue > 1 && unitsStoragePosition + 1 > bytesUnitsStorage.length) {
     return "".concat(Math.round(value * 100) / 100, " ").concat(bytesUnitsStorage[unitsStoragePosition]);
   } else if (newValue > 1) {
     return formatBytesRecursive(newValue, unitsStoragePosition + 1);
   }
 };
-
 var formatNtpToEpoch = function formatNtpToEpoch(value) {
   return value - 2208988800000;
 };
@@ -15820,25 +15495,20 @@ var VideoPlayerControlsSettingsStatsvue_type_style_index_0_id_00e40a59_lang_scss
 const VideoPlayerControlsSettingsStats_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsSettingsStatsvue_type_script_lang_js, [['render',VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_true_render],['__scopeId',"data-v-00e40a59"]])
 
 /* harmony default export */ var VideoPlayerControlsSettingsStats = (VideoPlayerControlsSettingsStats_exports_);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsReportIssue.vue?vue&type=template&id=d735932c
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsReportIssue.vue?vue&type=template&id=2938c91e
 
-
-var VideoPlayerControlsSettingsReportIssuevue_type_template_id_d735932c_hoisted_1 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
+var VideoPlayerControlsSettingsReportIssuevue_type_template_id_2938c91e_hoisted_1 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
   class: "ml-viewer-bi-flag-fill align-middle control-icon"
 }, null, -1);
-
-var VideoPlayerControlsSettingsReportIssuevue_type_template_id_d735932c_hoisted_2 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Report Playback Issue ");
-
-function VideoPlayerControlsSettingsReportIssuevue_type_template_id_d735932c_render(_ctx, _cache, $props, $setup, $data, $options) {
+function VideoPlayerControlsSettingsReportIssuevue_type_template_id_2938c91e_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerReportModal = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerReportModal");
-
   return $data.showReportButton ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     key: 0,
     class: "dropdown-item",
     onClick: _cache[0] || (_cache[0] = function () {
       return $options.toggleReport && $options.toggleReport.apply($options, arguments);
     })
-  }, [VideoPlayerControlsSettingsReportIssuevue_type_template_id_d735932c_hoisted_1, VideoPlayerControlsSettingsReportIssuevue_type_template_id_d735932c_hoisted_2, $data.showReportModal ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Teleport"], {
+  }, [VideoPlayerControlsSettingsReportIssuevue_type_template_id_2938c91e_hoisted_1, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Report Playback Issue "), $data.showReportModal ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Teleport"], {
     key: 0,
     to: "#vplayer"
   }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_VideoPlayerReportModal, {
@@ -15846,74 +15516,58 @@ function VideoPlayerControlsSettingsReportIssuevue_type_template_id_d735932c_ren
     close: $options.toggleReport
   }, null, 8, ["streamId", "close"])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true);
 }
-// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsReportIssue.vue?vue&type=template&id=d735932c
+// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsReportIssue.vue?vue&type=template&id=2938c91e
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerReportModal.vue?vue&type=template&id=2c22aaec&scoped=true
-
-
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerReportModal.vue?vue&type=template&id=4b8eac50&scoped=true
 
 
-var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-2c22aaec"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
+
+var VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_withScopeId = function _withScopeId(n) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-4b8eac50"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
-var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_1 = {
+var VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_1 = {
   class: "header"
 };
-
-var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_2 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_withScopeId(function () {
+var VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_2 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", {
     class: "ml-viewer-bi-flag-fill align-middle"
   }, null, -1);
 });
-
-var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_3 = ["textContent"];
-var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_4 = {
+var VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_3 = ["textContent"];
+var VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_4 = {
   class: "form-group"
 };
-
-var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_5 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_withScopeId(function () {
+var VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_5 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("label", {
     for: "name-input"
   }, "Name", -1);
 });
-
-var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_6 = {
+var VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_6 = {
   class: "form-group"
 };
-
-var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_7 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_withScopeId(function () {
+var VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_7 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("label", {
     for: "email-input"
   }, "Email", -1);
 });
-
-var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_8 = {
+var VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_8 = {
   class: "form-group"
 };
-
-var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_9 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_withScopeId(function () {
+var VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_9 = /*#__PURE__*/VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("label", {
     for: "description-input"
   }, "Description", -1);
 });
-
-var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_10 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])("Cancel");
-
-var VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_11 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])("Submit");
-
-function VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_base_button = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("base-button");
-
   var _component_base_modal = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("base-modal");
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_base_modal, {
     toggle: $props.close
   }, {
     "modal-header": Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withCtx"])(function () {
-      return [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_1, [VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_2, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h3", {
+      return [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_1, [VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_2, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h3", {
         textContent: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($data.title)
-      }, null, 8, VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_3)])];
+      }, null, 8, VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_3)])];
     }),
     "modal-body": Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withCtx"])(function () {
       return [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("form", {
@@ -15921,16 +15575,16 @@ function VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_render(
         onSubmit: _cache[3] || (_cache[3] = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withModifiers"])(function () {
           return $options.sendReport && $options.sendReport.apply($options, arguments);
         }, ["prevent"]))
-      }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_4, [VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_5, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("input", {
+      }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_4, [VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_5, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("input", {
         type: "text",
         class: "form-control",
         id: "name-input",
-        placeholder: "Name Lastname",
+        placeholder: "Full name",
         "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
           return $data.report.name = $event;
         }),
         required: ""
-      }, null, 512), [[external_commonjs_vue_commonjs2_vue_root_Vue_["vModelText"], $data.report.name]])]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_6, [VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_7, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("input", {
+      }, null, 512), [[external_commonjs_vue_commonjs2_vue_root_Vue_["vModelText"], $data.report.name]])]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_6, [VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_7, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("input", {
         type: "email",
         class: "form-control",
         id: "email-input",
@@ -15939,7 +15593,7 @@ function VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_render(
           return $data.report.email = $event;
         }),
         required: ""
-      }, null, 512), [[external_commonjs_vue_commonjs2_vue_root_Vue_["vModelText"], $data.report.email]])]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_8, [VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_9, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("textarea", {
+      }, null, 512), [[external_commonjs_vue_commonjs2_vue_root_Vue_["vModelText"], $data.report.email]])]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_8, [VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_hoisted_9, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("textarea", {
         class: "form-control",
         id: "description-input",
         rows: "4",
@@ -15955,7 +15609,7 @@ function VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_render(
         onClick: $props.close
       }, {
         default: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withCtx"])(function () {
-          return [VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_10];
+          return [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])("Cancel")];
         }),
         _: 1
       }, 8, ["onClick"]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_base_button, {
@@ -15965,7 +15619,7 @@ function VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_render(
         disabled: $data.isLoading
       }, {
         default: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withCtx"])(function () {
-          return [VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_hoisted_11];
+          return [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])("Submit")];
         }),
         _: 1
       }, 8, ["disabled"])];
@@ -15973,7 +15627,7 @@ function VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_render(
     _: 1
   }, 8, ["toggle"]);
 }
-// CONCATENATED MODULE: ./src/components/VideoPlayerReportModal.vue?vue&type=template&id=2c22aaec&scoped=true
+// CONCATENATED MODULE: ./src/components/VideoPlayerReportModal.vue?vue&type=template&id=4b8eac50&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.json.stringify.js
 var es_json_stringify = __webpack_require__("e9c4");
@@ -16021,76 +15675,60 @@ var es_json_stringify = __webpack_require__("e9c4");
   methods: {
     sendReport: function sendReport() {
       var _this = this;
-
       return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
         var log, i, toast, _this$millicastView$s, _this$millicastView, _this$millicastView$s2, _this$millicastView$s3, _this$millicastView2, _this$millicastView2$, headers, _err$response, message;
-
         return _regeneratorRuntime().wrap(function _callee$(_context) {
-          while (1) {
-            switch (_context.prev = _context.next) {
-              case 0:
-                if (!_this.isLoading) {
-                  _context.next = 2;
-                  break;
-                }
-
-                return _context.abrupt("return");
-
-              case 2:
-                log = millicast_umd["Logger"].getHistory();
-
-                for (i = 0; i < _this.localStats.length; i++) {
-                  log.push('[PeerConnectionStats] - ' + JSON.stringify(_this.localStats[i]));
-                }
-
-                _this.report.log = log;
-                toast = useToast();
-                _context.prev = 6;
-                _this.isLoading = true;
-                headers = {
-                  'Content-Type': 'application/json'
-                };
-                _this.report.serverId = (_this$millicastView$s = (_this$millicastView = _this.millicastView) === null || _this$millicastView === void 0 ? void 0 : (_this$millicastView$s2 = _this$millicastView.signaling) === null || _this$millicastView$s2 === void 0 ? void 0 : _this$millicastView$s2.serverId) !== null && _this$millicastView$s !== void 0 ? _this$millicastView$s : 'NOT_CONNECTED';
-                _this.report.clusterId = (_this$millicastView$s3 = (_this$millicastView2 = _this.millicastView) === null || _this$millicastView2 === void 0 ? void 0 : (_this$millicastView2$ = _this$millicastView2.signaling) === null || _this$millicastView2$ === void 0 ? void 0 : _this$millicastView2$.clusterId) !== null && _this$millicastView$s3 !== void 0 ? _this$millicastView$s3 : 'NOT_CONNECTED';
-                _context.next = 13;
-                return fetch(_this.reportUrl + '/reports', {
-                  method: 'POST',
-                  headers: headers,
-                  body: JSON.stringify(_this.report)
-                });
-
-              case 13:
-                toast.success('Report sent successfully', {
-                  timeout: 3000
-                });
-                _context.next = 21;
+          while (1) switch (_context.prev = _context.next) {
+            case 0:
+              if (!_this.isLoading) {
+                _context.next = 2;
                 break;
-
-              case 16:
-                _context.prev = 16;
-                _context.t0 = _context["catch"](6);
-                message = "Error: couldn't send report";
-
-                if ((_err$response = _context.t0.response) !== null && _err$response !== void 0 && _err$response.data) {
-                  message += ', ' + _context.t0.response.data;
-                }
-
-                toast.error(message, {
-                  timeout: 3000
-                });
-
-              case 21:
-                _context.prev = 21;
-                _this.isLoading = false;
-
-                _this.close();
-
-                return _context.finish(21);
-
-              case 25:
-              case "end":
-                return _context.stop();
-            }
+              }
+              return _context.abrupt("return");
+            case 2:
+              log = millicast_umd["Logger"].getHistory();
+              for (i = 0; i < _this.localStats.length; i++) {
+                log.push('[PeerConnectionStats] - ' + JSON.stringify(_this.localStats[i]));
+              }
+              _this.report.log = log;
+              toast = useToast();
+              _context.prev = 6;
+              _this.isLoading = true;
+              headers = {
+                'Content-Type': 'application/json'
+              };
+              _this.report.serverId = (_this$millicastView$s = (_this$millicastView = _this.millicastView) === null || _this$millicastView === void 0 ? void 0 : (_this$millicastView$s2 = _this$millicastView.signaling) === null || _this$millicastView$s2 === void 0 ? void 0 : _this$millicastView$s2.serverId) !== null && _this$millicastView$s !== void 0 ? _this$millicastView$s : 'NOT_CONNECTED';
+              _this.report.clusterId = (_this$millicastView$s3 = (_this$millicastView2 = _this.millicastView) === null || _this$millicastView2 === void 0 ? void 0 : (_this$millicastView2$ = _this$millicastView2.signaling) === null || _this$millicastView2$ === void 0 ? void 0 : _this$millicastView2$.clusterId) !== null && _this$millicastView$s3 !== void 0 ? _this$millicastView$s3 : 'NOT_CONNECTED';
+              _context.next = 13;
+              return fetch(_this.reportUrl + '/reports', {
+                method: 'POST',
+                headers: headers,
+                body: JSON.stringify(_this.report)
+              });
+            case 13:
+              toast.success('Report sent successfully', {
+                timeout: 3000
+              });
+              _context.next = 21;
+              break;
+            case 16:
+              _context.prev = 16;
+              _context.t0 = _context["catch"](6);
+              message = "Error: couldn't send report";
+              if ((_err$response = _context.t0.response) !== null && _err$response !== void 0 && _err$response.data) {
+                message += ', ' + _context.t0.response.data;
+              }
+              toast.error(message, {
+                timeout: 3000
+              });
+            case 21:
+              _context.prev = 21;
+              _this.isLoading = false;
+              _this.close();
+              return _context.finish(21);
+            case 25:
+            case "end":
+              return _context.stop();
           }
         }, _callee, null, [[6, 16, 21, 25]]);
       }))();
@@ -16098,7 +15736,6 @@ var es_json_stringify = __webpack_require__("e9c4");
     statsHandler: function statsHandler(stats) {
       var MAX_STATS_LENGTH = 40;
       this.localStats.push(stats);
-
       if (this.localStats.length >= MAX_STATS_LENGTH) {
         this.localStats = this.localStats.slice(-MAX_STATS_LENGTH);
       }
@@ -16115,30 +15752,26 @@ var es_json_stringify = __webpack_require__("e9c4");
   })),
   mounted: function mounted() {
     var _this$streamId, _this$streamId2, _this$millicastView3, _this$millicastView4, _this$millicastView4$;
-
     this.report.accountId = (_this$streamId = this.streamId) === null || _this$streamId === void 0 ? void 0 : _this$streamId.match(/^(.*?)\/.*$/)[1];
     this.report.streamId = (_this$streamId2 = this.streamId) === null || _this$streamId2 === void 0 ? void 0 : _this$streamId2.match(/^.*?\/(.*)$/)[1];
     this.report.url = window.location.href;
-
     if ((_this$millicastView3 = this.millicastView) !== null && _this$millicastView3 !== void 0 && _this$millicastView3.webRTCPeer && !((_this$millicastView4 = this.millicastView) !== null && _this$millicastView4 !== void 0 && (_this$millicastView4$ = _this$millicastView4.webRTCPeer) !== null && _this$millicastView4$ !== void 0 && _this$millicastView4$.peerConnectionStats)) {
       this.millicastView.webRTCPeer.initStats();
       this.statsInitialized = true;
     }
-
     this.millicastView.webRTCPeer.on('stats', this.statsHandler);
   },
   beforeUnmount: function beforeUnmount() {
     if (this.statsInitialized) {
       this.millicastView.webRTCPeer.stopStats();
     }
-
     this.millicastView.webRTCPeer.removeListener('stats', this.statsHandler);
   }
 });
 // CONCATENATED MODULE: ./src/components/VideoPlayerReportModal.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/components/VideoPlayerReportModal.vue?vue&type=style&index=0&id=2c22aaec&scoped=true&lang=css
-var VideoPlayerReportModalvue_type_style_index_0_id_2c22aaec_scoped_true_lang_css = __webpack_require__("363c");
+// EXTERNAL MODULE: ./src/components/VideoPlayerReportModal.vue?vue&type=style&index=0&id=4b8eac50&scoped=true&lang=css
+var VideoPlayerReportModalvue_type_style_index_0_id_4b8eac50_scoped_true_lang_css = __webpack_require__("1f9a");
 
 // CONCATENATED MODULE: ./src/components/VideoPlayerReportModal.vue
 
@@ -16148,7 +15781,7 @@ var VideoPlayerReportModalvue_type_style_index_0_id_2c22aaec_scoped_true_lang_cs
 
 
 
-const VideoPlayerReportModal_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerReportModalvue_type_script_lang_js, [['render',VideoPlayerReportModalvue_type_template_id_2c22aaec_scoped_true_render],['__scopeId',"data-v-2c22aaec"]])
+const VideoPlayerReportModal_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerReportModalvue_type_script_lang_js, [['render',VideoPlayerReportModalvue_type_template_id_4b8eac50_scoped_true_render],['__scopeId',"data-v-4b8eac50"]])
 
 /* harmony default export */ var VideoPlayerReportModal = (VideoPlayerReportModal_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsReportIssue.vue?vue&type=script&lang=js
@@ -16177,6 +15810,7 @@ const VideoPlayerReportModal_exports_ = /*#__PURE__*/exportHelper_default()(Vide
   }),
   computed: _extends({}, mapState('Params', {
     reportUrl: function reportUrl(state) {
+      this.showReportButton = !!state.queryParams.reportUrl;
       return state.queryParams.reportUrl;
     }
   })),
@@ -16194,46 +15828,43 @@ const VideoPlayerReportModal_exports_ = /*#__PURE__*/exportHelper_default()(Vide
 
 
 
-const VideoPlayerControlsSettingsReportIssue_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsSettingsReportIssuevue_type_script_lang_js, [['render',VideoPlayerControlsSettingsReportIssuevue_type_template_id_d735932c_render]])
+const VideoPlayerControlsSettingsReportIssue_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsSettingsReportIssuevue_type_script_lang_js, [['render',VideoPlayerControlsSettingsReportIssuevue_type_template_id_2938c91e_render]])
 
 /* harmony default export */ var VideoPlayerControlsSettingsReportIssue = (VideoPlayerControlsSettingsReportIssue_exports_);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsDropdown.vue?vue&type=template&id=3f20d85f&scoped=true
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsDropdown.vue?vue&type=template&id=491ccd6e&scoped=true
 
-
-var VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-3f20d85f"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
+var VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_withScopeId = function _withScopeId(n) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-491ccd6e"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
-var VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_1 = /*#__PURE__*/VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_withScopeId(function () {
+var VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_1 = /*#__PURE__*/VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "bi ml-viewer-bi-chevron-left p-0"
   }, null, -1);
 });
-
-var VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_2 = ["onClick"];
-var VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_3 = {
+var VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_2 = ["onClick"];
+var VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_3 = {
   class: "form-check p-0"
 };
-var VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_4 = {
+var VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_4 = {
   class: "row"
 };
-var VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_5 = {
+var VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_5 = {
   class: "col-1 mr-1"
 };
-var VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_6 = {
+var VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_6 = {
   class: "bi ml-viewer-bi-check p-0"
 };
-var VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_7 = ["innerHTML"];
-var VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_8 = {
+var VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_7 = ["innerHTML"];
+var VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_8 = {
   key: 1
 };
-function VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Fragment"], null, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("h6", {
     class: "dropdown-header back-header",
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return _ctx.setDropup('settings');
     })
-  }, [VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_1, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" " + Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($props.title), 1)]), (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(true), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Fragment"], null, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["renderList"])($props.items, function (item) {
+  }, [VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_1, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" " + Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($props.title), 1)]), (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(true), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Fragment"], null, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["renderList"])($props.items, function (item) {
     return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
       key: item.selectId,
       class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])([{
@@ -16242,15 +15873,15 @@ function VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped
       onClick: function onClick($event) {
         return $options.handleSelect(item);
       }
-    }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_3, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_4, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_5, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_6, null, 512), [[external_commonjs_vue_commonjs2_vue_root_Vue_["vShow"], $props.compare($props.selected, item)]])]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
+    }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_3, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_4, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_5, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_6, null, 512), [[external_commonjs_vue_commonjs2_vue_root_Vue_["vShow"], $props.compare($props.selected, item)]])]), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
       class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["item-name", [(item === null || item === void 0 ? void 0 : item.sourceId) === null ? 'main' : '']])
-    }, [(item !== null && item !== void 0 && item.name ? $props.unsupportedFlagEmoji(item === null || item === void 0 ? void 0 : item.name) : false) ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
+    }, [item !== null && item !== void 0 && item.name && $props.unsupportedFlagEmoji(item === null || item === void 0 ? void 0 : item.name) ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
       key: 0,
       innerHTML: $props.sourceFlagEmojiToPng(item === null || item === void 0 ? void 0 : item.name)
-    }, null, 8, VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_7)) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_8, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(item === null || item === void 0 ? void 0 : item.name), 1))], 2)])])], 10, VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_hoisted_2);
+    }, null, 8, VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_7)) : (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_8, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(item === null || item === void 0 ? void 0 : item.name), 1))], 2)])])], 10, VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_hoisted_2);
   }), 128))], 64);
 }
-// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsDropdown.vue?vue&type=template&id=3f20d85f&scoped=true
+// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsDropdown.vue?vue&type=template&id=491ccd6e&scoped=true
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsDropdown.vue?vue&type=script&lang=js
 
@@ -16277,8 +15908,8 @@ function VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped
 });
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsDropdown.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsDropdown.vue?vue&type=style&index=0&id=3f20d85f&lang=scss&scoped=true
-var VideoPlayerControlsSettingsDropdownvue_type_style_index_0_id_3f20d85f_lang_scss_scoped_true = __webpack_require__("49c8");
+// EXTERNAL MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsDropdown.vue?vue&type=style&index=0&id=491ccd6e&lang=scss&scoped=true
+var VideoPlayerControlsSettingsDropdownvue_type_style_index_0_id_491ccd6e_lang_scss_scoped_true = __webpack_require__("7442");
 
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsDropdown.vue
 
@@ -16288,25 +15919,23 @@ var VideoPlayerControlsSettingsDropdownvue_type_style_index_0_id_3f20d85f_lang_s
 
 
 
-const VideoPlayerControlsSettingsDropdown_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsSettingsDropdownvue_type_script_lang_js, [['render',VideoPlayerControlsSettingsDropdownvue_type_template_id_3f20d85f_scoped_true_render],['__scopeId',"data-v-3f20d85f"]])
+const VideoPlayerControlsSettingsDropdown_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsSettingsDropdownvue_type_script_lang_js, [['render',VideoPlayerControlsSettingsDropdownvue_type_template_id_491ccd6e_scoped_true_render],['__scopeId',"data-v-491ccd6e"]])
 
 /* harmony default export */ var VideoPlayerControlsSettingsDropdown = (VideoPlayerControlsSettingsDropdown_exports_);
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsSplitView.vue?vue&type=template&id=1dc7be3e
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsSplitView.vue?vue&type=template&id=3eaed314
 
-
-var VideoPlayerControlsSettingsSplitViewvue_type_template_id_1dc7be3e_hoisted_1 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
-  class: "bi-layout-sidebar-inset-reverse align-middle control-icon"
+var VideoPlayerControlsSettingsSplitViewvue_type_template_id_3eaed314_hoisted_1 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
+  class: "ml-viewer-bi-layout-sidebar-inset-reverse align-middle control-icon"
 }, null, -1);
-
-function VideoPlayerControlsSettingsSplitViewvue_type_template_id_1dc7be3e_render(_ctx, _cache, $props, $setup, $data, $options) {
+function VideoPlayerControlsSettingsSplitViewvue_type_template_id_3eaed314_render(_ctx, _cache, $props, $setup, $data, $options) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
     class: "dropdown-item",
     onClick: _cache[0] || (_cache[0] = function ($event) {
       return _ctx.setIsSplittedView(!_ctx.isSplittedView);
     })
-  }, [VideoPlayerControlsSettingsSplitViewvue_type_template_id_1dc7be3e_hoisted_1, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" " + Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(_ctx.isSplittedView ? 'Hide' : 'Show') + " Multi View ", 1)]);
+  }, [VideoPlayerControlsSettingsSplitViewvue_type_template_id_3eaed314_hoisted_1, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" " + Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(_ctx.isSplittedView ? 'Hide' : 'Show') + " Multi View ", 1)]);
 }
-// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsSplitView.vue?vue&type=template&id=1dc7be3e
+// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsSplitView.vue?vue&type=template&id=3eaed314
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsSplitView.vue?vue&type=script&lang=js
 
@@ -16324,13 +15953,47 @@ function VideoPlayerControlsSettingsSplitViewvue_type_template_id_1dc7be3e_rende
 
 
 
-const VideoPlayerControlsSettingsSplitView_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsSettingsSplitViewvue_type_script_lang_js, [['render',VideoPlayerControlsSettingsSplitViewvue_type_template_id_1dc7be3e_render]])
+const VideoPlayerControlsSettingsSplitView_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsSettingsSplitViewvue_type_script_lang_js, [['render',VideoPlayerControlsSettingsSplitViewvue_type_template_id_3eaed314_render]])
 
 /* harmony default export */ var VideoPlayerControlsSettingsSplitView = (VideoPlayerControlsSettingsSplitView_exports_);
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsLayout.vue?vue&type=template&id=20be2d5d
+
+function VideoPlayerControlsSettingsLayoutvue_type_template_id_20be2d5d_render(_ctx, _cache, $props, $setup, $data, $options) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("a", {
+    class: "dropdown-item",
+    onClick: _cache[0] || (_cache[0] = function ($event) {
+      return _ctx.setIsGrid(!_ctx.isGrid);
+    })
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
+    class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])([_ctx.isGrid ? 'bi ml-viewer-bi-grid' : 'bi ml-viewer-bi-grid-1x2', "align-middle control-icon"])
+  }, null, 2), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" Change layout ")]);
+}
+// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsLayout.vue?vue&type=template&id=20be2d5d
+
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsLayout.vue?vue&type=script&lang=js
+
+
+/* harmony default export */ var VideoPlayerControlsSettingsLayoutvue_type_script_lang_js = ({
+  name: "VideoPlayerControlsSettingsLayout",
+  computed: _extends({}, mapState("Controls", ["isGrid"])),
+  methods: _extends({}, mapMutations("Controls", ["setIsGrid"]))
+});
+// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsLayout.vue?vue&type=script&lang=js
+ 
+// CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsLayout.vue
+
+
+
+
+
+const VideoPlayerControlsSettingsLayout_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsSettingsLayoutvue_type_script_lang_js, [['render',VideoPlayerControlsSettingsLayoutvue_type_template_id_20be2d5d_render]])
+
+/* harmony default export */ var VideoPlayerControlsSettingsLayout = (VideoPlayerControlsSettingsLayout_exports_);
 // EXTERNAL MODULE: ./package.json
 var package_0 = __webpack_require__("9224");
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettings.vue?vue&type=script&lang=js
+
 
 
 
@@ -16366,7 +16029,8 @@ var package_0 = __webpack_require__("9224");
     VideoPlayerControlsSettingsStats: VideoPlayerControlsSettingsStats,
     VideoPlayerControlsSettingsReportIssue: VideoPlayerControlsSettingsReportIssue,
     VideoPlayerControlsSettingsDropdown: VideoPlayerControlsSettingsDropdown,
-    VideoPlayerControlsSettingsSplitView: VideoPlayerControlsSettingsSplitView
+    VideoPlayerControlsSettingsSplitView: VideoPlayerControlsSettingsSplitView,
+    VideoPlayerControlsSettingsLayout: VideoPlayerControlsSettingsLayout
   },
   props: {
     streamId: String
@@ -16400,6 +16064,9 @@ var package_0 = __webpack_require__("9224");
     },
     trackWarning: function trackWarning(state) {
       return state.trackWarning;
+    },
+    isSplittedView: function isSplittedView(state) {
+      return state.isSplittedView;
     }
   })),
   methods: _extends(_extends({}, mapMutations('Controls', ['setDropup', 'toggleFullscreen'])), {}, {
@@ -16420,8 +16087,9 @@ var package_0 = __webpack_require__("9224");
       var nAgt = navigator.userAgent;
       var isChrome = nAgt.indexOf('Chrome') !== -1;
       var isFlagEmoji = sourceId.match(/[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]/g) !== null;
-      var isWindows; // navigator.userAgentData is not supported for Firefox/Safari
+      var isWindows;
 
+      // navigator.userAgentData is not supported for Firefox/Safari
       if (isChrome) {
         isWindows = navigator.userAgentData.platform == 'Windows';
         return isFlagEmoji && isWindows;
@@ -16430,8 +16098,9 @@ var package_0 = __webpack_require__("9224");
       }
     },
     sourceFlagEmojiToPng: function sourceFlagEmojiToPng(sourceId) {
-      var selectedSourceFlagEmojis = sourceId.match(/[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]/g); // replace emojis  for img
+      var selectedSourceFlagEmojis = sourceId.match(/[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]/g);
 
+      // replace emojis  for img
       selectedSourceFlagEmojis.forEach(function (emoji) {
         // get emoji flag code, example france=fr
         var flagCode = Array.from(emoji, function (codeUnit) {
@@ -16446,114 +16115,93 @@ var package_0 = __webpack_require__("9224");
   }),
   mounted: function mounted() {
     this.viewerVersion = package_0["a" /* version */] ? 'v' + package_0["a" /* version */] : '';
+    this.toast = useToast();
   },
   watch: {
     dropup: function dropup(_dropup) {
+      var _this = this;
       if (_dropup === 'videoTracks' || _dropup === 'audioTracks' || _dropup === 'qualities') {
         this.settingsWidth = this.$refs.settings.clientWidth + 'px';
-
         switch (_dropup) {
           case 'videoTracks':
             {
               var videoTrackChange = /*#__PURE__*/function () {
                 var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee(source) {
-                  var toast;
                   return _regeneratorRuntime().wrap(function _callee$(_context) {
-                    while (1) {
-                      switch (_context.prev = _context.next) {
-                        case 0:
-                          _context.prev = 0;
-                          _context.next = 3;
-                          return selectSource({
-                            kind: 'video',
-                            source: source
-                          });
-
-                        case 3:
-                          _context.next = 9;
-                          break;
-
-                        case 5:
-                          _context.prev = 5;
-                          _context.t0 = _context["catch"](0);
-                          toast = useToast();
-                          toast.error('There was an error selecting the desired source, try again', {
-                            timeout: 5000
-                          });
-
-                        case 9:
-                        case "end":
-                          return _context.stop();
-                      }
+                    while (1) switch (_context.prev = _context.next) {
+                      case 0:
+                        _context.prev = 0;
+                        _context.next = 3;
+                        return selectSource({
+                          kind: 'video',
+                          source: source
+                        });
+                      case 3:
+                        _context.next = 8;
+                        break;
+                      case 5:
+                        _context.prev = 5;
+                        _context.t0 = _context["catch"](0);
+                        _this.toast.error('There was an error selecting the desired source, try again', {
+                          timeout: 5000
+                        });
+                      case 8:
+                      case "end":
+                        return _context.stop();
                     }
                   }, _callee, null, [[0, 5]]);
                 }));
-
                 return function videoTrackChange(_x) {
                   return _ref.apply(this, arguments);
                 };
               }();
-
               this.setDropupSettings(this.selectedVideoSource, this.getVideoSources, 'Video Source', videoTrackChange, this.compareSources);
               break;
             }
-
           case 'audioTracks':
             {
               var audioTrackChange = /*#__PURE__*/function () {
                 var _ref2 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(source) {
-                  var toast;
                   return _regeneratorRuntime().wrap(function _callee2$(_context2) {
-                    while (1) {
-                      switch (_context2.prev = _context2.next) {
-                        case 0:
-                          _context2.prev = 0;
-                          _context2.next = 3;
-                          return selectSource({
-                            kind: 'audio',
-                            source: source
-                          });
-
-                        case 3:
-                          _context2.next = 9;
-                          break;
-
-                        case 5:
-                          _context2.prev = 5;
-                          _context2.t0 = _context2["catch"](0);
-                          toast = useToast();
-                          toast.error('There was an error selecting the desired source, try again', {
-                            timeout: 5000
-                          });
-
-                        case 9:
-                        case "end":
-                          return _context2.stop();
-                      }
+                    while (1) switch (_context2.prev = _context2.next) {
+                      case 0:
+                        _context2.prev = 0;
+                        _context2.next = 3;
+                        return selectSource({
+                          kind: 'audio',
+                          source: source
+                        });
+                      case 3:
+                        _context2.next = 8;
+                        break;
+                      case 5:
+                        _context2.prev = 5;
+                        _context2.t0 = _context2["catch"](0);
+                        _this.toast.error('There was an error selecting the desired source, try again', {
+                          timeout: 5000
+                        });
+                      case 8:
+                      case "end":
+                        return _context2.stop();
                     }
                   }, _callee2, null, [[0, 5]]);
                 }));
-
                 return function audioTrackChange(_x2) {
                   return _ref2.apply(this, arguments);
                 };
               }();
-
               this.setDropupSettings(this.selectedAudioSource, this.getAudioSources, 'Audio Source', audioTrackChange, this.compareSources);
               break;
             }
-
           case 'qualities':
             {
               var qualityChange = function qualityChange(media) {
                 sdkManager_selectQuality(media);
               };
-
               this.setDropupSettings(this.selectedQuality, this.getActiveMedias, 'Video Quality', qualityChange, this.compareItems);
               break;
             }
         }
-
         this.showDropup = true;
       } else {
         this.showDropup = false;
@@ -16578,8 +16226,8 @@ var package_0 = __webpack_require__("9224");
 });
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettings.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettings.vue?vue&type=style&index=0&id=5b688000&lang=scss&scoped=true
-var VideoPlayerControlsSettingsvue_type_style_index_0_id_5b688000_lang_scss_scoped_true = __webpack_require__("87fa");
+// EXTERNAL MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettings.vue?vue&type=style&index=0&id=dba89080&lang=scss&scoped=true
+var VideoPlayerControlsSettingsvue_type_style_index_0_id_dba89080_lang_scss_scoped_true = __webpack_require__("967a");
 
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettings.vue
 
@@ -16589,16 +16237,14 @@ var VideoPlayerControlsSettingsvue_type_style_index_0_id_5b688000_lang_scss_scop
 
 
 
-const VideoPlayerControlsSettings_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsSettingsvue_type_script_lang_js, [['render',VideoPlayerControlsSettingsvue_type_template_id_5b688000_scoped_true_render],['__scopeId',"data-v-5b688000"]])
+const VideoPlayerControlsSettings_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerControlsSettingsvue_type_script_lang_js, [['render',VideoPlayerControlsSettingsvue_type_template_id_dba89080_scoped_true_render],['__scopeId',"data-v-dba89080"]])
 
 /* harmony default export */ var VideoPlayerControlsSettings = (VideoPlayerControlsSettings_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsUserCount.vue?vue&type=template&id=48f1b614&scoped=true
 
-
 var VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-48f1b614"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_hoisted_1 = {
   key: 0,
   class: "align-middle"
@@ -16609,13 +16255,11 @@ var VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_hoiste
     "border": "0px"
   }
 };
-
 var VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_hoisted_3 = /*#__PURE__*/VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "bi ml-viewer-bi-person-fill"
   }, null, -1);
 });
-
 function VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   return $options.count ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("h4", VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_hoisted_2, [VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_hoisted_3, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])(" " + Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.count), 1)])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true);
 }
@@ -16629,7 +16273,6 @@ function VideoPlayerControlsUserCountvue_type_template_id_48f1b614_scoped_true_r
   computed: _extends(_extends({}, mapState('Controls', ['viewerCount'])), {}, {
     count: function count() {
       var _this$viewerCount;
-
       return (_this$viewerCount = this.viewerCount) === null || _this$viewerCount === void 0 ? void 0 : _this$viewerCount.toLocaleString('en');
     }
   })
@@ -16652,11 +16295,9 @@ const VideoPlayerControlsUserCount_exports_ = /*#__PURE__*/exportHelper_default(
 /* harmony default export */ var VideoPlayerControlsUserCount = (VideoPlayerControlsUserCount_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsVolume.vue?vue&type=template&id=0cf82b5a&scoped=true
 
-
 var VideoPlayerControlsVolumevue_type_template_id_0cf82b5a_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-0cf82b5a"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsVolumevue_type_template_id_0cf82b5a_scoped_true_hoisted_1 = {
   class: "d-inline"
 };
@@ -16707,7 +16348,6 @@ function VideoPlayerControlsVolumevue_type_template_id_0cf82b5a_scoped_true_rend
       } else if (this.muted) {
         this.toggleMuted();
       }
-
       this.setVideoVolume(newVolume);
     }
   },
@@ -16731,11 +16371,9 @@ function VideoPlayerControlsVolumevue_type_template_id_0cf82b5a_scoped_true_rend
   methods: _extends(_extends({}, mapMutations('Controls', ['setVideoMuted', 'setVideoVolume'])), {}, {
     toggleVolumeSlider: function toggleVolumeSlider() {
       var _this = this;
-
       if (this.showVolumeTimeout) {
         clearTimeout(this.showVolumeTimeout);
       }
-
       this.showVolume = true;
       this.showVolumeTimeout = setTimeout(function () {
         _this.showVolume = false;
@@ -16764,11 +16402,9 @@ const VideoPlayerControlsVolume_exports_ = /*#__PURE__*/exportHelper_default()(V
 /* harmony default export */ var VideoPlayerControlsVolume = (VideoPlayerControlsVolume_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsContainer.vue?vue&type=template&id=6e3117e0&scoped=true
 
-
 var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-6e3117e0"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_1 = {
   class: "row"
 };
@@ -16788,7 +16424,6 @@ var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoiste
   key: 1,
   class: "dropup"
 };
-
 var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_7 = /*#__PURE__*/VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: "dropdown-header d-flex m-0 col-12"
@@ -16796,20 +16431,13 @@ var VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoiste
     class: "p-0 m-0"
   }, "Options")], -1);
 });
-
 function VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerControlsPlay = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsPlay");
-
   var _component_VideoPlayerControlsVolume = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsVolume");
-
   var _component_VideoPlayerControlsSettings = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsSettings");
-
   var _component_VideoPlayerControlsCast = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsCast");
-
   var _component_VideoPlayerControlsPip = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsPip");
-
   var _component_VideoPlayerControlsFullscreen = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerControlsFullscreen");
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])([_ctx.isMobile ? 'col-7 text-left pr-0' : 'col-6 text-left'])
   }, [!$props.isConnected ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_hoisted_2, [$props.showButton('play') ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(_component_VideoPlayerControlsPlay, {
@@ -16858,26 +16486,20 @@ function VideoPlayerControlsContainervue_type_template_id_6e3117e0_scoped_true_r
 
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsCast.vue?vue&type=template&id=f9fa5040&scoped=true
 
-
 var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-f9fa5040"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_1 = {
-  ref: "cast"
-};
-var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_2 = {
   key: 0
 };
-
-var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_3 = /*#__PURE__*/VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_withScopeId(function () {
+var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_2 = /*#__PURE__*/VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", {
     class: "align-middle"
   }, "Cast", -1);
 });
-
-var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_4 = [VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_3];
+var VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_3 = [VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_2];
 function VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+  var _component_google_cast_launcher = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("google-cast-launcher");
   return _ctx.castAvailable && !_ctx.options.loading ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", {
     key: 0,
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])([_ctx.isMobile ? 'dropdown-item d-flex row mx-0' : 'mobile-setting']),
@@ -16888,7 +16510,9 @@ function VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_render
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])([_ctx.isMobile ? '' : 'mobile-setting'])
   }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["align-middle control-icon", _ctx.isMobile ? 'mobile-icon' : 'h3'])
-  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("google-cast-launcher", VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_1, null, 512)], 2)], 2), _ctx.isMobile ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_2, VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_4)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 2)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true);
+  }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createVNode"])(_component_google_cast_launcher, {
+    ref: "cast"
+  }, null, 512)], 2)], 2), _ctx.isMobile ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_1, VideoPlayerControlsCastvue_type_template_id_f9fa5040_scoped_true_hoisted_3)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 2)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true);
 }
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsCast.vue?vue&type=template&id=f9fa5040&scoped=true
 
@@ -16978,7 +16602,6 @@ const VideoPlayerControlsCast_exports_ = /*#__PURE__*/exportHelper_default()(Vid
   })), {}, {
     isVideoTag: function isVideoTag() {
       var _this$video;
-
       return ((_this$video = this.video) === null || _this$video === void 0 ? void 0 : _this$video.nodeName) === 'VIDEO';
     },
     pipEnabled: function pipEnabled() {
@@ -16989,16 +16612,13 @@ const VideoPlayerControlsCast_exports_ = /*#__PURE__*/exportHelper_default()(Vid
   beforeMount: function beforeMount() {
     return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              _context.next = 2;
-              return setCast();
-
-            case 2:
-            case "end":
-              return _context.stop();
-          }
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            _context.next = 2;
+            return setCast();
+          case 2:
+          case "end":
+            return _context.stop();
         }
       }, _callee);
     }))();
@@ -17039,6 +16659,7 @@ const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default(
 
 
 
+
 /* harmony default export */ var VideoPlayerContainervue_type_script_lang_js = ({
   name: 'VideoPlayerContainer',
   components: {
@@ -17062,8 +16683,7 @@ const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default(
   },
   mounted: function mounted() {
     var _screen$orientation,
-        _this = this;
-
+      _this = this;
     (_screen$orientation = screen.orientation) === null || _screen$orientation === void 0 ? void 0 : _screen$orientation.addEventListener('change', this.handleOrientationChange);
     this.controlsTimeout = setTimeout(function () {
       _this.show = false;
@@ -17144,6 +16764,9 @@ const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default(
     },
     isSplittedView: function isSplittedView(state) {
       return state.isSplittedView;
+    },
+    isGrid: function isGrid(state) {
+      return state.isGrid;
     }
   })), {}, {
     currentTime: function currentTime() {
@@ -17155,18 +16778,16 @@ const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default(
       return minutes + ':' + seconds;
     }
   }),
-  methods: _extends(_extends(_extends(_extends({}, mapMutations('Layers', ['deleteLayers'])), mapMutations('Sources', ['deleteSource'])), mapMutations('Controls', ['setVideo', 'setIsLive', 'setIsLoading', 'setTrackWarning', 'setDropup', 'setVideoVolume', 'setVideoMuted', 'setPlaying', 'setCastOptions', 'setAutoPlayMuted', 'toggleFullscreen'])), {}, {
+  methods: _extends(_extends(_extends(_extends({}, mapMutations('Layers', ['deleteLayers'])), mapMutations('Sources', ['deleteSource', 'setMainLabel'])), mapMutations('Controls', ['setVideo', 'setIsLive', 'setIsLoading', 'setTrackWarning', 'setDropup', 'setVideoVolume', 'setVideoMuted', 'setPlaying', 'setCastOptions', 'setAutoPlayMuted', 'toggleFullscreen', 'setIsSplittedView'])), {}, {
     showControls: function showControls() {
       if (this.controlsTimeout) {
         clearTimeout(this.controlsTimeout);
       }
-
       this.show = true;
       this.hideControls();
     },
     hideControls: function hideControls() {
       var _this2 = this;
-
       if (!this.playing || this.dropup !== '') return;
       this.controlsTimeout = setTimeout(function () {
         _this2.show = false;
@@ -17174,51 +16795,53 @@ const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default(
     },
     showButton: function showButton(button) {
       var showButton = !this.queryParams.hideButtons.includes(button);
-
       if (showButton && button === 'fullscreen') {
         var _document$getElementB, _player, _player2;
-
         var player = (_document$getElementB = document.getElementById('player')) !== null && _document$getElementB !== void 0 ? _document$getElementB : document.getElementById('player2');
-
         if (!player) {
           // Temporarly create a video element to check if the browser supports fullscreen (iPhone fallback)
           player = document.createElement('video');
         }
-
         showButton && (showButton = document.fullscreenEnabled || document.webkitFullscreenEnabled || document.mozFullScreenEnabled || document.msFullscreenEnabled || ((_player = player) === null || _player === void 0 ? void 0 : _player.requestFullscreen) || ((_player2 = player) === null || _player2 === void 0 ? void 0 : _player2.webkitEnterFullscreen));
-
         if (!showButton) {
           console.warn('Fullscreen disabled due to incompatibility with the browser.');
         }
       }
-
       return showButton;
     },
     handleOrientationChange: function handleOrientationChange() {
       var orientation = screen.orientation.type;
-
       if (orientation === 'portrait-primary' && getFullscreenElement() && !this.mobileFullscreen) {
-        this.leaveFullScreen(); // portrait mode
+        this.leaveFullScreen();
+        // portrait mode
       } else if (orientation === 'landscape-primary') {
         this.goFullScreen();
       }
     },
     goFullScreen: function goFullScreen() {
       var _document$getElementB2, _ref, _ref2, _ref3, _playerDiv$requestFul, _playerDiv$requestFul2, _playerDiv$webkitRequ, _playerDiv$mozRequest, _playerDiv$msRequestF, _videoPlayer$webkitEn;
-
-      var playerDiv = document.getElementById('vplayer'); //Fallback for when requestFullScreen is not avaiable in a div but it is for a video tag
-
+      var playerDiv = document.getElementById('vplayer');
+      //Fallback for when requestFullScreen is not avaiable in a div but it is for a video tag
       var videoPlayer = (_document$getElementB2 = document.getElementById('player')) !== null && _document$getElementB2 !== void 0 ? _document$getElementB2 : document.getElementById('player2');
       (_ref = (_ref2 = (_ref3 = (_playerDiv$requestFul = playerDiv === null || playerDiv === void 0 ? void 0 : (_playerDiv$requestFul2 = playerDiv.requestFullscreen) === null || _playerDiv$requestFul2 === void 0 ? void 0 : _playerDiv$requestFul2.call(playerDiv)) !== null && _playerDiv$requestFul !== void 0 ? _playerDiv$requestFul : playerDiv === null || playerDiv === void 0 ? void 0 : (_playerDiv$webkitRequ = playerDiv.webkitRequestFullscreen) === null || _playerDiv$webkitRequ === void 0 ? void 0 : _playerDiv$webkitRequ.call(playerDiv)) !== null && _ref3 !== void 0 ? _ref3 : playerDiv === null || playerDiv === void 0 ? void 0 : (_playerDiv$mozRequest = playerDiv.mozRequestFullScreen) === null || _playerDiv$mozRequest === void 0 ? void 0 : _playerDiv$mozRequest.call(playerDiv)) !== null && _ref2 !== void 0 ? _ref2 : playerDiv === null || playerDiv === void 0 ? void 0 : (_playerDiv$msRequestF = playerDiv.msRequestFullscreen) === null || _playerDiv$msRequestF === void 0 ? void 0 : _playerDiv$msRequestF.call(playerDiv)) !== null && _ref !== void 0 ? _ref : videoPlayer === null || videoPlayer === void 0 ? void 0 : (_videoPlayer$webkitEn = videoPlayer.webkitEnterFullscreen) === null || _videoPlayer$webkitEn === void 0 ? void 0 : _videoPlayer$webkitEn.call(videoPlayer);
     },
     leaveFullScreen: function leaveFullScreen() {
       var _ref4, _ref5, _document$exitFullscr, _document$exitFullscr2, _document, _document$webkitExitF, _document2, _document$mozCancelFu, _document3, _document$msExitFulls, _document4;
-
       (_ref4 = (_ref5 = (_document$exitFullscr = (_document$exitFullscr2 = (_document = document).exitFullscreen) === null || _document$exitFullscr2 === void 0 ? void 0 : _document$exitFullscr2.call(_document)) !== null && _document$exitFullscr !== void 0 ? _document$exitFullscr : (_document$webkitExitF = (_document2 = document).webkitExitFullscreen) === null || _document$webkitExitF === void 0 ? void 0 : _document$webkitExitF.call(_document2)) !== null && _ref5 !== void 0 ? _ref5 : (_document$mozCancelFu = (_document3 = document).mozCancelFullScreen) === null || _document$mozCancelFu === void 0 ? void 0 : _document$mozCancelFu.call(_document3)) !== null && _ref4 !== void 0 ? _ref4 : (_document$msExitFulls = (_document4 = document).msExitFullscreen) === null || _document$msExitFulls === void 0 ? void 0 : _document$msExitFulls.call(_document4);
     },
     tapUnmute: function tapUnmute() {
       this.setVideoMuted(false);
       this.setAutoPlayMuted(false);
+    },
+    handleWholeScreen: function handleWholeScreen() {
+      if (this.isGrid) {
+        this.setIsSplittedView(!this.isSplittedView);
+        selectSource({
+          kind: 'video',
+          source: this.videoSources[0]
+        });
+        this.setMainLabel('Main');
+      }
     }
   }),
   watch: {
@@ -17233,7 +16856,6 @@ const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default(
       if (document.pictureInPictureElement) {
         document.exitPictureInPicture();
       }
-
       if (!getFullscreenElement()) {
         this.mobileFullscreen = true;
         this.goFullScreen();
@@ -17277,14 +16899,13 @@ const VideoPlayerControlsContainer_exports_ = /*#__PURE__*/exportHelper_default(
     }
   }
 });
-
 var getFullscreenElement = function getFullscreenElement() {
   return document.fullscreenElement || document.webkitFullscreenElement;
 };
 // CONCATENATED MODULE: ./src/components/VideoPlayerContainer.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/components/VideoPlayerContainer.vue?vue&type=style&index=0&id=1d5dabce&lang=scss&scoped=true
-var VideoPlayerContainervue_type_style_index_0_id_1d5dabce_lang_scss_scoped_true = __webpack_require__("6833");
+// EXTERNAL MODULE: ./src/components/VideoPlayerContainer.vue?vue&type=style&index=0&id=eb9152ec&lang=scss&scoped=true
+var VideoPlayerContainervue_type_style_index_0_id_eb9152ec_lang_scss_scoped_true = __webpack_require__("ad4b");
 
 // CONCATENATED MODULE: ./src/components/VideoPlayerContainer.vue
 
@@ -17294,7 +16915,7 @@ var VideoPlayerContainervue_type_style_index_0_id_1d5dabce_lang_scss_scoped_true
 
 
 
-const VideoPlayerContainer_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerContainervue_type_script_lang_js, [['render',VideoPlayerContainervue_type_template_id_1d5dabce_scoped_true_render],['__scopeId',"data-v-1d5dabce"]])
+const VideoPlayerContainer_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerContainervue_type_script_lang_js, [['render',VideoPlayerContainervue_type_template_id_eb9152ec_scoped_true_render],['__scopeId',"data-v-eb9152ec"]])
 
 /* harmony default export */ var VideoPlayerContainer = (VideoPlayerContainer_exports_);
 // EXTERNAL MODULE: ./node_modules/bootstrap-icons/font/bootstrap-icons.css
@@ -17324,6 +16945,12 @@ var css_element_queries = __webpack_require__("87d4");
 
 /* harmony default export */ var Appvue_type_script_lang_js = ({
   name: 'App',
+  data: function data() {
+    return {
+      chromecastIdDefault: null,
+      reportUrlDefault: null
+    };
+  },
   components: {
     VideoPlayerContainer: VideoPlayerContainer
   },
@@ -17333,8 +16960,7 @@ var css_element_queries = __webpack_require__("87d4");
   methods: _extends(_extends({}, mapMutations('Controls', ['setMobile'])), {}, {
     updateParams: function updateParams() {
       if (this.paramsOptions) {
-        var _this$paramsOptions, _this$paramsOptions2, _this$paramsOptions$a, _this$paramsOptions3, _this$paramsOptions$v, _this$paramsOptions4, _this$paramsOptions5, _this$paramsOptions6, _this$paramsOptions7, _this$paramsOptions$h, _this$paramsOptions$a2, _this$paramsOptions$m, _this$paramsOptions$c, _this$paramsOptions$r, _this$paramsOptions$n, _this$paramsOptions8, _this$paramsOptions$m2, _this$paramsOptions9;
-
+        var _this$paramsOptions, _this$paramsOptions2, _this$paramsOptions$a, _this$paramsOptions3, _this$paramsOptions$v, _this$paramsOptions4, _this$paramsOptions5, _this$paramsOptions6, _this$paramsOptions7, _this$paramsOptions$h, _this$paramsOptions$a2, _this$paramsOptions$m, _this$paramsOptions$c, _this$paramsOptions$r, _this$paramsOptions$n, _this$paramsOptions8, _this$paramsOptions$m2, _this$paramsOptions9, _this$paramsOptions$l, _this$paramsOptions10;
         setUserParams({
           streamId: ((_this$paramsOptions = this.paramsOptions) === null || _this$paramsOptions === void 0 ? void 0 : _this$paramsOptions.accountId) + '/' + ((_this$paramsOptions2 = this.paramsOptions) === null || _this$paramsOptions2 === void 0 ? void 0 : _this$paramsOptions2.streamName),
           audioOnly: (_this$paramsOptions$a = (_this$paramsOptions3 = this.paramsOptions) === null || _this$paramsOptions3 === void 0 ? void 0 : _this$paramsOptions3.audioOnly) !== null && _this$paramsOptions$a !== void 0 ? _this$paramsOptions$a : false,
@@ -17345,53 +16971,50 @@ var css_element_queries = __webpack_require__("87d4");
           hideButtons: this.paramsOptions.controls === false ? availableControls : (_this$paramsOptions$h = this.paramsOptions.hideButtons) !== null && _this$paramsOptions$h !== void 0 ? _this$paramsOptions$h : [],
           autoplay: (_this$paramsOptions$a2 = this.paramsOptions.autoplay) !== null && _this$paramsOptions$a2 !== void 0 ? _this$paramsOptions$a2 : true,
           muted: (_this$paramsOptions$m = this.paramsOptions.muted) !== null && _this$paramsOptions$m !== void 0 ? _this$paramsOptions$m : false,
-          chromecastId: (_this$paramsOptions$c = this.paramsOptions.chromecastId) !== null && _this$paramsOptions$c !== void 0 ? _this$paramsOptions$c : null,
-          reportUrl: (_this$paramsOptions$r = this.paramsOptions.reportUrl) !== null && _this$paramsOptions$r !== void 0 ? _this$paramsOptions$r : null,
+          chromecastId: (_this$paramsOptions$c = this.paramsOptions.chromecastId) !== null && _this$paramsOptions$c !== void 0 ? _this$paramsOptions$c : this.chromecastIdDefault,
+          reportUrl: (_this$paramsOptions$r = this.paramsOptions.reportUrl) !== null && _this$paramsOptions$r !== void 0 ? _this$paramsOptions$r : this.reportUrlDefault,
           noDelay: (_this$paramsOptions$n = (_this$paramsOptions8 = this.paramsOptions) === null || _this$paramsOptions8 === void 0 ? void 0 : _this$paramsOptions8.noDelay) !== null && _this$paramsOptions$n !== void 0 ? _this$paramsOptions$n : false,
-          multisource: (_this$paramsOptions$m2 = (_this$paramsOptions9 = this.paramsOptions) === null || _this$paramsOptions9 === void 0 ? void 0 : _this$paramsOptions9.multisource) !== null && _this$paramsOptions$m2 !== void 0 ? _this$paramsOptions$m2 : false
+          multisource: (_this$paramsOptions$m2 = (_this$paramsOptions9 = this.paramsOptions) === null || _this$paramsOptions9 === void 0 ? void 0 : _this$paramsOptions9.multisource) !== null && _this$paramsOptions$m2 !== void 0 ? _this$paramsOptions$m2 : false,
+          layout: (_this$paramsOptions$l = (_this$paramsOptions10 = this.paramsOptions) === null || _this$paramsOptions10 === void 0 ? void 0 : _this$paramsOptions10.layout) !== null && _this$paramsOptions$l !== void 0 ? _this$paramsOptions$l : null
         });
       }
     }
   }),
   mounted: function mounted() {
     var _this = this;
-
     return _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee() {
       var myContainer, toast, plugin;
       return _regeneratorRuntime().wrap(function _callee$(_context) {
-        while (1) {
-          switch (_context.prev = _context.next) {
-            case 0:
-              myContainer = document.getElementById('viewer-container');
-              _context.next = 3;
-              return useToast();
-
-            case 3:
-              toast = _context.sent;
-              toast.updateDefaults({
-                container: myContainer,
-                containerClassName: 'toast-custom'
+        while (1) switch (_context.prev = _context.next) {
+          case 0:
+            _this.chromecastIdDefault = "EC3A02DA";
+            _this.reportUrlDefault = "https://playback-report.millicast.com";
+            myContainer = document.getElementById('viewer-container');
+            _context.next = 5;
+            return useToast();
+          case 5:
+            toast = _context.sent;
+            toast.updateDefaults({
+              container: myContainer,
+              containerClassName: 'toast-custom'
+            });
+            _this.updateParams();
+            css_element_queries["ElementQueries"].listen();
+            css_element_queries["ElementQueries"].init();
+            window.addEventListener('load', function () {
+              new css_element_queries["ResizeSensor"](myContainer, function () {
+                _this.setMobile(myContainer.clientWidth <= 575);
               });
+            });
 
-              _this.updateParams();
-
-              css_element_queries["ElementQueries"].listen();
-              css_element_queries["ElementQueries"].init();
-              window.addEventListener('load', function () {
-                new css_element_queries["ResizeSensor"](myContainer, function () {
-                  _this.setMobile(myContainer.clientWidth <= 575);
-                });
-              }); // API for Chromecast
-
-              plugin = document.createElement("script");
-              plugin.setAttribute("src", "//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1");
-              plugin.async = true;
-              document.head.appendChild(plugin);
-
-            case 13:
-            case "end":
-              return _context.stop();
-          }
+            // API for Chromecast
+            plugin = document.createElement("script");
+            plugin.setAttribute("src", "//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1");
+            plugin.async = true;
+            document.head.appendChild(plugin);
+          case 15:
+          case "end":
+            return _context.stop();
         }
       }, _callee);
     }))();
@@ -17404,8 +17027,8 @@ var css_element_queries = __webpack_require__("87d4");
 });
 // CONCATENATED MODULE: ./src/App.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/App.vue?vue&type=style&index=0&id=30df5c10&scoped=true&lang=css
-var Appvue_type_style_index_0_id_30df5c10_scoped_true_lang_css = __webpack_require__("24fe");
+// EXTERNAL MODULE: ./src/App.vue?vue&type=style&index=0&id=9a08bfee&scoped=true&lang=css
+var Appvue_type_style_index_0_id_9a08bfee_scoped_true_lang_css = __webpack_require__("cf1e");
 
 // CONCATENATED MODULE: ./src/App.vue
 
@@ -17415,16 +17038,14 @@ var Appvue_type_style_index_0_id_30df5c10_scoped_true_lang_css = __webpack_requi
 
 
 
-const App_exports_ = /*#__PURE__*/exportHelper_default()(Appvue_type_script_lang_js, [['render',render],['__scopeId',"data-v-30df5c10"]])
+const App_exports_ = /*#__PURE__*/exportHelper_default()(Appvue_type_script_lang_js, [['render',render],['__scopeId',"data-v-9a08bfee"]])
 
 /* harmony default export */ var App = (App_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/UI/BaseModal.vue?vue&type=template&id=742b9a28&scoped=true
 
-
 var BaseModalvue_type_template_id_742b9a28_scoped_true_withScopeId = function _withScopeId(n) {
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-742b9a28"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-
 var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_1 = {
   class: "modal fade show",
   tabindex: "-1",
@@ -17446,13 +17067,11 @@ var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_4 = {
   class: "modal-header"
 };
 var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_5 = ["textContent"];
-
 var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_6 = /*#__PURE__*/BaseModalvue_type_template_id_742b9a28_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", {
     "aria-hidden": "true"
   }, "×", -1);
 });
-
 var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_7 = [BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_6];
 var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_8 = {
   class: "modal-body"
@@ -17460,12 +17079,8 @@ var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_8 = {
 var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_9 = {
   class: "modal-footer"
 };
-
-var BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_10 = /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])("OK");
-
 function BaseModalvue_type_template_id_742b9a28_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_base_button = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("base-button");
-
   return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("div", BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_1, [(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createBlock"])(external_commonjs_vue_commonjs2_vue_root_Vue_["Teleport"], {
     to: "#viewer-container"
   }, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("div", {
@@ -17492,7 +17107,7 @@ function BaseModalvue_type_template_id_742b9a28_scoped_true_render(_ctx, _cache,
       onClick: $props.toggle
     }, {
       default: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withCtx"])(function () {
-        return [BaseModalvue_type_template_id_742b9a28_scoped_true_hoisted_10];
+        return [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createTextVNode"])("OK")];
       }),
       _: 1
     }, 8, ["onClick"])];
@@ -17569,21 +17184,17 @@ const BaseButton_exports_ = /*#__PURE__*/exportHelper_default()(BaseButtonvue_ty
 
 
 
-
 var filterBeforeCreate = function filterBeforeCreate(toast, toasts) {
   if (toasts.filter(function (t) {
     return t.type === toast.type;
   }).length !== 0) {
     return false;
   }
-
   return toast;
 };
-
 /* harmony default export */ var index_0 = ({
   install: function install(vue, options) {
     var _options$audioOnly, _options$hideButtons, _options$autoplay, _options$muted, _options$chromecastId, _options$reportUrl;
-
     if (!options.store) {
       vue.use(src_store);
     } else {
@@ -17593,7 +17204,6 @@ var filterBeforeCreate = function filterBeforeCreate(toast, toasts) {
       options.store.registerModule('Sources', modules_sources);
       options.store.registerModule('ViewConnection', viewConnection);
     }
-
     setUserParams({
       streamId: (options === null || options === void 0 ? void 0 : options.accountId) + '/' + (options === null || options === void 0 ? void 0 : options.streamName),
       audioOnly: (_options$audioOnly = options.audioOnly) !== null && _options$audioOnly !== void 0 ? _options$audioOnly : false,
@@ -17603,8 +17213,8 @@ var filterBeforeCreate = function filterBeforeCreate(toast, toasts) {
       hideButtons: (_options$hideButtons = options.hideButtons) !== null && _options$hideButtons !== void 0 ? _options$hideButtons : [],
       autoplay: (_options$autoplay = options === null || options === void 0 ? void 0 : options.autoplay) !== null && _options$autoplay !== void 0 ? _options$autoplay : true,
       muted: (_options$muted = options === null || options === void 0 ? void 0 : options.muted) !== null && _options$muted !== void 0 ? _options$muted : false,
-      chromecastId: (_options$chromecastId = options === null || options === void 0 ? void 0 : options.chromecastId) !== null && _options$chromecastId !== void 0 ? _options$chromecastId : null,
-      reportUrl: (_options$reportUrl = options === null || options === void 0 ? void 0 : options.reportUrl) !== null && _options$reportUrl !== void 0 ? _options$reportUrl : null
+      chromecastId: (_options$chromecastId = options === null || options === void 0 ? void 0 : options.chromecastId) !== null && _options$chromecastId !== void 0 ? _options$chromecastId : "EC3A02DA",
+      reportUrl: (_options$reportUrl = options === null || options === void 0 ? void 0 : options.reportUrl) !== null && _options$reportUrl !== void 0 ? _options$reportUrl : "https://playback-report.millicast.com"
     });
     vue.use(src_default, {
       transition: 'Vue-Toastification__fade',
@@ -17766,7 +17376,7 @@ module.exports = {
 /***/ "fdbf":
 /***/ (function(module, exports, __webpack_require__) {
 
-/* eslint-disable es-x/no-symbol -- required for testing */
+/* eslint-disable es/no-symbol -- required for testing */
 var NATIVE_SYMBOL = __webpack_require__("04f8");
 
 module.exports = NATIVE_SYMBOL

@@ -1,7 +1,5 @@
 <template>
-  <div id="viewer-container">
-    <VideoPlayerContainer class="ml-viewer" />
-  </div>
+    <VideoPlayerContainer class="ml-viewer" id="viewer-container"/>
 </template>
 
 <script>
@@ -52,7 +50,8 @@ export default {
           chromecastId: this.paramsOptions.chromecastId ?? this.chromecastIdDefault,
           reportUrl: this.paramsOptions.reportUrl ?? this.reportUrlDefault,
           noDelay: this.paramsOptions?.noDelay ?? false,
-          multisource: this.paramsOptions?.multisource ?? false
+          multisource: this.paramsOptions?.multisource ?? false,
+          layout: this.paramsOptions?.layout ?? null
         })
       }
     },
@@ -96,80 +95,52 @@ export default {
 
 <style scoped>
 #viewer-container {
-  display: inline-block;
   background-color: #000;
   color: white;
   font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
   width: 100%;
   height: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  padding: 0;
+  overflow: hidden;
 }
 
-#viewer-container[min-width~='576px'] :deep(.mv-col-12) {
-  -webkit-flex: 0 0 100%;
-  flex: 0 0 100%;
-  max-width: 100%;
-
-  position: relative;
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-}
-
-#viewer-container[min-width~='576px'] :deep(.mv-col-9) {
-  -webkit-flex: 0 0 75%;
-  flex: 0 0 75%;
-  max-width: 75%;
-
-  position: relative;
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-}
-
-#viewer-container[max-width~='575px'] :deep(.mv-col-6) {
-  -webkit-flex: 0 0 50%;
-  flex: 0 0 50%;
-  max-width: 50%;
-
-  position: relative;
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-}
-
-#viewer-container[min-width~='576px'] :deep(.mv-col-3) {
-  -webkit-flex: 0 0 25%;
-  flex: 0 0 25%;
-  max-width: 25%;
-
-  position: relative;
-  width: 100%;
-  padding-right: 15px;
-  padding-left: 15px;
-}
-
-#viewer-container[min-width~='576px'] :deep(.side-panel) {
+#viewer-container[min-width~='430px'] :deep(.side-panel) {
   height: 100%;
+  display: flex;
 }
 
-#viewer-container[max-width~='575px'] :deep(.side-panel) {
-  height: 35%;
-}
-
-#viewer-container[max-width~='575px'] :deep(.limit-screen) {
-  height: 65%;
-}
-
-#viewer-container[min-width~='992px'] :deep(.side-source) {
-  height: 10rem;
-}
-
-#viewer-container[max-width~='991.98px'] :deep(.side-source) {
-  height: 7rem;
-}
-
-#viewer-container[max-width~='575px'] :deep(.dropdown-menu) {
+#viewer-container[max-width~='429px'] :deep(.dropdown-menu) {
   width: 15rem;
+}
+
+#viewer-container[max-width~='429.9px'] {
+  position: relative;
+  align-self: center;
+  height: 100%;
+  display: flex;
+}
+
+#viewer-container[max-width~='429.9px'] :deep(.list-side) {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+  
+#viewer-container[max-width~='429.9px'] :deep(.list-item){
+  padding: 0;
+  max-width: 100%;
+}
+
+#viewer-container[min-width~='721'][max-width~='1920'] :deep(.grid-container){
+  max-width: 85%;
+}
+
+#viewer-container[min-width~='429.98px'][max-width~='721px'] :deep(.grid-container){
+  padding: 0 40px;
+  display: -webkit-inline-box;
 }
 
 .Vue-Toastification__container {
@@ -185,5 +156,10 @@ export default {
   width: 100%;
   top: 0;
   background: none;
+}
+
+#viewer-container {
+  position: relative;
+  transform: translate(0);
 }
 </style>

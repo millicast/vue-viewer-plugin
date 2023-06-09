@@ -170,7 +170,7 @@ export const selectQuality = (media) => {
 // SOURCES
 
 export const selectSource = async ({ kind, source }) => {
-  sources.handleSelectSource({ kind, source })
+  return await sources.handleSelectSource({ kind, source })
 }
 
 export const projectRemoteTracks = async (index) => {

@@ -14,6 +14,7 @@
       ref="player"
       :poster="queryParams.placeholderImg"
       :class="{ 'display: none;': currentElementRef === 'player2' }"
+      :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
     ></video>
   </template>
   <template v-if="isMigrating || currentElementRef === 'player2'">
@@ -31,9 +32,12 @@
       ref="player2"
       :poster="queryParams.placeholderImg"
       :class="{ 'display: none;': currentElementRef === 'player' }"
+      :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
     ></video>
   </template>
-  <span v-if="sourceRemoteTracks.length && isSplittedView">{{
+  <span v-if="sourceRemoteTracks.length && isSplittedView && !fullscreen"
+    :class="isGrid ? 'grid-label' : 'list-label'"
+  >{{
     this.mainLabel
   }}</span>
 </template>
@@ -101,6 +105,8 @@ export default {
       isMigrating: (state) => state.isMigrating,
       isSplittedView: (state) => state.isSplittedView,
       previousSplitState: state => state.previousSplitState,
+      isGrid: state => state.isGrid,
+      fullscreen: (state) => state.fullscreen,
     }),
     ...mapState('Params', {
       queryParams: (state) => state.queryParams,
@@ -198,12 +204,13 @@ export default {
 <style scoped>
 video {
   width: 100%;
-  height: 100%;
+  max-height: 100vh;
   pointer-events: none;
+  border-radius: 0.25rem;
 }
 
 span {
-  bottom: 3rem;
+  bottom: 1rem;
   left: 1.5rem;
   position: absolute;
   color: #fff;
@@ -219,5 +226,31 @@ span {
   width: fit-content;
   max-width: 6rem;
   overflow: hidden;
+}
+
+.grid-label {
+  bottom: 8%;
+  left: 5%;
+  position: absolute;
+  color: #FFF;
+  background: rgba(0, 0, 0, 0.288);
+  padding: 4px 8px;
+  font-size: .875rem;
+  font-weight: 400;
+  line-height: 1.15rem;
+  border-radius: 2px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width: fit-content;
+  max-width: 6rem;
+  overflow: hidden;
+}
+.test-player video, .test-player-2 video {
+  border-radius: .25rem;
+}
+.grid-player {
+  width: 100%;
+  align-self: center;
+  position: relative;
 }
 </style>

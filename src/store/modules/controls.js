@@ -25,6 +25,7 @@ const defaulState = {
   migrateListenerIsSet: false,
   isSplittedView: false,
   previousSplitState: false,
+  isGrid: false
 }
 
 export default {
@@ -135,6 +136,9 @@ export default {
         state.previousSplitState = previousSplitState
       }
     },
+    setIsGrid(state, isGrid) {
+      state.isGrid = isGrid
+    }
   },
   getters: {},
 }

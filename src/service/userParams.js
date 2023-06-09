@@ -16,7 +16,8 @@ export const defaultOptions = {
   forcePlayoutDelay: false,
   multisource: false,
   chromecastId: null,
-  reportUrl: null
+  reportUrl: null,
+  layout: null
 }
 
 export default function setUserParams({
@@ -32,7 +33,8 @@ export default function setUserParams({
   noDelay,
   multisource,
   chromecastId,
-  reportUrl
+  reportUrl,
+  layout
 }) {
   const options = {}
 
@@ -46,6 +48,7 @@ export default function setUserParams({
   options.autoplay = autoplay ?? true
   options.muted = muted ?? false
   options.multisource = multisource ?? false
+  options.layout = layout
   if (multisource) {
     store.commit('Controls/setIsSplittedView', true)
   }
@@ -54,6 +57,8 @@ export default function setUserParams({
   }
   options.chromecastId = chromecastId ?? process.env.VUE_APP_CHROMECAST_ID
   options.reportUrl = reportUrl ?? process.env.VUE_APP_DEFAULT_REPORT_URL
-
+  if (options.layout && options.layout === 'grid') {
+    store.commit('Controls/setIsGrid', true)
+  }
   store.commit('Params/setQueryParams', { ...defaultOptions, ...options })
 }
