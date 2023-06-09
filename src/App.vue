@@ -72,7 +72,7 @@ export default {
     ElementQueries.init()
     window.addEventListener('load', () => {
       new ResizeSensor(myContainer, () => {
-        this.setMobile(myContainer.clientWidth <= 429)
+        this.setMobile(myContainer.clientWidth <= 575)
       })
     })
 
@@ -135,7 +135,7 @@ export default {
 }
 
 #viewer-container[min-width~='721'][max-width~='1920'] :deep(.grid-container){
-  max-width: 90%;
+  max-width: 85%;
 }
 
 #viewer-container[min-width~='429.98px'][max-width~='721px'] :deep(.grid-container){
