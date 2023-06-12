@@ -17,7 +17,8 @@ export const defaultOptions = {
   multisource: false,
   chromecastId: null,
   reportUrl: null,
-  layout: null
+  layout: null,
+  showLabels: true
 }
 
 export default function setUserParams({
@@ -34,7 +35,8 @@ export default function setUserParams({
   multisource,
   chromecastId,
   reportUrl,
-  layout
+  layout,
+  showLabels
 }) {
   const options = {}
 
@@ -49,6 +51,7 @@ export default function setUserParams({
   options.muted = muted ?? false
   options.multisource = multisource ?? false
   options.layout = layout
+  options.showLabels = showLabels
   if (multisource) {
     store.commit('Controls/setIsSplittedView', true)
   }
