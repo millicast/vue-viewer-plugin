@@ -1,6 +1,10 @@
 import store from '../../store'
 const { commit, state } = store
 const bitsUnitsStorage = ['bps', 'kbps', 'mbps', 'gbps']
+const qualityNames = {
+  2: ['High', 'Low'],
+  3: ['High', 'Medium', 'Low']
+}
 
 export const updateLayers = (evntData) => {
   const { data } = evntData
@@ -52,18 +56,11 @@ export const updateLayers = (evntData) => {
   activeQualities.sort((a, b) => {
     return b.bitrate - a.bitrate
   })
-  if (activeQualities.length === 2) {
-    activeQualities[0].name = 'High'
-    activeQualities[1].name = 'Low'
-    activeQualities.unshift({ name: 'Auto' })
-  } else if (activeQualities.length === 3) {
-    activeQualities[0].name = 'High'
-    activeQualities[1].name = 'Medium'
-    activeQualities[2].name = 'Low'
-    activeQualities.unshift({ name: 'Auto' })
-  } else if (activeQualities.length >= 4) {
-    activeQualities.forEach((quality) => {
-      quality.name = formatBitsRecursive(quality.bitrate)
+  if (activeQualities.length >= 2) {
+    activeQualities.sort((layer, nextLayer) =>  nextLayer.id - layer.id ) 
+    const names = qualityNames[activeQualities.length] || []
+    activeQualities.forEach((quality, index) => {
+      quality.name = quality.height ? `${quality.height}p` : names[index] || formatBitsRecursive(quality.bitrate)
     })
     activeQualities.unshift({name: 'Auto'})
   }
