@@ -217,14 +217,16 @@ export const handleProjectRemoteTracks = async (index) => {
   const sidePlayerId =
     'sidePlayer' +
     state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].sourceId
-  document.getElementById(sidePlayerId).srcObject =
-    state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].mediaStream
+  const sidePlayerVideo = document.getElementById(sidePlayerId)
+  sidePlayerVideo.srcObject = state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].mediaStream
   handleProjectVideo(
     state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].sourceId,
     state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].transceiver
       ?.mid ?? null,
     vidId
   )
-  document.getElementById(sidePlayerId).muted = true
-  document.getElementById(sidePlayerId).play()
+  sidePlayerVideo.muted = true
+  sidePlayerVideo.autoPlay = true
+  sidePlayerVideo.playsInline = true
+  sidePlayerVideo.play()
 }
