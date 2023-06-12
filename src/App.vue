@@ -51,7 +51,8 @@ export default {
           reportUrl: this.paramsOptions.reportUrl ?? this.reportUrlDefault,
           noDelay: this.paramsOptions?.noDelay ?? false,
           multisource: this.paramsOptions?.multisource ?? false,
-          layout: this.paramsOptions?.layout ?? null
+          layout: this.paramsOptions?.layout ?? null,
+          showLabels: this.paramsOptions?.showLabels ?? true,
         })
       }
     },

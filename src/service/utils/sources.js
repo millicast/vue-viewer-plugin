@@ -196,8 +196,10 @@ const project = async ({ kind, source }) => {
 }
 
 export const handleProjectVideo = async (what, where, index) => {
-  let sideLabel = 'sideLabel' + where
-  document.getElementById(sideLabel).textContent = what ?? 'Main'
+  if (state.Params.queryParams.showLabels) {
+    let sideLabel = 'sideLabel' + where
+    document.getElementById(sideLabel).textContent = what ?? 'Main'
+  }
   await state.ViewConnection.millicastView.project(what, [
     {
       trackId: state.Sources.videoSources[index].trackId,

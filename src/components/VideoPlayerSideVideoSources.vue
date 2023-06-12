@@ -18,9 +18,12 @@
           muted
           playsinline
         ></video>
-        <span :id="'sideLabel' + source.transceiver?.mid">{{
-          source.sourceId
-        }}</span>
+        <span 
+          v-if="queryParams.showLabels"
+          :id="'sideLabel' + source.transceiver?.mid"
+        >
+          {{source.sourceId}}
+        </span>
       </div>
     </div>
   </div>
@@ -45,10 +48,17 @@ export default {
   },
   computed: {
     ...mapState('Sources', ['sourceRemoteTracks', 'videoSources']),
-    ...mapState("Controls", {fullscreen: state => state.fullscreen, isGrid: state => state.isGrid, isSplittedView: state => state.isSplittedView}),
+    ...mapState("Controls", {
+        fullscreen: state => state.fullscreen,
+        isGrid: state => state.isGrid,
+        isSplittedView: state => state.isSplittedView
+    }),
     ...mapGetters('Sources', ['getVideoHasMain']),
     ...mapState('ViewConnection', {
       millicastView: (state) => state.millicastView,
+    }),
+    ...mapState('Params', {
+      queryParams: (state) => state.queryParams,
     }),
   },
   async mounted() {

@@ -35,11 +35,12 @@
       :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
     ></video>
   </template>
-  <span v-if="sourceRemoteTracks.length && isSplittedView && !fullscreen"
+  <span
+    v-if="sourceRemoteTracks.length && isSplittedView && !fullscreen && queryParams.showLabels"
     :class="isGrid ? 'grid-label' : 'list-label'"
-  >{{
-    this.mainLabel
-  }}</span>
+  >
+    {{this.mainLabel}}
+  </span>
 </template>
 
 <script>
