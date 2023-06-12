@@ -14,6 +14,9 @@
           :id="'sidePlayer' + source.sourceId"
           :ref="'sidePlayer' + source.sourceId"
           :class="!isGrid && isSplittedView ? 'hires-class': ''"
+          autoplay
+          muted
+          playsinline
         ></video>
         <span :id="'sideLabel' + source.transceiver?.mid">{{
           source.sourceId
