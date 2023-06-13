@@ -144,8 +144,8 @@ li {
   padding-left: 0.8rem;
 }
 .videoText span {
-  bottom: 8%;
-  left: 5%;
+  bottom: 1rem;
+  left: 1rem;
   position: absolute;
   color: #fff;
   background: rgba(0, 0, 0, 0.288);
