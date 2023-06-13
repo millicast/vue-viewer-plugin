@@ -24,6 +24,7 @@
         </div>
       </div>
       <VideoPlayerControlsSettingsQuality v-if="getActiveMedias.length > 1" />
+      <VideoPlayerControlsSettingsLayout v-if="getVideoSources.length > 1 && isSplittedView"/>
       <VideoPlayerControlsSettingsSplitView v-if="getVideoSources.length > 1" />
       <VideoPlayerControlsSettingsVideoTrack
         v-if="
@@ -73,9 +74,12 @@ import VideoPlayerControlsSettingsStats from './VideoPlayerControlsSettingsStats
 import VideoPlayerControlsSettingsReportIssue from './VideoPlayerControlsSettingsReportIssue.vue'
 import VideoPlayerControlsSettingsDropdown from './VideoPlayerControlsSettingsDropdown.vue'
 import VideoPlayerControlsSettingsSplitView from './VideoPlayerControlsSettingsSplitView.vue'
+import VideoPlayerControlsSettingsLayout from './VideoPlayerControlsSettingsLayout.vue'
 
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { useToast } from 'vue-toastification'
+
+import { version } from '../../../package.json';
 
 export default {
   name: 'VideoPlayerControlsSettings',
@@ -87,6 +91,7 @@ export default {
     VideoPlayerControlsSettingsReportIssue,
     VideoPlayerControlsSettingsDropdown,
     VideoPlayerControlsSettingsSplitView,
+    VideoPlayerControlsSettingsLayout
   },
   props: {
     streamId: String,
@@ -121,6 +126,7 @@ export default {
     ...mapState('Controls', {
       dropup: (state) => state.dropup,
       trackWarning: (state) => state.trackWarning,
+      isSplittedView: (state) => state.isSplittedView
     }),
   },
   methods: {
@@ -176,9 +182,10 @@ export default {
     },
   },
   mounted() {
-    this.viewerVersion = process.env.PACKAGE_VERSION
-      ? 'v' + process.env.PACKAGE_VERSION
-      : ''
+    this.viewerVersion = version
+      ? 'v' + version
+      : '';
+      this.toast = useToast()
   },
   watch: {
     dropup: function (dropup) {
@@ -194,8 +201,7 @@ export default {
               try {
                 await selectSource({ kind: 'video', source })
               } catch (error) {
-                const toast = useToast()
-                toast.error(
+                this.toast.error(
                   'There was an error selecting the desired source, try again',
                   { timeout: 5000 }
                 )
@@ -215,8 +221,7 @@ export default {
               try {
                 await selectSource({ kind: 'audio', source })
               } catch (error) {
-                const toast = useToast()
-                toast.error(
+                this.toast.error(
                   'There was an error selecting the desired source, try again',
                   { timeout: 5000 }
                 )

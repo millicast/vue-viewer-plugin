@@ -1,5 +1,7 @@
 # Millicast Vue.js Web Viewer Plugin
 
+![npm (scoped)](https://img.shields.io/npm/v/@millicast/vue-viewer-plugin)
+
 Vue.js plugin to embed viewer of a Millicast stream. This plugin allows developers to simplify Millicast services integration into their own Vue.js apps.
 
 ## Installation
@@ -35,25 +37,31 @@ At the end of the file `App.vue`, you must include the following dependecy:
 </style>
 ```
 
-**Optional:** If you want to use the chromecast feature you should also add the next script in your HTML:
+Or simply by adding the following dependecy at the beginning of the file `main.js`:
+
 ```html
-<script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"></script>
+import "@millicast/vue-viewer-plugin/dist/millicast-vue-viewer-plugin.css"
 ```
 
 Once this is done, you are ready to use the plugin in any Vue file of your project as a component.
 
 ### Configuration Parameters
 
-| Name          | Type             | Attribute | Default | Description                                                        |
-| ------------- | ---------------- | --------- | ------- | ------------------------------------------------------------------ |
-| `accountId`   | `String`         | Mandatory |         | Millicast existing *Account ID* where you want to get the stream.  |
-| `streamName`  | `String`         | Mandatory |         | Millicast existing *Stream Name* where you want to get the stream. |
-| `muted`       | `Boolean`        | Optional  | `false` | The streaming will start muted.                                    |
-| `autoplay`    | `Boolean`        | Optional  | `true`  | The streaming will autoplay when connected.                        |
-| `hideButtons` | `Array.<String>` | Optional  | `[]`    | The list is provided further in this document.                     |
-| `image`       | `String`         | Optional  |         | Placeholder image while stream is offline                          |
+| Name           | Type             | Attribute | Default | Description                                                                                       |
+| -------------- | ---------------- | --------- | ------- | ------------------------------------------------------------------------------------------------- |
+| `accountId`    | `String`         | Mandatory |         | Millicast existing *Account ID* where you want to get the stream.                                 |
+| `streamName`   | `String`         | Mandatory |         | Millicast existing *Stream Name* where you want to get the stream.                                |
+| `image`        | `String`         | Optional  |         | Placeholder image while stream is offline. By default it is a solid black.                        |
+| `muted`        | `Boolean`        | Optional  | `false` | The streaming will start muted.                                                                   |
+| `autoplay`     | `Boolean`        | Optional  | `true`  | The streaming will autoplay when connected.                                                       |
+| `hideButtons`  | `Array.<String>` | Optional  | `[]`    | The list is provided further in this document.                                                    |
+| `reportUrl`    | `String`         | Optional  | `null`  | The report playback URL service.                                                                  |
+| `chromecastId` | `String`         | Optional  | `null`  | The Chromecast ID of your application.                                                            |
+| `multisource`  | `Boolean`        | Optional  | `false` | The streaming will start using multiview.                                                         |
+| `noDelay`      | `Boolean`        | Optional  | `false` | Sets the minimum and maximum delay (sets `forcePlayoutDelayMin` and `forcePlayoutDelayMax` to 0). |
+| `showLabels`   | `Boolean`        | Optional  | `true` | Show stream label in multiview mode.                                                              |
 
-To be able to use the viewer, just reference to the component `VideoPlayer`, and pass the parameters of your choice as an object in the parameter `paramsOptions`.
+To be able to use the viewer, just reference to the component `VideoPlayer`, and pass the parameters of your choice as an object in the parameter `paramsOptions`. Later in this document, you will find an example of use.
 
 #### `hideButtons` options
 
@@ -69,6 +77,8 @@ In order to customize your experience using the plugin, you are able to hide the
 | `userCount`  | Hides the number of current viewers of the sreaming.                            |
 | `settings`   | Hides *settings* button.                                                        |
 
+In case you want to disable all buttons at once, you can simply pass the paremeter `controls: false`, instead of using `hideButtons`.
+
 ### Example of Use
 
 ```html
@@ -78,7 +88,9 @@ In order to customize your experience using the plugin, you are able to hide the
 - Remember that `accountId` and `streamName` are the only requeried parameters.
 - At the moment, this plugin allows **only one** instantiation of the component at a time by project.
 
-## Example App
+## Example Apps
+
+## Live Chat Example
 
 An example app is also provided which integrates a [PubNub](https://www.pubnub.com/docs/) based live chat, this example can be found in the `examples/live-chat` folder.
 
@@ -93,6 +105,11 @@ npm run serve
 ```
 
 This will install the dependencies and run the app.
+
+## Plugin Test App
+
+An example of a interactive and resizable sample app using the vue viewer plugin can be found in the `examples/plugin-test` folder.
+This app is for testing purposes.
 
 # Contribute
 

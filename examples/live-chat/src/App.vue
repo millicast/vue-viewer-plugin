@@ -1,8 +1,15 @@
 <template>
+  <b-modal size="lg" v-model="modalShow" v-if="!pubnubSettled || !millicastSettled" ref="my-modal" title="Warning" ok-only>
+    <ul>
+      <li v-if="!pubnubSettled">You have not settled your PubNub credentials in the .ENV file.</li>
+      <li v-if="!millicastSettled">You have not settled your Millicast credentials in the .ENV file.</li>
+    </ul>
+  </b-modal>
+
   <div id="container" class="row">
     <div id="video-player" class="col d-flex align-items-center py-3">
-      <template v-if="streamId.accountId && streamId.streamName">
-        <VideoPlayer :paramsOptions="streamId" class="video-container" />
+      <template v-if="millicastSettled">
+        <VideoPlayer :paramsOptions="streamId" />
       </template>
       <template v-else>
         <div class="alert alert-danger fade show" role="alert">
@@ -16,6 +23,8 @@
 
 <script>
 import LiveChat from './components/LiveChat.vue'
+const PubNubCredentials = process.env.VUE_APP_PUBNUB_PUBLISH_KEY && process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY && process.env.VUE_APP_PUBNUB_UUID
+const MillicastCredentials = process.env.VUE_APP_MILLICAST_ACCOUNT_ID && process.env.VUE_APP_MILLICAST_STREAM_NAME
 export default {
   name: 'App',
   components: {
@@ -23,10 +32,13 @@ export default {
   },
   data() {
     return {
-      streamId: {
-        accountId: process.env.VUE_APP_MILLICAST_ACCOUNT_ID,
-        streamName: process.env.VUE_APP_MILLICAST_STREAM_NAME,
-      },
+        streamId: {
+          accountId: process.env.VUE_APP_MILLICAST_ACCOUNT_ID,
+          streamName: process.env.VUE_APP_MILLICAST_STREAM_NAME,
+        },
+      pubnubSettled: PubNubCredentials,
+      millicastSettled: MillicastCredentials,
+      modalShow: true
     }
   },
 }
@@ -35,11 +47,6 @@ export default {
 <style lang="scss" scoped>
 #container {
   margin: 0;
-}
-
-.video-container {
-  width: 100%;
-  margin: 1rem 0;
 }
 
 @media only screen and (max-width: 990px) {
@@ -51,5 +58,5 @@ export default {
 </style>
 
 <style>
-@import '@millicast/vue-viewer-plugin/dist/millicast-vue-viewer-plugin.css';
+  @import '@millicast/vue-viewer-plugin/dist/millicast-vue-viewer-plugin.css';
 </style>

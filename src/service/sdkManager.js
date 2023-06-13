@@ -24,7 +24,9 @@ export const setVideoPlayer = ({
     commit('Controls/setVideo', videoPlayer)
     commit('Controls/setCurrentElementRef', videoPlayer.id)
   }
-  if (srcObject) commit('Controls/setVideoSource', srcObject)
+  if (srcObject) {
+    commit('Controls/setVideoSource', srcObject)
+  }
   if (volume) commit('Controls/setVideoVolume', volume)
   if (muted) commit('Controls/setVideoMuted', muted)
   if (autoplay) commit('Controls/setVideoAutoplay', autoplay)
@@ -149,7 +151,10 @@ const updateInactiveBroadcastState = (event) => {
 }
 
 const updateLayersBroadcastState = (event) => {
-  layers.updateLayers(event)
+  if ('0' in event.data.medias) 
+    layers.updateLayers(event)
+  else
+    layers.deleteLayers()
 }
 
 const updateViewerCount = (event) => {
@@ -165,7 +170,7 @@ export const selectQuality = (media) => {
 // SOURCES
 
 export const selectSource = async ({ kind, source }) => {
-  sources.handleSelectSource({ kind, source })
+  return await sources.handleSelectSource({ kind, source })
 }
 
 export const projectRemoteTracks = async (index) => {

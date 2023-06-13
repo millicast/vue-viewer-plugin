@@ -14,6 +14,7 @@
       ref="player"
       :poster="queryParams.placeholderImg"
       :class="{ 'display: none;': currentElementRef === 'player2' }"
+      :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
     ></video>
   </template>
   <template v-if="isMigrating || currentElementRef === 'player2'">
@@ -31,11 +32,14 @@
       ref="player2"
       :poster="queryParams.placeholderImg"
       :class="{ 'display: none;': currentElementRef === 'player' }"
+      :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
     ></video>
   </template>
-  <span v-if="sourceRemoteTracks.length && isSplittedView">{{
-    this.mainLabel
-  }}</span>
+  <span
+    v-if="sourceRemoteTracks.length && isSplittedView && !fullscreen && queryParams.showLabels"
+  >
+    {{this.mainLabel}}
+  </span>
 </template>
 
 <script>
@@ -100,6 +104,9 @@ export default {
       currentElementRef: (state) => state.currentElementRef,
       isMigrating: (state) => state.isMigrating,
       isSplittedView: (state) => state.isSplittedView,
+      previousSplitState: state => state.previousSplitState,
+      isGrid: state => state.isGrid,
+      fullscreen: (state) => state.fullscreen,
     }),
     ...mapState('Params', {
       queryParams: (state) => state.queryParams,
@@ -146,6 +153,14 @@ export default {
       if (isReconnecting) {
         this.setIsSplittedView(false)
         toast.warning(`Connection lost. Retrying...`)
+      } else {
+        const setSplitView = (state) => {
+          if (['connected'].includes(state)) {
+            this.setIsSplittedView(this.previousSplitState)
+            this.millicastView.removeListener('connectionStateChange', setSplitView)
+          }
+        }
+        this.millicastView.on('connectionStateChange', setSplitView)
       }
     },
     displayAudioOnly: async function () {
@@ -189,13 +204,14 @@ export default {
 <style scoped>
 video {
   width: 100%;
-  height: 100%;
+  max-height: 100vh;
   pointer-events: none;
+  border-radius: 0.25rem;
 }
 
-span {
-  bottom: 3rem;
-  left: 1.5rem;
+#main-source span {
+  bottom: 1rem;
+  left: 1rem;
   position: absolute;
   color: #fff;
   background: rgba(0, 0, 0, 0.288);
@@ -203,11 +219,19 @@ span {
   font-size: 0.875rem;
   line-height: 1.15rem;
   border-radius: 2px;
-
   text-overflow: ellipsis;
   white-space: nowrap;
   width: fit-content;
   max-width: 6rem;
   overflow: hidden;
+}
+
+.test-player video, .test-player-2 video {
+  border-radius: .25rem;
+}
+.grid-player {
+  width: 100%;
+  align-self: center;
+  position: relative;
 }
 </style>

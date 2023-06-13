@@ -37,7 +37,7 @@
     <tbody
       v-if="hasStats"
       :style="[isMobile ? 'overflow-x: auto;' : 'overflow-x: hidden;']"
-      class="text-left"
+      class="text-left videoStats"
     >
       <tr v-if="millicastView?.signaling?.subscriberId" class="row mx-0">
         <td class="col-6">Server Id</td>
@@ -135,9 +135,9 @@
 
 <script>
 import { mapGetters, mapState } from 'vuex'
+import { formatBitsRecursive } from '../service/utils/layers'
 
 const bytesUnitsStorage = ['B', 'KB', 'MB', 'GB', 'TB']
-const bitsUnitsStorage = ['bps', 'kbps', 'mbps', 'gbps']
 
 export default {
   name: 'VideoPlayerStatsTable',
@@ -292,20 +292,6 @@ const formatBytesRecursive = (value, unitsStoragePosition = 0) => {
   }
 }
 
-const formatBitsRecursive = (value, unitsStoragePosition = 0) => {
-  const newValue = value / 1000
-  if (
-    newValue < 1 ||
-    (newValue > 1 && unitsStoragePosition + 1 > bitsUnitsStorage.length)
-  ) {
-    return `${Math.round(value * 100) / 100} ${
-      bitsUnitsStorage[unitsStoragePosition]
-    }`
-  } else if (newValue > 1) {
-    return formatBitsRecursive(newValue, unitsStoragePosition + 1)
-  }
-}
-
 const formatNtpToEpoch = (value) => {
   return value - 2208988800000
 }
@@ -316,6 +302,7 @@ table {
   background-color: #343a40e6;
   max-width: 35rem;
 }
+
 .ml-viewer .table td,
 .ml-viewer .table th {
   background-color: #343a40e6 !important;
@@ -325,14 +312,31 @@ thead,
 tbody {
   display: block;
 }
+
 tr {
   margin: 0;
 }
 
-tbody {
+.videoStats {
   max-height: 60vh;
   overflow-y: auto;
 }
+
+.videoStats::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  margin-right: 10px;
+}
+
+.videoStats::-webkit-scrollbar-track {
+  border-radius: 10px;
+}
+
+.videoStats::-webkit-scrollbar-thumb {
+  background-color: #a9a9aa9e;
+  border-radius: 10px;
+}
+
 i {
   padding: 0.3rem;
 }
