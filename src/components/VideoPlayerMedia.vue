@@ -37,7 +37,6 @@
   </template>
   <span
     v-if="sourceRemoteTracks.length && isSplittedView && !fullscreen && queryParams.showLabels"
-    :class="isGrid ? 'grid-label' : 'list-label'"
   >
     {{this.mainLabel}}
   </span>
@@ -210,34 +209,14 @@ video {
   border-radius: 0.25rem;
 }
 
-span {
+#main-source span {
   bottom: 1rem;
-  left: 1.5rem;
+  left: 1rem;
   position: absolute;
   color: #fff;
   background: rgba(0, 0, 0, 0.288);
   padding: 4px 8px;
   font-size: 0.875rem;
-  font-weight: bold;
-  line-height: 1.15rem;
-  border-radius: 2px;
-
-  text-overflow: ellipsis;
-  white-space: nowrap;
-  width: fit-content;
-  max-width: 6rem;
-  overflow: hidden;
-}
-
-.grid-label {
-  bottom: 8%;
-  left: 5%;
-  position: absolute;
-  color: #FFF;
-  background: rgba(0, 0, 0, 0.288);
-  padding: 4px 8px;
-  font-size: .875rem;
-  font-weight: 400;
   line-height: 1.15rem;
   border-radius: 2px;
   text-overflow: ellipsis;
@@ -246,6 +225,7 @@ span {
   max-width: 6rem;
   overflow: hidden;
 }
+
 .test-player video, .test-player-2 video {
   border-radius: .25rem;
 }
