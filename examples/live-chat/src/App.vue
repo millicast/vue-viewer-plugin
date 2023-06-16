@@ -9,7 +9,12 @@
   <div id="container" class="row">
     <div id="video-player" class="col d-flex align-items-center py-3">
       <template v-if="millicastSettled">
-        <VideoPlayer :paramsOptions="streamId" />
+        <VideoPlayer 
+          :paramsOptions="{
+            accountId: accountId,
+            streamName: streamName
+          }"
+        />
       </template>
       <template v-else>
         <div class="alert alert-danger fade show" role="alert">
@@ -32,10 +37,8 @@ export default {
   },
   data() {
     return {
-        streamId: {
-          accountId: process.env.VUE_APP_MILLICAST_ACCOUNT_ID,
-          streamName: process.env.VUE_APP_MILLICAST_STREAM_NAME,
-        },
+      accountId: process.env.VUE_APP_MILLICAST_ACCOUNT_ID,
+      streamName: process.env.VUE_APP_MILLICAST_STREAM_NAME,
       pubnubSettled: PubNubCredentials,
       millicastSettled: MillicastCredentials,
       modalShow: true

@@ -2,7 +2,7 @@ import store from '../store'
 
 export const availableControls = ['play', 'volume', 'pip', 'fullscreen', 'cast', 'liveBadge', 'userCount', 'settings']
 
-export const defaultOptions = {
+export const defaultViewerOptions = {
   audioOnly: false,
   autoplay: true,
   videoOnly: false,
@@ -15,13 +15,11 @@ export const defaultOptions = {
   token: null,
   forcePlayoutDelay: false,
   multisource: false,
-  chromecastId: null,
-  reportUrl: null,
   layout: null,
   showLabels: true
 }
 
-export default function setUserParams({
+export default function processViewerOptions({
   streamId,
   audioOnly,
   videoOnly,
@@ -33,8 +31,6 @@ export default function setUserParams({
   muted,
   noDelay,
   multisource,
-  chromecastId,
-  reportUrl,
   layout,
   showLabels
 }) {
@@ -58,10 +54,8 @@ export default function setUserParams({
   if (noDelay) {
     options.forcePlayoutDelay = { min: 0, max: 0 }
   }
-  options.chromecastId = chromecastId ?? process.env.VUE_APP_CHROMECAST_ID
-  options.reportUrl = reportUrl ?? process.env.VUE_APP_DEFAULT_REPORT_URL
   if (options.layout && options.layout === 'grid') {
     store.commit('Controls/setIsGrid', true)
   }
-  store.commit('Params/setQueryParams', { ...defaultOptions, ...options })
+  store.commit('Params/setViewerOptions', { ...defaultViewerOptions, ...options })
 }

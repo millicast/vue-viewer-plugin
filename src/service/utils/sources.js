@@ -196,7 +196,7 @@ const project = async ({ kind, source }) => {
 }
 
 export const handleProjectVideo = async (what, where, index) => {
-  if (state.Params.queryParams.showLabels) {
+  if (state.Params.viewer.showLabels) {
     let sideLabel = 'sideLabel' + where
     document.getElementById(sideLabel).textContent = what ?? 'Main'
   }
