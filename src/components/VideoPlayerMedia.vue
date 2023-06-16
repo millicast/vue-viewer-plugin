@@ -12,7 +12,7 @@
       playsinline
       id="player"
       ref="player"
-      :poster="queryParams.placeholderImg"
+      :poster="viewer.placeholderImg"
       :class="{ 'display: none;': currentElementRef === 'player2' }"
       :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
     ></video>
@@ -30,13 +30,13 @@
       playsinline
       id="player2"
       ref="player2"
-      :poster="queryParams.placeholderImg"
+      :poster="viewer.placeholderImg"
       :class="{ 'display: none;': currentElementRef === 'player' }"
       :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
     ></video>
   </template>
   <span
-    v-if="sourceRemoteTracks.length && isSplittedView && !fullscreen && queryParams.showLabels"
+    v-if="sourceRemoteTracks.length && isSplittedView && !fullscreen && viewer.showLabels"
   >
     {{this.mainLabel}}
   </span>
@@ -72,8 +72,8 @@ export default {
       videoPlayer: player,
       srcObject: null,
       volume: 1,
-      muted: this.queryParams.muted,
-      autoplay: this.queryParams.autoplay,
+      muted: this.viewer.muted,
+      autoplay: this.viewer.autoplay,
     })
   },
   computed: {
@@ -109,13 +109,13 @@ export default {
       fullscreen: (state) => state.fullscreen,
     }),
     ...mapState('Params', {
-      queryParams: (state) => state.queryParams,
+      viewer: (state) => state.viewer,
     }),
     ...mapGetters('Sources', ['getVideoHasMain', 'getAudioHasMain']),
     displayAudioOnly() {
       return (
         (this.isAudioOnly && this.isLive) ||
-        (this.queryParams.placeholderImg === null && !this.isLive)
+        (this.viewer.placeholderImg === null && !this.isLive)
       )
     },
   },
@@ -182,7 +182,7 @@ export default {
         autoplay,
       })
     },
-    async queryParams() {
+    async viewer() {
       await stopStream()
       await nextTick()
 

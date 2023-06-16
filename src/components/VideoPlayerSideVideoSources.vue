@@ -19,7 +19,7 @@
           playsinline
         ></video>
         <span 
-          v-if="queryParams.showLabels"
+          v-if="viewer.showLabels"
           :id="'sideLabel' + source.transceiver?.mid"
         >
           {{source.sourceId}}
@@ -58,7 +58,7 @@ export default {
       millicastView: (state) => state.millicastView,
     }),
     ...mapState('Params', {
-      queryParams: (state) => state.queryParams,
+      viewer: (state) => state.viewer,
     }),
   },
   async mounted() {

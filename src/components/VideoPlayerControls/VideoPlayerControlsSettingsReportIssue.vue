@@ -35,8 +35,8 @@ export default {
   computed: {
     ...mapState('Params', {
       reportUrl(state) {
-        this.showReportButton = !!state.queryParams.reportUrl
-        return state.queryParams.reportUrl
+        this.showReportButton = !!state.environment.VUE_APP_REPORT_URL
+        return state.environment.VUE_APP_REPORT_URL
       }
     }),
   },

@@ -138,7 +138,7 @@ export default {
       millicastView: (state) => state.millicastView,
     }),
     ...mapState('Params', {
-      reportUrl: (state) => state.queryParams.reportUrl,
+      reportUrl: (state) => state.environment.VUE_APP_REPORT_URL,
     }),
   },
   mounted() {

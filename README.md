@@ -55,11 +55,10 @@ Once this is done, you are ready to use the plugin in any Vue file of your proje
 | `muted`        | `Boolean`        | Optional  | `false` | The streaming will start muted.                                                                   |
 | `autoplay`     | `Boolean`        | Optional  | `true`  | The streaming will autoplay when connected.                                                       |
 | `hideButtons`  | `Array.<String>` | Optional  | `[]`    | The list is provided further in this document.                                                    |
-| `reportUrl`    | `String`         | Optional  | `null`  | The report playback URL service.                                                                  |
-| `chromecastId` | `String`         | Optional  | `null`  | The Chromecast ID of your application.                                                            |
 | `multisource`  | `Boolean`        | Optional  | `false` | The streaming will start using multiview.                                                         |
 | `noDelay`      | `Boolean`        | Optional  | `false` | Sets the minimum and maximum delay (sets `forcePlayoutDelayMin` and `forcePlayoutDelayMax` to 0). |
-| `showLabels`   | `Boolean`        | Optional  | `true` | Show stream label in multiview mode.                                                              |
+| `showLabels`   | `Boolean`        | Optional  | `true`  | Show stream label in multiview mode.                                                              |
+| `environment`  | `{}`      | Optional  | `.env file content`  | Plugin environment settings.                                                              |
 
 To be able to use the viewer, just reference to the component `VideoPlayer`, and pass the parameters of your choice as an object in the parameter `paramsOptions`. Later in this document, you will find an example of use.
 
@@ -78,6 +77,22 @@ In order to customize your experience using the plugin, you are able to hide the
 | `settings`   | Hides *settings* button.                                                        |
 
 In case you want to disable all buttons at once, you can simply pass the paremeter `controls: false`, instead of using `hideButtons`.
+
+#### `environment` options
+
+In order to customize your experience using the plugin, you are able to set up the environment settings. 
+
+| Option                      | Description                                                                     |
+| --------------------------- | ------------------------------------------------------------------------------- |
+| `NODE_ENV`                  | Determine if the main app is a production or development build.                 |
+| `VUE_APP_TURN_ENDPOINT`     | Set the turn endpoint.                                                          |
+| `VUE_APP_LIVEWS_ENDPOINT`   | Set the live views endpoint.                                                    |
+| `VUE_APP_DIRECTOR_ENDPOINT` | Set the director endpoint.                                                      |
+| `VUE_APP_PUBLIC_PATH`       | Set the public path endpoint.                                                   |
+| `VUE_APP_REPORT_URL`        | The report playback URL .                                                       |
+| `VUE_APP_CHROMECAST_ID`     | Chromecast ID of your application.                                              |
+
+In case this parameters are not send as a property, the plugin will use the default values specified in the .env file.
 
 ### Example of Use
 

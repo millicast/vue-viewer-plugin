@@ -60,7 +60,7 @@
         <div 
           id="controls" 
           class="controls" 
-          v-if="queryParams.controls"
+          v-if="viewer.controls"
         > 
           <!-- TOP CONTROLS -->
           <div 
@@ -85,7 +85,7 @@
               :isConnected="cast.isConnected"
               :showButton="showButton"
               :currentTime="currentTime"
-              :streamId="queryParams.streamId"
+              :streamId="viewer.streamId"
             />
           </div>
         </div>
@@ -157,8 +157,8 @@ export default {
     }, 1000)
 
     this.setCastOptions({
-      streamId: this.queryParams.streamId,
-      token: this.queryParams.token,
+      streamId: this.viewer.streamId,
+      token: this.viewer.token,
       loading: this.isLoading,
     })
   },
@@ -167,7 +167,7 @@ export default {
   },
   computed: {
     ...mapState('Params', {
-      queryParams: (state) => state.queryParams,
+      viewer: (state) => state.viewer,
     }),
     ...mapState('Sources', {
       videoSources: (state) => state.videoSources,
@@ -233,7 +233,7 @@ export default {
       }, 4000)
     },
     showButton(button) {
-      let showButton = !this.queryParams.hideButtons.includes(button)
+      let showButton = !this.viewer.hideButtons.includes(button)
       if (showButton && button === 'fullscreen') {
         let player = document.getElementById('player') ?? document.getElementById('player2')
         if (!player) {
@@ -318,8 +318,8 @@ export default {
     },
     token: function () {
       this.setCastOptions({
-        streamId: this.queryParams.streamId,
-        token: this.queryParams.token,
+        streamId: this.viewer.streamId,
+        token: this.viewer.token,
         loading: this.isLoading,
       })
     },
@@ -334,10 +334,10 @@ export default {
         this.cast = { isConnected }
       }
     },
-    queryParams: function () {
+    viewer: function () {
       this.setCastOptions({
-        streamId: this.queryParams.streamId,
-        token: this.queryParams.token,
+        streamId: this.viewer.streamId,
+        token: this.viewer.token,
         loading: this.isLoading,
       })
     },
