@@ -71,6 +71,7 @@ const addSource = (kind, sourceId, trackId) => {
     name: sourceId === null ? 'Main' : sourceId,
     sourceId,
     trackId,
+    mid: sourceId === null ? '0' : null,
   }
   const sourceToUse =
     kind === 'video' ? state.Sources.videoSources : state.Sources.audioSources
@@ -195,37 +196,25 @@ const project = async ({ kind, source }) => {
   }
 }
 
-export const handleProjectVideo = async (what, where, index) => {
-  if (state.Params.viewer.showLabels) {
-    let sideLabel = 'sideLabel' + where
-    document.getElementById(sideLabel).textContent = what ?? 'Main'
-  }
+export const handleProjectVideo = async (what, where, trackId, layer) => {
   await state.ViewConnection.millicastView.project(what, [
     {
-      trackId: state.Sources.videoSources[index].trackId,
+      trackId,
       mediaId: where,
+      layer
     },
   ])
 }
 
-export const handleProjectRemoteTracks = async (index) => {
+export const handleProjectRemoteTracks = async (remoteTrack) => {
   await nextTick()
-  const newSourceRemoteTrackIndex = index
-  const vidId =
-    index +
-    state.Sources.videoSources.length -
-    state.Sources.sourceRemoteTracks.length
-  if (newSourceRemoteTrackIndex < 0) return
-  const sidePlayerId =
-    'sidePlayer' +
-    state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].sourceId
+  const sidePlayerId = 'sidePlayer' + remoteTrack.transceiver?.mid
   const sidePlayerVideo = document.getElementById(sidePlayerId)
-  sidePlayerVideo.srcObject = state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].mediaStream
+  sidePlayerVideo.srcObject = remoteTrack.mediaStream
   handleProjectVideo(
-    state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].sourceId,
-    state.Sources.sourceRemoteTracks[newSourceRemoteTrackIndex].transceiver
-      ?.mid ?? null,
-    vidId
+    remoteTrack.sourceId, 
+    remoteTrack.transceiver?.mid ?? null, 
+    state.Sources.transceiverSourceState[remoteTrack.transceiver?.mid].trackId
   )
   sidePlayerVideo.muted = true
   sidePlayerVideo.autoPlay = true

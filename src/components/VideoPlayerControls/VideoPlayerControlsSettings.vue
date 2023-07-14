@@ -23,7 +23,7 @@
           {{ viewerVersion }}
         </div>
       </div>
-      <VideoPlayerControlsSettingsQuality v-if="getActiveMedias.length > 1" />
+      <VideoPlayerControlsSettingsQuality v-if="getActiveMainTransceiverMedias.length > 1" />
       <VideoPlayerControlsSettingsLayout v-if="getVideoSources.length > 1 && isSplittedView"/>
       <VideoPlayerControlsSettingsSplitView v-if="getVideoSources.length > 1" />
       <VideoPlayerControlsSettingsVideoTrack
@@ -109,7 +109,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Layers', ['getActiveMedias']),
+    ...mapGetters('Layers', ['getActiveMainTransceiverMedias']),
     ...mapGetters('Sources', [
       'getVideoSources',
       'getAudioSources',
@@ -130,7 +130,13 @@ export default {
     }),
   },
   methods: {
-    ...mapMutations('Controls', ['setDropup', 'toggleFullscreen']),
+    ...mapMutations('Controls', [
+      'setDropup', 
+      'toggleFullscreen'
+    ]),
+    ...mapMutations('Sources', [
+      'setMainLabel',
+    ]),
     compareItems(entry, current) {
       return entry?.name === current?.name
     },
@@ -200,6 +206,7 @@ export default {
             const videoTrackChange = async (source) => {
               try {
                 await selectSource({ kind: 'video', source })
+                await this.setMainLabel(source.name)
               } catch (error) {
                 this.toast.error(
                   'There was an error selecting the desired source, try again',
@@ -242,7 +249,7 @@ export default {
             }
             this.setDropupSettings(
               this.selectedQuality,
-              this.getActiveMedias,
+              this.getActiveMainTransceiverMedias,
               'Video Quality',
               qualityChange,
               this.compareItems
@@ -262,7 +269,7 @@ export default {
     },
     getVideoSources() {
       if (this.dropup === 'videoTracks') {
-        this.items = this.getVideoSources
+        this.items = this.getActiveMainTransceiverMedias;
       }
     },
     getAudioSources() {

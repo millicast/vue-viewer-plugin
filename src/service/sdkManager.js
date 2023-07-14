@@ -173,12 +173,12 @@ export const selectSource = async ({ kind, source }) => {
   return await sources.handleSelectSource({ kind, source })
 }
 
-export const projectRemoteTracks = async (index) => {
-  sources.handleProjectRemoteTracks(index)
+export const projectRemoteTracks = async (remoteTrack) => {
+  sources.handleProjectRemoteTracks(remoteTrack)
 }
 
-export const projectVideo = async (what, where, index) => {
-  sources.handleProjectVideo(what, where, index)
+export const projectVideo = async (what, where, trackId, layer) => {
+  sources.handleProjectVideo(what, where, trackId, layer)
 }
 
 // CAST

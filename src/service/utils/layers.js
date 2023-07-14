@@ -6,12 +6,18 @@ const qualityNames = {
   3: ['High', 'Medium', 'Low']
 }
 
+let activeSideSources = []
+
 export const updateLayers = (evntData) => {
   const { data } = evntData
   const activeQualities = []
   const inactiveQualities = []
-  const mainSource = {'0': data.medias[0]}
-  const encodings = Object.values(mainSource)
+  const mainMedia = { "0" : data.medias[0]}
+  const encodings = Object.values(mainMedia)
+  const [, ...rest] = Object.entries(data.medias);
+  const sideSources = Object.fromEntries(rest);
+  commit('Layers/setMedias', data.medias)
+  setSideSourcesQualityLow(sideSources)
   encodings.forEach((encoding) => {
     if (
       encoding?.active.length === 1 &&
@@ -65,17 +71,17 @@ export const updateLayers = (evntData) => {
     activeQualities.unshift({name: 'Auto'})
   }
 
-  if (activeQualities.length != state.Layers.medias.active.length) {
+  if (activeQualities.length != state.Layers.mainTransceiverMedias.active.length) {
     commit('Layers/setSelectedQuality', { name: 'Auto' })
   }
-  commit('Layers/setMedias', {
+  commit('Layers/setMainTransceiverMedias', {
     active: activeQualities,
     inactive: inactiveQualities,
   })
 }
 
 export const deleteLayers = () => {
-  commit('Layers/setMedias', { active: [], inactive: [] })
+  commit('Layers/setMainTransceiverMedias', { active: [], inactive: [] })
   commit('Layers/setSelectedQuality', { name: 'Auto' })
 }
 
@@ -102,5 +108,45 @@ export const formatBitsRecursive = (value, unitsStoragePosition = 0) => {
     return `${Math.round(value * 100) / 100} ${bitsUnitsStorage[unitsStoragePosition]}`
   } else if (newValue > 1) {
     return formatBitsRecursive(newValue, unitsStoragePosition + 1)
+  }
+}
+
+const setSideSourcesQualityLow = (sideSources) => {
+  const isSplittedView = state.Controls.isSplittedView;
+  const isGrid = state.Controls.isGrid;
+  if ( isSplittedView && !isGrid ){
+
+    const keys1 = Object.keys(activeSideSources);
+    const keys2 = Object.keys(sideSources);
+    const difference = keys2.filter(key => !keys1.includes(key));
+
+    const result = difference.reduce((acc, key) => {
+      const obj = sideSources[key].active.length > 0 ? sideSources[key].active : null
+      if (obj != null) acc[key] = obj;
+      return acc;
+    }, {});
+
+    if ( Object.keys(result).length === 0 ) return
+
+    const videoSources = state.Sources.videoSources;
+    // Set low quality for side video source streams
+    videoSources.forEach( (source) => {
+      if ( source.sourceId !== null && source.mid in result ){
+        result[source.mid].sort((layer, nextLayer) =>  nextLayer.id - layer.id )   
+        state.ViewConnection.millicastView?.project(source.name,[{ 
+          mediaId: source.mid, 
+          layer: {
+            encodingId: result[source.mid].pop().id
+          }, 
+          trackId: 'video', 
+          media: 'video'
+        }])
+      }
+    })
+
+    activeSideSources = sideSources
+
+  } else {
+    activeSideSources = []
   }
 }

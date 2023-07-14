@@ -2,14 +2,23 @@ const defaulState = {
   medias: {
     active: [],
     inactive: [],
+    layers: []
   },
-  selectedQuality: { name: 'Auto' },
+  selectedQuality: {name: 'Auto'},
+  mainTransceiverMedias: {
+    active: [],
+    inactive: [],
+    layers: []
+  }
 }
 
 export default {
   namespaced: true,
   state: defaulState,
   mutations: {
+    setMainTransceiverMedias(state, medias) {
+      state.mainTransceiverMedias = medias
+    },
     setMedias(state, medias) {
       state.medias = medias
     },
@@ -22,7 +31,10 @@ export default {
   },
   getters: {
     getActiveMedias(state) {
-      return state.medias.active
+      return state.medias
+    },
+    getActiveMainTransceiverMedias(state){
+      return state.mainTransceiverMedias.active
     },
   },
 }
