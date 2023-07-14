@@ -114,5 +114,8 @@ export default {
     getSelectedVideoSource(state) {
       return state.selectedVideoSource
     },
+    getTransceiverSourceState(state) {
+      return state.transceiverSourceState
+    }
   },
 }

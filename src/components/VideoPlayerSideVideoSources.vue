@@ -76,10 +76,12 @@ export default {
       await projectRemoteTracks(remoteTrack)
     )
     
-    this.videoSources.forEach(source => {
-      this.transceiverSourceState[source.mid] = source  
-    });
     this.playerRef = document.getElementById('player')
+  },
+  async unmounted() {
+    this.videoSources.forEach(source => {
+      this.transceiverSourceState[source.mid] = source
+    })
   },
   watch: {
     'sourceRemoteTracks.length': async function () {

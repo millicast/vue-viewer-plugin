@@ -17,7 +17,7 @@
             @change="handleSourceChange"
           >
             <option
-              v-for="source in getVideoSources"
+              v-for="source in getTransceiverSourceState"
               :key="source.sourceId"
               :value="source.mid"
             >
@@ -168,6 +168,7 @@ export default {
       })
       this.stats = { ...this.stats, ...peerStats }
     })
+    this.selectedSourceMid = this.getTransceiverSourceState[0].mid
   },
   beforeUnmount() {
     this.millicastView.webRTCPeer.stopStats()
@@ -190,14 +191,22 @@ export default {
       const mid = this.selectedSourceMid ?? 0
       this.statsIndex = this.midToStatsIndexMap[mid]
     },
+    selectMidZero() {
+      this.selectedSourceMid = this.getTransceiverSourceState[0].mid
+    },
   },
   computed: {
-    ...mapState('Controls', ['isMobile', 'isSplittedView']),
+    ...mapState('Controls', [
+      'isMobile',
+      'isSplittedView'
+    ]),
     ...mapState('ViewConnection', {
       millicastView: (state) => state.millicastView,
     }),
     ...mapState('Sources', ['sourceRemoteTracks']),
-    ...mapGetters('Sources', ['getVideoSources']),
+    ...mapGetters('Sources', [
+      'getTransceiverSourceState'
+    ]),
     hasStats() {
       return Object.keys(this.stats).length > 0
     },
@@ -269,11 +278,15 @@ export default {
       return this.millicastView?.signaling?.clusterId
     },
     multiStatsAvailable() {
-      return (
-        this.sourceRemoteTracks.length &&
-        this.isSplittedView &&
+      const multiOn = (
+        this.sourceRemoteTracks.length && 
+        this.isSplittedView && 
         Object.keys(this.midToStatsIndexMap).length
       )
+      if (!multiOn) {
+        this.selectMidZero()
+      }
+      return multiOn
     },
   },
 }
