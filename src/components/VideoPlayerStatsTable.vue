@@ -4,12 +4,12 @@
       <tr
         class="row mx-0 align-items-center"
         :class="
-          multiStatsAvailable
+          multiviewStatsAvailable
             ? 'justify-content-between'
             : 'justify-content-end'
         "
       >
-        <th v-if="multiStatsAvailable" class="d-flex align-items-center">
+        <th v-if="multiviewStatsAvailable" class="d-flex align-items-center">
           <span>Source:</span>
           <select
             class="ml-2 source-select"
@@ -277,16 +277,16 @@ export default {
     clusterId() {
       return this.millicastView?.signaling?.clusterId
     },
-    multiStatsAvailable() {
-      const multiOn = (
+    multiviewStatsAvailable() {
+      const multiviewIsOn = (
         this.sourceRemoteTracks.length && 
         this.isSplittedView && 
         Object.keys(this.midToStatsIndexMap).length
       )
-      if (!multiOn) {
+      if (!multiviewIsOn) {
         this.selectMidZero()
       }
-      return multiOn
+      return multiviewIsOn
     },
   },
 }
