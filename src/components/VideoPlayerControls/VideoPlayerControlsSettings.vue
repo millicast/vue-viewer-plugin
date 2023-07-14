@@ -78,8 +78,7 @@ import VideoPlayerControlsSettingsLayout from './VideoPlayerControlsSettingsLayo
 
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { useToast } from 'vue-toastification'
-
-import { version } from '../../../package.json';
+import { version } from '../../../package.json'
 
 export default {
   name: 'VideoPlayerControlsSettings',
@@ -188,10 +187,8 @@ export default {
     },
   },
   mounted() {
-    this.viewerVersion = version
-      ? 'v' + version
-      : '';
-      this.toast = useToast()
+    this.viewerVersion = version ? 'v' + version : ''
+    this.toast = useToast()
   },
   watch: {
     dropup: function (dropup) {
@@ -262,14 +259,14 @@ export default {
         this.showDropup = false
       }
     },
-    getActiveMedias() {
+    getActiveMainTransceiverMedias() {
       if (this.dropup === 'qualities') {
-        this.items = this.getActiveMedias
+        this.items = this.getActiveMainTransceiverMedias
       }
     },
     getVideoSources() {
       if (this.dropup === 'videoTracks') {
-        this.items = this.getActiveMainTransceiverMedias;
+        this.items = this.getActiveMainTransceiverMedias
       }
     },
     getAudioSources() {

@@ -45,7 +45,6 @@ export default {
     return {
       indexSourceProjectedInMain: null,
       indexMainMediaSource: 0,
-      indexMainMediaSource: 0,
       playerRef: null,
       enableClick: true
     }
