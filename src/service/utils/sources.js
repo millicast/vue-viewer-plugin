@@ -71,7 +71,7 @@ const addSource = (kind, sourceId, trackId) => {
     name: sourceId === null ? 'Main' : sourceId,
     sourceId,
     trackId,
-    mid: sourceId === null ? '0' : null,
+    mid: sourceId === null ? (kind === 'video' ? "0" : "1") : null
   }
   const sourceToUse =
     kind === 'video' ? state.Sources.videoSources : state.Sources.audioSources
@@ -83,11 +83,14 @@ const addSource = (kind, sourceId, trackId) => {
         kind === 'video'
           ? state.Sources.selectedVideoSource
           : state.Sources.selectedAudioSource
-      if (selectedMediaSource.name === 'none') {
+
+      if (selectedMediaSource.name !== 'Main') {
         commit('Sources/setSelectedSource', {
           kind,
           selectedSource: source,
         })
+        handleSelectSource({ kind, source })
+        commit('Sources/setMainLabel', 'Main')
       }
     } else {
       sources.push(source)
@@ -124,6 +127,8 @@ export const handleDeleteSource = (sourceId) => {
 }
 
 const deleteSource = (kind, sourceId) => {
+  let sourceCurrentMid
+  let sourceInitialMid
   let selectedSource =
     kind === 'video'
       ? state.Sources.selectedVideoSource
@@ -131,15 +136,40 @@ const deleteSource = (kind, sourceId) => {
   let sourcesToUse =
     kind === 'video' ? state.Sources.videoSources : state.Sources.audioSources
   sourcesToUse = sourcesToUse.filter((source) => source.sourceId !== sourceId)
-  if (sourceId === selectedSource.sourceId) {
-    if (sourcesToUse.findIndex((source) => source.sourceId === null) !== -1) {
-      selectedSource = sourcesToUse[0]
-    } else {
-      selectedSource = { name: 'none', sourceId: 0 }
+
+  if (sourceId === selectedSource.sourceId || sourceId === null) {
+    selectedSource = sourcesToUse[0]
+    if ( !state.Sources.isAudioOnly ) {
+      commit('Sources/setMainLabel', sourcesToUse[0].name)
     }
   }
+
+  if (kind === 'video') {
+    sourceCurrentMid = Object.keys(state.Sources.transceiverSourceState).find(key => state.Sources.transceiverSourceState[key].sourceId === sourceId)
+    if (sourceId !== null) {
+      sourceInitialMid = Object.values(state.Sources.sourceRemoteTracks).find(value => value.sourceId === sourceId).transceiver.mid
+    }
+  }
+
+  if (state.Sources.selectedVideoSource.sourceId !== null && sourceId === null && state.Controls.isSplittedView && kind === 'video') {
+    handleProjectVideo(state.Sources.selectedVideoSource.sourceId, `${sourceCurrentMid}`, state.Sources.selectedVideoSource.trackId)
+    document.getElementById(`sideLabel${state.Sources.selectedVideoSource.mid}`).textContent = state.Sources.selectedVideoSource.sourceId
+  } else if (state.Sources.selectedVideoSource.sourceId === null && sourceId !== null && state.Controls.isSplittedView && kind === 'video'){
+    if (sourceCurrentMid !== sourceInitialMid) {
+      handleProjectVideo(state.Sources.transceiverSourceState[sourceInitialMid].sourceId, state.Sources.transceiverSourceState[sourceCurrentMid].mid)
+      document.getElementById(`sideLabel${state.Sources.transceiverSourceState[sourceCurrentMid].mid}`).textContent = state.Sources.transceiverSourceState[sourceInitialMid].sourceId
+    }
+  } else if (state.Sources.selectedVideoSource.sourceId !== null && sourceId !== null && state.Controls.isSplittedView && kind === 'video' && sourceCurrentMid !== sourceInitialMid){
+    handleProjectVideo(state.Sources.transceiverSourceState[sourceInitialMid].sourceId, state.Sources.selectedVideoSource.mid)
+    document.getElementById(`sideLabel${state.Sources.transceiverSourceState[state.Sources.selectedVideoSource.mid].mid}`).textContent = state.Sources.transceiverSourceState[sourceInitialMid].sourceId
+  }
+
+  if ( kind === 'video') {
+    commit('Sources/removeTransceiverSourceState', sourceId)
+  }
+
   commit('Sources/removeSourceRemoteTrack', sourceId)
-  commit('Sources/setSources', { kind, sources: sourcesToUse })
+  commit('Sources/removeSource', { kind, sourceId: sourceId })
   handleSelectSource({ kind, source: selectedSource })
 }
 
@@ -187,6 +217,8 @@ const project = async ({ kind, source }) => {
       {
         trackId: source.trackId,
         mediaId,
+        ...(kind === 'video' && { promote: true }),
+        media: kind
       },
     ])
   } else if (state.Controls.castIsConnected) {
@@ -201,6 +233,7 @@ export const handleProjectVideo = async (what, where, trackId, layer) => {
     {
       trackId,
       mediaId: where,
+      media: 'video',
       layer
     },
   ])
