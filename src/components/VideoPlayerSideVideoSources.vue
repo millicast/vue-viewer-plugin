@@ -37,6 +37,7 @@ import {
   selectSource,
   projectRemoteTracks,
   projectVideo,
+  unprojectMultiview,
 } from '../service/sdkManager'
 
 export default {
@@ -82,11 +83,17 @@ export default {
     this.videoSources.forEach(source => {
       this.transceiverSourceState[source.mid] = source
     })
+    unprojectMultiview()
   },
   watch: {
-    'sourceRemoteTracks.length': async function () {
-      await projectRemoteTracks(this.sourceRemoteTracks[this.sourceRemoteTracks.length - 1])
-    },
+    'sourceRemoteTracks.length': {
+      handler: async function (newLenght, currentLenght) {
+        if (newLenght > currentLenght) {
+          const lastIndex = newLenght - 1
+          await projectRemoteTracks(this.sourceRemoteTracks[lastIndex])
+        } 
+      },
+    }
   },
   methods: {
     ...mapMutations('Controls', ['toggleFullscreen', 'setIsSplittedView']),

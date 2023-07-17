@@ -221,3 +221,9 @@ export const handleProjectRemoteTracks = async (remoteTrack) => {
   sidePlayerVideo.playsInline = true
   sidePlayerVideo.play()
 }
+
+export const handleUnprojectMultiview = async () => {
+  const mids = state.ViewConnection.millicastView.webRTCPeer.peer.getTransceivers()
+    .splice(2).map((vt) => { return vt.mid })
+  state.ViewConnection.millicastView.unproject(mids)
+}
