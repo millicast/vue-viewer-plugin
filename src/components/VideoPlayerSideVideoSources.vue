@@ -76,7 +76,7 @@ export default {
     this.sourceRemoteTracks.forEach(async (remoteTrack) =>
       await projectRemoteTracks(remoteTrack)
     )
-    
+
     this.playerRef = document.getElementById('player')
   },
   async unmounted() {
