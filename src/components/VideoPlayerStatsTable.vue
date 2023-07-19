@@ -203,7 +203,10 @@ export default {
     ...mapState('ViewConnection', {
       millicastView: (state) => state.millicastView,
     }),
-    ...mapState('Sources', ['sourceRemoteTracks']),
+    ...mapState('Sources', [
+      'sourceRemoteTracks', 
+      'videoSources'
+    ]),
     ...mapGetters('Sources', [
       'getTransceiverSourceState'
     ]),
@@ -279,7 +282,7 @@ export default {
     },
     multiviewStatsAvailable() {
       const multiviewIsOn = (
-        this.sourceRemoteTracks.length && 
+        this.videoSources.length > 1 && 
         this.isSplittedView && 
         Object.keys(this.midToStatsIndexMap).length
       )
