@@ -181,6 +181,10 @@ export const projectVideo = async (what, where, trackId, layer) => {
   sources.handleProjectVideo(what, where, trackId, layer)
 }
 
+export const unprojectMultiview = async () => {
+  sources.handleUnprojectMultiview()
+}
+
 // CAST
 
 export const setCast = async () => {
