@@ -38,8 +38,8 @@
         class="player"
         :class="{
           show: show,
-          'limit-screen': sourceRemoteTracks.length && isSplittedView && !isGrid,
-          'grid-player': sourceRemoteTracks.length && isSplittedView && isGrid
+          'limit-screen': videoSources.length > 1 && isSplittedView && !isGrid,
+          'grid-player': videoSources.length > 1 && isSplittedView && isGrid
         }"
         :style="{
         cursor: isGrid? 'pointer' : '',
@@ -102,9 +102,9 @@
       </div>
       <!-- SIDE SOURCES -->
       <div
+        v-if="videoSources.length > 1 && isSplittedView"
         :class="!isGrid ? 'side-panel overflow-auto sc1': ''"
         :style="!isGrid ? 'scroll-snap-type: y mandatory': 'display: contents'"
-        v-if="sourceRemoteTracks.length && isSplittedView"
         @mousemove="showControls"
       >
         <VideoPlayerSideVideoSources :class="isGrid ? 'side-sources' : ''"/>
