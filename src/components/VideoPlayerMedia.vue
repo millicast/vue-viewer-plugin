@@ -36,7 +36,7 @@
     ></video>
   </template>
   <span
-    v-if="sourceRemoteTracks.length && isSplittedView && !fullscreen && viewer.showLabels"
+    v-if="videoSources.length > 1 && isSplittedView && !fullscreen && viewer.showLabels"
   >
     {{this.mainLabel}}
   </span>
@@ -91,7 +91,6 @@ export default {
       selectedAudioSource: (state) => state.selectedAudioSource,
       audioSources: (state) => state.audioSources,
       videoSources: (state) => state.videoSources,
-      sourceRemoteTracks: (state) => state.sourceRemoteTracks,
       mainLabel: (state) => state.mainLabel,
     }),
     ...mapState('Controls', {
