@@ -28,8 +28,8 @@
     <!-- SOURCES -->
     <div 
       class="mx-0"
-      :id="!isGrid && isSplittedView ? 'lcontainer' : ''"
-      :class="isGrid && isSplittedView ? 'grid-container': 'list-container'"
+      :id="videoSources.length > 1 && !isGrid && isSplittedView ? 'lcontainer' : ''"
+      :class="videoSources.length > 1 && isGrid && isSplittedView ? 'grid-container': 'list-container'"
       >
       <!-- MAIN SOURCE -->
       <div
