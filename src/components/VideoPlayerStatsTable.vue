@@ -224,11 +224,7 @@ export default {
       const video = this.stats.video?.inbounds
       const videoLength = video?.length
       if (videoLength) {
-        return video[
-          this.statsIndex > this.sourceRemoteTracks.length - 1
-            ? 0
-            : this.statsIndex
-        ]
+        return video[this.midToStatsIndexMap[this.selectedSourceMid]]
       }
       return null
     },
