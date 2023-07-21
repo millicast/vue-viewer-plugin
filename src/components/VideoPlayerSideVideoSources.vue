@@ -10,9 +10,9 @@
     >
       <div class="videoText" :class="isGrid ? 'videoGrid' : '' ">
         <video
-          v-on:click="switchProjection(index)"
-          :id="'sidePlayer' + source.sourceId"
-          :ref="'sidePlayer' + source.sourceId"
+          v-on:click="() => enableClick && switchProjection(source.transceiver?.mid)"
+          :id="`sidePlayer${source.transceiver?.mid}`"
+          :ref="`sidePlayer${source.transceiver?.mid}`"
           :class="!isGrid && isSplittedView ? 'hires-class': ''"
           autoplay
           muted
@@ -20,7 +20,8 @@
         ></video>
         <span 
           v-if="viewer.showLabels"
-          :id="'sideLabel' + source.transceiver?.mid"
+          :id="`sideLabel${source.transceiver?.mid}`"
+          :ref="`sideLabel${source.transceiver?.mid}`"
         >
           {{source.sourceId}}
         </span>
@@ -36,6 +37,7 @@ import {
   selectSource,
   projectRemoteTracks,
   projectVideo,
+  unprojectMultiview,
 } from '../service/sdkManager'
 
 export default {
@@ -44,16 +46,23 @@ export default {
     return {
       indexSourceProjectedInMain: null,
       indexMainMediaSource: 0,
+      playerRef: null,
+      enableClick: true
     }
   },
   computed: {
-    ...mapState('Sources', ['sourceRemoteTracks', 'videoSources']),
-    ...mapState("Controls", {
-        fullscreen: state => state.fullscreen,
+    ...mapState('Sources', [
+      'sourceRemoteTracks',
+      'videoSources',
+      'transceiverSourceState',
+    ]),
+    ...mapState('Controls', {
+        fullscreen: state => state.fullscreen, 
         isGrid: state => state.isGrid,
-        isSplittedView: state => state.isSplittedView
+        isSplittedView: state => state.isSplittedView, 
+        currentElementRef: state => state.currentElementRef,
     }),
-    ...mapGetters('Sources', ['getVideoHasMain']),
+    ...mapGetters('Sources', ['getVideoHasMain', 'getSelectedVideoSource']),
     ...mapState('ViewConnection', {
       millicastView: (state) => state.millicastView,
     }),
@@ -62,68 +71,71 @@ export default {
     }),
   },
   async mounted() {
-    selectSource({kind: 'video',source: this.videoSources[0]})
-    this.setMainLabel('Main')
-    this.sourceRemoteTracks.forEach(
-      async (_, index) => await projectRemoteTracks(index)
+    selectSource({ kind: 'video', source: this.videoSources[0] })
+    this.setMainLabel(this.videoSources[0].name)
+    this.sourceRemoteTracks.forEach(async (remoteTrack) =>
+      await projectRemoteTracks(remoteTrack)
     )
+
+    this.playerRef = document.getElementById('player')
+  },
+  async unmounted() {
+    this.videoSources.forEach(source => {
+      this.transceiverSourceState[source.mid] = source
+    })
+    unprojectMultiview()
   },
   watch: {
-    'sourceRemoteTracks.length': async function () {
-      await projectRemoteTracks(this.sourceRemoteTracks.length - 1)
-    },
+    'sourceRemoteTracks.length': {
+      handler: async function (newLenght, currentLenght) {
+        if (newLenght > currentLenght) {
+          const lastIndex = newLenght - 1
+          await projectRemoteTracks(this.sourceRemoteTracks[lastIndex])
+        } 
+      },
+    }
   },
   methods: {
-    ...mapMutations("Controls", ["toggleFullscreen", "setIsSplittedView"]),
-    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel']),
-    async switchProjection(index) {
+    ...mapMutations('Controls', ['toggleFullscreen', 'setIsSplittedView']),
+    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'updateTransceiverSourceState']),
+    ...mapGetters('Layers', ['getActiveMedias','getActiveMainTransceiverMedias']),
+    async switchProjection(videoMid) {
       await nextTick()
+      this.enableClick = false
+      this.playerRef = document.getElementById(this.currentElementRef)
+      const sideLabelRef = this.$refs[`sideLabel${videoMid}`][0]
 
-      // select the source in the dropdown
-      const vidId =
-        index + this.videoSources.length - this.sourceRemoteTracks.length
-      let source = this.videoSources[vidId]
+      // Select the source from the transceiver state and project it in the main video
+      let source = this.transceiverSourceState[videoMid]
+      let lowQualityLayer
+      let midProjectedInMain = this.videoSources[0].mid
 
       if (this.getVideoHasMain) {
-        if (this.indexSourceProjectedInMain === null) {
-          // the one projected is the main and want to project a small one
-          projectVideo(
-            null,
-            this.sourceRemoteTracks[index].transceiver?.mid,
-            vidId
-          )
-          this.indexSourceProjectedInMain = index
-        } else if (this.indexSourceProjectedInMain === index) {
-          // is being projected a small video and want to switch to main with this one
-          projectVideo(
-            this.sourceRemoteTracks[index].sourceId,
-            this.sourceRemoteTracks[index].transceiver?.mid,
-            vidId
-          )
-          this.indexSourceProjectedInMain = null
-          source = this.videoSources[this.indexMainMediaSource]
-        } else {
-          // is being projected a small video but want to project another small one
-          projectVideo(
-            null,
-            this.sourceRemoteTracks[index].transceiver?.mid,
-            vidId
-          )
-          projectVideo(
-            this.sourceRemoteTracks[this.indexSourceProjectedInMain].sourceId,
-            this.sourceRemoteTracks[this.indexSourceProjectedInMain].transceiver
-              ?.mid,
-            vidId
-          )
-          this.indexSourceProjectedInMain = index
+        sideLabelRef.textContent = this.transceiverSourceState[midProjectedInMain].name        
+
+        const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
+        midProjectedInMain = this.transceiverSourceState[midProjectedInMain].mid
+        
+        if (midProjectedInMain in this.getActiveMedias()) {
+          lowQualityLayer = this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
         }
+        projectVideo(
+          sourceIdProjectedInMain, 
+          videoMid, 
+          this.transceiverSourceState[midProjectedInMain].trackId, 
+          lowQualityLayer
+        )
+        this.updateTransceiverSourceState({ source })
       }
 
       this.setMainLabel(source.sourceId ?? 'Main')
-      await selectSource({ kind: source.trackId, source })
+      await selectSource({ kind: 'video', source })
+
       if (this.isGrid) {
         this.setIsSplittedView(false)
       }
+
+      this.enableClick = true
     },
   },
 }

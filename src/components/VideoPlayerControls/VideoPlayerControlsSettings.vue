@@ -23,7 +23,7 @@
           {{ viewerVersion }}
         </div>
       </div>
-      <VideoPlayerControlsSettingsQuality v-if="getActiveMedias.length > 1" />
+      <VideoPlayerControlsSettingsQuality v-if="getActiveMainTransceiverMedias.length > 1" />
       <VideoPlayerControlsSettingsLayout v-if="getVideoSources.length > 1 && isSplittedView"/>
       <VideoPlayerControlsSettingsSplitView v-if="getVideoSources.length > 1" />
       <VideoPlayerControlsSettingsVideoTrack
@@ -78,8 +78,7 @@ import VideoPlayerControlsSettingsLayout from './VideoPlayerControlsSettingsLayo
 
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import { useToast } from 'vue-toastification'
-
-import { version } from '../../../package.json';
+import { version } from '../../../package.json'
 
 export default {
   name: 'VideoPlayerControlsSettings',
@@ -109,7 +108,7 @@ export default {
     }
   },
   computed: {
-    ...mapGetters('Layers', ['getActiveMedias']),
+    ...mapGetters('Layers', ['getActiveMainTransceiverMedias']),
     ...mapGetters('Sources', [
       'getVideoSources',
       'getAudioSources',
@@ -130,7 +129,13 @@ export default {
     }),
   },
   methods: {
-    ...mapMutations('Controls', ['setDropup', 'toggleFullscreen']),
+    ...mapMutations('Controls', [
+      'setDropup', 
+      'toggleFullscreen'
+    ]),
+    ...mapMutations('Sources', [
+      'setMainLabel',
+    ]),
     compareItems(entry, current) {
       return entry?.name === current?.name
     },
@@ -182,10 +187,8 @@ export default {
     },
   },
   mounted() {
-    this.viewerVersion = version
-      ? 'v' + version
-      : '';
-      this.toast = useToast()
+    this.viewerVersion = version ? 'v' + version : ''
+    this.toast = useToast()
   },
   watch: {
     dropup: function (dropup) {
@@ -200,6 +203,7 @@ export default {
             const videoTrackChange = async (source) => {
               try {
                 await selectSource({ kind: 'video', source })
+                await this.setMainLabel(source.name)
               } catch (error) {
                 this.toast.error(
                   'There was an error selecting the desired source, try again',
@@ -242,7 +246,7 @@ export default {
             }
             this.setDropupSettings(
               this.selectedQuality,
-              this.getActiveMedias,
+              this.getActiveMainTransceiverMedias,
               'Video Quality',
               qualityChange,
               this.compareItems
@@ -255,14 +259,14 @@ export default {
         this.showDropup = false
       }
     },
-    getActiveMedias() {
+    getActiveMainTransceiverMedias() {
       if (this.dropup === 'qualities') {
-        this.items = this.getActiveMedias
+        this.items = this.getActiveMainTransceiverMedias
       }
     },
     getVideoSources() {
       if (this.dropup === 'videoTracks') {
-        this.items = this.getVideoSources
+        this.items = this.getActiveMainTransceiverMedias
       }
     },
     getAudioSources() {
