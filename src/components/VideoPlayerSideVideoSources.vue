@@ -128,7 +128,7 @@ export default {
         this.updateTransceiverSourceState({ source })
       }
 
-      this.setMainLabel(source.sourceId ?? 'Main')
+      this.setMainLabel(source.sourceId ?? source.name)
       await selectSource({ kind: 'video', source })
 
       if (this.isGrid) {

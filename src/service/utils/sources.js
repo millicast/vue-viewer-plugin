@@ -67,8 +67,9 @@ const tracksAvailableAndMainNotExists = () => {
 }
 
 const addSource = (kind, sourceId, trackId) => {
+  const mainLabelName = state.Sources.mainLabelName
   const source = {
-    name: sourceId === null ? 'Main' : sourceId,
+    name: sourceId === null ? mainLabelName : sourceId,
     sourceId,
     trackId,
     mid: sourceId === null ? (kind === 'video' ? "0" : "1") : null
@@ -84,13 +85,13 @@ const addSource = (kind, sourceId, trackId) => {
           ? state.Sources.selectedVideoSource
           : state.Sources.selectedAudioSource
 
-      if (selectedMediaSource.name !== 'Main') {
+      if (selectedMediaSource.name !== mainLabelName) {
         commit('Sources/setSelectedSource', {
           kind,
           selectedSource: source,
         })
         handleSelectSource({ kind, source })
-        commit('Sources/setMainLabel', 'Main')
+        commit('Sources/setMainLabel', mainLabelName)
       }
     } else {
       sources.push(source)
