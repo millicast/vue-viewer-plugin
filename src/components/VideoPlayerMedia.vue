@@ -147,17 +147,23 @@ export default {
   },
   watch: {
     reconnectionStatus: function (isReconnecting) {
+      let toastOptions;
       const toast = useToast()
       toast.clear()
       if (isReconnecting) {
         this.setIsSplittedView(false)
-        toast.warning(`Connection lost. Retrying...`)
+        const message = 'Connection lost. Retrying...'
+        if (this.reconnection?.timeout) {
+          toastOptions = { timeout: this.reconnection?.timeout }
+        }
+        toast.warning(message, toastOptions)
       } else {
         const setSplitView = (state) => {
-          if (['connected'].includes(state)) {
-            this.setIsSplittedView(this.previousSplitState)
-            this.millicastView.removeListener('connectionStateChange', setSplitView)
-          }
+            if (['connected'].includes(state)) {
+              this.setIsSplittedView(this.previousSplitState)
+              this.millicastView.removeListener('connectionStateChange', setSplitView)
+              toast.clear()
+            }
         }
         this.millicastView.on('connectionStateChange', setSplitView)
       }
