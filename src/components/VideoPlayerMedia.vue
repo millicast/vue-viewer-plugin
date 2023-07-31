@@ -159,11 +159,11 @@ export default {
         toast.warning(message, toastOptions)
       } else {
         const setSplitView = (state) => {
-            if (['connected'].includes(state)) {
-              this.setIsSplittedView(this.previousSplitState)
-              this.millicastView.removeListener('connectionStateChange', setSplitView)
-              toast.clear()
-            }
+          if (['connected'].includes(state)) {
+            this.setIsSplittedView(this.previousSplitState)
+            this.millicastView.removeListener('connectionStateChange', setSplitView)
+            toast.clear()
+          }
         }
         this.millicastView.on('connectionStateChange', setSplitView)
       }
