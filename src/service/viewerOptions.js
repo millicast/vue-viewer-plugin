@@ -17,7 +17,7 @@ export const defaultViewerOptions = {
   multisource: false,
   layout: null,
   showLabels: true,
-  mainLabelName: null
+  mainLabel: null
 }
 
 export default function processViewerOptions({
@@ -34,7 +34,7 @@ export default function processViewerOptions({
   multisource,
   layout,
   showLabels,
-  mainLabelName
+  mainLabel
 }) {
   const options = {}
 
@@ -60,9 +60,9 @@ export default function processViewerOptions({
     store.commit('Controls/setIsGrid', true)
   }
 
-  if (mainLabelName) {
-    options.mainLabelName = mainLabelName
-    store.commit('Sources/setMainLabel', options.mainLabelName)
+  if (mainLabel) {
+    options.mainLabel = mainLabel
+    store.commit('Sources/setMainLabel', options.mainLabel)
   }
 
   store.commit('Params/setViewerOptions', { ...defaultViewerOptions, ...options })
