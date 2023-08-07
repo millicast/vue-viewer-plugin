@@ -289,7 +289,7 @@ export default {
       if (this.isGrid) {
         this.setIsSplittedView(!this.isSplittedView)
         selectSource({kind:'video', source: this.videoSources[0]})
-        this.setMainLabel('Main')
+        this.setMainLabel(this.videoSources[0].sourceId ?? this.videoSources[0].name)
       }
     },
   },

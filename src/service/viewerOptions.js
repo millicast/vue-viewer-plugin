@@ -16,7 +16,8 @@ export const defaultViewerOptions = {
   forcePlayoutDelay: false,
   multisource: false,
   layout: null,
-  showLabels: true
+  showLabels: true,
+  mainLabel: null
 }
 
 export default function processViewerOptions({
@@ -32,7 +33,8 @@ export default function processViewerOptions({
   noDelay,
   multisource,
   layout,
-  showLabels
+  showLabels,
+  mainLabel
 }) {
   const options = {}
 
@@ -57,5 +59,11 @@ export default function processViewerOptions({
   if (options.layout && options.layout === 'grid') {
     store.commit('Controls/setIsGrid', true)
   }
+
+  if (mainLabel) {
+    options.mainLabel = mainLabel
+    store.commit('Sources/setMainLabel', options.mainLabel)
+  }
+
   store.commit('Params/setViewerOptions', { ...defaultViewerOptions, ...options })
 }

@@ -59,6 +59,7 @@ Once this is done, you are ready to use the plugin in any Vue file of your proje
 | `noDelay`      | `Boolean`        | Optional  | `false` | Sets the minimum and maximum delay (sets `forcePlayoutDelayMin` and `forcePlayoutDelayMax` to 0). |
 | `showLabels`   | `Boolean`        | Optional  | `true`  | Show stream label in multiview mode.                                                              |
 | `environment`  | `Object`         | Optional  | `.env file content`  | Plugin environment                                                                   |
+| `mainLabel`  | `String`         | Optional  |         | Allows to change the label of the main video.                                                                                                     |
 
 To be able to use the viewer, just reference to the component `VideoPlayer`, and pass the parameters of your choice as an object in the parameter `paramsOptions`. Later in this document, you will find an example of use.
 
