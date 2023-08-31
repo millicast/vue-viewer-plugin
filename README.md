@@ -20,7 +20,7 @@ yarn add @millicast/vue-viewer-plugin
 
 ## Basic Usage
 
-To import the plugin in to your Vue application, have the following structure in your `main.js` file:
+To import the plugin into your Vue application, have the following structure in your `main.js` file:
 
 ```javascript
 import { createApp } from 'vue'
