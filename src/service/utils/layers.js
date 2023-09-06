@@ -1,3 +1,4 @@
+import { watch } from 'vue'
 import store from '../../store'
 const { commit, state } = store
 const bitsUnitsStorage = ['bps', 'kbps', 'mbps', 'gbps']
@@ -6,12 +7,18 @@ const qualityNames = {
   3: ['High', 'Medium', 'Low']
 }
 
+let previousSideLayers = []
+
 export const updateLayers = (evntData) => {
   const { data } = evntData
   const activeQualities = []
   const inactiveQualities = []
-  const mainSource = {'0': data.medias[0]}
-  const encodings = Object.values(mainSource)
+  const mainMedia = { "0" : data.medias[0]}
+  const encodings = Object.values(mainMedia)
+  const [, ...rest] = Object.entries(data.medias)
+  const sideLayers = Object.fromEntries(rest)
+  commit('Layers/setMedias', data.medias)
+  setSideSourcesQualityLow(sideLayers)
   encodings.forEach((encoding) => {
     if (
       encoding?.active.length === 1 &&
@@ -65,17 +72,17 @@ export const updateLayers = (evntData) => {
     activeQualities.unshift({name: 'Auto'})
   }
 
-  if (activeQualities.length != state.Layers.medias.active.length) {
+  if (activeQualities.length != state.Layers.mainTransceiverMedias.active.length) {
     commit('Layers/setSelectedQuality', { name: 'Auto' })
   }
-  commit('Layers/setMedias', {
+  commit('Layers/setMainTransceiverMedias', {
     active: activeQualities,
     inactive: inactiveQualities,
   })
 }
 
 export const deleteLayers = () => {
-  commit('Layers/setMedias', { active: [], inactive: [] })
+  commit('Layers/setMainTransceiverMedias', { active: [], inactive: [] })
   commit('Layers/setSelectedQuality', { name: 'Auto' })
 }
 
@@ -104,3 +111,55 @@ export const formatBitsRecursive = (value, unitsStoragePosition = 0) => {
     return formatBitsRecursive(newValue, unitsStoragePosition + 1)
   }
 }
+
+const setSideSourcesQualityLow = (newLayers) => {
+  const { isSplittedView, isGrid } = state.Controls
+
+  if ( isSplittedView && !isGrid ){
+    const layersMids = Object.keys(previousSideLayers)
+    const newLayersMids = Object.keys(newLayers)
+    const difference = newLayersMids.filter(key => !layersMids.includes(key))
+
+    const diffActiveLayers = difference.reduce((diffActiveLayers, key) => {
+      const activeLayers = newLayers[key].active.length > 0 ? newLayers[key].active : null
+      if (activeLayers != null) diffActiveLayers[key] = activeLayers
+      return diffActiveLayers
+    }, {})
+
+    const keys = Object.keys(diffActiveLayers)
+
+    if (keys.length === 0 ) return
+
+    const transceiverSourceState = state.Sources.transceiverSourceState
+
+    const videoSourceKeys = keys.reduce((videoSourceKeys, key) => {
+      videoSourceKeys.push(transceiverSourceState[key])
+      return videoSourceKeys
+    }, [])
+
+    // Set low quality for side video source streams
+    videoSourceKeys.forEach( (source) => {
+      if ( source.sourceId !== null && source.mid in diffActiveLayers ){
+        diffActiveLayers[source.mid].sort((layer, nextLayer) =>  nextLayer.id - layer.id )   
+        state.ViewConnection.millicastView?.project(source.name, [
+          { 
+            mediaId: source.mid, 
+            layer: {encodingId: diffActiveLayers[source.mid].pop().id}, 
+            trackId: source.trackId, 
+            media: 'video'
+          }
+        ])
+      }
+    })
+
+    previousSideLayers = newLayers
+  } 
+}
+
+const resetPreviousLayers = (isSplittedView) => {
+  if ( !isSplittedView ){
+    previousSideLayers = []
+  }
+}
+
+watch(() => state.Controls.isSplittedView, resetPreviousLayers, { deep: true })

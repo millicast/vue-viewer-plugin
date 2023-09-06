@@ -18,25 +18,25 @@ const setEnvironment = () => {
 
 const setDirectorEndpoint = () => {
   if (
-    process.env.VUE_APP_DIRECTOR_ENDPOINT ||
-    state.Params.queryParams.directorUrl
+    state.Params.environment.VUE_APP_DIRECTOR_ENDPOINT ||
+    state.Params.viewer.directorUrl
   ) {
     Director.setEndpoint(
-      state.Params.queryParams.directorUrl ??
-        process.env.VUE_APP_DIRECTOR_ENDPOINT
+      state.Params.viewer.directorUrl ??
+      state.Params.environment.VUE_APP_DIRECTOR_ENDPOINT
     )
   }
 }
 
 const setLiveDomain = () => {
-  if (process.env.VUE_APP_LIVEWS_ENDPOINT) {
-    Director.setLiveDomain(process.env.VUE_APP_LIVEWS_ENDPOINT)
+  if (state.Params.environment.VUE_APP_LIVEWS_ENDPOINT) {
+    Director.setLiveDomain(state.Params.environment.VUE_APP_LIVEWS_ENDPOINT)
   }
 }
 
 const setPeerConnection = () => {
-  if (process.env.VUE_APP_TURN_ENDPOINT) {
-    PeerConnection.setTurnServerLocation(process.env.VUE_APP_TURN_ENDPOINT)
+  if (state.Params.environment.VUE_APP_TURN_ENDPOINT) {
+    PeerConnection.setTurnServerLocation(state.Params.environment.VUE_APP_TURN_ENDPOINT)
   }
 }
 
@@ -49,7 +49,7 @@ export const handleInitViewConnection = (accountId, streamName) => {
     Director.getSubscriber(
       streamName,
       accountId,
-      state.Params.queryParams.token
+      state.Params.viewer.token
     )
   const millicastView = new View(streamName, tokenGenerator)
   window.millicastView = millicastView
@@ -70,9 +70,9 @@ export const handleConnectToStream = async () => {
       events: ['active', 'inactive', 'layers', 'viewercount'],
       absCaptureTime: true,
     }
-    if (state.Params.queryParams.audioOnly) connectOptions.disableVideo = true
-    if (state.Params.queryParams.videoOnly) connectOptions.disableAudio = true
-    if (state.Params.queryParams.forcePlayoutDelay) connectOptions.forcePlayoutDelay = state.Params.queryParams.forcePlayoutDelay
+    if (state.Params.viewer.audioOnly) {connectOptions.disableVideo = true}
+    if (state.Params.viewer.videoOnly) {connectOptions.disableAudio = true}
+    if (state.Params.viewer.forcePlayoutDelay) {connectOptions.forcePlayoutDelay = state.Params.viewer.forcePlayoutDelay}
     await millicastView.connect(connectOptions)
     addSignalingMigrateListener()
   } catch (e) {
@@ -155,14 +155,14 @@ const setStream = async (entrySrcObject) => {
 }
 
 const setCanAutoPlayStream = async () => {
-  commit('Controls/setVideoAutoplay', state.Params.queryParams.autoplay)
-  if (state.Params.queryParams.autoplay) {
+  commit('Controls/setVideoAutoplay', state.Params.viewer.autoplay)
+  if (state.Params.viewer.autoplay) {
     const canAutoPlayVideo = await canAutoPlay.video({
-      muted: state.Params.queryParams.muted,
+      muted: state.Params.viewer.muted,
     })
-    const muted = !state.Params.queryParams.muted
+    const muted = !state.Params.viewer.muted
       ? !canAutoPlayVideo.result
-      : state.Params.queryParams.muted
+      : state.Params.viewer.muted
     commit('Controls/setVideoMuted', muted)
     commit('Controls/setAutoPlayMuted', muted)
   }

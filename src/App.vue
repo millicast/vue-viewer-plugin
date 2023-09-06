@@ -1,12 +1,13 @@
 <template>
-    <VideoPlayerContainer class="ml-viewer" id="viewer-container"/>
+  <VideoPlayerContainer class="ml-viewer" id="viewer-container"/>
 </template>
 
 <script>
 import VideoPlayerContainer from './components/VideoPlayerContainer.vue'
 import { useToast } from 'vue-toastification'
-import setUserParams from './service/userParams'
-import { availableControls } from './service/userParams'
+import processViewerOptions from './service/viewerOptions'
+import { availableControls } from './service/viewerOptions'
+import processEnvironmentOptions from './service/environmentOptions'
 import 'bootstrap-icons/font/bootstrap-icons.css'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import 'vue-toastification/dist/index.css'
@@ -15,12 +16,6 @@ import { mapMutations } from 'vuex'
 
 export default {
   name: 'App',
-  data() {
-    return {
-      chromecastIdDefault: null,
-      reportUrlDefault: null
-    }
-  },
   components: {
     VideoPlayerContainer,
   },
@@ -31,7 +26,9 @@ export default {
     ...mapMutations('Controls', ['setMobile']),
     updateParams() {
       if (this.paramsOptions) {
-        setUserParams({
+        let NODE_ENV = this.paramsOptions?.environment?.NODE_ENV ?? process.env.NODE_ENV
+
+        processViewerOptions({
           streamId:
             this.paramsOptions?.accountId +
             '/' +
@@ -41,26 +38,26 @@ export default {
           token: this.paramsOptions?.token,
           image: this.paramsOptions?.image,
           directorUrl:
-            process.env.NODE_ENV !== 'production'
+            NODE_ENV !== 'production'
               ? this.paramsOptions?.directorUrl
               : null,
-          hideButtons: this.paramsOptions.controls === false ? availableControls : (this.paramsOptions.hideButtons ?? []),
+          hideButtons: 
+            this.paramsOptions.controls === false 
+              ? availableControls
+              : (this.paramsOptions.hideButtons ?? []),
           autoplay: this.paramsOptions.autoplay ?? true,
           muted: this.paramsOptions.muted ?? false,
-          chromecastId: this.paramsOptions.chromecastId ?? this.chromecastIdDefault,
-          reportUrl: this.paramsOptions.reportUrl ?? this.reportUrlDefault,
           noDelay: this.paramsOptions?.noDelay ?? false,
           multisource: this.paramsOptions?.multisource ?? false,
           layout: this.paramsOptions?.layout ?? null,
           showLabels: this.paramsOptions?.showLabels ?? true,
+          mainLabel: this.paramsOptions?.mainLabel ?? null
         })
       }
+      processEnvironmentOptions(this.paramsOptions?.environment)
     },
   },
   async mounted() {
-    this.chromecastIdDefault = process.env.VUE_APP_DEFAULT_CHROMECAST_ID
-    this.reportUrlDefault = process.env.VUE_APP_DEFAULT_REPORT_URL
-
     const myContainer = document.getElementById('viewer-container')
     const toast = await useToast()
     toast.updateDefaults({

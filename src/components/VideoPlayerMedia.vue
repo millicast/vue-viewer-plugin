@@ -12,7 +12,7 @@
       playsinline
       id="player"
       ref="player"
-      :poster="queryParams.placeholderImg"
+      :poster="viewer.placeholderImg"
       :class="{ 'display: none;': currentElementRef === 'player2' }"
       :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
     ></video>
@@ -30,13 +30,13 @@
       playsinline
       id="player2"
       ref="player2"
-      :poster="queryParams.placeholderImg"
+      :poster="viewer.placeholderImg"
       :class="{ 'display: none;': currentElementRef === 'player' }"
       :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
     ></video>
   </template>
   <span
-    v-if="sourceRemoteTracks.length && isSplittedView && !fullscreen && queryParams.showLabels"
+    v-if="videoSources.length > 1 && isSplittedView && !fullscreen && viewer.showLabels"
   >
     {{this.mainLabel}}
   </span>
@@ -72,8 +72,8 @@ export default {
       videoPlayer: player,
       srcObject: null,
       volume: 1,
-      muted: this.queryParams.muted,
-      autoplay: this.queryParams.autoplay,
+      muted: this.viewer.muted,
+      autoplay: this.viewer.autoplay,
     })
   },
   computed: {
@@ -91,7 +91,6 @@ export default {
       selectedAudioSource: (state) => state.selectedAudioSource,
       audioSources: (state) => state.audioSources,
       videoSources: (state) => state.videoSources,
-      sourceRemoteTracks: (state) => state.sourceRemoteTracks,
       mainLabel: (state) => state.mainLabel,
     }),
     ...mapState('Controls', {
@@ -109,13 +108,13 @@ export default {
       fullscreen: (state) => state.fullscreen,
     }),
     ...mapState('Params', {
-      queryParams: (state) => state.queryParams,
+      viewer: (state) => state.viewer,
     }),
     ...mapGetters('Sources', ['getVideoHasMain', 'getAudioHasMain']),
     displayAudioOnly() {
       return (
         (this.isAudioOnly && this.isLive) ||
-        (this.queryParams.placeholderImg === null && !this.isLive)
+        (this.viewer.placeholderImg === null && !this.isLive)
       )
     },
   },
@@ -148,16 +147,22 @@ export default {
   },
   watch: {
     reconnectionStatus: function (isReconnecting) {
+      let toastOptions;
       const toast = useToast()
       toast.clear()
       if (isReconnecting) {
         this.setIsSplittedView(false)
-        toast.warning(`Connection lost. Retrying...`)
+        const message = 'Connection lost. Retrying...'
+        if (this.reconnection?.timeout) {
+          toastOptions = { timeout: this.reconnection?.timeout }
+        }
+        toast.warning(message, toastOptions)
       } else {
         const setSplitView = (state) => {
           if (['connected'].includes(state)) {
             this.setIsSplittedView(this.previousSplitState)
             this.millicastView.removeListener('connectionStateChange', setSplitView)
+            toast.clear()
           }
         }
         this.millicastView.on('connectionStateChange', setSplitView)
@@ -182,7 +187,7 @@ export default {
         autoplay,
       })
     },
-    async queryParams() {
+    async viewer() {
       await stopStream()
       await nextTick()
 

@@ -4,12 +4,12 @@
       <tr
         class="row mx-0 align-items-center"
         :class="
-          multiStatsAvailable
+          multiviewStatsAvailable
             ? 'justify-content-between'
             : 'justify-content-end'
         "
       >
-        <th v-if="multiStatsAvailable" class="d-flex align-items-center">
+        <th v-if="multiviewStatsAvailable" class="d-flex align-items-center">
           <span>Source:</span>
           <select
             class="ml-2 source-select"
@@ -17,7 +17,7 @@
             @change="handleSourceChange"
           >
             <option
-              v-for="source in getVideoSources"
+              v-for="source in getTransceiverSourceState"
               :key="source.sourceId"
               :value="source.mid"
             >
@@ -168,6 +168,7 @@ export default {
       })
       this.stats = { ...this.stats, ...peerStats }
     })
+    this.selectedSourceMid = this.getTransceiverSourceState[0].mid
   },
   beforeUnmount() {
     this.millicastView.webRTCPeer.stopStats()
@@ -190,14 +191,25 @@ export default {
       const mid = this.selectedSourceMid ?? 0
       this.statsIndex = this.midToStatsIndexMap[mid]
     },
+    selectMidZero() {
+      this.selectedSourceMid = this.getTransceiverSourceState[0].mid
+    },
   },
   computed: {
-    ...mapState('Controls', ['isMobile', 'isSplittedView']),
+    ...mapState('Controls', [
+      'isMobile',
+      'isSplittedView'
+    ]),
     ...mapState('ViewConnection', {
       millicastView: (state) => state.millicastView,
     }),
-    ...mapState('Sources', ['sourceRemoteTracks']),
-    ...mapGetters('Sources', ['getVideoSources']),
+    ...mapState('Sources', [
+      'sourceRemoteTracks', 
+      'videoSources'
+    ]),
+    ...mapGetters('Sources', [
+      'getTransceiverSourceState'
+    ]),
     hasStats() {
       return Object.keys(this.stats).length > 0
     },
@@ -212,11 +224,7 @@ export default {
       const video = this.stats.video?.inbounds
       const videoLength = video?.length
       if (videoLength) {
-        return video[
-          this.statsIndex > this.sourceRemoteTracks.length - 1
-            ? 0
-            : this.statsIndex
-        ]
+        return video[this.midToStatsIndexMap[this.selectedSourceMid]]
       }
       return null
     },
@@ -268,12 +276,16 @@ export default {
     clusterId() {
       return this.millicastView?.signaling?.clusterId
     },
-    multiStatsAvailable() {
-      return (
-        this.sourceRemoteTracks.length &&
-        this.isSplittedView &&
+    multiviewStatsAvailable() {
+      const multiviewIsOn = (
+        this.videoSources.length > 1 && 
+        this.isSplittedView && 
         Object.keys(this.midToStatsIndexMap).length
       )
+      if (!multiviewIsOn) {
+        this.selectMidZero()
+      }
+      return multiviewIsOn
     },
   },
 }

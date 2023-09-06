@@ -8,7 +8,7 @@ let receiverApplicationId = null
 export const handleSetCast = async () => {
   while (!receiverApplicationId){
     await new Promise(r => setTimeout(r, 20));
-    receiverApplicationId = state.Params.queryParams.chromecastId
+    receiverApplicationId = state.Params.environment.VUE_APP_CHROMECAST_ID
   }
 
   const castStateListener = async (castState) => {

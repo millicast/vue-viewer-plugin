@@ -1,15 +1,20 @@
-import { defaultOptions } from '../../service/userParams'
+import { defaultViewerOptions } from '../../service/viewerOptions'
+import { defaultEnvOptions } from '../../service/environmentOptions'
 
 const defaulState = {
-  queryParams: defaultOptions,
+  viewer: defaultViewerOptions,
+  environment: defaultEnvOptions
 }
 
 export default {
   namespaced: true,
   state: defaulState,
   mutations: {
-    setQueryParams(state, queryParams) {
-      state.queryParams = queryParams
+    setViewerOptions(state, viewer) {
+      state.viewer = viewer
+    },
+    setEnvironmentOptions(state, environment) {
+      state.environment = environment
     },
   },
 }
