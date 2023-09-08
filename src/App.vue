@@ -51,7 +51,7 @@ export default {
           multisource: this.paramsOptions?.multisource ?? false,
           layout: this.paramsOptions?.layout ?? null,
           showLabels: this.paramsOptions?.showLabels ?? true,
-          mainLabel: this.paramsOptions?.mainLabel ?? null
+          mainLabel: this.paramsOptions?.mainLabel ?? 'Main'
         })
       }
       processEnvironmentOptions(this.paramsOptions?.environment)

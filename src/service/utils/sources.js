@@ -84,14 +84,13 @@ const addSource = (kind, sourceId, trackId) => {
         kind === 'video'
           ? state.Sources.selectedVideoSource
           : state.Sources.selectedAudioSource
-
-      if (selectedMediaSource.name !== mainLabel) {
+      if (selectedMediaSource.name !== state.Params.viewer.mainLabel) {
         commit('Sources/setSelectedSource', {
           kind,
           selectedSource: source,
         })
         handleSelectSource({ kind, source })
-        commit('Sources/setMainLabel', mainLabel)
+        commit('Sources/setMainLabel', state.Params.viewer.mainLabel)
       }
     } else {
       sources.push(source)
