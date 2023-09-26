@@ -137,7 +137,8 @@ export default {
       'setMainLabel',
     ]),
     compareItems(entry, current) {
-      return entry?.name === current?.name
+      console.log('compare', entry, current, entry?.name === current?.name && (entry?.id === current?.id || current?.name === 'Auto'))
+      return entry?.name === current?.name && (entry?.id === current?.id || current?.name === 'Auto')
     },
     compareSources(entry, current) {
       return entry?.sourceId === current?.sourceId
