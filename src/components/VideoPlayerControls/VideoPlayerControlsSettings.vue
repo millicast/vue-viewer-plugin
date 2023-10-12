@@ -137,7 +137,7 @@ export default {
       'setMainLabel',
     ]),
     compareItems(entry, current) {
-      return entry?.name === current?.name
+      return entry?.name === current?.name && (entry?.id === current?.id || current?.name === 'Auto')
     },
     compareSources(entry, current) {
       return entry?.sourceId === current?.sourceId
