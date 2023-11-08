@@ -67,7 +67,7 @@ const tracksAvailableAndMainNotExists = () => {
 }
 
 const addSource = (kind, sourceId, trackId) => {
-  const mainLabel = state.Sources.mainLabel
+  const mainLabel = state.Params.viewer.mainLabel ?  state.Params.viewer.mainLabel  : 'Main'
   const source = {
     name: sourceId === null ? mainLabel : sourceId,
     sourceId,
