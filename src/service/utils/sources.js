@@ -157,19 +157,19 @@ const deleteSource = (kind, sourceId) => {
     if (state.Controls.isSplittedView) {
       if (state.Sources.selectedVideoSource.sourceId !== null && sourceId === null) {
         handleProjectVideo(state.Sources.selectedVideoSource.sourceId, `${sourceCurrentMid}`, state.Sources.selectedVideoSource.trackId)
-        if (state.viewer.showLabels) {
+        if (state.Params.viewer.showLabels) {
           document.getElementById(`sideLabel${state.Sources.selectedVideoSource.mid}`).textContent = state.Sources.selectedVideoSource.sourceId
         }
       } else if (state.Sources.selectedVideoSource.sourceId === null && sourceId !== null) {
         if (sourceCurrentMid !== sourceInitialMid) {
           handleProjectVideo(state.Sources.transceiverSourceState[sourceInitialMid].sourceId, state.Sources.transceiverSourceState[sourceCurrentMid].mid)
-          if (state.viewer.showLabels) {
+          if (state.Params.viewer.showLabels) {
             document.getElementById(`sideLabel${state.Sources.transceiverSourceState[sourceCurrentMid].mid}`).textContent = state.Sources.transceiverSourceState[sourceInitialMid].sourceId
           }
         }
       } else if (state.Sources.selectedVideoSource.sourceId !== null && sourceId !== null && sourceCurrentMid !== sourceInitialMid) {
         handleProjectVideo(state.Sources.transceiverSourceState[sourceInitialMid].sourceId, state.Sources.selectedVideoSource.mid)
-        if (state.viewer.showLabels) {
+        if (state.Params.viewer.showLabels) {
           document.getElementById(`sideLabel${state.Sources.transceiverSourceState[state.Sources.selectedVideoSource.mid].mid}`).textContent = state.Sources.transceiverSourceState[sourceInitialMid].sourceId
         }
       }

@@ -91,7 +91,11 @@ export default {
         if (newLenght > currentLenght) {
           const lastIndex = newLenght - 1
           await projectRemoteTracks(this.sourceRemoteTracks[lastIndex])
-        } 
+        } else {
+          this.sourceRemoteTracks.forEach(async (remoteTrack) =>
+            await projectRemoteTracks(remoteTrack)
+          )
+        }
       },
     }
   },
