@@ -67,9 +67,8 @@ const tracksAvailableAndMainNotExists = () => {
 }
 
 const addSource = (kind, sourceId, trackId) => {
-  const mainLabel = state.Sources.mainLabel
   const source = {
-    name: sourceId === null ? mainLabel : sourceId,
+    name: sourceId === null ? state.Params.viewer.mainLabel : sourceId,
     sourceId,
     trackId,
     mid: sourceId === null ? (kind === 'video' ? "0" : "1") : null
