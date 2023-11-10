@@ -107,7 +107,6 @@ export default {
       await nextTick()
       this.enableClick = false
       this.playerRef = document.getElementById(this.currentElementRef)
-      const sideLabelRef = this.$refs[`sideLabel${videoMid}`][0]
 
       // Select the source from the transceiver state and project it in the main video
       let source = this.transceiverSourceState[videoMid]
@@ -115,7 +114,9 @@ export default {
       let midProjectedInMain = this.videoSources[0].mid
 
       if (this.getVideoHasMain) {
-        sideLabelRef.textContent = this.transceiverSourceState[midProjectedInMain].name        
+        if (this.viewer.showLabels) {
+          this.$refs[`sideLabel${videoMid}`][0].textContent = this.transceiverSourceState[midProjectedInMain].name        
+        }
 
         const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
         midProjectedInMain = this.transceiverSourceState[midProjectedInMain].mid
