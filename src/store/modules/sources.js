@@ -8,6 +8,7 @@ const defaulState = {
     name: 'none',
   },
   isAudioOnly: false,
+  audioFollowsVideo: false,
   stream: null,
   sourceRemoteTracks: [],
   mainLabel: 'Main',
@@ -54,6 +55,9 @@ export default {
     },
     setIsAudioOnly(state, isAudioOnly) {
       state.isAudioOnly = isAudioOnly
+    },
+    setAudioFollowsVideo(state, audioFollowsVideo) {
+      state.audioFollowsVideo = audioFollowsVideo
     },
     addSourceRemoteTrack(state, sourceRemoteTrack) {
       state.sourceRemoteTracks.push(sourceRemoteTrack)

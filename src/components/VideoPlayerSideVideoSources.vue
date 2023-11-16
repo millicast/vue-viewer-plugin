@@ -54,7 +54,9 @@ export default {
     ...mapState('Sources', [
       'sourceRemoteTracks',
       'videoSources',
+      'audioSources',
       'transceiverSourceState',
+      'audioFollowsVideo',
     ]),
     ...mapState('Controls', {
         fullscreen: state => state.fullscreen, 
@@ -112,6 +114,8 @@ export default {
       let source = this.transceiverSourceState[videoMid]
       let lowQualityLayer
       let midProjectedInMain = this.videoSources[0].mid
+      const sourceName =  source.name
+      const audioSource = this.audioSources.find(currentSoruce => currentSoruce.name === sourceName)
 
       if (this.getVideoHasMain) {
         if (this.viewer.showLabels) {
@@ -138,6 +142,17 @@ export default {
 
       if (this.isGrid) {
         this.setIsSplittedView(false)
+      }
+
+      if ( audioSource && this.audioFollowsVideo ) {
+        try {
+          await selectSource({ kind: 'audio', source: audioSource })
+        } catch (error) {
+          this.toast.error(
+            'There was an error selecting the desired source, try again',
+            { timeout: 5000 }
+          )
+        }
       }
 
       this.enableClick = true
