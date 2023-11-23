@@ -49,6 +49,7 @@ export default {
           muted: this.paramsOptions.muted ?? false,
           noDelay: this.paramsOptions?.noDelay ?? false,
           multisource: this.paramsOptions?.multisource ?? false,
+          audioFollowsVideo: this.paramsOptions?.audioFollowsVideo ?? false,
           layout: this.paramsOptions?.layout ?? null,
           showLabels: this.paramsOptions?.showLabels ?? true,
           mainLabel: this.paramsOptions?.mainLabel ?? 'Main'

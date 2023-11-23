@@ -15,6 +15,7 @@ export const defaultViewerOptions = {
   token: null,
   forcePlayoutDelay: false,
   multisource: false,
+  audioFollowsVideo: false,
   layout: null,
   showLabels: true,
   mainLabel: null
@@ -32,6 +33,7 @@ export default function processViewerOptions({
   muted,
   noDelay,
   multisource,
+  audioFollowsVideo,
   layout,
   showLabels,
   mainLabel
@@ -48,10 +50,14 @@ export default function processViewerOptions({
   options.autoplay = autoplay ?? true
   options.muted = muted ?? false
   options.multisource = multisource ?? false
+  options.audioFollowsVideo = audioFollowsVideo ?? false
   options.layout = layout
   options.showLabels = showLabels
   if (multisource) {
     store.commit('Controls/setIsSplittedView', true)
+  }
+  if (audioFollowsVideo) {
+    store.commit('Sources/setAudioFollowsVideo', true)
   }
   if (noDelay) {
     options.forcePlayoutDelay = { min: 0, max: 0 }

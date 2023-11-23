@@ -105,6 +105,12 @@ export default {
       dropupTitle: '',
       handleClick: function () {},
       compare: function () {},
+      audioFollowVideoData: {
+        mid: null,
+        name: 'AudioFollowVideo',
+        sourceId: 'AudioFollowVideo',
+        trackId: null,
+      }
     }
   },
   computed: {
@@ -121,6 +127,7 @@ export default {
     ...mapState('Sources', {
       selectedVideoSource: (state) => state.selectedVideoSource,
       selectedAudioSource: (state) => state.selectedAudioSource,
+      audioFollowsVideo: (state) => state.audioFollowsVideo,
     }),
     ...mapState('Controls', {
       dropup: (state) => state.dropup,
@@ -135,6 +142,7 @@ export default {
     ]),
     ...mapMutations('Sources', [
       'setMainLabel',
+      'setAudioFollowsVideo',
     ]),
     compareItems(entry, current) {
       return entry?.name === current?.name && (entry?.id === current?.id || current?.name === 'Auto')
@@ -222,18 +230,32 @@ export default {
           }
           case 'audioTracks': {
             const audioTrackChange = async (source) => {
-              try {
-                await selectSource({ kind: 'audio', source })
-              } catch (error) {
-                this.toast.error(
-                  'There was an error selecting the desired source, try again',
-                  { timeout: 5000 }
-                )
+              if(source.name === 'AudioFollowVideo') {
+                this.setAudioFollowsVideo(true)
+              } else {
+                this.setAudioFollowsVideo(false)
+                try {
+                  await selectSource({ kind: 'audio', source })
+                } catch (error) {
+                  this.toast.error(
+                    'There was an error selecting the desired source, try again',
+                    { timeout: 5000 }
+                  )
+                }
               }
             }
+            const getAudioTracks = () => {
+              return [this.audioFollowVideoData, ...this.getAudioSources]
+            }
+            const getAudioSourceSelected = () => {
+              if (this.audioFollowsVideo) {
+                return this.audioFollowVideoData
+              }
+              return this.selectedAudioSource
+            }
             this.setDropupSettings(
-              this.selectedAudioSource,
-              this.getAudioSources,
+              getAudioSourceSelected(),
+              getAudioTracks(),
               'Audio Source',
               audioTrackChange,
               this.compareSources
