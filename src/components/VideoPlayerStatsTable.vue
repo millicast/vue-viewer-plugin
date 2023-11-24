@@ -168,7 +168,8 @@ export default {
       })
       this.stats = { ...this.stats, ...peerStats }
     })
-    this.selectedSourceMid = this.getTransceiverSourceState[0].mid
+    this.selectedSourceMid = this.getTransceiverSourceState[0]?.mid 
+      ?? Object.values(this.getTransceiverSourceState)[0].mid
   },
   beforeUnmount() {
     this.millicastView.webRTCPeer.stopStats()
@@ -192,7 +193,8 @@ export default {
       this.statsIndex = this.midToStatsIndexMap[mid]
     },
     selectMidZero() {
-      this.selectedSourceMid = this.getTransceiverSourceState[0].mid
+      this.selectedSourceMid = this.getTransceiverSourceState[0]?.mid 
+        ?? Object.values(this.getTransceiverSourceState)[0].mid
     },
   },
   computed: {
