@@ -17,7 +17,7 @@
       class="dropdown-item-name mr-auto"
       :class="[
         this.selectedAudioSource.name === 'none' ? 'none' : '',
-        this.selectedAudioSource.sourceId === null ? this.selectedAudioSource.name : '',
+        this.selectedAudioSource.sourceId === null ? 'main' : ''
       ]"
     >
       <span

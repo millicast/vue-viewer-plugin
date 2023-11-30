@@ -67,9 +67,8 @@ const tracksAvailableAndMainNotExists = () => {
 }
 
 const addSource = (kind, sourceId, trackId) => {
-  const mainLabel = state.Sources.mainLabel
   const source = {
-    name: sourceId === null ? mainLabel : sourceId,
+    name: sourceId === null ? state.Params.viewer.mainLabel : sourceId,
     sourceId,
     trackId,
     mid: sourceId === null ? (kind === 'video' ? "0" : "1") : null
@@ -158,15 +157,21 @@ const deleteSource = (kind, sourceId) => {
     if (state.Controls.isSplittedView) {
       if (state.Sources.selectedVideoSource.sourceId !== null && sourceId === null) {
         handleProjectVideo(state.Sources.selectedVideoSource.sourceId, `${sourceCurrentMid}`, state.Sources.selectedVideoSource.trackId)
-        document.getElementById(`sideLabel${state.Sources.selectedVideoSource.mid}`).textContent = state.Sources.selectedVideoSource.sourceId
+        if (state.Params.viewer.showLabels) {
+          document.getElementById(`sideLabel${state.Sources.selectedVideoSource.mid}`).textContent = state.Sources.selectedVideoSource.sourceId
+        }
       } else if (state.Sources.selectedVideoSource.sourceId === null && sourceId !== null) {
         if (sourceCurrentMid !== sourceInitialMid) {
           handleProjectVideo(state.Sources.transceiverSourceState[sourceInitialMid].sourceId, state.Sources.transceiverSourceState[sourceCurrentMid].mid)
-          document.getElementById(`sideLabel${state.Sources.transceiverSourceState[sourceCurrentMid].mid}`).textContent = state.Sources.transceiverSourceState[sourceInitialMid].sourceId
+          if (state.Params.viewer.showLabels) {
+            document.getElementById(`sideLabel${state.Sources.transceiverSourceState[sourceCurrentMid].mid}`).textContent = state.Sources.transceiverSourceState[sourceInitialMid].sourceId
+          }
         }
       } else if (state.Sources.selectedVideoSource.sourceId !== null && sourceId !== null && sourceCurrentMid !== sourceInitialMid) {
         handleProjectVideo(state.Sources.transceiverSourceState[sourceInitialMid].sourceId, state.Sources.selectedVideoSource.mid)
-        document.getElementById(`sideLabel${state.Sources.transceiverSourceState[state.Sources.selectedVideoSource.mid].mid}`).textContent = state.Sources.transceiverSourceState[sourceInitialMid].sourceId
+        if (state.Params.viewer.showLabels) {
+          document.getElementById(`sideLabel${state.Sources.transceiverSourceState[state.Sources.selectedVideoSource.mid].mid}`).textContent = state.Sources.transceiverSourceState[sourceInitialMid].sourceId
+        }
       }
     }
 

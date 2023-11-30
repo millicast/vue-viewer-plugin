@@ -54,7 +54,9 @@ export default {
     ...mapState('Sources', [
       'sourceRemoteTracks',
       'videoSources',
+      'audioSources',
       'transceiverSourceState',
+      'audioFollowsVideo',
     ]),
     ...mapState('Controls', {
         fullscreen: state => state.fullscreen, 
@@ -91,7 +93,11 @@ export default {
         if (newLenght > currentLenght) {
           const lastIndex = newLenght - 1
           await projectRemoteTracks(this.sourceRemoteTracks[lastIndex])
-        } 
+        } else {
+          this.sourceRemoteTracks.forEach(async (remoteTrack) =>
+            await projectRemoteTracks(remoteTrack)
+          )
+        }
       },
     }
   },
@@ -103,15 +109,18 @@ export default {
       await nextTick()
       this.enableClick = false
       this.playerRef = document.getElementById(this.currentElementRef)
-      const sideLabelRef = this.$refs[`sideLabel${videoMid}`][0]
 
       // Select the source from the transceiver state and project it in the main video
       let source = this.transceiverSourceState[videoMid]
       let lowQualityLayer
       let midProjectedInMain = this.videoSources[0].mid
+      const sourceName =  source.name
+      const audioSource = this.audioSources.find(currentSoruce => currentSoruce.name === sourceName)
 
       if (this.getVideoHasMain) {
-        sideLabelRef.textContent = this.transceiverSourceState[midProjectedInMain].name        
+        if (this.viewer.showLabels) {
+          this.$refs[`sideLabel${videoMid}`][0].textContent = this.transceiverSourceState[midProjectedInMain].name        
+        }
 
         const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
         midProjectedInMain = this.transceiverSourceState[midProjectedInMain].mid
@@ -133,6 +142,17 @@ export default {
 
       if (this.isGrid) {
         this.setIsSplittedView(false)
+      }
+
+      if ( audioSource && this.audioFollowsVideo ) {
+        try {
+          await selectSource({ kind: 'audio', source: audioSource })
+        } catch (error) {
+          this.toast.error(
+            'There was an error selecting the desired source, try again',
+            { timeout: 5000 }
+          )
+        }
       }
 
       this.enableClick = true
