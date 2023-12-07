@@ -45,12 +45,21 @@ export const handleInitViewConnection = (accountId, streamName) => {
     throw new Error('Stream ID not provided.')
   }
   setEnvironment()
-  const tokenGenerator = () =>
-    Director.getSubscriber(
-      streamName,
-      accountId,
-      state.Params.viewer.token
-    )
+  const tokenGenerator = () => {
+      const subscriber = Director.getSubscriber(
+        streamName,
+        accountId,
+        state.Params.viewer.token
+      )
+      subscriber.catch((error) => {
+        const errorMessage = `${error}`
+        const splitedMessage = errorMessage.replace('FetchError: ','')
+        store.commit('Errors/setMessage', splitedMessage)
+        store.commit('Errors/setShowError', true)
+      })
+      return subscriber
+  }
+
   const millicastView = new View(streamName, tokenGenerator)
   window.millicastView = millicastView
   window.__defineGetter__('peer', () => {
