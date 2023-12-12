@@ -149,15 +149,17 @@ export default {
       stats: {},
       statsIndex: 0,
       selectedSourceMid: null,
-      midToStatsIndexMap: {},
+      trackIdToStatsIndexMap: {},
+      trackIdMidMap: {}
     }
   },
   mounted() {
     this.millicastView.webRTCPeer.initStats()
     this.millicastView.webRTCPeer.on('stats', (peerStats) => {
+      this.trackIdMidMap = this.getTrackIdMidMap
       peerStats.video?.inbounds?.forEach((stat, index) => {
-        if (stat.mid) {
-          this.midToStatsIndexMap[stat.mid] = index
+        if (stat.trackIdentifier) {
+          this.trackIdToStatsIndexMap[stat.trackIdentifier] = index
         }
       })
       window.peer?.getReceivers?.().forEach?.((receiver) => {
@@ -190,7 +192,7 @@ export default {
     },
     handleSourceChange() {
       const mid = this.selectedSourceMid ?? 0
-      this.statsIndex = this.midToStatsIndexMap[mid]
+      this.statsIndex = this.trackIdToStatsIndexMap[this.trackIdMidMap[mid]]
     },
     selectMidZero() {
       this.selectedSourceMid = this.getTransceiverSourceState[0]?.mid 
@@ -210,7 +212,8 @@ export default {
       'videoSources'
     ]),
     ...mapGetters('Sources', [
-      'getTransceiverSourceState'
+      'getTransceiverSourceState',
+      'getTrackIdMidMap'
     ]),
     hasStats() {
       return Object.keys(this.stats).length > 0
@@ -226,7 +229,7 @@ export default {
       const video = this.stats.video?.inbounds
       const videoLength = video?.length
       if (videoLength) {
-        return video[this.midToStatsIndexMap[this.selectedSourceMid]]
+        return video[this.trackIdToStatsIndexMap[this.trackIdMidMap[this.selectedSourceMid]]]
       }
       return null
     },
@@ -282,7 +285,7 @@ export default {
       const multiviewIsOn = (
         this.videoSources.length > 1 && 
         this.isSplittedView && 
-        Object.keys(this.midToStatsIndexMap).length
+        Object.keys(this.trackIdToStatsIndexMap).length
       )
       if (!multiviewIsOn) {
         this.selectMidZero()

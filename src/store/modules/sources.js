@@ -13,6 +13,7 @@ const defaulState = {
   sourceRemoteTracks: [],
   mainLabel: 'Main',
   transceiverSourceState: {},
+  trackIdMidMap: {}
 }
 
 export default {
@@ -58,6 +59,9 @@ export default {
     },
     setAudioFollowsVideo(state, audioFollowsVideo) {
       state.audioFollowsVideo = audioFollowsVideo
+    },
+    addTrackIdMidMapping(state, trackIdMidMapping) {
+      state.trackIdMidMap[trackIdMidMapping.mid] = trackIdMidMapping.trackId
     },
     addSourceRemoteTrack(state, sourceRemoteTrack) {
       state.sourceRemoteTracks.push(sourceRemoteTrack)
@@ -155,6 +159,9 @@ export default {
     },
     getTransceiverSourceState(state) {
       return state.transceiverSourceState
+    },
+    getTrackIdMidMap(state) {
+      return state.trackIdMidMap
     }
   },
 }

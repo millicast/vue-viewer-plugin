@@ -90,6 +90,13 @@ export const handleConnectToStream = async () => {
 export const setTrackEvent = () => {
   const millicastView = state.ViewConnection.millicastView
   millicastView.on('track', async (event) => {
+    // map video trackId with mid
+    if (event.track?.kind === 'video') {
+      commit('Sources/addTrackIdMidMapping', {
+        trackId: event.track?.id,
+        mid: event.transceiver?.mid
+      })
+    }
     if (event.streams.length) {
       await setStream(event.streams[0])
     }
