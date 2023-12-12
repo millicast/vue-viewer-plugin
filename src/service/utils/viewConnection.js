@@ -54,8 +54,9 @@ export const handleInitViewConnection = (accountId, streamName) => {
       subscriber.catch((error) => {
         const errorMessage = `${error}`
         const splitedMessage = errorMessage.replace('FetchError: ','')
-        store.commit('Errors/setMessage', splitedMessage)
-        store.commit('Errors/setShowError', true)
+        commit('Errors/setMessage', splitedMessage)
+        commit('Errors/setType', 'SubscriberError')
+        commit('Errors/setShowError', true)
       })
       return subscriber
   }

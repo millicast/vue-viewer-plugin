@@ -171,6 +171,7 @@ export default {
       viewer: (state) => state.viewer,
     }),
     ...mapState('Errors', {
+      type: (state) => state.type,
       message: (state) => state.message,
       showError: (state) => state.showError,
     }),
@@ -348,7 +349,7 @@ export default {
       })
     },
     showError: function (newVal) {
-      if (newVal) {
+      if (newVal && this.type === 'SubscriberError') {
         const toast = useToast()
         toast.error(this.message)
       } else {
