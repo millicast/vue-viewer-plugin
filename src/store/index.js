@@ -5,6 +5,7 @@ import Layers from './modules/layers'
 import Controls from './modules/controls'
 import ViewConnection from './modules/viewConnection'
 import Params from './modules/params'
+import Errors from './modules/errors'
 
 export default createStore({
   state: {
@@ -18,5 +19,6 @@ export default createStore({
     Controls,
     ViewConnection,
     Params,
+    Errors,
   },
 })

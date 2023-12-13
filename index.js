@@ -10,6 +10,7 @@ import controls from './src/store/modules/controls'
 import layers from './src/store/modules/layers'
 import params from './src/store/modules/params'
 import sources from './src/store/modules/sources'
+import errors from './src/store/modules/errors'
 import viewConnection from './src/store/modules/viewConnection'
 
 const filterBeforeCreate = (toast, toasts) => {
@@ -26,6 +27,7 @@ export default {
     } else {
       options.store.registerModule('Controls', controls)
       options.store.registerModule('Layers', layers)
+      options.store.registerModule('Errors', errors)
       options.store.registerModule('Params', params)
       options.store.registerModule('Sources', sources)
       options.store.registerModule('ViewConnection', viewConnection)
