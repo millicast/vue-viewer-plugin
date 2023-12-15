@@ -108,6 +108,10 @@ const processTrackWarning = () => {
 }
 
 export const handleDeleteSource = (sourceId) => {
+  if (state.Layers.mainTransceiverMedias.active.length) {
+    // If stream has simulcast enabled, set the source quality to auto before droping the source
+    layers.handleSelectQuality({name: 'Auto'})
+  }
   const videoIndex = state.Sources.videoSources.findIndex(
     (source) => source.sourceId === sourceId
   )
