@@ -64,7 +64,7 @@ export const updateLayers = (evntData) => {
     return b.bitrate - a.bitrate
   })
   if (activeQualities.length >= 2) {
-    activeQualities.sort((layer, nextLayer) =>  nextLayer.id - layer.id ) 
+    activeQualities.sort((quality, nextQuality) =>  nextQuality.height - quality.height ) 
     const names = qualityNames[activeQualities.length] || []
     activeQualities.forEach((quality, index) => {
       quality.name = quality.height ? `${quality.height}p` : names[index] || formatBitsRecursive(quality.bitrate)

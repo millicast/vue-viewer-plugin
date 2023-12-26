@@ -216,6 +216,7 @@ li {
 
 .list-side {
   margin: auto;
+  width: 100%;
 }
 
 .list-item {
