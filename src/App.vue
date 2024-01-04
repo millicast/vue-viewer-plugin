@@ -52,6 +52,7 @@ export default {
           audioFollowsVideo: this.paramsOptions?.audioFollowsVideo ?? false,
           layout: this.paramsOptions?.layout ?? null,
           showLabels: this.paramsOptions?.showLabels ?? true,
+          startingQuality: this.paramsOptions?.startingQuality,
           mainLabel: this.paramsOptions?.mainLabel ?? 'Main'
         })
       }
@@ -66,6 +67,11 @@ export default {
       containerClassName: 'toast-custom',
     })
     this.updateParams()
+
+    // Starting quality toast
+    if (this.paramsOptions?.startingQuality) {
+      toast.info('Fetching starting quality layer', { timeout: 1500 })
+    }
 
     ElementQueries.listen()
     ElementQueries.init()

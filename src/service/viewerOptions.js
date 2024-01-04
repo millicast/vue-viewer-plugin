@@ -18,6 +18,7 @@ export const defaultViewerOptions = {
   audioFollowsVideo: false,
   layout: null,
   showLabels: true,
+  startingQuality: null,
   mainLabel: null
 }
 
@@ -36,6 +37,7 @@ export default function processViewerOptions({
   audioFollowsVideo,
   layout,
   showLabels,
+  startingQuality,
   mainLabel
 }) {
   const options = {}
@@ -65,7 +67,10 @@ export default function processViewerOptions({
   if (options.layout && options.layout === 'grid') {
     store.commit('Controls/setIsGrid', true)
   }
-
+  if (startingQuality !== null) {
+    options.startingQuality = startingQuality
+    store.commit('Controls/setIsSelectingLayer', true)
+  }
   if (mainLabel) {
     options.mainLabel = mainLabel
     store.commit('Sources/setMainLabel', options.mainLabel)

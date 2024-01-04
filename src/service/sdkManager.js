@@ -9,6 +9,7 @@ import * as cast from './utils/cast'
 //Import Vuex Store.
 import store from '../store'
 const { commit, state } = store
+let selectingLayerTimeout = []
 
 // VIDEO PLAYER
 
@@ -107,12 +108,20 @@ const setBroadcastEvent = () => {
 
 const updateActiveBroadcastState = (event) => {
   sources.getTracks(event.data)
-  commit('Controls/setIsLoading', false)
-  commit('Controls/setIsLive', true)
+  if (!state.Controls.isSelectingLayer) {
+    commit('Controls/setIsLoading', false)
+    commit('Controls/setIsLive', true)
+  }
   viewConnection.setReconnect()
   if (!state.Controls.video.srcObject) {
     commit('Controls/setVideoSource', state.Controls.srcObject)
   }
+  const timeoutId = setTimeout(() => {
+    console.warn('Starting quality selected, but no layer event available.');
+    commit('Controls/setIsLoading', false)
+    commit('Controls/setIsLive', true)
+  }, 5000)
+  selectingLayerTimeout.push(timeoutId)
 }
 
 const updateStoppedBroadcastState = () => {
@@ -151,10 +160,42 @@ const updateInactiveBroadcastState = (event) => {
 }
 
 const updateLayersBroadcastState = (event) => {
-  if ('0' in event.data.medias) 
+  if ('0' in event.data.medias) {
     layers.updateLayers(event)
-  else
+  } else {
     layers.deleteLayers()
+  }
+  if (state.Controls.isSelectingLayer && state.Params.viewer.startingQuality !== null) {
+    const medias = state.Layers.mainTransceiverMedias.active
+    let selectedMedia = {}
+    const startingQuality = state.Params.viewer.startingQuality
+    const qualityIndex = ['Auto', 'High', 'Medium', 'Low'].indexOf(startingQuality)
+    if (/^\d{3,4}$/.test(startingQuality)) {
+      // Select layer with specific height
+      selectedMedia = medias.find((media) => media.height === parseInt(startingQuality))
+      console.log('Selected media, height:', selectedMedia)
+    } else if (qualityIndex >= 0) {
+      selectedMedia = medias[qualityIndex]
+      console.log('Selected media, level:', selectedMedia)
+    } else {
+      console.warn('Not valid starting quality, switching to Auto')
+      selectedMedia = { name: 'Auto' }
+    }
+    if (selectedMedia == undefined) {
+      console.warn('Not valid starting quality, switching to Auto')
+      selectedMedia = { name: 'Auto' }
+    }
+    setTimeout(() => {
+      selectQuality(selectedMedia)
+      selectingLayerTimeout.forEach((timeoutId) => {
+        clearTimeout(timeoutId)
+      })
+      selectingLayerTimeout = []
+      commit('Controls/setIsSelectingLayer', false)
+      commit('Controls/setIsLoading', false)
+      commit('Controls/setIsLive', true)
+    }, 1500)
+  }
 }
 
 const updateViewerCount = (event) => {
