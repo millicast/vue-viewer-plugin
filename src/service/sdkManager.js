@@ -183,14 +183,14 @@ const updateLayersBroadcastState = (event) => {
     if (/^\d{3,4}$/.test(startingQuality)) {
       // Select layer with specific height
       selectedMedia = medias.find((media) => media.height === parseInt(startingQuality))
-      console.log('Selected media, height:', selectedMedia)
+      console.log('Selected media, height:', selectedMedia.id)
     } else if (qualityIndex >= 0) {
       if (startingQuality.toLowerCase() === 'low') {
         selectedMedia = medias[medias.length - 1]
       } else {
         selectedMedia = medias[qualityIndex]
       }
-      console.log('Selected media, level:', selectedMedia)
+      console.log('Selected media, level:', selectedMedia.id)
     } else {
       console.warn('Not valid starting quality, switching to Auto')
       selectedMedia = { name: 'Auto' }
