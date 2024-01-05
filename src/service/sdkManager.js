@@ -165,17 +165,31 @@ const updateLayersBroadcastState = (event) => {
   } else {
     layers.deleteLayers()
   }
+  const medias = state.Layers.mainTransceiverMedias.active
+  if (medias.length === 0) {
+    console.warn('No active layers available, will wait for next event. Switching to Auto until then.')
+    selectingLayerTimeout.forEach((timeoutId) => {
+      clearTimeout(timeoutId)
+    })
+    selectingLayerTimeout = []
+    commit('Controls/setIsLoading', false)
+    commit('Controls/setIsLive', true)
+    return
+  }
   if (state.Controls.isSelectingLayer && state.Params.viewer.startingQuality !== null) {
-    const medias = state.Layers.mainTransceiverMedias.active
     let selectedMedia = {}
     const startingQuality = state.Params.viewer.startingQuality
-    const qualityIndex = ['Auto', 'High', 'Medium', 'Low'].indexOf(startingQuality)
+    const qualityIndex = ['auto', 'high', 'medium', 'low'].indexOf(startingQuality.toLowerCase())
     if (/^\d{3,4}$/.test(startingQuality)) {
       // Select layer with specific height
       selectedMedia = medias.find((media) => media.height === parseInt(startingQuality))
       console.log('Selected media, height:', selectedMedia)
     } else if (qualityIndex >= 0) {
-      selectedMedia = medias[qualityIndex]
+      if (startingQuality.toLowerCase() === 'low') {
+        selectedMedia = medias[medias.length - 1]
+      } else {
+        selectedMedia = medias[qualityIndex]
+      }
       console.log('Selected media, level:', selectedMedia)
     } else {
       console.warn('Not valid starting quality, switching to Auto')
