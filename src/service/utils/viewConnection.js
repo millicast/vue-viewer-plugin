@@ -53,10 +53,12 @@ export const handleInitViewConnection = (accountId, streamName) => {
       )
       subscriber.catch((error) => {
         const errorMessage = `${error}`
-        const splitedMessage = errorMessage.replace('FetchError: ','')
-        commit('Errors/setMessage', splitedMessage)
-        commit('Errors/setType', 'SubscriberError')
-        commit('Errors/setShowError', true)
+        if(!errorMessage.includes('stream not being published')) {
+          const splitedMessage = errorMessage.replace('FetchError: ','')
+          commit('Errors/setMessage', splitedMessage)
+          commit('Errors/setType', 'SubscriberError')
+          commit('Errors/setShowError', true)
+        }
       })
       return subscriber
   }
