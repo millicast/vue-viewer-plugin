@@ -9,7 +9,7 @@ import * as cast from './utils/cast'
 //Import Vuex Store.
 import store from '../store'
 const { commit, state } = store
-let selectingLayerTimeout = []
+let selectingLayerTimeout = null
 
 // VIDEO PLAYER
 
@@ -108,20 +108,21 @@ const setBroadcastEvent = () => {
 
 const updateActiveBroadcastState = (event) => {
   sources.getTracks(event.data)
+  commit('Controls/setIsLive', true)
   if (!state.Controls.isSelectingLayer) {
     commit('Controls/setIsLoading', false)
-    commit('Controls/setIsLive', true)
   }
   viewConnection.setReconnect()
   if (!state.Controls.video.srcObject) {
     commit('Controls/setVideoSource', state.Controls.srcObject)
   }
-  const timeoutId = setTimeout(() => {
-    console.warn('Starting quality selected, but no layer event available.');
-    commit('Controls/setIsLoading', false)
-    commit('Controls/setIsLive', true)
-  }, 5000)
-  selectingLayerTimeout.push(timeoutId)
+  if (selectingLayerTimeout != null) {
+    const timeoutId = setTimeout(() => {
+      console.warn('Starting quality selected, but no layer event available.');
+      commit('Controls/setIsLoading', false)
+    }, 5000)
+    selectingLayerTimeout = timeoutId
+  }
 }
 
 const updateStoppedBroadcastState = () => {
@@ -168,12 +169,9 @@ const updateLayersBroadcastState = (event) => {
   const medias = state.Layers.mainTransceiverMedias.active
   if (medias.length === 0) {
     console.warn('No active layers available, will wait for next event. Switching to Auto until then.')
-    selectingLayerTimeout.forEach((timeoutId) => {
-      clearTimeout(timeoutId)
-    })
-    selectingLayerTimeout = []
+    selectingLayerTimeout != null && clearTimeout(selectingLayerTimeout)
+    selectingLayerTimeout = null
     commit('Controls/setIsLoading', false)
-    commit('Controls/setIsLive', true)
     return
   }
   if (state.Controls.isSelectingLayer && state.Params.viewer.startingQuality !== null) {
@@ -183,14 +181,14 @@ const updateLayersBroadcastState = (event) => {
     if (/^\d{3,4}$/.test(startingQuality)) {
       // Select layer with specific height
       selectedMedia = medias.find((media) => media.height === parseInt(startingQuality))
-      console.log('Selected media, height:', selectedMedia.id)
+      console.log('Selected media, height:', selectedMedia?.id)
     } else if (qualityIndex >= 0) {
       if (startingQuality.toLowerCase() === 'low') {
         selectedMedia = medias[medias.length - 1]
       } else {
         selectedMedia = medias[qualityIndex]
       }
-      console.log('Selected media, level:', selectedMedia.id)
+      console.log('Selected media, level:', selectedMedia?.id)
     } else {
       console.warn('Not valid starting quality, switching to Auto')
       selectedMedia = { name: 'Auto' }
@@ -201,13 +199,10 @@ const updateLayersBroadcastState = (event) => {
     }
     setTimeout(() => {
       selectQuality(selectedMedia)
-      selectingLayerTimeout.forEach((timeoutId) => {
-        clearTimeout(timeoutId)
-      })
-      selectingLayerTimeout = []
+      selectingLayerTimeout != null && clearTimeout(selectingLayerTimeout)
+      selectingLayerTimeout = null
       commit('Controls/setIsSelectingLayer', false)
       commit('Controls/setIsLoading', false)
-      commit('Controls/setIsLive', true)
     }, 1500)
   }
 }
