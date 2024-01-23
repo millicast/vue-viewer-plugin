@@ -121,6 +121,9 @@ export default {
         }
       }
     },
+    removeTrackIdMidMapping(state, mid) {
+      delete state.trackIdMidMap[mid]
+    },
     setMainLabel(state, label) {
       state.mainLabel = label
     },

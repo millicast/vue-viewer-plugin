@@ -192,7 +192,8 @@ export default {
     },
     handleSourceChange() {
       const mid = this.selectedSourceMid ?? 0
-      this.statsIndex = this.trackIdToStatsIndexMap[this.trackIdMidMap[mid]]
+      const trackId = this.trackIdMidMap[mid]
+      this.statsIndex = this.trackIdToStatsIndexMap[trackId]
     },
     selectMidZero() {
       this.selectedSourceMid = this.getTransceiverSourceState[0]?.mid 
@@ -229,7 +230,9 @@ export default {
       const video = this.stats.video?.inbounds
       const videoLength = video?.length
       if (videoLength) {
-        return video[this.trackIdToStatsIndexMap[this.trackIdMidMap[this.selectedSourceMid]]]
+        const trackId = this.trackIdMidMap[this.selectedSourceMid]
+        const statsIndex = this.trackIdToStatsIndexMap[trackId]
+        return video[statsIndex]
       }
       return null
     },
