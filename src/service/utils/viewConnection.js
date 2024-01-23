@@ -45,12 +45,24 @@ export const handleInitViewConnection = (accountId, streamName) => {
     throw new Error('Stream ID not provided.')
   }
   setEnvironment()
-  const tokenGenerator = () =>
-    Director.getSubscriber(
-      streamName,
-      accountId,
-      state.Params.viewer.token
-    )
+  const tokenGenerator = () => {
+      const subscriber = Director.getSubscriber(
+        streamName,
+        accountId,
+        state.Params.viewer.token
+      )
+      subscriber.catch((error) => {
+        const errorMessage = `${error}`
+        if(!errorMessage.includes('stream not being published')) {
+          const splitedMessage = errorMessage.replace('FetchError: ','')
+          commit('Errors/setMessage', splitedMessage)
+          commit('Errors/setType', 'SubscriberError')
+          commit('Errors/setShowError', true)
+        }
+      })
+      return subscriber
+  }
+
   const millicastView = new View(streamName, tokenGenerator)
   window.millicastView = millicastView
   window.__defineGetter__('peer', () => {
@@ -90,6 +102,13 @@ export const handleConnectToStream = async () => {
 export const setTrackEvent = () => {
   const millicastView = state.ViewConnection.millicastView
   millicastView.on('track', async (event) => {
+    // map video trackId with mid
+    if (event.track?.kind === 'video') {
+      commit('Sources/addTrackIdMidMapping', {
+        trackId: event.track?.id,
+        mid: event.transceiver?.mid
+      })
+    }
     if (event.streams.length) {
       await setStream(event.streams[0])
     }

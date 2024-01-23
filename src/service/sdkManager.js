@@ -9,6 +9,7 @@ import * as cast from './utils/cast'
 //Import Vuex Store.
 import store from '../store'
 const { commit, state } = store
+let selectingLayerTimeout = null
 
 // VIDEO PLAYER
 
@@ -107,11 +108,20 @@ const setBroadcastEvent = () => {
 
 const updateActiveBroadcastState = (event) => {
   sources.getTracks(event.data)
-  commit('Controls/setIsLoading', false)
   commit('Controls/setIsLive', true)
+  if (!state.Controls.isSelectingLayer) {
+    commit('Controls/setIsLoading', false)
+  }
   viewConnection.setReconnect()
   if (!state.Controls.video.srcObject) {
     commit('Controls/setVideoSource', state.Controls.srcObject)
+  }
+  if (selectingLayerTimeout != null) {
+    const timeoutId = setTimeout(() => {
+      console.warn('Starting quality selected, but no layer event available.');
+      commit('Controls/setIsLoading', false)
+    }, 5000)
+    selectingLayerTimeout = timeoutId
   }
 }
 
@@ -151,10 +161,54 @@ const updateInactiveBroadcastState = (event) => {
 }
 
 const updateLayersBroadcastState = (event) => {
-  if ('0' in event.data.medias) 
+  if ('0' in event.data.medias) {
     layers.updateLayers(event)
-  else
+  } else {
     layers.deleteLayers()
+  }
+  const medias = state.Layers.mainTransceiverMedias.active
+  if (medias.length === 0) {
+    console.warn('No active layers available, will wait for next event. Switching to Auto until then.')
+    if (selectingLayerTimeout != null) {
+      clearTimeout(selectingLayerTimeout)
+    }
+    selectingLayerTimeout = null
+    commit('Controls/setIsLoading', false)
+    return
+  }
+  if (state.Controls.isSelectingLayer && state.Params.viewer.startingQuality !== null) {
+    let selectedMedia = {}
+    const startingQuality = state.Params.viewer.startingQuality
+    const qualityIndex = ['auto', 'high', 'medium', 'low'].indexOf(startingQuality.toLowerCase())
+    if (/^\d{3,4}$/.test(startingQuality)) {
+      // Select layer with specific height
+      selectedMedia = medias.find((media) => media.height === parseInt(startingQuality))
+      console.log('Selected media, height:', selectedMedia?.id)
+    } else if (qualityIndex >= 0) {
+      if (startingQuality.toLowerCase() === 'low') {
+        selectedMedia = medias[medias.length - 1]
+      } else {
+        selectedMedia = medias[qualityIndex]
+      }
+      console.log('Selected media, level:', selectedMedia?.id)
+    } else {
+      console.warn('Not valid starting quality, switching to Auto')
+      selectedMedia = { name: 'Auto' }
+    }
+    if (selectedMedia == undefined) {
+      console.warn('Not valid starting quality, switching to Auto')
+      selectedMedia = { name: 'Auto' }
+    }
+    setTimeout(() => {
+      selectQuality(selectedMedia)
+      if (selectingLayerTimeout != null) {
+        clearTimeout(selectingLayerTimeout)
+      }
+      selectingLayerTimeout = null
+      commit('Controls/setIsSelectingLayer', false)
+      commit('Controls/setIsLoading', false)
+    }, 1500)
+  }
 }
 
 const updateViewerCount = (event) => {

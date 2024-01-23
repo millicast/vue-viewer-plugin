@@ -123,6 +123,7 @@ import {
   VideoPlayerControlsContainer,
 } from './VideoPlayerControls'
 import { selectSource } from '../service/sdkManager'
+import { useToast } from 'vue-toastification'
 
 export default {
   name: 'VideoPlayerContainer',
@@ -169,6 +170,11 @@ export default {
     ...mapState('Params', {
       viewer: (state) => state.viewer,
     }),
+    ...mapState('Errors', {
+      type: (state) => state.type,
+      message: (state) => state.message,
+      showError: (state) => state.showError,
+    }),
     ...mapState('Sources', {
       videoSources: (state) => state.videoSources,
       audioSources: (state) => state.audioSources,
@@ -204,6 +210,7 @@ export default {
   },
   methods: {
     ...mapMutations('Layers', ['deleteLayers']),
+    ...mapMutations('Errors', ['setShowError']),
     ...mapMutations('Sources', ['deleteSource', 'setMainLabel']),
     ...mapMutations('Controls', [
       'setVideo',
@@ -340,6 +347,14 @@ export default {
         token: this.viewer.token,
         loading: this.isLoading,
       })
+    },
+    showError: function (newVal) {
+      if (newVal && this.type === 'SubscriberError') {
+        const toast = useToast()
+        toast.error(this.message)
+      } else {
+        this.setShowError(false)
+      }
     },
   },
 }
