@@ -169,7 +169,9 @@ const updateLayersBroadcastState = (event) => {
   const medias = state.Layers.mainTransceiverMedias.active
   if (medias.length === 0) {
     console.warn('No active layers available, will wait for next event. Switching to Auto until then.')
-    selectingLayerTimeout != null && clearTimeout(selectingLayerTimeout)
+    if (selectingLayerTimeout != null) {
+      clearTimeout(selectingLayerTimeout)
+    }
     selectingLayerTimeout = null
     commit('Controls/setIsLoading', false)
     return
@@ -199,7 +201,9 @@ const updateLayersBroadcastState = (event) => {
     }
     setTimeout(() => {
       selectQuality(selectedMedia)
-      selectingLayerTimeout != null && clearTimeout(selectingLayerTimeout)
+      if (selectingLayerTimeout != null) {
+        clearTimeout(selectingLayerTimeout)
+      }
       selectingLayerTimeout = null
       commit('Controls/setIsSelectingLayer', false)
       commit('Controls/setIsLoading', false)
