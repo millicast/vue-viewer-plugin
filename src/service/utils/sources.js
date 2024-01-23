@@ -180,6 +180,7 @@ const deleteSource = (kind, sourceId) => {
     }
 
     commit('Sources/removeTransceiverSourceState', sourceId)
+    commit('Sources/removeTrackIdMidMapping', sourceCurrentMid)
   }
 
   commit('Sources/removeSourceRemoteTrack', sourceId)
