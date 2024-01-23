@@ -25,7 +25,9 @@ const defaulState = {
   migrateListenerIsSet: false,
   isSplittedView: false,
   previousSplitState: false,
-  isGrid: false
+  isGrid: false,
+  isSelectingLayer: false,
+  selectingLayerTimeouts: null
 }
 
 export default {
@@ -138,6 +140,12 @@ export default {
     },
     setIsGrid(state, isGrid) {
       state.isGrid = isGrid
+    },
+    setIsSelectingLayer(state, isSelectingLayer) {
+      state.isSelectingLayer = isSelectingLayer
+    },
+    setSelectingLayerTimeout(state, selectingLayerTimeout) {
+      state.selectingLayerTimeouts = selectingLayerTimeout
     }
   },
   getters: {},
