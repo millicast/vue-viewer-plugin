@@ -53,6 +53,7 @@ export default {
           layout: this.paramsOptions?.layout ?? null,
           showLabels: this.paramsOptions?.showLabels ?? true,
           startingQuality: this.paramsOptions?.startingQuality,
+          hideToast: this.paramsOptions?.hideToast,
           mainLabel: this.paramsOptions?.mainLabel ?? 'Main'
         })
       }

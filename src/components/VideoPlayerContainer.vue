@@ -123,7 +123,7 @@ import {
   VideoPlayerControlsContainer,
 } from './VideoPlayerControls'
 import { selectSource } from '../service/sdkManager'
-import { useToast } from 'vue-toastification'
+import CustomToast from '../service/utils/toast'
 
 export default {
   name: 'VideoPlayerContainer',
@@ -142,6 +142,7 @@ export default {
       cast: { isConnected: false },
       controlsTimeout: 0,
       mobileFullscreen: false,
+      toast: new CustomToast(),
     }
   },
   mounted() {
@@ -197,6 +198,7 @@ export default {
       autoPlayMuted: (state) => state.autoPlayMuted,
       isLive: (state) => state.isLive,
       isSplittedView: (state) => state.isSplittedView,
+      hideToast: (state) => state.hideToast,
       isGrid: (state) => state.isGrid
     }),
     currentTime: function () {
@@ -350,8 +352,7 @@ export default {
     },
     showError: function (newVal) {
       if (newVal && this.type === 'SubscriberError') {
-        const toast = useToast()
-        toast.error(this.message)
+        this.toast.showToast('error', this.message)
       } else {
         this.setShowError(false)
       }
