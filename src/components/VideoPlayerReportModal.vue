@@ -58,8 +58,8 @@
 
 <script>
 import { Logger } from '@millicast/sdk'
-import { useToast } from 'vue-toastification'
 import { mapState } from 'vuex'
+import CustomToast from '../service/utils/toast'
 
 export default {
   name: 'VideoPlayerReportModal',
@@ -82,6 +82,7 @@ export default {
         url: '',
         log: [],
         statsInitialized: false,
+        toast: new CustomToast(),
       },
       localStats: [],
       isLoading: false,
@@ -99,7 +100,6 @@ export default {
       }
 
       this.report.log = log
-      const toast = useToast()
       try {
         this.isLoading = true
         const headers = { 'Content-Type': 'application/json' }
@@ -112,13 +112,13 @@ export default {
           headers,
           body: JSON.stringify(this.report),
         })
-        toast.success('Report sent successfully', { timeout: 3000 })
+        this.toast.showToast('success','Report sent successfully', { timeout: 3000 })
       } catch (err) {
         let message = "Error: couldn't send report"
         if (err.response?.data) {
           message += ', ' + err.response.data
         }
-        toast.error(message, { timeout: 3000 })
+        this.toast.showToast('error',message, { timeout: 3000 })
       } finally {
         this.isLoading = false
         this.close()

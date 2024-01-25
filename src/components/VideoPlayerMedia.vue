@@ -51,7 +51,7 @@ import {
   setVideoPlayer,
 } from '../service/sdkManager'
 import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import { useToast } from 'vue-toastification'
+import CustomToast from '../service/utils/toast'
 
 export default {
   name: 'VideoPlayerMedia',
@@ -63,6 +63,7 @@ export default {
         reconnect: null,
         stats: null,
         broadcastEvent: null,
+        toast: new CustomToast()
       },
     }
   },
@@ -148,21 +149,20 @@ export default {
   watch: {
     reconnectionStatus: function (isReconnecting) {
       let toastOptions;
-      const toast = useToast()
-      toast.clear()
+      this.toast.clear()
       if (isReconnecting) {
         this.setIsSplittedView(false)
         const message = 'Connection lost. Retrying...'
         if (this.reconnection?.timeout) {
           toastOptions = { timeout: this.reconnection?.timeout }
         }
-        toast.warning(message, toastOptions)
+        this.toast.showToast('warning',message, toastOptions)
       } else {
         const setSplitView = (state) => {
           if (['connected'].includes(state)) {
             this.setIsSplittedView(this.previousSplitState)
             this.millicastView.removeListener('connectionStateChange', setSplitView)
-            toast.clear()
+            this.toast.clear()
           }
         }
         this.millicastView.on('connectionStateChange', setSplitView)
@@ -191,7 +191,6 @@ export default {
       await stopStream()
       await nextTick()
 
-      const toast = await useToast()
       initViewModule()
       try {
         await connectToStream()
@@ -199,7 +198,7 @@ export default {
           this.setAutoPlayMuted(false)
         }, 6000)
       } catch (e) {
-        toast.error(e.message)
+        this.toast.showToast('error', e.message)
       }
     },
   },

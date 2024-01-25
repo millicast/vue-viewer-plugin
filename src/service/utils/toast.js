@@ -14,25 +14,25 @@ class CustomToast {
     this.store = store
   }
 
-  showToast(type, message) {
+  showToast(type, message, options) {
     if (this.shouldShowError(type)) {
-      this.showToaster(type, message)
+      this.showToaster(type, message, options)
     }
   }
 
-  showToaster(type, message) {
+  showToaster(type, message, options) {
     switch (type) {
       case TYPE.ERROR:
-        this.toast.error(message)
+        this.toast.error(message,options)
         break
       case TYPE.WARNING:
-        this.toast.warning(message)
+        this.toast.warning(message,options)
         break
       case TYPE.INFO:
-        this.toast.info(message)
+        this.toast.info(message,options)
         break
       case TYPE.SUCCESS:
-        this.toast.success(message)
+        this.toast.success(message,options)
         break
       default:
         break
@@ -42,6 +42,14 @@ class CustomToast {
   shouldShowError(type) {
     const hideToast = this.store?._state?.data?.Controls.hideToast
     return !(hideToast ? hideToast.includes(type) : false)
+  }
+
+  clear() {
+    this.toast.clear()
+  }
+
+  updateDefaults(options) {
+    this.toast.updateDefaults(options)
   }
 }
 
