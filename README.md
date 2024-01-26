@@ -70,6 +70,7 @@ You can now use the plugin in any Vue file of your project as a component.
 | `environment`  | `Object`         | Optional  | `.env file content` | Plugin environment. See [Environment options](#environment-options) on how to configure.             |
 | `mainLabel`    | `String`         | Optional  |                     | Allows to change the label of the main video.                                                        |
 | `startingQuality` | `String` | Optional | Allows to start the stream at a specific resolution when available. Possible values: 'High', 'Medium', 'Low', <Number> specifying the desired frame height (i.e. 360). |
+| `hideToast`   | `String`          | Optional |  `null`              | Allows you to hide a specific type of toast, and you can hide more than one by separating them by ",". Possible values: 'success', 'error', 'warning', 'info'. |
 | `audioFollowsVideo`| `Boolean`    | Optional  | `false`             | Allows automatically switching the audio to the one associated with the selected video source.       |
 
 To be able to use the viewer, just reference the `VideoPlayer` component, and pass the parameters of your choice as an object in the parameter `paramsOptions`. Refer to the [example usage](#example-apps).
