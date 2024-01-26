@@ -63,7 +63,7 @@ export default {
         reconnect: null,
         stats: null,
         broadcastEvent: null,
-        toast: new CustomToast()
+        toast: null,
       },
     }
   },
@@ -149,6 +149,7 @@ export default {
   watch: {
     reconnectionStatus: function (isReconnecting) {
       let toastOptions;
+      this.toast = new CustomToast()
       this.toast.clear()
       if (isReconnecting) {
         this.setIsSplittedView(false)

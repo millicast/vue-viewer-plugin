@@ -15,6 +15,8 @@ class CustomToast {
   }
 
   showToast(type, message, options) {
+    this.toast = useToast()
+    this.toast.clear()
     if (this.shouldShowError(type)) {
       this.showToaster(type, message, options)
     }
@@ -45,10 +47,12 @@ class CustomToast {
   }
 
   clear() {
+    this.toast = useToast()
     this.toast.clear()
   }
 
   updateDefaults(options) {
+    this.toast = useToast()
     this.toast.updateDefaults(options)
   }
 }
