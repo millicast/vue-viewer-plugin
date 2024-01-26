@@ -148,7 +148,7 @@ export default {
         try {
           await selectSource({ kind: 'audio', source: audioSource })
         } catch (error) {
-          this.toast.showToast('success', 'There was an error selecting the desired source, try again', { timeout: 5000 })
+          this.toast.showToast('error', 'There was an error selecting the desired source, try again', { timeout: 5000 })
         }
       }
       this.enableClick = true
