@@ -77,7 +77,7 @@ import VideoPlayerControlsSettingsSplitView from './VideoPlayerControlsSettingsS
 import VideoPlayerControlsSettingsLayout from './VideoPlayerControlsSettingsLayout.vue'
 
 import { mapGetters, mapState, mapMutations } from 'vuex'
-import { useToast } from 'vue-toastification'
+import CustomToast from '../../service/utils/toast'
 import { version } from '../../../package.json'
 
 export default {
@@ -110,7 +110,8 @@ export default {
         name: 'AudioFollowVideo',
         sourceId: 'AudioFollowVideo',
         trackId: null,
-      }
+      },
+      toast: null,
     }
   },
   computed: {
@@ -196,7 +197,7 @@ export default {
   },
   mounted() {
     this.viewerVersion = version ? 'v' + version : ''
-    this.toast = useToast()
+    this.toast = new CustomToast()
   },
   watch: {
     dropup: function (dropup) {
@@ -213,10 +214,7 @@ export default {
                 await selectSource({ kind: 'video', source })
                 await this.setMainLabel(source.name)
               } catch (error) {
-                this.toast.error(
-                  'There was an error selecting the desired source, try again',
-                  { timeout: 5000 }
-                )
+                this.toast.showToast('error','There was an error selecting the desired source, try again', { timeout: 5000 })
               }
             }
             this.setDropupSettings(
@@ -237,10 +235,7 @@ export default {
                 try {
                   await selectSource({ kind: 'audio', source })
                 } catch (error) {
-                  this.toast.error(
-                    'There was an error selecting the desired source, try again',
-                    { timeout: 5000 }
-                  )
+                  this.toast.showToast('error','There was an error selecting the desired source, try again',  { timeout: 5000 })
                 }
               }
             }

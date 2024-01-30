@@ -39,6 +39,7 @@ import {
   projectVideo,
   unprojectMultiview,
 } from '../service/sdkManager'
+import CustomToast from '../service/utils/toast'
 
 export default {
   name: 'VideoPlayerSideVideoSources',
@@ -47,7 +48,8 @@ export default {
       indexSourceProjectedInMain: null,
       indexMainMediaSource: 0,
       playerRef: null,
-      enableClick: true
+      enableClick: true,
+      toast: new CustomToast()
     }
   },
   computed: {
@@ -148,13 +150,9 @@ export default {
         try {
           await selectSource({ kind: 'audio', source: audioSource })
         } catch (error) {
-          this.toast.error(
-            'There was an error selecting the desired source, try again',
-            { timeout: 5000 }
-          )
+          this.toast.showToast('error', 'There was an error selecting the desired source, try again', { timeout: 5000 })
         }
       }
-
       this.enableClick = true
     },
   },
