@@ -4,7 +4,7 @@
 
 <script>
 import VideoPlayerContainer from './components/VideoPlayerContainer.vue'
-import { useToast } from 'vue-toastification'
+import CustomToast from './service/utils/toast'
 import processViewerOptions from './service/viewerOptions'
 import { availableControls } from './service/viewerOptions'
 import processEnvironmentOptions from './service/environmentOptions'
@@ -53,6 +53,7 @@ export default {
           layout: this.paramsOptions?.layout ?? null,
           showLabels: this.paramsOptions?.showLabels ?? true,
           startingQuality: this.paramsOptions?.startingQuality,
+          hideToast: this.paramsOptions?.hideToast,
           mainLabel: this.paramsOptions?.mainLabel ?? 'Main'
         })
       }
@@ -61,7 +62,7 @@ export default {
   },
   async mounted() {
     const myContainer = document.getElementById('viewer-container')
-    const toast = await useToast()
+    const toast = await new CustomToast()
     toast.updateDefaults({
       container: myContainer,
       containerClassName: 'toast-custom',
@@ -70,7 +71,7 @@ export default {
 
     // Starting quality toast
     if (this.paramsOptions?.startingQuality) {
-      toast.info('Fetching starting quality layer', { timeout: 1500 })
+      toast.showToast('info','Fetching starting quality layer', { timeout: 1500 })
     }
 
     ElementQueries.listen()

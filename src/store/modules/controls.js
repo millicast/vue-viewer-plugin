@@ -27,6 +27,7 @@ const defaulState = {
   previousSplitState: false,
   isGrid: false,
   isSelectingLayer: false,
+  hideToast: false,
   selectingLayerTimeouts: null
 }
 
@@ -143,6 +144,9 @@ export default {
     },
     setIsSelectingLayer(state, isSelectingLayer) {
       state.isSelectingLayer = isSelectingLayer
+    },
+    setHideToastError(state, hideToast) {
+      state.hideToast = hideToast
     },
     setSelectingLayerTimeout(state, selectingLayerTimeout) {
       state.selectingLayerTimeouts = selectingLayerTimeout

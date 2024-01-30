@@ -19,6 +19,7 @@ export const defaultViewerOptions = {
   layout: null,
   showLabels: true,
   startingQuality: null,
+  hideToast: null,
   mainLabel: null
 }
 
@@ -38,6 +39,7 @@ export default function processViewerOptions({
   layout,
   showLabels,
   startingQuality,
+  hideToast,
   mainLabel
 }) {
   const options = {}
@@ -70,6 +72,10 @@ export default function processViewerOptions({
   if (startingQuality !== null) {
     options.startingQuality = startingQuality
     store.commit('Controls/setIsSelectingLayer', true)
+  }
+  if (hideToast !== null) {
+    options.hideToast = hideToast
+    store.commit('Controls/setHideToastError', hideToast)
   }
   if (mainLabel) {
     options.mainLabel = mainLabel
