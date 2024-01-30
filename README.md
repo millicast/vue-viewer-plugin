@@ -69,7 +69,7 @@ You can now use the plugin in any Vue file of your project as a component.
 | `showLabels`   | `Boolean`        | Optional  | `true`              | Show stream label in multiview mode.                                                                 |
 | `environment`  | `Object`         | Optional  | `.env file content` | Plugin environment. See [Environment options](#environment-options) on how to configure.             |
 | `mainLabel`    | `String`         | Optional  |                     | Allows to change the label of the main video.                                                        |
-| `startingQuality` | `String` | Optional | Allows to start the stream at a specific resolution when available. Possible values: 'High', 'Medium', 'Low', <Number> specifying the desired frame height (i.e. 360). |
+| `startingQuality` | `String` | Optional | `null`| Allows to start the stream at a specific resolution when available. Possible values: 'High', 'Medium', 'Low', <Number> specifying the desired frame height (i.e. 360). |
 | `hideToast`   | `String`          | Optional |  `null`              | Allows to hide a specific type of toast, with the capability to hide multiple types simultaneously by `,`. Accepted values: 'success', 'error', 'warning', 'info'. |
 | `audioFollowsVideo`| `Boolean`    | Optional  | `false`             | Allows automatically switching the audio to the one associated with the selected video source.       |
 
