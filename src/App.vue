@@ -71,7 +71,7 @@ export default {
 
     // Starting quality toast
     if (this.paramsOptions?.startingQuality) {
-      this.toast.showToast('info','Fetching starting quality layer', { timeout: 1500 })
+      toast.showToast('info','Fetching starting quality layer', { timeout: 1500 })
     }
 
     ElementQueries.listen()

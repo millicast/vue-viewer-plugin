@@ -39,6 +39,7 @@ import {
   projectVideo,
   unprojectMultiview,
 } from '../service/sdkManager'
+import CustomToast from '../service/utils/toast'
 
 export default {
   name: 'VideoPlayerSideVideoSources',
@@ -47,7 +48,8 @@ export default {
       indexSourceProjectedInMain: null,
       indexMainMediaSource: 0,
       playerRef: null,
-      enableClick: true
+      enableClick: true,
+      toast: new CustomToast()
     }
   },
   computed: {
