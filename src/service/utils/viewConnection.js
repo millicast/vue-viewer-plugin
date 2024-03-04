@@ -9,12 +9,15 @@ import { nextTick } from 'vue'
 const { commit, state } = store
 
 import canAutoPlay from 'can-autoplay'
+import { SimpleMetadataSync } from 'nal-extractor'
 
 const setEnvironment = () => {
   setDirectorEndpoint()
   setLiveDomain()
   setPeerConnection()
 }
+
+const worker = new Worker('./worker.js')
 
 const setDirectorEndpoint = () => {
   if (
@@ -110,7 +113,7 @@ export const setTrackEvent = () => {
       })
     }
     if (event.streams.length) {
-      await setStream(event.streams[0])
+      await setStream(event.streams[0], event.receiver)
     }
     if (!state.ViewConnection.trackEvent[event.track.kind].transceiver[0]) {
       state.ViewConnection.trackEvent[event.track.kind].transceiver[0] =
@@ -124,10 +127,69 @@ export const setTrackEvent = () => {
   })
 }
 
-const setStream = async (entrySrcObject) => {
+const getSEITimecode = (video, receiver) => {
+  const clockRate = 90000
+  const cleanupTasks = []
+  const metadataSync = new class extends SimpleMetadataSync {
+    newFrame(now, frameMetadata) {
+      super.newFrame(now, frameMetadata)
+    }
+    async waitMetadata() {
+      if (this.metadata == undefined) {
+        return new Promise((resolve, reject) => {
+          const timeout = setTimeout(() => {
+            clearInterval(interval)
+            reject(new Error('timeout waiting for metadata'))
+          }, 3000)  
+          const interval = setInterval(() => {
+            if (this.metadata !== undefined) {
+              clearTimeout(timeout)
+              clearInterval(interval)
+              resolve(this.metadata)
+            }
+          }, 10)
+        })
+      }
+      return this.metadata
+    }
+  } (clockRate, video, receiver, worker)
+
+  if (receiver.track.kind === 'audio') {
+    metadataSync.stop()
+    metadataSync.metadata = undefined
+    return
+  }
+
+  cleanupTasks.push(() => metadataSync.stop())
+
+  const { timestamp } = metadataSync.metadata
+
+  return () => [...cleanupTasks].reverse().forEach(x => x())
+}
+
+const setStream = async (entrySrcObject, receiver) => {
   const video = state.Controls.video
   addSignalingMigrateListener()
   commit('Controls/setSrcObject', entrySrcObject)
+  if (video.srcObject && receiver.track.kind !== 'audio') {
+    const tmp = video.cloneNode(true)
+    // Override the muted attribute with current muted state
+    tmp.muted = video.muted
+    // Set same volume
+    tmp.volume = video.volume
+    // Set new stream
+    tmp.srcObject = entrySrcObject
+    // Replicate playback state
+    if (video.playing) {
+      try { tmp.play() } catch (e) { console.error('Could not play video') } 
+    } else if (video.paused) {
+      try { tmp.paused() } catch (e) { console.error('Could not pause video') } 
+    }
+    // Replace the video when media has started playing
+    tmp.addEventListener('loadedmetadata', () => {
+      getSEITimecode(tmp, receiver)
+    })
+  }
   //If we already had a a stream and is not migrating then we ignore it (Firefox addRemoteTrack issue)
   if (
     video.srcObject &&
