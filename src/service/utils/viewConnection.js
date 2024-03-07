@@ -17,7 +17,8 @@ const setEnvironment = () => {
   setPeerConnection()
 }
 
-const worker = new Worker('./worker.js')
+const worker = new Worker('./worker.umd.js')
+let metadataPlayer
 
 const setDirectorEndpoint = () => {
   if (
@@ -84,6 +85,9 @@ export const handleConnectToStream = async () => {
     const connectOptions = {
       events: ['active', 'inactive', 'layers', 'viewercount'],
       absCaptureTime: true,
+      peerConfig: {
+        encodedInsertableStreams: true
+      }
     }
     if (state.Params.viewer.audioOnly) {connectOptions.disableVideo = true}
     if (state.Params.viewer.videoOnly) {connectOptions.disableAudio = true}
@@ -162,7 +166,7 @@ const getSEITimecode = (video, receiver) => {
 
   cleanupTasks.push(() => metadataSync.stop())
 
-  const { timestamp } = metadataSync.metadata
+  const metadata = metadataSync.metadata
 
   return () => [...cleanupTasks].reverse().forEach(x => x())
 }
@@ -172,24 +176,18 @@ const setStream = async (entrySrcObject, receiver) => {
   addSignalingMigrateListener()
   commit('Controls/setSrcObject', entrySrcObject)
   if (video.srcObject && receiver.track.kind !== 'audio') {
-    const tmp = video.cloneNode(true)
-    // Override the muted attribute with current muted state
-    tmp.muted = video.muted
-    // Set same volume
-    tmp.volume = video.volume
-    // Set new stream
-    tmp.srcObject = entrySrcObject
-    // Replicate playback state
-    if (video.playing) {
-      try { tmp.play() } catch (e) { console.error('Could not play video') } 
-    } else if (video.paused) {
-      try { tmp.paused() } catch (e) { console.error('Could not pause video') } 
-    }
     // Replace the video when media has started playing
-    tmp.addEventListener('loadedmetadata', () => {
-      getSEITimecode(tmp, receiver)
-    })
+    video.onloadedmetadata = () => {
+      console.log('In loaded metadata');
+      getSEITimecode(video, receiver)
+    }
   }
+
+  if (receiver.track.kind === 'video') {
+    metadataPlayer?.() // unmount current player
+    metadataPlayer = getSEITimecode(video, receiver)
+  }
+
   //If we already had a a stream and is not migrating then we ignore it (Firefox addRemoteTrack issue)
   if (
     video.srcObject &&
