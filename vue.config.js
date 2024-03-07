@@ -1,6 +1,5 @@
 module.exports = {
   chainWebpack: (config) => {
-    // Vue Loader Configuration
     config.module
       .rule('vue')
       .use('vue-loader')
@@ -11,12 +10,5 @@ module.exports = {
         }
         return options
       })
-
-    config.module
-      .rule('nal-extractor')
-      .test(/node_modules\/nal-extractor\/.*\.js$/)
-      .use('babel-loader')
-      .loader('babel-loader')
-      .end()
   },
-} 
+}
