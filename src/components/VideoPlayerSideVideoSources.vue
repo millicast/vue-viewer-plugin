@@ -140,6 +140,11 @@ export default {
         if (midProjectedInMain in this.getActiveMedias()) {
           lowQualityLayer = this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
         }
+        const layers = {
+          encodingId: lowQualityLayer.encodingId,
+          spatialLayerId: lowQualityLayer.spatialLayerId,
+          temporalLayerId: lowQualityLayer.temporalLayerId
+        }
         projectVideo(
           source.sourceId, 
           videoMid,
@@ -151,7 +156,7 @@ export default {
           sourceIdProjectedInMain, 
           midProjectedInMain, 
           this.transceiverSourceState[midProjectedInMain].trackId, 
-          lowQualityLayer,
+          layers,
           false,
         )
         await this.swapVideos(`sidePlayer${proyectedVideoMid}`)

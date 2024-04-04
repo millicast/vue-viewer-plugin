@@ -240,7 +240,7 @@ const project = async ({ kind, source }) => {
 export const handleProjectVideo = async (what, where, trackId, layer, promote) => {
   await state.ViewConnection.millicastView.project(what, [
     {
-      trackId,
+      // trackId,
       mediaId: where,
       media: 'video',
       layer,
