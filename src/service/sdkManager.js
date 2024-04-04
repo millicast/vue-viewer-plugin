@@ -231,8 +231,8 @@ export const projectRemoteTracks = async (remoteTrack) => {
   sources.handleProjectRemoteTracks(remoteTrack)
 }
 
-export const projectVideo = async (what, where, trackId, layer) => {
-  sources.handleProjectVideo(what, where, trackId, layer)
+export const projectVideo = async (what, where, trackId, layer, promote) => {
+  sources.handleProjectVideo(what, where, trackId, layer, promote)
 }
 
 export const unprojectMultiview = async () => {

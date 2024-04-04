@@ -39,7 +39,7 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import {
   selectSource,
   projectRemoteTracks,
-  // projectVideo,
+  projectVideo,
   unprojectMultiview,
 } from '../service/sdkManager'
 import CustomToast from '../service/utils/toast'
@@ -126,7 +126,7 @@ export default {
       this.playerRef = document.getElementById(this.currentElementRef)
       // Select the source from the transceiver state and project it in the main video
       let source = this.transceiverSourceState[videoMid]
-      // let lowQualityLayer
+      let lowQualityLayer
       let midProjectedInMain = this.proyectedMain?.mid || this.videoSources[0].mid
       const sourceName =  source.name
       const audioSource = this.audioSources.find(currentSoruce => currentSoruce.name === sourceName)
@@ -134,20 +134,27 @@ export default {
         if (this.viewer.showLabels) {
           this.$refs[`sideLabel${proyectedVideoMid}`][0].textContent = this.transceiverSourceState[midProjectedInMain].name        
         }
-        // const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
+        const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
         midProjectedInMain = this.transceiverSourceState[midProjectedInMain].mid
 
+        if (midProjectedInMain in this.getActiveMedias()) {
+          lowQualityLayer = this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
+        }
+        projectVideo(
+          source.sourceId, 
+          videoMid,
+          this.transceiverSourceState[midProjectedInMain].trackId, 
+          undefined,
+          true,
+        )
+        projectVideo(
+          sourceIdProjectedInMain, 
+          midProjectedInMain, 
+          this.transceiverSourceState[midProjectedInMain].trackId, 
+          lowQualityLayer,
+          false,
+        )
         await this.swapVideos(`sidePlayer${proyectedVideoMid}`)
-        
-        // if (midProjectedInMain in this.getActiveMedias()) {
-        //   lowQualityLayer = this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
-        // }
-        // projectVideo(
-        //   sourceIdProjectedInMain, 
-        //   videoMid, 
-        //   this.transceiverSourceState[midProjectedInMain].trackId, 
-        //   lowQualityLayer
-        // )
         // this.updateTransceiverSourceState({ source })
       }
       this.setMainLabel(source.sourceId ?? source.name)
@@ -201,18 +208,35 @@ export default {
 </script>
 
 <style>
-video.animateVideo {
-  transition: all 0.4s ease-in;
-  width: 40%;
-  margin-left: 60%;
+
+@media (max-width: 430px) {
+  video.animateVideo {
+    transition: all 0.4s ease-in;
+    padding: 25%;
+    transform: translateY(100%);
+  }
+
+  video.sideAnimateVideo {
+    transition: all 0.4s ease-in;
+    transform: translateY(-100%);
+  }
 }
 
-video.sideAnimateVideo {
-  transition: all 0.4s ease-in;
-  transform: translateX(-100%);
-  height: 200% !important;
-  width: 200% !important;
+@media (min-width: 430px) {
+  video.animateVideo {
+    transition: all 0.4s ease-in;
+    width: 40%;
+    margin-left: 60%;
+  }
+
+  video.sideAnimateVideo {
+    transition: all 0.4s ease-in;
+    transform: translateX(-100%);
+    height: 200% !important;
+    width: 200% !important;
+  }
 }
+
 </style>
 
 <style scoped>
