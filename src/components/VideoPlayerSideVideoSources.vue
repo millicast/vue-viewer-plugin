@@ -8,9 +8,12 @@
       v-for="(source, index) in sourceRemoteTracks"
       :key="'p' + index"
     >
-      <div class="videoText" :class="isGrid ? 'videoGrid' : '' ">
+      <div
+        class="videoText"
+        :class="isGrid ? 'videoGrid' : '' "
+        v-on:click="() => enableClick && switchProjection(source.transceiver?.mid)"
+      >
         <video
-          v-on:click="() => enableClick && switchProjection(source.transceiver?.mid)"
           :id="`sidePlayer${source.transceiver?.mid}`"
           :ref="`sidePlayer${source.transceiver?.mid}`"
           :class="!isGrid && isSplittedView ? 'hires-class': ''"
@@ -36,7 +39,7 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import {
   selectSource,
   projectRemoteTracks,
-  projectVideo,
+  // projectVideo,
   unprojectMultiview,
 } from '../service/sdkManager'
 import CustomToast from '../service/utils/toast'
@@ -49,7 +52,9 @@ export default {
       indexMainMediaSource: 0,
       playerRef: null,
       enableClick: true,
-      toast: new CustomToast()
+      toast: new CustomToast(),
+      proyectedMain: {},
+      trackMId: {0 : 0},
     }
   },
   computed: {
@@ -77,8 +82,11 @@ export default {
   async mounted() {
     selectSource({ kind: 'video', source: this.videoSources[0] })
     this.setMainLabel(this.videoSources[0].name)
-    this.sourceRemoteTracks.forEach(async (remoteTrack) =>
+    this.sourceRemoteTracks.forEach(async (remoteTrack) => {
       await projectRemoteTracks(remoteTrack)
+      const mid = remoteTrack.transceiver.mid
+      this.trackMId[mid] = mid
+    }
     )
 
     this.playerRef = document.getElementById('player')
@@ -95,9 +103,13 @@ export default {
         if (newLenght > currentLenght) {
           const lastIndex = newLenght - 1
           await projectRemoteTracks(this.sourceRemoteTracks[lastIndex])
+          const mid = this.sourceRemoteTracks[lastIndex].transceiver.mid
+          this.trackMId[mid] = mid
         } else {
-          this.sourceRemoteTracks.forEach(async (remoteTrack) =>
+          this.sourceRemoteTracks.forEach(async (remoteTrack) => {
             await projectRemoteTracks(remoteTrack)
+            console.log('remove',remoteTrack)
+          }
           )
         }
       },
@@ -105,42 +117,42 @@ export default {
   },
   methods: {
     ...mapMutations('Controls', ['toggleFullscreen', 'setIsSplittedView']),
-    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'updateTransceiverSourceState']),
+    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'replaceSourceRemoteTrack']),//, 'updateTransceiverSourceState']),
     ...mapGetters('Layers', ['getActiveMedias','getActiveMainTransceiverMedias']),
-    async switchProjection(videoMid) {
+    async switchProjection(proyectedVideoMid) {
+      const videoMid = this.trackMId[proyectedVideoMid]
       await nextTick()
       this.enableClick = false
       this.playerRef = document.getElementById(this.currentElementRef)
-
       // Select the source from the transceiver state and project it in the main video
       let source = this.transceiverSourceState[videoMid]
-      let lowQualityLayer
-      let midProjectedInMain = this.videoSources[0].mid
+      // let lowQualityLayer
+      let midProjectedInMain = this.proyectedMain?.mid || this.videoSources[0].mid
       const sourceName =  source.name
       const audioSource = this.audioSources.find(currentSoruce => currentSoruce.name === sourceName)
-
       if (this.getVideoHasMain) {
         if (this.viewer.showLabels) {
-          this.$refs[`sideLabel${videoMid}`][0].textContent = this.transceiverSourceState[midProjectedInMain].name        
+          this.$refs[`sideLabel${proyectedVideoMid}`][0].textContent = this.transceiverSourceState[midProjectedInMain].name        
         }
-
-        const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
+        // const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
         midProjectedInMain = this.transceiverSourceState[midProjectedInMain].mid
-        
-        if (midProjectedInMain in this.getActiveMedias()) {
-          lowQualityLayer = this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
-        }
-        projectVideo(
-          sourceIdProjectedInMain, 
-          videoMid, 
-          this.transceiverSourceState[midProjectedInMain].trackId, 
-          lowQualityLayer
-        )
-        this.updateTransceiverSourceState({ source })
-      }
 
+        await this.swapVideos(`sidePlayer${proyectedVideoMid}`)
+        
+        // if (midProjectedInMain in this.getActiveMedias()) {
+        //   lowQualityLayer = this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
+        // }
+        // projectVideo(
+        //   sourceIdProjectedInMain, 
+        //   videoMid, 
+        //   this.transceiverSourceState[midProjectedInMain].trackId, 
+        //   lowQualityLayer
+        // )
+        // this.updateTransceiverSourceState({ source })
+      }
       this.setMainLabel(source.sourceId ?? source.name)
-      await selectSource({ kind: 'video', source })
+      // await selectSource({ kind: 'video', source })
+      this.proyectedMain = source
 
       if (this.isGrid) {
         this.setIsSplittedView(false)
@@ -153,18 +165,61 @@ export default {
           this.toast.showToast('error', 'There was an error selecting the desired source, try again', { timeout: 5000 })
         }
       }
+      this.trackMId[0] = videoMid
+      this.trackMId[proyectedVideoMid] = midProjectedInMain
       this.enableClick = true
     },
+    async swapVideos(id) {
+      return new Promise((resolve) => {
+        const playerVideo = document.getElementById(this.currentElementRef);
+        const sideVideo = document.getElementById(id);
+        const elements = document.querySelectorAll('.overflow-auto');
+        elements.forEach(element => {
+          element.classList.remove('overflow-auto');
+        });
+        const sideParent = sideVideo.parentElement;
+        playerVideo.classList.add('animateVideo');
+        sideVideo.classList.add('sideAnimateVideo');
+        setTimeout(() => {
+          sideParent.insertBefore(playerVideo, sideVideo.nextSibling);
+          const playerParent  = document.getElementById('main-source');
+          const spanElement = playerParent.querySelector('span')
+          playerParent.insertBefore(sideVideo, spanElement);
+          playerVideo.classList.remove('animateVideo');
+          sideVideo.classList.remove('sideAnimateVideo');
+          playerVideo.id = playerVideo.ref = id
+          sideVideo.id = sideVideo.ref = this.currentElementRef
+          elements.forEach(element => {
+            element.classList.add('overflow-auto');
+          });
+          resolve();
+        }, 400);
+      });
+    }
   },
 }
 </script>
+
+<style>
+video.animateVideo {
+  transition: all 0.4s ease-in;
+  width: 40%;
+  margin-left: 60%;
+}
+
+video.sideAnimateVideo {
+  transition: all 0.4s ease-in;
+  transform: translateX(-100%);
+  height: 200% !important;
+  width: 200% !important;
+}
+</style>
 
 <style scoped>
 video {
   height: 100%;
   width: 100%;
   align-self: center;
-  cursor: pointer;
   border-radius: 0.25rem;
   object-fit: cover;
 }
@@ -194,6 +249,7 @@ li {
   height: 100%;
   width: 100%;
   position: relative;
+  cursor: pointer;
 }
 
 .videoGrid {
