@@ -45,7 +45,6 @@ import {
 import CustomToast from '../service/utils/toast'
 import gsap from 'gsap';
 import { Flip } from "gsap/Flip";
-// import { TweenMax } from 'gsap';
 
 export default {
   name: 'VideoPlayerSideVideoSources',
@@ -203,8 +202,8 @@ export default {
       elements.forEach(element => {
         element.classList.add('overflow-auto');
       });
-      Flip.from(statePlayer, {duration: 0.5, ease: "power1.inOut"});
-      Flip.from(stateSide, {duration: 0.5, ease: "power1.inOut"});
+      Flip.from(statePlayer, {duration: 0.8, ease: "power1.inOut"});
+      Flip.from(stateSide, {duration: 0.8, ease: "power1.inOut"});
     }
   },
 }
