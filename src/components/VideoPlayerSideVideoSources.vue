@@ -43,6 +43,9 @@ import {
   unprojectMultiview,
 } from '../service/sdkManager'
 import CustomToast from '../service/utils/toast'
+import gsap from 'gsap';
+import { Flip } from "gsap/Flip";
+// import { TweenMax } from 'gsap';
 
 export default {
   name: 'VideoPlayerSideVideoSources',
@@ -120,6 +123,7 @@ export default {
     ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'replaceSourceRemoteTrack']),//, 'updateTransceiverSourceState']),
     ...mapGetters('Layers', ['getActiveMedias','getActiveMainTransceiverMedias']),
     async switchProjection(proyectedVideoMid) {
+
       const videoMid = this.trackMId[proyectedVideoMid]
       await nextTick()
       this.enableClick = false
@@ -136,14 +140,13 @@ export default {
         }
         const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
         midProjectedInMain = this.transceiverSourceState[midProjectedInMain].mid
-
         if (midProjectedInMain in this.getActiveMedias()) {
           lowQualityLayer = this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
         }
         const layers = {
-          encodingId: lowQualityLayer.encodingId,
-          spatialLayerId: lowQualityLayer.spatialLayerId,
-          temporalLayerId: lowQualityLayer.temporalLayerId
+          encodingId: lowQualityLayer?.encodingId,
+          spatialLayerId: lowQualityLayer?.spatialLayerId,
+          temporalLayerId: lowQualityLayer?.temporalLayerId
         }
         projectVideo(
           source.sourceId, 
@@ -159,7 +162,7 @@ export default {
           layers,
           false,
         )
-        await this.swapVideos(`sidePlayer${proyectedVideoMid}`)
+        this.swapVideos(`sidePlayer${proyectedVideoMid}`)
         // this.updateTransceiverSourceState({ source })
       }
       this.setMainLabel(source.sourceId ?? source.name)
@@ -181,32 +184,27 @@ export default {
       this.trackMId[proyectedVideoMid] = midProjectedInMain
       this.enableClick = true
     },
-    async swapVideos(id) {
-      return new Promise((resolve) => {
-        const playerVideo = document.getElementById(this.currentElementRef);
-        const sideVideo = document.getElementById(id);
-        const elements = document.querySelectorAll('.overflow-auto');
-        elements.forEach(element => {
-          element.classList.remove('overflow-auto');
-        });
-        const sideParent = sideVideo.parentElement;
-        playerVideo.classList.add('animateVideo');
-        sideVideo.classList.add('sideAnimateVideo');
-        setTimeout(() => {
-          sideParent.insertBefore(playerVideo, sideVideo.nextSibling);
-          const playerParent  = document.getElementById('main-source');
-          const spanElement = playerParent.querySelector('span')
-          playerParent.insertBefore(sideVideo, spanElement);
-          playerVideo.classList.remove('animateVideo');
-          sideVideo.classList.remove('sideAnimateVideo');
-          playerVideo.id = playerVideo.ref = id
-          sideVideo.id = sideVideo.ref = this.currentElementRef
-          elements.forEach(element => {
-            element.classList.add('overflow-auto');
-          });
-          resolve();
-        }, 400);
+    swapVideos(id) {
+      gsap.registerPlugin(Flip);
+      const playerVideo = document.getElementById(this.currentElementRef);
+      const sideVideo = document.getElementById(id);
+      const elements = document.querySelectorAll('.overflow-auto');
+      const statePlayer = Flip.getState(playerVideo);
+      const stateSide = Flip.getState(sideVideo);
+      const sideParent = sideVideo.parentElement;
+      sideParent.insertBefore(playerVideo, sideVideo.nextSibling);
+      const playerParent  = document.getElementById('main-source');
+      const spanElement = playerParent.querySelector('span')
+      playerParent.insertBefore(sideVideo, spanElement);
+      playerVideo.classList.remove('animateVideo');
+      sideVideo.classList.remove('sideAnimateVideo');
+      playerVideo.id = playerVideo.ref = id
+      sideVideo.id = sideVideo.ref = this.currentElementRef
+      elements.forEach(element => {
+        element.classList.add('overflow-auto');
       });
+      Flip.from(statePlayer, {duration: 0.5, ease: "power1.inOut"});
+      Flip.from(stateSide, {duration: 0.5, ease: "power1.inOut"});
     }
   },
 }

@@ -25,6 +25,7 @@
         "bootstrap-icons": "github:millicast/icons#ml-viewer",
         "can-autoplay": "^3.0.0",
         "css-element-queries": "^1.2.3",
+        "gsap": "^3.12.5",
         "vue-toastification": "^2.0.0-rc.1",
         "vuex": "^4.0.2"
     },
