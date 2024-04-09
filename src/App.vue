@@ -50,6 +50,7 @@ export default {
           noDelay: this.paramsOptions?.noDelay ?? false,
           multisource: this.paramsOptions?.multisource ?? false,
           audioFollowsVideo: this.paramsOptions?.audioFollowsVideo ?? false,
+          animate: this.paramsOptions?.animate ?? false,
           layout: this.paramsOptions?.layout ?? null,
           showLabels: this.paramsOptions?.showLabels ?? true,
           startingQuality: this.paramsOptions?.startingQuality,

@@ -66,6 +66,7 @@ export default {
       'audioSources',
       'transceiverSourceState',
       'audioFollowsVideo',
+      'animate',
     ]),
     ...mapState('Controls', {
         fullscreen: state => state.fullscreen, 
@@ -216,8 +217,9 @@ export default {
       elements.forEach(element => {
         element.classList.add('overflow-auto');
       });
-      Flip.from(statePlayer, {duration: 0.8, ease: "power1.inOut"});
-      Flip.from(stateSide, {duration: 0.8, ease: "power1.inOut"});
+      const duration = this.animate ? 0.8 : 0
+      Flip.from(statePlayer, {duration, ease: "power1.inOut"});
+      Flip.from(stateSide, {duration, ease: "power1.inOut"});
     }
   },
 }

@@ -9,6 +9,7 @@ const defaulState = {
   },
   isAudioOnly: false,
   audioFollowsVideo: false,
+  animate: false,
   stream: null,
   sourceRemoteTracks: [],
   mainLabel: 'Main',
@@ -60,6 +61,9 @@ export default {
     },
     setAudioFollowsVideo(state, audioFollowsVideo) {
       state.audioFollowsVideo = audioFollowsVideo
+    },
+    setAnimate(state, animate) {
+      state.animate = animate
     },
     addTrackIdMidMapping(state, trackIdMidMapping) {
       state.trackIdMidMap[trackIdMidMapping.mid] = trackIdMidMapping.trackId
