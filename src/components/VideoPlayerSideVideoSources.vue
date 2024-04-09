@@ -73,6 +73,9 @@ export default {
         isSplittedView: state => state.isSplittedView, 
         currentElementRef: state => state.currentElementRef,
     }),
+    ...mapState('Layers', {
+      selectedQuality: (state) => state.selectedQuality,
+    }),
     ...mapGetters('Sources', ['getVideoHasMain', 'getSelectedVideoSource']),
     ...mapState('ViewConnection', {
       millicastView: (state) => state.millicastView,
@@ -84,6 +87,7 @@ export default {
   async mounted() {
     selectSource({ kind: 'video', source: this.videoSources[0] })
     this.setMainLabel(this.videoSources[0].name)
+    this.setProyectedMain(this.videoSources[0])
     this.sourceRemoteTracks.forEach(async (remoteTrack) => {
       await projectRemoteTracks(remoteTrack)
       const mid = remoteTrack.transceiver.mid
@@ -110,7 +114,6 @@ export default {
         } else {
           this.sourceRemoteTracks.forEach(async (remoteTrack) => {
             await projectRemoteTracks(remoteTrack)
-            console.log('remove',remoteTrack)
           }
           )
         }
@@ -119,7 +122,7 @@ export default {
   },
   methods: {
     ...mapMutations('Controls', ['toggleFullscreen', 'setIsSplittedView']),
-    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'replaceSourceRemoteTrack']),//, 'updateTransceiverSourceState']),
+    ...mapMutations('Sources', ['setMainLabel','setProyectedMain','setPreviousMainLabel', 'replaceSourceRemoteTrack']),//, 'updateTransceiverSourceState']),
     ...mapGetters('Layers', ['getActiveMedias','getActiveMainTransceiverMedias']),
     async switchProjection(proyectedVideoMid) {
 
@@ -142,6 +145,16 @@ export default {
         if (midProjectedInMain in this.getActiveMedias()) {
           lowQualityLayer = this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
         }
+        let selectedQualityLayer
+        if (videoMid in this.getActiveMedias() && this.selectedQuality?.simulcastIdx !== undefined) {
+          const lay = this.getActiveMedias()[videoMid].layers
+          const mediaSelected = lay.find(layer => layer.simulcastIdx === this.selectedQuality.simulcastIdx)
+          selectedQualityLayer = {
+            encodingId: mediaSelected?.encodingId,
+            spatialLayerId: mediaSelected?.spatialLayerId,
+            temporalLayerId: mediaSelected?.temporalLayerId
+          }
+        }
         const layers = {
           encodingId: lowQualityLayer?.encodingId,
           spatialLayerId: lowQualityLayer?.spatialLayerId,
@@ -150,9 +163,9 @@ export default {
         projectVideo(
           source.sourceId, 
           videoMid,
-          this.transceiverSourceState[midProjectedInMain].trackId, 
-          undefined,
-          true,
+          this.transceiverSourceState[videoMid].trackId, 
+          selectedQualityLayer,
+          !selectedQualityLayer,
         )
         projectVideo(
           sourceIdProjectedInMain, 
@@ -165,6 +178,7 @@ export default {
         // this.updateTransceiverSourceState({ source })
       }
       this.setMainLabel(source.sourceId ?? source.name)
+      this.setProyectedMain(this.transceiverSourceState[videoMid])
       // await selectSource({ kind: 'video', source })
       this.proyectedMain = source
 

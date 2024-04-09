@@ -12,6 +12,7 @@ const defaulState = {
   stream: null,
   sourceRemoteTracks: [],
   mainLabel: 'Main',
+  proyectedMain: {},
   transceiverSourceState: {},
   trackIdMidMap: {}
 }
@@ -123,6 +124,9 @@ export default {
     },
     setMainLabel(state, label) {
       state.mainLabel = label
+    },
+    setProyectedMain(state,label) {
+      state.proyectedMain = label
     },
     updateTransceiverSourceState(state, { source }) {
       const currentSource = state.transceiverSourceState[state.videoSources[0].mid]
