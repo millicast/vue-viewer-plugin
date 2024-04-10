@@ -1,8 +1,10 @@
 import { nextTick } from 'vue'
 import store from '../../store'
 const { commit, state, getters } = store
-import { sendLoadRequest } from './cast'
+// import { sendLoadRequest } from './cast'
 import * as layers from './layers'
+// import gsap from 'gsap';
+// import { Flip } from "gsap/Flip";
 
 export const getTracks = (data) => {
   const sourceId = data.sourceId || null
@@ -188,54 +190,47 @@ const deleteSource = (kind, sourceId) => {
 }
 
 export const handleSelectSource = async ({ kind, source }) => {
-  let track = null
-  let selectedSource = null
+  // let track = null
+  // let selectedSource = null
 
-  if (kind === 'video') {
-    layers.deleteLayers()
-    track = state.ViewConnection.trackEvent.video.track
-    selectedSource = state.Sources.selectedVideoSource
-  } else if (kind === 'audio') {
-    track = state.ViewConnection.trackEvent.audio.track
-    selectedSource = state.Sources.selectedVideoSource
-    selectedSource = state.Sources.selectedAudioSource
-  }
+  // if (kind === 'video') {
+  //   layers.deleteLayers()
+  //   track = state.ViewConnection.trackEvent.video.track
+  //   selectedSource = state.Sources.selectedVideoSource
+  // } else if (kind === 'audio') {
+  //   track = state.ViewConnection.trackEvent.audio.track
+  //   selectedSource = state.Sources.selectedVideoSource
+  //   selectedSource = state.Sources.selectedAudioSource
+  // }
   commit('Sources/setSelectedSource', { kind, selectedSource: source })
-  if (source && source?.name !== 'none' && track) {
-    await project({ kind, source })
-    if (selectedSource.name !== 'none') {
-      commit('Controls/setTrackWarning', false)
-    }
-  }
+  // if (source && source?.name !== 'none' && track) {
+  //   await switchProject({ source })
+  //   if (selectedSource.name !== 'none') {
+  //     commit('Controls/setTrackWarning', false)
+  //   }
+  // }
 }
 
-const project = async ({ kind, source }) => {
-  const sourceId = source?.sourceId
-  let sources = null
-  let transceiver = null
-  if (kind === 'video') {
-    sources = state.Sources.videoSources
-    transceiver = state.ViewConnection.trackEvent?.video?.transceiver
-  } else if (kind === 'audio') {
-    sources = state.Sources.audioSources
-    transceiver = state.ViewConnection.trackEvent?.audio?.transceiver
-  }
+// const switchProject = async ({ source }) => {
+//   gsap.registerPlugin(Flip);
+//   const id = `sidePlayer${source.mid}`
+//   const currentElementRef = 'player'
+//   const playerVideo = document.getElementById(currentElementRef);
+//   const sideVideo = document.getElementById(id);
+//   const statePlayer = Flip.getState(playerVideo);
+//   const stateSide = Flip.getState(sideVideo);
+//   const sideParent = sideVideo.parentElement;
+//   sideParent.insertBefore(playerVideo, sideVideo.nextSibling);
+//   const playerParent  = document.getElementById('main-source');
+//   const spanElement = playerParent.querySelector('span')
+//   playerParent.insertBefore(sideVideo, spanElement);
+//   playerVideo.id = playerVideo.ref = id
+//   sideVideo.id = sideVideo.ref = currentElementRef
+//   const duration = this.animate ? 0.8 : 0
+//   Flip.from(statePlayer, {duration, ease: "power1.inOut"});
+//   Flip.from(stateSide, {duration, ease: "power1.inOut"});
+// }
 
-  if (state.Controls.castIsConnected) {
-    sendLoadRequest()
-  } else if (!(sourceId === null && !sources.length)) {
-    const mediaId = transceiver?.mid ?? null
-
-    await state.ViewConnection.millicastView.project(sourceId, [
-      {
-        trackId: source.trackId,
-        mediaId,
-        ...(kind === 'video' && { promote: true }),
-        media: kind
-      },
-    ])
-  }
-}
 
 export const handleProjectVideo = async (what, where, trackId, layer, promote) => {
   await state.ViewConnection.millicastView.project(what, [

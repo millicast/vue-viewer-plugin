@@ -149,9 +149,7 @@ export default {
         let selectedQualityLayer
         if (videoMid in this.getActiveMedias() && this.selectedQuality?.simulcastIdx !== undefined) {
           const selectedTranciverMedias = this.getActiveMedias()[videoMid]
-          console.log('selectedTranciverMedias',selectedTranciverMedias)
           this.setMainTransceiverMedias(selectedTranciverMedias)
-          console.log('post')
           const mediaSelected = selectedTranciverMedias.layers.find(layer => layer.simulcastIdx === this.selectedQuality.simulcastIdx)
           selectedQualityLayer = {
             encodingId: mediaSelected?.encodingId,
