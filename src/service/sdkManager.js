@@ -161,7 +161,8 @@ const updateInactiveBroadcastState = (event) => {
 }
 
 const updateLayersBroadcastState = (event) => {
-  if ('0' in event.data.medias) {
+  const source = state.Sources.selectedVideoSource
+  if (source.mid in event.data.medias) {
     layers.updateLayers(event)
   } else {
     layers.deleteLayers()

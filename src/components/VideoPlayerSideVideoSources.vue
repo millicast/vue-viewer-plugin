@@ -55,7 +55,7 @@ export default {
       playerRef: null,
       enableClick: true,
       toast: new CustomToast(),
-      proyectedMain: {},
+      projectedMain: {},
       trackMId: {0 : 0},
     }
   },
@@ -88,7 +88,6 @@ export default {
   async mounted() {
     selectSource({ kind: 'video', source: this.videoSources[0] })
     this.setMainLabel(this.videoSources[0].name)
-    this.setProyectedMain(this.videoSources[0])
     this.sourceRemoteTracks.forEach(async (remoteTrack) => {
       await projectRemoteTracks(remoteTrack)
       const mid = remoteTrack.transceiver.mid
@@ -123,23 +122,24 @@ export default {
   },
   methods: {
     ...mapMutations('Controls', ['toggleFullscreen', 'setIsSplittedView']),
-    ...mapMutations('Sources', ['setMainLabel','setProyectedMain','setPreviousMainLabel', 'replaceSourceRemoteTrack']),//, 'updateTransceiverSourceState']),
+    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'replaceSourceRemoteTrack']),//, 'updateTransceiverSourceState']),
+    ...mapMutations('Layers', ['setMainTransceiverMedias']),
     ...mapGetters('Layers', ['getActiveMedias','getActiveMainTransceiverMedias']),
-    async switchProjection(proyectedVideoMid) {
+    async switchProjection(projectedVideoMid) {
 
-      const videoMid = this.trackMId[proyectedVideoMid]
+      const videoMid = this.trackMId[projectedVideoMid]
       await nextTick()
       this.enableClick = false
       this.playerRef = document.getElementById(this.currentElementRef)
       // Select the source from the transceiver state and project it in the main video
       let source = this.transceiverSourceState[videoMid]
       let lowQualityLayer
-      let midProjectedInMain = this.proyectedMain?.mid || this.videoSources[0].mid
+      let midProjectedInMain = this.projectedMain?.mid || this.videoSources[0].mid
       const sourceName =  source.name
       const audioSource = this.audioSources.find(currentSoruce => currentSoruce.name === sourceName)
       if (this.getVideoHasMain) {
         if (this.viewer.showLabels) {
-          this.$refs[`sideLabel${proyectedVideoMid}`][0].textContent = this.transceiverSourceState[midProjectedInMain].name        
+          this.$refs[`sideLabel${projectedVideoMid}`][0].textContent = this.transceiverSourceState[midProjectedInMain].name        
         }
         const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
         midProjectedInMain = this.transceiverSourceState[midProjectedInMain].mid
@@ -148,8 +148,11 @@ export default {
         }
         let selectedQualityLayer
         if (videoMid in this.getActiveMedias() && this.selectedQuality?.simulcastIdx !== undefined) {
-          const lay = this.getActiveMedias()[videoMid].layers
-          const mediaSelected = lay.find(layer => layer.simulcastIdx === this.selectedQuality.simulcastIdx)
+          const selectedTranciverMedias = this.getActiveMedias()[videoMid]
+          console.log('selectedTranciverMedias',selectedTranciverMedias)
+          this.setMainTransceiverMedias(selectedTranciverMedias)
+          console.log('post')
+          const mediaSelected = selectedTranciverMedias.layers.find(layer => layer.simulcastIdx === this.selectedQuality.simulcastIdx)
           selectedQualityLayer = {
             encodingId: mediaSelected?.encodingId,
             spatialLayerId: mediaSelected?.spatialLayerId,
@@ -175,13 +178,12 @@ export default {
           layers,
           false,
         )
-        this.swapVideos(`sidePlayer${proyectedVideoMid}`)
+        this.swapVideos(`sidePlayer${projectedVideoMid}`)
         // this.updateTransceiverSourceState({ source })
       }
       this.setMainLabel(source.sourceId ?? source.name)
-      this.setProyectedMain(this.transceiverSourceState[videoMid])
-      // await selectSource({ kind: 'video', source })
-      this.proyectedMain = source
+      await selectSource({ kind: 'video', source: this.transceiverSourceState[videoMid] })
+      this.projectedMain = source
 
       if (this.isGrid) {
         this.setIsSplittedView(false)
@@ -195,7 +197,7 @@ export default {
         }
       }
       this.trackMId[0] = videoMid
-      this.trackMId[proyectedVideoMid] = midProjectedInMain
+      this.trackMId[projectedVideoMid] = midProjectedInMain
       this.enableClick = true
     },
     swapVideos(id) {

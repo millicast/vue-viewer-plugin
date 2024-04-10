@@ -93,7 +93,7 @@ export const handleSelectQuality = (media) => {
     selectedData.spatialLayerId = parseInt(media.spatialLayerId)
   }
 
-  const source = state.Sources.proyectedMain
+  const source = state.Sources.selectedVideoSource
   const mediaLayers = state.Layers.medias[source.mid].layers
   const quality = mediaLayers.find(layer => layer.simulcastIdx === media.simulcastIdx)
   state.ViewConnection.millicastView?.project(source.sourceId, [
