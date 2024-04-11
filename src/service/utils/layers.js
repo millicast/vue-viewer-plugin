@@ -135,25 +135,25 @@ const setSideSourcesQualityLow = (newLayers) => {
 
     const transceiverSourceState = state.Sources.transceiverSourceState
 
-    const videoSourceKeys = keys.reduce((videoSourceKeys, key) => {
+    keys.reduce((videoSourceKeys, key) => {
       videoSourceKeys.push(transceiverSourceState[key])
       return videoSourceKeys
     }, [])
 
     // Set low quality for side video source streams
-    videoSourceKeys.forEach( (source) => {
-      if ( source.sourceId !== null && source.mid in diffActiveLayers ){
-        diffActiveLayers[source.mid].sort((layer, nextLayer) =>  nextLayer.id - layer.id )   
-        state.ViewConnection.millicastView?.project(source.name, [
-          { 
-            mediaId: source.mid, 
-            layer: {encodingId: diffActiveLayers[source.mid].pop().id}, 
-            trackId: source.trackId, 
-            media: 'video'
-          }
-        ]) 
-      }
-    })
+    // videoSourceKeys.forEach( (source) => {
+    //   if ( source.sourceId !== null && source.mid in diffActiveLayers ){
+    //     diffActiveLayers[source.mid].sort((layer, nextLayer) =>  nextLayer.id - layer.id )   
+    //     state.ViewConnection.millicastView?.project(source.name, [
+    //       { 
+    //         mediaId: source.mid, 
+    //         layer: {encodingId: diffActiveLayers[source.mid].pop().id}, 
+    //         trackId: source.trackId, 
+    //         media: 'video'
+    //       }
+    //     ]) 
+    //   }
+    // })
 
     previousSideLayers = newLayers
   } 
