@@ -3,8 +3,8 @@ import store from '../../store'
 const { commit, state, getters } = store
 // import { sendLoadRequest } from './cast'
 import * as layers from './layers'
-// import gsap from 'gsap';
-// import { Flip } from "gsap/Flip";
+import gsap from 'gsap';
+import { Flip } from "gsap/Flip";
 
 export const getTracks = (data) => {
   const sourceId = data.sourceId || null
@@ -180,56 +180,35 @@ const deleteSource = (kind, sourceId) => {
         }
       }
     }
-
     commit('Sources/removeTransceiverSourceState', sourceId)
   }
-
   commit('Sources/removeSourceRemoteTrack', sourceId)
   commit('Sources/removeSource', { kind, sourceId: sourceId })
   handleSelectSource({ kind, source: selectedSource })
 }
 
 export const handleSelectSource = async ({ kind, source }) => {
-  // let track = null
-  // let selectedSource = null
-
-  // if (kind === 'video') {
-  //   layers.deleteLayers()
-  //   track = state.ViewConnection.trackEvent.video.track
-  //   selectedSource = state.Sources.selectedVideoSource
-  // } else if (kind === 'audio') {
-  //   track = state.ViewConnection.trackEvent.audio.track
-  //   selectedSource = state.Sources.selectedVideoSource
-  //   selectedSource = state.Sources.selectedAudioSource
-  // }
   commit('Sources/setSelectedSource', { kind, selectedSource: source })
-  // if (source && source?.name !== 'none' && track) {
-  //   await switchProject({ source })
-  //   if (selectedSource.name !== 'none') {
-  //     commit('Controls/setTrackWarning', false)
-  //   }
-  // }
 }
 
-// const switchProject = async ({ source }) => {
-//   gsap.registerPlugin(Flip);
-//   const id = `sidePlayer${source.mid}`
-//   const currentElementRef = 'player'
-//   const playerVideo = document.getElementById(currentElementRef);
-//   const sideVideo = document.getElementById(id);
-//   const statePlayer = Flip.getState(playerVideo);
-//   const stateSide = Flip.getState(sideVideo);
-//   const sideParent = sideVideo.parentElement;
-//   sideParent.insertBefore(playerVideo, sideVideo.nextSibling);
-//   const playerParent  = document.getElementById('main-source');
-//   const spanElement = playerParent.querySelector('span')
-//   playerParent.insertBefore(sideVideo, spanElement);
-//   playerVideo.id = playerVideo.ref = id
-//   sideVideo.id = sideVideo.ref = currentElementRef
-//   const duration = this.animate ? 0.8 : 0
-//   Flip.from(statePlayer, {duration, ease: "power1.inOut"});
-//   Flip.from(stateSide, {duration, ease: "power1.inOut"});
-// }
+export const switchProject = async ({ id }) => {
+  gsap.registerPlugin(Flip);
+  const currentElementRef = 'player'
+  const playerVideo = document.getElementById(currentElementRef);
+  const sideVideo = document.getElementById(id);
+  const statePlayer = Flip.getState(playerVideo);
+  const stateSide = Flip.getState(sideVideo);
+  const sideParent = sideVideo.parentElement;
+  sideParent.insertBefore(playerVideo, sideVideo.nextSibling);
+  const playerParent  = document.getElementById('main-source');
+  const spanElement = playerParent.querySelector('span')
+  playerParent.insertBefore(sideVideo, spanElement);
+  playerVideo.id = playerVideo.ref = id
+  sideVideo.id = sideVideo.ref = currentElementRef
+  const duration = 0.8
+  Flip.from(statePlayer, {duration, ease: "power1.inOut"});
+  Flip.from(stateSide, {duration, ease: "power1.inOut"});
+}
 
 
 export const handleProjectVideo = async (what, where, trackId, layer, promote) => {

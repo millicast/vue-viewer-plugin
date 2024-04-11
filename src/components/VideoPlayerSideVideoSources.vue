@@ -42,6 +42,7 @@ import {
   projectVideo,
   unprojectMultiview,
 } from '../service/sdkManager'
+import { switchProject } from '../service/utils/sources'
 import CustomToast from '../service/utils/toast'
 import gsap from 'gsap';
 import { Flip } from "gsap/Flip";
@@ -55,8 +56,6 @@ export default {
       playerRef: null,
       enableClick: true,
       toast: new CustomToast(),
-      projectedMain: {},
-      trackMId: {0 : 0},
     }
   },
   computed: {
@@ -67,6 +66,8 @@ export default {
       'transceiverSourceState',
       'audioFollowsVideo',
       'animate',
+      'trackMId',
+      'selectedVideoSource',
     ]),
     ...mapState('Controls', {
         fullscreen: state => state.fullscreen, 
@@ -91,7 +92,7 @@ export default {
     this.sourceRemoteTracks.forEach(async (remoteTrack) => {
       await projectRemoteTracks(remoteTrack)
       const mid = remoteTrack.transceiver.mid
-      this.trackMId[mid] = mid
+      this.setTrackMId({key: mid, value: mid})
     }
     )
 
@@ -110,7 +111,7 @@ export default {
           const lastIndex = newLenght - 1
           await projectRemoteTracks(this.sourceRemoteTracks[lastIndex])
           const mid = this.sourceRemoteTracks[lastIndex].transceiver.mid
-          this.trackMId[mid] = mid
+          this.setTrackMId({key: mid, value: mid})
         } else {
           this.sourceRemoteTracks.forEach(async (remoteTrack) => {
             await projectRemoteTracks(remoteTrack)
@@ -122,7 +123,7 @@ export default {
   },
   methods: {
     ...mapMutations('Controls', ['toggleFullscreen', 'setIsSplittedView']),
-    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'replaceSourceRemoteTrack']),//, 'updateTransceiverSourceState']),
+    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'replaceSourceRemoteTrack','setTrackMId']),//, 'updateTransceiverSourceState']),
     ...mapMutations('Layers', ['setMainTransceiverMedias']),
     ...mapGetters('Layers', ['getActiveMedias','getActiveMainTransceiverMedias']),
     async switchProjection(projectedVideoMid) {
@@ -134,12 +135,12 @@ export default {
       // Select the source from the transceiver state and project it in the main video
       let source = this.transceiverSourceState[videoMid]
       let lowQualityLayer
-      let midProjectedInMain = this.projectedMain?.mid || this.videoSources[0].mid
+      let midProjectedInMain = this.selectedVideoSource?.mid || this.videoSources[0].mid
       const sourceName =  source.name
       const audioSource = this.audioSources.find(currentSoruce => currentSoruce.name === sourceName)
       if (this.getVideoHasMain) {
         if (this.viewer.showLabels) {
-          this.$refs[`sideLabel${projectedVideoMid}`][0].textContent = this.transceiverSourceState[midProjectedInMain].name        
+          this.$refs[`sideLabel${projectedVideoMid}`][0].textContent = this.selectedVideoSource.name        
         }
         const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
         midProjectedInMain = this.transceiverSourceState[midProjectedInMain].mid
@@ -176,12 +177,12 @@ export default {
           layers,
           false,
         )
-        this.swapVideos(`sidePlayer${projectedVideoMid}`)
+        // this.swapVideos(`sidePlayer${projectedVideoMid}`)
         // this.updateTransceiverSourceState({ source })
       }
+      switchProject({id:`sidePlayer${projectedVideoMid}`})
       this.setMainLabel(source.sourceId ?? source.name)
       await selectSource({ kind: 'video', source: this.transceiverSourceState[videoMid] })
-      this.projectedMain = source
 
       if (this.isGrid) {
         this.setIsSplittedView(false)
@@ -194,8 +195,8 @@ export default {
           this.toast.showToast('error', 'There was an error selecting the desired source, try again', { timeout: 5000 })
         }
       }
-      this.trackMId[0] = videoMid
-      this.trackMId[projectedVideoMid] = midProjectedInMain
+      this.setTrackMId({key: 0, value: videoMid})
+      this.setTrackMId({key: projectedVideoMid, value: midProjectedInMain})
       this.enableClick = true
     },
     swapVideos(id) {

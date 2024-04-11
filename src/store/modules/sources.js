@@ -14,7 +14,8 @@ const defaulState = {
   sourceRemoteTracks: [],
   mainLabel: 'Main',
   transceiverSourceState: {},
-  trackIdMidMap: {}
+  trackIdMidMap: {},
+  trackMId: {0:0},
 }
 
 export default {
@@ -66,6 +67,10 @@ export default {
     },
     addTrackIdMidMapping(state, trackIdMidMapping) {
       state.trackIdMidMap[trackIdMidMapping.mid] = trackIdMidMapping.trackId
+    },
+    setTrackMId(state, trackMid) {
+      const {key,value} = trackMid
+      state.trackMId[key] = value
     },
     addSourceRemoteTrack(state, sourceRemoteTrack) {
       state.sourceRemoteTracks.push(sourceRemoteTrack)
