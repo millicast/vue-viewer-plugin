@@ -51,6 +51,7 @@ export default {
           multisource: this.paramsOptions?.multisource ?? false,
           audioFollowsVideo: this.paramsOptions?.audioFollowsVideo ?? false,
           animate: this.paramsOptions?.animate ?? false,
+          maxHeight: this.paramsOptions?.maxHeight ?? null,
           layout: this.paramsOptions?.layout ?? null,
           showLabels: this.paramsOptions?.showLabels ?? true,
           startingQuality: this.paramsOptions?.startingQuality,

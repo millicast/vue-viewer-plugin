@@ -225,13 +225,15 @@ export const handleProjectVideo = async (what, where, trackId, layer, promote) =
 
 export const handleProjectRemoteTracks = async (remoteTrack) => {
   await nextTick()
+  const maxLayerHeight = state.Params.viewer.maxHeight ? Number(state.Params.viewer.maxHeight) : null
   const sidePlayerId = 'sidePlayer' + remoteTrack.transceiver?.mid
   const sidePlayerVideo = document.getElementById(sidePlayerId)
   sidePlayerVideo.srcObject = remoteTrack.mediaStream
   handleProjectVideo(
     remoteTrack.sourceId, 
     remoteTrack.transceiver?.mid ?? null, 
-    state.Sources.transceiverSourceState[remoteTrack.transceiver?.mid].trackId
+    state.Sources.transceiverSourceState[remoteTrack.transceiver?.mid].trackId,
+    maxLayerHeight ? { maxHeight: maxLayerHeight } : null
   )
   sidePlayerVideo.muted = true
   sidePlayerVideo.autoPlay = true

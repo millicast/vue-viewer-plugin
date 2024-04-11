@@ -17,6 +17,7 @@ export const defaultViewerOptions = {
   multisource: false,
   audioFollowsVideo: false,
   animate: false,
+  maxHeight: null,
   layout: null,
   showLabels: true,
   startingQuality: null,
@@ -38,6 +39,7 @@ export default function processViewerOptions({
   multisource,
   audioFollowsVideo,
   animate,
+  maxHeight,
   layout,
   showLabels,
   startingQuality,
@@ -58,6 +60,7 @@ export default function processViewerOptions({
   options.multisource = multisource ?? false
   options.audioFollowsVideo = audioFollowsVideo ?? false
   options.animate = animate ?? false
+  options.maxHeight = maxHeight
   options.layout = layout
   options.showLabels = showLabels
   if (multisource) {
