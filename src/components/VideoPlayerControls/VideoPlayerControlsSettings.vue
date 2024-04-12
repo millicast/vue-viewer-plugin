@@ -136,7 +136,8 @@ export default {
     ...mapState('Controls', {
       dropup: (state) => state.dropup,
       trackWarning: (state) => state.trackWarning,
-      isSplittedView: (state) => state.isSplittedView
+      isSplittedView: (state) => state.isSplittedView,
+      isGrid: state => state.isGrid,
     }),
   },
   methods: {
@@ -243,20 +244,22 @@ export default {
                   spatialLayerId: lowQualityLayer?.spatialLayerId,
                   temporalLayerId: lowQualityLayer?.temporalLayerId
                 }
-                projectVideo(
-                  source.sourceId, 
-                  videoMid,
-                  source.trackId, 
-                  selectedQualityLayer,
-                  !selectedQualityLayer,
-                )
-                projectVideo(
-                  this.selectedVideoSource.sourceId, 
-                  midProjectedInMain, 
-                  this.selectedVideoSource.trackId, 
-                  layers,
-                  false,
-                )
+                if (!this.isGrid) {
+                  projectVideo(
+                    source.sourceId, 
+                    videoMid,
+                    source.trackId, 
+                    selectedQualityLayer,
+                    !selectedQualityLayer,
+                  )
+                  projectVideo(
+                    this.selectedVideoSource.sourceId, 
+                    midProjectedInMain, 
+                    this.selectedVideoSource.trackId, 
+                    layers,
+                    false,
+                  )
+                }
                 switchProject({id:`sidePlayer${key}`})
                 await selectSource({ kind: 'video', source })
                 await this.setMainLabel(source.name)
