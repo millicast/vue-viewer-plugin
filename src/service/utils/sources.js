@@ -1,7 +1,7 @@
 import { nextTick } from 'vue'
 import store from '../../store'
 const { commit, state, getters } = store
-// import { sendLoadRequest } from './cast'
+import { sendLoadRequest } from './cast'
 import * as layers from './layers'
 import gsap from 'gsap';
 import { Flip } from "gsap/Flip";
@@ -202,6 +202,29 @@ export const handleSelectSource = async ({ kind, source }) => {
     }
   }
   commit('Sources/setSelectedSource', { kind, selectedSource: source })
+}
+
+const project = async ({ kind, source }) => {
+  const sourceId = source?.sourceId
+  let sources = null
+  let transceiver = null
+  sources = state.Sources.audioSources
+  transceiver = state.ViewConnection.trackEvent?.audio?.transceiver
+
+  if (state.Controls.castIsConnected) {
+    sendLoadRequest()
+  } else if (!(sourceId === null && !sources.length)) {
+    const mediaId = transceiver?.mid ?? null
+
+    await state.ViewConnection.millicastView.project(sourceId, [
+      {
+        trackId: source.trackId,
+        mediaId,
+        ...(kind === 'video' && { promote: true }),
+        media: kind
+      },
+    ])
+  }
 }
 
 export const switchProject = async ({ id }) => {
