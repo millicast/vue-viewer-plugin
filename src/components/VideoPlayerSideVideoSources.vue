@@ -56,6 +56,7 @@ export default {
       playerRef: null,
       enableClick: true,
       toast: new CustomToast(),
+      fullScreen: false,
     }
   },
   computed: {
@@ -130,74 +131,85 @@ export default {
 
       const videoMid = this.trackMId[projectedVideoMid]
       await nextTick()
-      this.enableClick = false
-      this.playerRef = document.getElementById(this.currentElementRef)
-      // Select the source from the transceiver state and project it in the main video
-      let source = this.transceiverSourceState[videoMid]
-      let lowQualityLayer
-      let midProjectedInMain = this.selectedVideoSource?.mid || this.videoSources[0].mid
-      const sourceName =  source.name
-      const audioSource = this.audioSources.find(currentSoruce => currentSoruce.name === sourceName)
-      if (this.getVideoHasMain) {
-        if (this.viewer.showLabels) {
-          this.$refs[`sideLabel${projectedVideoMid}`][0].textContent = this.selectedVideoSource.name        
+      if( this.isGrid ) {
+        const video = document.getElementById(`sidePlayer${projectedVideoMid}`)
+        const videoParent = video.parentElement;
+        if (this.fullScreen) {
+          videoParent.classList.add('video-full-screen');
+        } else {
+          videoParent.classList.remove('video-full-screen');
         }
-        const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
-        midProjectedInMain = this.transceiverSourceState[midProjectedInMain].mid
-        if (midProjectedInMain in this.getActiveMedias()) {
-          lowQualityLayer = this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
+        this.fullScreen = !this.fullScreen
+      } else {
+        this.enableClick = false
+        this.playerRef = document.getElementById(this.currentElementRef)
+        // Select the source from the transceiver state and project it in the main video
+        let source = this.transceiverSourceState[videoMid]
+        let lowQualityLayer
+        let midProjectedInMain = this.selectedVideoSource?.mid || this.videoSources[0].mid
+        const sourceName =  source.name
+        const audioSource = this.audioSources.find(currentSoruce => currentSoruce.name === sourceName)
+        if (this.getVideoHasMain) {
+          if (this.viewer.showLabels) {
+            this.$refs[`sideLabel${projectedVideoMid}`][0].textContent = this.selectedVideoSource.name        
+          }
+          const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
+          midProjectedInMain = this.transceiverSourceState[midProjectedInMain].mid
+          if (midProjectedInMain in this.getActiveMedias()) {
+            lowQualityLayer = this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
+          }
+          let selectedQualityLayer
+          if (videoMid in this.getActiveMedias() && this.selectedQuality?.simulcastIdx !== undefined) {
+            const selectedTranciverMedias = this.getActiveMedias()[videoMid]
+            this.setMainTransceiverMedias(selectedTranciverMedias)
+            const mediaSelected = selectedTranciverMedias.layers.find(layer => layer.simulcastIdx === this.selectedQuality.simulcastIdx)
+            selectedQualityLayer = {
+              encodingId: mediaSelected?.encodingId,
+              spatialLayerId: mediaSelected?.spatialLayerId,
+              temporalLayerId: mediaSelected?.temporalLayerId
+            }
+          }
+          const layers = {
+            encodingId: lowQualityLayer?.encodingId,
+            spatialLayerId: lowQualityLayer?.spatialLayerId,
+            temporalLayerId: lowQualityLayer?.temporalLayerId
+          }
+          projectVideo(
+            source.sourceId, 
+            videoMid,
+            this.transceiverSourceState[videoMid].trackId, 
+            selectedQualityLayer,
+            !selectedQualityLayer,
+          )
+          projectVideo(
+            sourceIdProjectedInMain, 
+            midProjectedInMain, 
+            this.transceiverSourceState[midProjectedInMain].trackId, 
+            layers,
+            false,
+          )
+          // this.swapVideos(`sidePlayer${projectedVideoMid}`)
+          // this.updateTransceiverSourceState({ source })
         }
-        let selectedQualityLayer
-        if (videoMid in this.getActiveMedias() && this.selectedQuality?.simulcastIdx !== undefined) {
-          const selectedTranciverMedias = this.getActiveMedias()[videoMid]
-          this.setMainTransceiverMedias(selectedTranciverMedias)
-          const mediaSelected = selectedTranciverMedias.layers.find(layer => layer.simulcastIdx === this.selectedQuality.simulcastIdx)
-          selectedQualityLayer = {
-            encodingId: mediaSelected?.encodingId,
-            spatialLayerId: mediaSelected?.spatialLayerId,
-            temporalLayerId: mediaSelected?.temporalLayerId
+        switchProject({id:`sidePlayer${projectedVideoMid}`})
+        this.setMainLabel(source.sourceId ?? source.name)
+        await selectSource({ kind: 'video', source: this.transceiverSourceState[videoMid] })
+
+        if (this.isGrid) {
+          this.setIsSplittedView(false)
+        }
+
+        if ( audioSource && this.audioFollowsVideo ) {
+          try {
+            await selectSource({ kind: 'audio', source: audioSource })
+          } catch (error) {
+            this.toast.showToast('error', 'There was an error selecting the desired source, try again', { timeout: 5000 })
           }
         }
-        const layers = {
-          encodingId: lowQualityLayer?.encodingId,
-          spatialLayerId: lowQualityLayer?.spatialLayerId,
-          temporalLayerId: lowQualityLayer?.temporalLayerId
-        }
-        projectVideo(
-          source.sourceId, 
-          videoMid,
-          this.transceiverSourceState[videoMid].trackId, 
-          selectedQualityLayer,
-          !selectedQualityLayer,
-        )
-        projectVideo(
-          sourceIdProjectedInMain, 
-          midProjectedInMain, 
-          this.transceiverSourceState[midProjectedInMain].trackId, 
-          layers,
-          false,
-        )
-        // this.swapVideos(`sidePlayer${projectedVideoMid}`)
-        // this.updateTransceiverSourceState({ source })
+        this.setTrackMId({key: 0, value: videoMid})
+        this.setTrackMId({key: projectedVideoMid, value: midProjectedInMain})
+        this.enableClick = true
       }
-      switchProject({id:`sidePlayer${projectedVideoMid}`})
-      this.setMainLabel(source.sourceId ?? source.name)
-      await selectSource({ kind: 'video', source: this.transceiverSourceState[videoMid] })
-
-      if (this.isGrid) {
-        this.setIsSplittedView(false)
-      }
-
-      if ( audioSource && this.audioFollowsVideo ) {
-        try {
-          await selectSource({ kind: 'audio', source: audioSource })
-        } catch (error) {
-          this.toast.showToast('error', 'There was an error selecting the desired source, try again', { timeout: 5000 })
-        }
-      }
-      this.setTrackMId({key: 0, value: videoMid})
-      this.setTrackMId({key: projectedVideoMid, value: midProjectedInMain})
-      this.enableClick = true
     },
     swapVideos(id) {
       gsap.registerPlugin(Flip);
@@ -254,6 +266,14 @@ export default {
     height: 200% !important;
     width: 200% !important;
   }
+}
+
+.video-full-screen {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
 }
 
 </style>

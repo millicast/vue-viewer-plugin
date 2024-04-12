@@ -39,7 +39,8 @@
         :class="{
           show: show,
           'limit-screen': videoSources.length > 1 && isSplittedView && !isGrid,
-          'grid-player': videoSources.length > 1 && isSplittedView && isGrid
+          'grid-player': videoSources.length > 1 && isSplittedView && isGrid,
+          'video-full-screen': isVideoFullScreen
         }"
         :style="{
         cursor: isGrid? 'pointer' : '',
@@ -143,6 +144,7 @@ export default {
       controlsTimeout: 0,
       mobileFullscreen: false,
       toast: new CustomToast(),
+      isVideoFullScreen: false,
     }
   },
   mounted() {
@@ -296,7 +298,8 @@ export default {
     },
     handleWholeScreen() {
       if (this.isGrid) {
-        this.setIsSplittedView(!this.isSplittedView)
+        // this.setIsSplittedView(!this.isSplittedView)
+        this.isVideoFullScreen = !this.isVideoFullScreen
         selectSource({kind:'video', source: this.videoSources[0]})
         this.setMainLabel(this.videoSources[0].sourceId ?? this.videoSources[0].name)
       }
@@ -364,6 +367,18 @@ const getFullscreenElement = () => {
   return document.fullscreenElement || document.webkitFullscreenElement
 }
 </script>
+
+<style>
+.video-full-screen {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+</style>
 
 <style lang="scss" scoped>
 .player {
