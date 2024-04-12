@@ -188,6 +188,19 @@ const deleteSource = (kind, sourceId) => {
 }
 
 export const handleSelectSource = async ({ kind, source }) => {
+  if (kind === 'audio') {
+    let track = null
+    let selectedSource = null
+    track = state.ViewConnection.trackEvent.audio.track
+    selectedSource = state.Sources.selectedVideoSource
+    selectedSource = state.Sources.selectedAudioSource
+    if (source && source?.name !== 'none' && track) {
+      await project({ kind, source })
+      if (selectedSource.name !== 'none') {
+        commit('Controls/setTrackWarning', false)
+      }
+    }
+  }
   commit('Sources/setSelectedSource', { kind, selectedSource: source })
 }
 

@@ -40,7 +40,7 @@
           show: show,
           'limit-screen': videoSources.length > 1 && isSplittedView && !isGrid,
           'grid-player': videoSources.length > 1 && isSplittedView && isGrid,
-          'video-full-screen': isVideoFullScreen
+          'video-full-screen': isVideoFullScreen && isGrid
         }"
         :style="{
         cursor: isGrid? 'pointer' : '',
@@ -300,6 +300,7 @@ export default {
       if (this.isGrid) {
         // this.setIsSplittedView(!this.isSplittedView)
         this.isVideoFullScreen = !this.isVideoFullScreen
+      } else {
         selectSource({kind:'video', source: this.videoSources[0]})
         this.setMainLabel(this.videoSources[0].sourceId ?? this.videoSources[0].name)
       }
@@ -397,7 +398,7 @@ const getFullscreenElement = () => {
   gap: 10px;
   margin: auto;
   overflow: auto;
-  max-height: 100%;
+  scrollbar-width: none;
   padding: 10px;
   flex-grow: 0.6;
 }
@@ -498,7 +499,7 @@ const getFullscreenElement = () => {
   top: 0;
   right: 0;
   margin-bottom: -55px;
-  z-index: 1;
+  z-index: 2;
 }
 
 .controls-bottom {
@@ -506,7 +507,7 @@ const getFullscreenElement = () => {
   bottom: 0;
   right: 0;
   margin-top: -50px;
-  z-index: 1;
+  z-index: 2;
 }
 
 .side-panel {
