@@ -40,7 +40,9 @@ export default function processViewerOptions({
   showLabels,
   startingQuality,
   hideToast,
-  mainLabel
+  mainLabel,
+  forcePlayoutDelayMin,
+  forcePlayoutDelayMax,
 }) {
   const options = {}
 
@@ -80,6 +82,11 @@ export default function processViewerOptions({
   if (mainLabel) {
     options.mainLabel = mainLabel
     store.commit('Sources/setMainLabel', options.mainLabel)
+  }
+  if (forcePlayoutDelayMin && forcePlayoutDelayMax) {
+    if (parseInt(forcePlayoutDelayMin) && parseInt(forcePlayoutDelayMax)) {
+      options.forcePlayoutDelay = { min: parseInt(forcePlayoutDelayMin), max: parseInt(forcePlayoutDelayMax) }
+    }
   }
 
   store.commit('Params/setViewerOptions', { ...defaultViewerOptions, ...options })
