@@ -44,8 +44,7 @@ import {
 } from '../service/sdkManager'
 import { switchProject } from '../service/utils/sources'
 import CustomToast from '../service/utils/toast'
-import gsap from 'gsap';
-import { Flip } from "gsap/Flip";
+import { switchSourcesGrid } from '../service/utils/sources'
 
 export default {
   name: 'VideoPlayerSideVideoSources',
@@ -132,14 +131,7 @@ export default {
       const videoMid = this.trackMId[projectedVideoMid]
       await nextTick()
       if( this.isGrid ) {
-        const video = document.getElementById(`sidePlayer${projectedVideoMid}`)
-        const videoParent = video.parentElement;
-        if (this.fullScreen) {
-          videoParent.classList.add('video-full-screen');
-        } else {
-          videoParent.classList.remove('video-full-screen');
-        }
-        this.fullScreen = !this.fullScreen
+        this.fullScreen = switchSourcesGrid(projectedVideoMid, this.fullScreen)
       } else {
         this.enableClick = false
         this.playerRef = document.getElementById(this.currentElementRef)
@@ -188,8 +180,6 @@ export default {
             layers,
             false,
           )
-          // this.swapVideos(`sidePlayer${projectedVideoMid}`)
-          // this.updateTransceiverSourceState({ source })
         }
         switchProject({id:`sidePlayer${projectedVideoMid}`})
         this.setMainLabel(source.sourceId ?? source.name)
@@ -210,29 +200,6 @@ export default {
         this.setTrackMId({key: projectedVideoMid, value: midProjectedInMain})
         this.enableClick = true
       }
-    },
-    swapVideos(id) {
-      gsap.registerPlugin(Flip);
-      const playerVideo = document.getElementById(this.currentElementRef);
-      const sideVideo = document.getElementById(id);
-      const elements = document.querySelectorAll('.overflow-auto');
-      const statePlayer = Flip.getState(playerVideo);
-      const stateSide = Flip.getState(sideVideo);
-      const sideParent = sideVideo.parentElement;
-      sideParent.insertBefore(playerVideo, sideVideo.nextSibling);
-      const playerParent  = document.getElementById('main-source');
-      const spanElement = playerParent.querySelector('span')
-      playerParent.insertBefore(sideVideo, spanElement);
-      playerVideo.classList.remove('animateVideo');
-      sideVideo.classList.remove('sideAnimateVideo');
-      playerVideo.id = playerVideo.ref = id
-      sideVideo.id = sideVideo.ref = this.currentElementRef
-      elements.forEach(element => {
-        element.classList.add('overflow-auto');
-      });
-      const duration = this.animate ? 0.8 : 0
-      Flip.from(statePlayer, {duration, ease: "power1.inOut"});
-      Flip.from(stateSide, {duration, ease: "power1.inOut"});
     }
   },
 }

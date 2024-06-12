@@ -227,6 +227,20 @@ const project = async ({ kind, source }) => {
   }
 }
 
+export const switchSourcesGrid = (projectedVideoMid, fullScreen) => {
+  const video = document.getElementById(`sidePlayer${projectedVideoMid}`)
+  const videoParent = video.parentElement;
+  if (!fullScreen) {
+    videoParent.classList.add('video-full-screen');
+  } else {
+    videoParent.classList.remove('video-full-screen');
+  }
+  return !fullScreen
+}
+
+// export const switchSourcesSide = () => {
+// }
+
 export const switchProject = async ({ id }) => {
   gsap.registerPlugin(Flip);
   const currentElementRef = 'player'
