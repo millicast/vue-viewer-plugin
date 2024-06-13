@@ -2293,17 +2293,6 @@ module.exports = uncurryThis({}.isPrototypeOf);
 
 /***/ }),
 
-/***/ "3b0c":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerStatsTable_vue_vue_type_style_index_0_id_0ebd82a9_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("4c3d");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerStatsTable_vue_vue_type_style_index_0_id_0ebd82a9_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerStatsTable_vue_vue_type_style_index_0_id_0ebd82a9_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
-
-
-/***/ }),
-
 /***/ "3bbe":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2633,6 +2622,13 @@ module.exports = function (it) {
 
 /***/ }),
 
+/***/ "44e8":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
+
+/***/ }),
+
 /***/ "45fc":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -2846,13 +2842,6 @@ module.exports = function (input, pref) {
 
 /***/ }),
 
-/***/ "4c3d":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
-
-/***/ }),
-
 /***/ "4c45":
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -2989,6 +2978,17 @@ module.exports = function from(arrayLike /* , mapfn = undefined, thisArg = undef
   result.length = index;
   return result;
 };
+
+
+/***/ }),
+
+/***/ "4e34":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerStatsTable_vue_vue_type_style_index_0_id_782b12dc_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("44e8");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerStatsTable_vue_vue_type_style_index_0_id_782b12dc_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_9_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_9_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_9_oneOf_1_2_node_modules_sass_loader_dist_cjs_js_ref_9_oneOf_1_3_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_VideoPlayerStatsTable_vue_vue_type_style_index_0_id_782b12dc_lang_scss_scoped_true__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
 
 
 /***/ }),
@@ -16499,28 +16499,28 @@ function VideoPlayerControlsSettingsStatsvue_type_template_id_00e40a59_scoped_tr
 }
 // CONCATENATED MODULE: ./src/components/VideoPlayerControls/VideoPlayerControlsSettingsStats.vue?vue&type=template&id=00e40a59&scoped=true
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerStatsTable.vue?vue&type=template&id=0ebd82a9&scoped=true
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerStatsTable.vue?vue&type=template&id=782b12dc&scoped=true
 
 
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId = function _withScopeId(n) {
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-0ebd82a9"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId = function _withScopeId(n) {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["pushScopeId"])("data-v-782b12dc"), n = n(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["popScopeId"])(), n;
 };
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_1 = {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_1 = {
   class: "table table-sm table-dark table-borderless fixed-top"
 };
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_2 = {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_2 = {
   key: 0,
   class: "d-flex align-items-center"
 };
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_3 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_3 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("span", null, "Source:", -1);
 });
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_4 = ["value"];
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_5 = {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_4 = ["value"];
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_5 = {
   colspan: "2",
   class: "text-right"
 };
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_6 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_6 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("tr", {
     class: "row mx-0 text-left"
   }, [/*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("th", {
@@ -16531,50 +16531,50 @@ var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_6 = /
     class: "col-6"
   }, "Value")], -1);
 });
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_7 = {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_7 = {
   key: 0,
   class: "row mx-0"
 };
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_8 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_8 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Server Id", -1);
 });
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_9 = {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_9 = {
   class: "col-6"
 };
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_10 = {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_10 = {
   key: 1,
   class: "row mx-0"
 };
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_11 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_11 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Stream View Id", -1);
 });
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_12 = {
-  class: "col-5"
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_12 = {
+  class: "col-5 overflow-ellipsis"
 };
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_13 = {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_13 = {
   class: "col-1"
 };
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_14 = {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_14 = {
   key: 2,
   class: "row mx-0"
 };
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_15 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_15 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "RTT", -1);
 });
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_16 = {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_16 = {
   class: "col-6"
 };
 var _hoisted_17 = {
   key: 3,
   class: "row mx-0"
 };
-var _hoisted_18 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_18 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Resolution", -1);
@@ -16586,19 +16586,19 @@ var _hoisted_20 = {
   key: 4,
   class: "row mx-0"
 };
-var _hoisted_21 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_21 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "FPS", -1);
 });
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_22 = {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_22 = {
   class: "col-6"
 };
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_23 = {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_23 = {
   key: 5,
   class: "row mx-0"
 };
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_24 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_24 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Bitrate", -1);
@@ -16610,7 +16610,7 @@ var _hoisted_26 = {
   key: 6,
   class: "row mx-0"
 };
-var _hoisted_27 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_27 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Audio Bitrate", -1);
@@ -16622,7 +16622,7 @@ var _hoisted_29 = {
   key: 7,
   class: "row mx-0"
 };
-var _hoisted_30 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_30 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Total Received", -1);
@@ -16630,23 +16630,23 @@ var _hoisted_30 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a
 var _hoisted_31 = {
   class: "col-6"
 };
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_32 = {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_32 = {
   key: 8,
   class: "row mx-0"
 };
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_33 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_33 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Audio Total Received", -1);
 });
-var VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_34 = {
+var VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_34 = {
   class: "col-6"
 };
 var _hoisted_35 = {
   key: 9,
   class: "row mx-0"
 };
-var _hoisted_36 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_36 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Packet Loss", -1);
@@ -16658,7 +16658,7 @@ var _hoisted_38 = {
   key: 10,
   class: "row mx-0"
 };
-var _hoisted_39 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_39 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Audio Packet Loss", -1);
@@ -16670,7 +16670,7 @@ var _hoisted_41 = {
   key: 11,
   class: "row mx-0"
 };
-var _hoisted_42 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_42 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Video Jitter", -1);
@@ -16682,7 +16682,7 @@ var _hoisted_44 = {
   key: 12,
   class: "row mx-0"
 };
-var _hoisted_45 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_45 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Audio Jitter", -1);
@@ -16694,7 +16694,7 @@ var _hoisted_47 = {
   key: 13,
   class: "row mx-0"
 };
-var _hoisted_48 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_48 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Capture timestamp", -1);
@@ -16704,7 +16704,7 @@ var _hoisted_50 = {
   key: 14,
   class: "row mx-0"
 };
-var _hoisted_51 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_51 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Capture delta time", -1);
@@ -16714,7 +16714,7 @@ var _hoisted_53 = {
   key: 15,
   class: "row mx-0"
 };
-var _hoisted_54 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_54 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6"
   }, "Codecs", -1);
@@ -16724,7 +16724,7 @@ var _hoisted_56 = {
   key: 16,
   class: "row mx-0"
 };
-var _hoisted_57 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_57 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6 text-break"
   }, "Timestamp", -1);
@@ -16734,7 +16734,7 @@ var _hoisted_59 = {
   key: 17,
   class: "row mx-0"
 };
-var _hoisted_60 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_60 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6 text-break"
   }, "Server", -1);
@@ -16744,7 +16744,7 @@ var _hoisted_62 = {
   key: 18,
   class: "row mx-0"
 };
-var _hoisted_63 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_63 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-6 text-break"
   }, "Cluster", -1);
@@ -16754,7 +16754,7 @@ var _hoisted_65 = {
   key: 19,
   class: "row mx-0"
 };
-var _hoisted_66 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_withScopeId(function () {
+var _hoisted_66 = /*#__PURE__*/VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_withScopeId(function () {
   return /*#__PURE__*/Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     class: "col-12 center"
   }, null, -1);
@@ -16768,11 +16768,11 @@ var _hoisted_69 = {
   class: "col-12",
   align: "center"
 };
-function VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
+function VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_render(_ctx, _cache, $props, $setup, $data, $options) {
   var _ctx$millicastView, _ctx$millicastView2, _$options$video, _$options$video2, _$options$video3, _$options$video4, _$options$audio, _$options$video5, _$options$audio2, _$options$video6, _$options$audio3, _$options$video7, _$options$audio4;
-  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("table", VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("thead", null, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("tr", {
+  return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("table", VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_1, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("thead", null, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("tr", {
     class: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeClass"])(["row mx-0 align-items-center", $options.multiviewStatsAvailable ? 'justify-content-between' : 'justify-content-end'])
-  }, [$options.multiviewStatsAvailable ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("th", VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_2, [VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_3, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("select", {
+  }, [$options.multiviewStatsAvailable ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("th", VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_2, [VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_3, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["withDirectives"])(Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("select", {
     class: "ml-2 source-select",
     "onUpdate:modelValue": _cache[0] || (_cache[0] = function ($event) {
       return $data.selectedSourceMid = $event;
@@ -16784,22 +16784,22 @@ function VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_render(_
     return Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("option", {
       key: source.sourceId,
       value: source.mid
-    }, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(source.name), 9, VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_4);
-  }), 128))], 544), [[external_commonjs_vue_commonjs2_vue_root_Vue_["vModelSelect"], $data.selectedSourceMid]])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("th", VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_5, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
+    }, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(source.name), 9, VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_4);
+  }), 128))], 544), [[external_commonjs_vue_commonjs2_vue_root_Vue_["vModelSelect"], $data.selectedSourceMid]])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("th", VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_5, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "bi ml-viewer-bi-x-lg",
     onClick: _cache[2] || (_cache[2] = function () {
       return $props.close && $props.close.apply($props, arguments);
     })
-  })])], 2), VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_6]), $options.hasStats ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tbody", {
+  })])], 2), VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_6]), $options.hasStats ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tbody", {
     key: 0,
     style: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["normalizeStyle"])([_ctx.isMobile ? 'overflow-x: auto;' : 'overflow-x: hidden;']),
     class: "text-left videoStats"
-  }, [(_ctx$millicastView = _ctx.millicastView) !== null && _ctx$millicastView !== void 0 && (_ctx$millicastView = _ctx$millicastView.signaling) !== null && _ctx$millicastView !== void 0 && _ctx$millicastView.subscriberId ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_7, [VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_8, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_9, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(_ctx.millicastView.signaling.subscriberId), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_ctx$millicastView2 = _ctx.millicastView) !== null && _ctx$millicastView2 !== void 0 && (_ctx$millicastView2 = _ctx$millicastView2.signaling) !== null && _ctx$millicastView2 !== void 0 && _ctx$millicastView2.streamViewId ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_10, [VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_11, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_12, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(_ctx.millicastView.signaling.streamViewId), 1), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_13, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
+  }, [(_ctx$millicastView = _ctx.millicastView) !== null && _ctx$millicastView !== void 0 && (_ctx$millicastView = _ctx$millicastView.signaling) !== null && _ctx$millicastView !== void 0 && _ctx$millicastView.subscriberId ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_7, [VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_8, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_9, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(_ctx.millicastView.signaling.subscriberId), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_ctx$millicastView2 = _ctx.millicastView) !== null && _ctx$millicastView2 !== void 0 && (_ctx$millicastView2 = _ctx$millicastView2.signaling) !== null && _ctx$millicastView2 !== void 0 && _ctx$millicastView2.streamViewId ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_10, [VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_11, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_12, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])(_ctx.millicastView.signaling.streamViewId), 1), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_13, [Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("i", {
     class: "ml-viewer-bi-copy",
     onClick: _cache[3] || (_cache[3] = function ($event) {
       return $options.copyText(_ctx.millicastView.signaling.streamViewId);
     })
-  })])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $data.stats.currentRoundTripTime ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_14, [VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_15, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_16, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatMilliseconds($data.stats.currentRoundTripTime)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video = $options.video) !== null && _$options$video !== void 0 && _$options$video.frameWidth && (_$options$video2 = $options.video) !== null && _$options$video2 !== void 0 && _$options$video2.frameHeight ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_17, [_hoisted_18, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_19, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])("".concat($options.video.frameWidth, "x").concat($options.video.frameHeight)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video3 = $options.video) !== null && _$options$video3 !== void 0 && _$options$video3.framesPerSecond ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_20, [_hoisted_21, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_22, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.video.framesPerSecond), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video4 = $options.video) !== null && _$options$video4 !== void 0 && _$options$video4.bitrate ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_23, [VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_24, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_25, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatBitrate($options.video.bitrate)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$audio = $options.audio) !== null && _$options$audio !== void 0 && _$options$audio.bitrate ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_26, [_hoisted_27, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_28, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatBitrate($options.audio.bitrate)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video5 = $options.video) !== null && _$options$video5 !== void 0 && _$options$video5.totalBytesReceived ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_29, [_hoisted_30, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_31, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatTotalBytes($options.video.totalBytesReceived)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$audio2 = $options.audio) !== null && _$options$audio2 !== void 0 && _$options$audio2.totalBytesReceived ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_32, [VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_33, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_hoisted_34, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatTotalBytes($options.audio.totalBytesReceived)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$video6 = $options.video) === null || _$options$video6 === void 0 ? void 0 : _$options$video6.totalPacketsLost) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_35, [_hoisted_36, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_37, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.video.totalPacketsLost), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$audio3 = $options.audio) === null || _$options$audio3 === void 0 ? void 0 : _$options$audio3.totalPacketsLost) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_38, [_hoisted_39, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_40, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.audio.totalPacketsLost), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$video7 = $options.video) === null || _$options$video7 === void 0 ? void 0 : _$options$video7.jitter) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_41, [_hoisted_42, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_43, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatMilliseconds($options.video.jitter)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$audio4 = $options.audio) === null || _$options$audio4 === void 0 ? void 0 : _$options$audio4.jitter) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_44, [_hoisted_45, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_46, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatMilliseconds($options.audio.jitter)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $options.videoCaptureTimestamp ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_47, [_hoisted_48, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
+  })])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $data.stats.currentRoundTripTime ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_14, [VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_15, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_16, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatMilliseconds($data.stats.currentRoundTripTime)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video = $options.video) !== null && _$options$video !== void 0 && _$options$video.frameWidth && (_$options$video2 = $options.video) !== null && _$options$video2 !== void 0 && _$options$video2.frameHeight ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_17, [_hoisted_18, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_19, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])("".concat($options.video.frameWidth, "x").concat($options.video.frameHeight)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video3 = $options.video) !== null && _$options$video3 !== void 0 && _$options$video3.framesPerSecond ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_20, [_hoisted_21, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_22, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.video.framesPerSecond), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video4 = $options.video) !== null && _$options$video4 !== void 0 && _$options$video4.bitrate ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_23, [VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_24, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_25, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatBitrate($options.video.bitrate)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$audio = $options.audio) !== null && _$options$audio !== void 0 && _$options$audio.bitrate ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_26, [_hoisted_27, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_28, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatBitrate($options.audio.bitrate)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$video5 = $options.video) !== null && _$options$video5 !== void 0 && _$options$video5.totalBytesReceived ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_29, [_hoisted_30, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_31, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatTotalBytes($options.video.totalBytesReceived)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), (_$options$audio2 = $options.audio) !== null && _$options$audio2 !== void 0 && _$options$audio2.totalBytesReceived ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_32, [VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_33, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_hoisted_34, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatTotalBytes($options.audio.totalBytesReceived)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$video6 = $options.video) === null || _$options$video6 === void 0 ? void 0 : _$options$video6.totalPacketsLost) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_35, [_hoisted_36, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_37, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.video.totalPacketsLost), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$audio3 = $options.audio) === null || _$options$audio3 === void 0 ? void 0 : _$options$audio3.totalPacketsLost) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_38, [_hoisted_39, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_40, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.audio.totalPacketsLost), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$video7 = $options.video) === null || _$options$video7 === void 0 ? void 0 : _$options$video7.jitter) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_41, [_hoisted_42, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_43, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatMilliseconds($options.video.jitter)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), ((_$options$audio4 = $options.audio) === null || _$options$audio4 === void 0 ? void 0 : _$options$audio4.jitter) !== undefined ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_44, [_hoisted_45, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", _hoisted_46, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.formatMilliseconds($options.audio.jitter)), 1)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $options.videoCaptureTimestamp ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_47, [_hoisted_48, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
     textContent: Object(external_commonjs_vue_commonjs2_vue_root_Vue_["toDisplayString"])($options.videoCaptureTimestamp),
     class: "col-6"
   }, null, 8, _hoisted_49)])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true), $options.videoCaptureDelta ? (Object(external_commonjs_vue_commonjs2_vue_root_Vue_["openBlock"])(), Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementBlock"])("tr", _hoisted_50, [_hoisted_51, Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createElementVNode"])("td", {
@@ -16826,7 +16826,7 @@ function VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_render(_
     }
   }, "Close stats")])])) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)], 4)) : Object(external_commonjs_vue_commonjs2_vue_root_Vue_["createCommentVNode"])("", true)]);
 }
-// CONCATENATED MODULE: ./src/components/VideoPlayerStatsTable.vue?vue&type=template&id=0ebd82a9&scoped=true
+// CONCATENATED MODULE: ./src/components/VideoPlayerStatsTable.vue?vue&type=template&id=782b12dc&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.date.to-iso-string.js
 var es_date_to_iso_string = __webpack_require__("accc");
@@ -17004,8 +17004,8 @@ var formatNtpToEpoch = function formatNtpToEpoch(value) {
 };
 // CONCATENATED MODULE: ./src/components/VideoPlayerStatsTable.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/components/VideoPlayerStatsTable.vue?vue&type=style&index=0&id=0ebd82a9&lang=scss&scoped=true
-var VideoPlayerStatsTablevue_type_style_index_0_id_0ebd82a9_lang_scss_scoped_true = __webpack_require__("3b0c");
+// EXTERNAL MODULE: ./src/components/VideoPlayerStatsTable.vue?vue&type=style&index=0&id=782b12dc&lang=scss&scoped=true
+var VideoPlayerStatsTablevue_type_style_index_0_id_782b12dc_lang_scss_scoped_true = __webpack_require__("4e34");
 
 // CONCATENATED MODULE: ./src/components/VideoPlayerStatsTable.vue
 
@@ -17015,7 +17015,7 @@ var VideoPlayerStatsTablevue_type_style_index_0_id_0ebd82a9_lang_scss_scoped_tru
 
 
 
-const VideoPlayerStatsTable_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerStatsTablevue_type_script_lang_js, [['render',VideoPlayerStatsTablevue_type_template_id_0ebd82a9_scoped_true_render],['__scopeId',"data-v-0ebd82a9"]])
+const VideoPlayerStatsTable_exports_ = /*#__PURE__*/exportHelper_default()(VideoPlayerStatsTablevue_type_script_lang_js, [['render',VideoPlayerStatsTablevue_type_template_id_782b12dc_scoped_true_render],['__scopeId',"data-v-782b12dc"]])
 
 /* harmony default export */ var VideoPlayerStatsTable = (VideoPlayerStatsTable_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/VideoPlayerControls/VideoPlayerControlsSettingsStats.vue?vue&type=script&lang=js

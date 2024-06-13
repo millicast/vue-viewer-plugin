@@ -47,7 +47,7 @@
       </tr>
       <tr v-if="millicastView?.signaling?.streamViewId" class="row mx-0">
         <td class="col-6">Stream View Id</td>
-        <td class="col-5">
+        <td class="col-5 overflow-ellipsis">
           {{ millicastView.signaling.streamViewId }}
         </td>
         <td class="col-1">
@@ -382,6 +382,12 @@ i {
   color: white;
   background: #343a40e6;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+td.overflow-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
   white-space: nowrap;
 }
 
