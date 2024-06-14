@@ -103,8 +103,11 @@
       </div>
       <!-- SIDE SOURCES -->
       <div
-        v-if="videoSources.length > 1 && isSplittedView"
-        :class="!isGrid ? 'side-panel overflow-auto sc1': ''"
+        v-if="videoSources.length > 1"
+        :class="{
+          'side-panel overflow-auto sc1': !isGrid,
+          'hide-sidebar': !isSplittedView
+         }"
         :style="!isGrid ? 'scroll-snap-type: y mandatory': 'display: contents'"
         @mousemove="showControls"
       >
@@ -408,6 +411,10 @@ const getFullscreenElement = () => {
   justify-content: center;
   align-items: center;
   z-index: 1;
+}
+
+.hide-sidebar {
+  display: none !important;
 }
 
 .controls {
