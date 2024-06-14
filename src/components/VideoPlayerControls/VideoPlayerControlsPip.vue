@@ -38,12 +38,14 @@ export default {
   },
   methods: {
     togglePip() {
+      const videoElement = document.getElementById('player');
       if (
         !this.pip &&
         this.video.srcObject &&
-        this.video.nodeName === 'VIDEO'
+        this.video.nodeName === 'VIDEO' &&
+        videoElement
       ) {
-        this.video.requestPictureInPicture()
+        videoElement.requestPictureInPicture()
       } else {
         document.exitPictureInPicture()
       }
