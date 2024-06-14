@@ -12,6 +12,7 @@
         class="videoText"
         :class="isGrid ? 'videoGrid' : '' "
         v-on:click="() => enableClick && switchProjection(source.transceiver?.mid)"
+        @dblclick="toggleFullscreen"
       >
         <video
           :id="`sidePlayer${source.transceiver?.mid}`"
