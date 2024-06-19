@@ -209,6 +209,7 @@ export default {
 <style scoped>
 video {
   width: 100%;
+  height: 100%;
   max-height: 100vh;
   pointer-events: none;
   border-radius: 0.25rem;
