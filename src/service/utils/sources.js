@@ -255,6 +255,7 @@ export const switchProject = async ({ id }) => {
   playerParent.insertBefore(sideVideo, spanElement);
   playerVideo.id = playerVideo.ref = id
   sideVideo.id = sideVideo.ref = currentElementRef
+  commit('Controls/setVideo', sideVideo)
   const duration = state.Sources.animate ? 0.8 : 0
   Flip.from(statePlayer, {duration, ease: "power1.inOut"});
   Flip.from(stateSide, {duration, ease: "power1.inOut"});
