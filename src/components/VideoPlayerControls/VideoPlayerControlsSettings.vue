@@ -218,9 +218,7 @@ export default {
         switch (dropup) {
           case 'videoTracks': {
             const videoTrackChange = async (source) => {
-              console.log(this.isSplittedView)
               try {
-                // if (this.isSplittedView) {
                   const key = getKeyByValue(source.mid);
                   const videoMid = source.mid
                   if (this.isGrid) {
@@ -252,22 +250,6 @@ export default {
                       temporalLayerId: lowQualityLayer?.temporalLayerId
                     }
                     if (!this.isGrid) {
-                      console.log(
-                        "primero",
-                        this.selectedVideoSource.sourceId, 
-                        midProjectedInMain, 
-                        this.selectedVideoSource.trackId, 
-                        layers,
-                        false,
-                      )
-                      console.log(
-                        "segundo",
-                        source.sourceId, 
-                        videoMid,
-                        source.trackId, 
-                        selectedQualityLayer,
-                        !selectedQualityLayer,
-                      )
                       projectVideo(
                         source.sourceId, 
                         videoMid,
@@ -285,23 +267,6 @@ export default {
                     }
                     switchProject({id:`sidePlayer${key}`})
                   }
-                // } else if (!this.isGrid) {
-                //   console.log('selectedVideoSource.mid',this.selectedVideoSource.mid)
-                //   console.log('source.mid',source.mid)
-                //   console.log('source.trackId',source.trackId)
-                //   let lowQualityLayer
-                //     if (source.mid in this.getActiveMedias) {
-                //       lowQualityLayer = this.getActiveMedias[source.mid].layers.slice(-1)[0]
-                //     }
-                //   console.log('lowQualityLayer',lowQualityLayer)
-                //   projectVideo(
-                //     this.selectedVideoSource.mid,
-                //     source.mid, 
-                //     source.trackId, 
-                //     undefined,
-                //     false,
-                //   )
-                // }
                 await selectSource({ kind: 'video', source })
                 await this.setMainLabel(source.name)
               } catch (error) {
