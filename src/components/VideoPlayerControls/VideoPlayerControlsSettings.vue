@@ -219,7 +219,6 @@ export default {
           case 'videoTracks': {
             const videoTrackChange = async (source) => {
               try {
-                if (this.isSplittedView) {
                   const key = getKeyByValue(source.mid);
                   const videoMid = source.mid
                   if (this.isGrid) {
@@ -268,7 +267,6 @@ export default {
                     }
                     switchProject({id:`sidePlayer${key}`})
                   }
-                }
                 await selectSource({ kind: 'video', source })
                 await this.setMainLabel(source.name)
               } catch (error) {

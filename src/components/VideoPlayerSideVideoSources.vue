@@ -248,10 +248,10 @@ export default {
 <style scoped>
 video {
   height: 100%;
+  max-height: 100vh;
   width: 100%;
   align-self: center;
   border-radius: 0.25rem;
-  object-fit: cover;
 }
 
 li {
