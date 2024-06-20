@@ -21,7 +21,6 @@ export default {
             const layers = this.isGrid ? { maxHeight: 100 } : undefined
             for (var key in this.trackMId) {
                 if (key > 0) {
-                    console.log(key)
                     const source = this.transceiverSourceState[this.trackMId[key]]
                     projectVideo(
                         source.sourceId, 
