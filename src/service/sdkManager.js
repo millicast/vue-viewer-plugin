@@ -21,6 +21,7 @@ export const setVideoPlayer = ({
   muted,
   autoplay,
 }) => {
+  if (state.Controls.video) removeEventListeners(state.Controls.video)
   if (videoPlayer) {
     commit('Controls/setVideo', videoPlayer)
     commit('Controls/setCurrentElementRef', videoPlayer.id)
@@ -40,6 +41,14 @@ export const addVideoEventListeners = (video) => {
   video.addEventListener('pause', pauseControlListener)
   video.onenterpictureinpicture = () => commit('Controls/setPip', true)
   video.onleavepictureinpicture = () => commit('Controls/setPip', false)
+}
+
+const removeEventListeners = (video) => {
+  video.onplay = () => {}
+  video.removeEventListener('emptied', pauseControlListener)
+  video.removeEventListener('pause', pauseControlListener)
+  video.onenterpictureinpicture = () => {}
+  video.onleavepictureinpicture = () => {}
 }
 
 export const removeVideoPauseListeners = () => {
