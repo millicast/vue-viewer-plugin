@@ -67,7 +67,6 @@
 <script>
 import { selectQuality, selectSource } from '../../service/sdkManager'
 import { switchProject } from '../../service/utils/sources'
-import { projectVideo } from '../../service/sdkManager'
 
 import VideoPlayerControlsSettingsVideoTrack from './VideoPlayerControlsSettingsVideoTrack.vue'
 import VideoPlayerControlsSettingsAudioTrack from './VideoPlayerControlsSettingsAudioTrack.vue'
@@ -81,7 +80,6 @@ import VideoPlayerControlsSettingsLayout from './VideoPlayerControlsSettingsLayo
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import CustomToast from '../../service/utils/toast'
 import { version } from '../../../package.json'
-import { switchSourcesGrid } from '../../service/utils/sources'
 
 export default {
   name: 'VideoPlayerControlsSettings',
@@ -219,67 +217,10 @@ export default {
           case 'videoTracks': {
             const videoTrackChange = async (source) => {
               try {
-                  const key = getKeyByValue(source.mid);
-                  const videoMid = source.mid
-                  if (this.isGrid) {
-                    this.sourcesFullscreen = switchSourcesGrid(source.mid, this.sourcesFullscreen)
-                  } else {
-                    const midProjectedInMain = this.selectedVideoSource.mid
-                    this.setTrackMId({key: 0, value: source.mid})
-                    this.setTrackMId({key: key, value: this.selectedVideoSource.mid})
-                    const sideSpan = document.getElementById(`sideLabel${key}`)
-                    sideSpan.textContent = this.selectedVideoSource.name
-                    let lowQualityLayer
-                    if (midProjectedInMain in this.getActiveMedias) {
-                      lowQualityLayer = this.getActiveMedias[midProjectedInMain].layers.slice(-1)[0]
-                    }
-                    let selectedQualityLayer
-                    if (videoMid in this.getActiveMedias && this.selectedQuality?.simulcastIdx !== undefined) {
-                      const selectedTranciverMedias = this.getActiveMedias[videoMid]
-                      this.setMainTransceiverMedias(selectedTranciverMedias)
-                      const mediaSelected = selectedTranciverMedias.layers.find(layer => layer.simulcastIdx === this.selectedQuality.simulcastIdx)
-                      selectedQualityLayer = {
-                        encodingId: mediaSelected?.encodingId,
-                        spatialLayerId: mediaSelected?.spatialLayerId,
-                        temporalLayerId: mediaSelected?.temporalLayerId
-                      }
-                    }
-                    const layers = {
-                      encodingId: lowQualityLayer?.encodingId,
-                      spatialLayerId: lowQualityLayer?.spatialLayerId,
-                      temporalLayerId: lowQualityLayer?.temporalLayerId
-                    }
-                    if (!this.isGrid) {
-                      projectVideo(
-                        source.sourceId, 
-                        videoMid,
-                        source.trackId, 
-                        selectedQualityLayer,
-                        !selectedQualityLayer,
-                      )
-                      projectVideo(
-                        this.selectedVideoSource.sourceId, 
-                        midProjectedInMain, 
-                        this.selectedVideoSource.trackId, 
-                        layers,
-                        false,
-                      )
-                    }
-                    switchProject({id:`sidePlayer${key}`})
-                  }
-                await selectSource({ kind: 'video', source })
-                await this.setMainLabel(source.name)
+                await switchProject(source)
               } catch (error) {
                 this.toast.showToast('error','There was an error selecting the desired source, try again', { timeout: 5000 })
               }
-            }
-            const getKeyByValue = (valueToFind) => {
-              for (let key in this.trackMId) {
-                if (this.trackMId[key] === valueToFind) {
-                  return key
-                }
-              }
-              return null
             }
             this.setDropupSettings(
               this.selectedVideoSource,

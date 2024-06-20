@@ -227,21 +227,72 @@ const project = async ({ kind, source }) => {
   }
 }
 
-export const switchSourcesGrid = (projectedVideoMid, fullScreen) => {
-  const video = document.getElementById(`sidePlayer${projectedVideoMid}`)
-  const videoParent = video.parentElement;
-  if (!fullScreen) {
-    videoParent.classList.add('video-full-screen');
-  } else {
-    videoParent.classList.remove('video-full-screen');
+const getKeyByValue = (valueToFind) => {
+  for (let key in state.Sources.trackMId) {
+    if (state.Sources.trackMId[key] === valueToFind) {
+      return key
+    }
   }
-  return !fullScreen
+  return null
 }
 
-// export const switchSourcesSide = () => {
-// }
+export const switchSourcesGrid = async (source) => {
+  if (!state.Controls.isMainVideoFullScreen) {
+    await switchProject(source, false)
+  }
+  commit('Controls/setIsMainVideoFullScreen', !state.Controls.isMainVideoFullScreen)
+}
 
-export const switchProject = async ({ id }) => {
+export const switchProject = async (sourceToSwitch, animation) => {
+  const key = getKeyByValue(sourceToSwitch.mid)
+  const videoMid = sourceToSwitch.mid
+  const midProjectedInMain = state.Sources.selectedVideoSource.mid
+  commit('Sources/setTrackMId', {key: 0, value: sourceToSwitch.mid})
+  commit('Sources/setTrackMId', {key: key, value: state.Sources.selectedVideoSource.mid})
+  const sideSpan = document.getElementById(`sideLabel${key}`)
+  sideSpan.textContent = state.Sources.selectedVideoSource.name
+  let lowQualityLayer
+  if (midProjectedInMain in state.Layers.medias) {
+    lowQualityLayer = state.Layers.medias[midProjectedInMain].layers.slice(-1)[0]
+  }
+  let selectedQualityLayer
+  if (videoMid in state.Layers.medias && state.Layers.selectedQuality?.simulcastIdx !== undefined) {
+    const selectedTranciverMedias = state.Layers.medias[videoMid]
+    commit('Layers/setMainTransceiverMedias', selectedTranciverMedias)
+    const mediaSelected = selectedTranciverMedias.layers.find(layer => layer.simulcastIdx === state.Layers.selectedQuality.simulcastIdx)
+    selectedQualityLayer = {
+      encodingId: mediaSelected?.encodingId,
+      spatialLayerId: mediaSelected?.spatialLayerId,
+      temporalLayerId: mediaSelected?.temporalLayerId
+    }
+  }
+  const layers = {
+    encodingId: lowQualityLayer?.encodingId,
+    spatialLayerId: lowQualityLayer?.spatialLayerId,
+    temporalLayerId: lowQualityLayer?.temporalLayerId
+  }
+  if (!state.Controls.isGrid) {
+    handleProjectVideo(
+      sourceToSwitch.sourceId, 
+      videoMid,
+      sourceToSwitch.trackId, 
+      selectedQualityLayer,
+      !selectedQualityLayer,
+    )
+    handleProjectVideo(
+      state.Sources.selectedVideoSource.sourceId, 
+      midProjectedInMain, 
+      state.Sources.selectedVideoSource.trackId, 
+      layers,
+      false,
+    )
+  }
+  swapVideos(`sidePlayer${key}`, animation)
+  await handleSelectSource({ kind: 'video', source: sourceToSwitch })
+  await commit('Sources/setMainLabel', sourceToSwitch.name)
+}
+
+const swapVideos = async (id, animation = state.Sources.animate) => {
   gsap.registerPlugin(Flip);
   const currentElementRef = 'player'
   const playerVideo = document.getElementById(currentElementRef);
@@ -256,7 +307,7 @@ export const switchProject = async ({ id }) => {
   playerVideo.id = playerVideo.ref = id
   sideVideo.id = sideVideo.ref = currentElementRef
   commit('Controls/setVideo', sideVideo)
-  const duration = state.Sources.animate ? 0.8 : 0
+  const duration = animation ? 0.8 : 0
   Flip.from(statePlayer, {duration, ease: "power1.inOut"});
   Flip.from(stateSide, {duration, ease: "power1.inOut"});
 }

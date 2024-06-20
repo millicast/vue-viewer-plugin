@@ -40,7 +40,7 @@
           show: show,
           'limit-screen': videoSources.length > 1 && isSplittedView && !isGrid,
           'grid-player': videoSources.length > 1 && isSplittedView && isGrid,
-          'video-full-screen': isVideoFullScreen && isGrid
+          'video-full-screen': isMainVideoFullScreen && isGrid
         }"
         :style="{
         cursor: isGrid? 'pointer' : '',
@@ -147,7 +147,6 @@ export default {
       controlsTimeout: 0,
       mobileFullscreen: false,
       toast: new CustomToast(),
-      isVideoFullScreen: false,
     }
   },
   mounted() {
@@ -195,6 +194,7 @@ export default {
       fullscreen: (state) => state.fullscreen,
       dropup: (state) => state.dropup,
       isLoading: (state) => state.isLoading,
+      isMainVideoFullScreen: (state) => state.isMainVideoFullScreen,
       volume: (state) => state.volume,
       playerMuted: (state) => state.muted,
       castIsConnected: (state) => state.castIsConnected,
@@ -223,6 +223,7 @@ export default {
       'setVideo',
       'setIsLive',
       'setIsLoading',
+      'setIsMainVideoFullScreen',
       'setTrackWarning',
       'setDropup',
       'setVideoVolume',
@@ -301,8 +302,7 @@ export default {
     },
     handleWholeScreen() {
       if (this.isGrid) {
-        // this.setIsSplittedView(!this.isSplittedView)
-        this.isVideoFullScreen = !this.isVideoFullScreen
+        this.setIsMainVideoFullScreen(!this.isMainVideoFullScreen)
       } else {
         selectSource({kind:'video', source: this.videoSources[0]})
         this.setMainLabel(this.videoSources[0].sourceId ?? this.videoSources[0].name)

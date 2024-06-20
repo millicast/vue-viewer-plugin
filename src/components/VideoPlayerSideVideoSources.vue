@@ -12,6 +12,7 @@
         class="videoText"
         :class="isGrid ? 'videoGrid' : '' "
         v-on:click="() => enableClick && switchProjection(source.transceiver?.mid)"
+        @dblclick="toggleFullscreen"
       >
         <video
           :id="`sidePlayer${source.transceiver?.mid}`"
@@ -39,7 +40,6 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import {
   selectSource,
   projectRemoteTracks,
-  projectVideo,
   unprojectMultiview,
 } from '../service/sdkManager'
 import { switchProject } from '../service/utils/sources'
@@ -130,75 +130,22 @@ export default {
 
       const videoMid = this.trackMId[projectedVideoMid]
       await nextTick()
+      const source = this.transceiverSourceState[videoMid]
       if( this.isGrid ) {
-        this.fullScreen = switchSourcesGrid(projectedVideoMid, this.fullScreen)
+        switchSourcesGrid(source)
       } else {
         this.enableClick = false
         this.playerRef = document.getElementById(this.currentElementRef)
-        // Select the source from the transceiver state and project it in the main video
-        let source = this.transceiverSourceState[videoMid]
-        let lowQualityLayer
-        let midProjectedInMain = this.selectedVideoSource?.mid || this.videoSources[0].mid
-        const sourceName =  source.name
-        const audioSource = this.audioSources.find(currentSoruce => currentSoruce.name === sourceName)
-        if (this.getVideoHasMain) {
-          if (this.viewer.showLabels) {
-            this.$refs[`sideLabel${projectedVideoMid}`][0].textContent = this.selectedVideoSource.name        
-          }
-          const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
-          midProjectedInMain = this.transceiverSourceState[midProjectedInMain].mid
-          if (midProjectedInMain in this.getActiveMedias()) {
-            lowQualityLayer = this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
-          }
-          let selectedQualityLayer
-          if (videoMid in this.getActiveMedias() && this.selectedQuality?.simulcastIdx !== undefined) {
-            const selectedTranciverMedias = this.getActiveMedias()[videoMid]
-            this.setMainTransceiverMedias(selectedTranciverMedias)
-            const mediaSelected = selectedTranciverMedias.layers.find(layer => layer.simulcastIdx === this.selectedQuality.simulcastIdx)
-            selectedQualityLayer = {
-              encodingId: mediaSelected?.encodingId,
-              spatialLayerId: mediaSelected?.spatialLayerId,
-              temporalLayerId: mediaSelected?.temporalLayerId
-            }
-          }
-          const layers = {
-            encodingId: lowQualityLayer?.encodingId,
-            spatialLayerId: lowQualityLayer?.spatialLayerId,
-            temporalLayerId: lowQualityLayer?.temporalLayerId
-          }
-          projectVideo(
-            source.sourceId, 
-            videoMid,
-            this.transceiverSourceState[videoMid].trackId, 
-            selectedQualityLayer,
-            !selectedQualityLayer,
-          )
-          projectVideo(
-            sourceIdProjectedInMain, 
-            midProjectedInMain, 
-            this.transceiverSourceState[midProjectedInMain].trackId, 
-            layers,
-            false,
-          )
-        }
-        switchProject({id:`sidePlayer${projectedVideoMid}`})
-        this.setMainLabel(source.sourceId ?? source.name)
-        await selectSource({ kind: 'video', source: this.transceiverSourceState[videoMid] })
-
-        if (this.isGrid) {
-          this.setIsSplittedView(false)
-        }
-
-        if ( audioSource && this.audioFollowsVideo ) {
-          try {
-            await selectSource({ kind: 'audio', source: audioSource })
-          } catch (error) {
-            this.toast.showToast('error', 'There was an error selecting the desired source, try again', { timeout: 5000 })
-          }
-        }
-        this.setTrackMId({key: 0, value: videoMid})
-        this.setTrackMId({key: projectedVideoMid, value: midProjectedInMain})
+        switchProject(source)
         this.enableClick = true
+      }
+      const audioSource = this.audioSources.find(currentSoruce => currentSoruce.name === source.name)
+      if ( audioSource && this.audioFollowsVideo ) {
+        try {
+          await selectSource({ kind: 'audio', source: audioSource })
+        } catch (error) {
+          this.toast.showToast('error', 'There was an error selecting the desired source, try again', { timeout: 5000 })
+        }
       }
     }
   },
