@@ -5,6 +5,7 @@ import { sendLoadRequest } from './cast'
 import * as layers from './layers'
 import gsap from 'gsap';
 import { Flip } from "gsap/Flip";
+import { setVideoPlayer } from '../sdkManager'
 
 export const getTracks = (data) => {
   const sourceId = data.sourceId || null
@@ -306,7 +307,7 @@ const swapVideos = async (id, animation = state.Sources.animate) => {
   playerParent.insertBefore(sideVideo, spanElement);
   playerVideo.id = playerVideo.ref = id
   sideVideo.id = sideVideo.ref = currentElementRef
-  commit('Controls/setVideo', sideVideo)
+  setVideoPlayer({ videoPlayer: sideVideo, srcObject: sideVideo.srcObject })
   const duration = animation ? 0.8 : 0
   Flip.from(statePlayer, {duration, ease: "power1.inOut"});
   Flip.from(stateSide, {duration, ease: "power1.inOut"});
