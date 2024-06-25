@@ -38,12 +38,16 @@ export default {
       } else if (this.muted) {
         this.toggleMuted()
       }
+      this.mainSourceVideo.volume = newVolume
       this.setVideoVolume(newVolume)
     },
   },
   computed: {
     ...mapState('Controls', {
       muted: (state) => state.muted,
+    }),
+    ...mapState('Sources', {
+      mainSourceVideo: (state) => state.mainSourceVideo
     }),
     volumeIcon: function () {
       if (this.muted || this.volume === 0) {
@@ -69,6 +73,7 @@ export default {
       }, 4000)
     },
     toggleMuted() {
+      this.mainSourceVideo.muted = !this.muted
       this.setVideoMuted(!this.muted)
     },
   },
