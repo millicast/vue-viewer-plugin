@@ -16,6 +16,7 @@ const defaulState = {
   transceiverSourceState: {},
   trackIdMidMap: {},
   trackMId: {0:0},
+  mainSourceVideo: null,
 }
 
 export default {
@@ -143,6 +144,9 @@ export default {
       state.transceiverSourceState[state.videoSources[0].mid] = { ...targetSource, mid: state.videoSources[0].mid }
       state.transceiverSourceState[targetKey] = { ...currentSource, mid: targetKey }
     },
+    setMainSourceVideo(state, video) {
+      state.mainSourceVideo = video
+    }
   },
   getters: {
     getVideoSources(state) {
