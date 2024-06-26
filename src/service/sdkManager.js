@@ -21,6 +21,7 @@ export const setVideoPlayer = ({
   muted,
   autoplay,
 }) => {
+  if (state.Controls.video) removeEventListeners(state.Controls.video)
   if (videoPlayer) {
     commit('Controls/setVideo', videoPlayer)
     commit('Controls/setCurrentElementRef', videoPlayer.id)
@@ -40,6 +41,14 @@ export const addVideoEventListeners = (video) => {
   video.addEventListener('pause', pauseControlListener)
   video.onenterpictureinpicture = () => commit('Controls/setPip', true)
   video.onleavepictureinpicture = () => commit('Controls/setPip', false)
+}
+
+const removeEventListeners = (video) => {
+  video.onplay = () => {}
+  video.removeEventListener('emptied', pauseControlListener)
+  video.removeEventListener('pause', pauseControlListener)
+  video.onenterpictureinpicture = () => {}
+  video.onleavepictureinpicture = () => {}
 }
 
 export const removeVideoPauseListeners = () => {
@@ -161,7 +170,8 @@ const updateInactiveBroadcastState = (event) => {
 }
 
 const updateLayersBroadcastState = (event) => {
-  if ('0' in event.data.medias) {
+  const source = state.Sources.selectedVideoSource
+  if (source.mid in event.data.medias) {
     layers.updateLayers(event)
   } else {
     layers.deleteLayers()
@@ -231,8 +241,8 @@ export const projectRemoteTracks = async (remoteTrack) => {
   sources.handleProjectRemoteTracks(remoteTrack)
 }
 
-export const projectVideo = async (what, where, trackId, layer) => {
-  sources.handleProjectVideo(what, where, trackId, layer)
+export const projectVideo = async (what, where, trackId, layer, promote) => {
+  sources.handleProjectVideo(what, where, trackId, layer, promote)
 }
 
 export const unprojectMultiview = async () => {

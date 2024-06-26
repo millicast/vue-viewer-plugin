@@ -92,14 +92,17 @@ export const handleSelectQuality = (media) => {
   if (!selectedData.encodingId && media.spatialLayerId !== null) {
     selectedData.spatialLayerId = parseInt(media.spatialLayerId)
   }
-  const data =
-    selectedData.encodingId ||
-    selectedData.encodingId === 0 ||
-    selectedData.spatialLayerId ||
-    selectedData.spatialLayerId === 0
-      ? selectedData
-      : {}
-  state.ViewConnection.millicastView.select(data)
+
+  const source = state.Sources.selectedVideoSource
+  const mediaLayers = state.Layers.medias[source.mid].layers
+  const quality = mediaLayers.find(layer => layer.simulcastIdx === media.simulcastIdx)
+  state.ViewConnection.millicastView?.project(source.sourceId, [
+    {
+      mediaId: source.mid, 
+      layer: quality,
+      media: 'video',
+      promote: !quality,
+    }  ])
   commit('Layers/selectQuality', media)
 }
 
@@ -132,25 +135,10 @@ const setSideSourcesQualityLow = (newLayers) => {
 
     const transceiverSourceState = state.Sources.transceiverSourceState
 
-    const videoSourceKeys = keys.reduce((videoSourceKeys, key) => {
+    keys.reduce((videoSourceKeys, key) => {
       videoSourceKeys.push(transceiverSourceState[key])
       return videoSourceKeys
     }, [])
-
-    // Set low quality for side video source streams
-    videoSourceKeys.forEach( (source) => {
-      if ( source.sourceId !== null && source.mid in diffActiveLayers ){
-        diffActiveLayers[source.mid].sort((layer, nextLayer) =>  nextLayer.id - layer.id )   
-        state.ViewConnection.millicastView?.project(source.name, [
-          { 
-            mediaId: source.mid, 
-            layer: {encodingId: diffActiveLayers[source.mid].pop().id}, 
-            trackId: source.trackId, 
-            media: 'video'
-          }
-        ])
-      }
-    })
 
     previousSideLayers = newLayers
   } 

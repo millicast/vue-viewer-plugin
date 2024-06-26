@@ -3,6 +3,9 @@ import store from '../../store'
 const { commit, state, getters } = store
 import { sendLoadRequest } from './cast'
 import * as layers from './layers'
+import gsap from 'gsap';
+import { Flip } from "gsap/Flip";
+import { setVideoPlayer } from '../sdkManager'
 
 export const getTracks = (data) => {
   const sourceId = data.sourceId || null
@@ -178,48 +181,36 @@ const deleteSource = (kind, sourceId) => {
         }
       }
     }
-
     commit('Sources/removeTransceiverSourceState', sourceId)
   }
-
   commit('Sources/removeSourceRemoteTrack', sourceId)
   commit('Sources/removeSource', { kind, sourceId: sourceId })
   handleSelectSource({ kind, source: selectedSource })
 }
 
 export const handleSelectSource = async ({ kind, source }) => {
-  let track = null
-  let selectedSource = null
-
-  if (kind === 'video') {
-    layers.deleteLayers()
-    track = state.ViewConnection.trackEvent.video.track
-    selectedSource = state.Sources.selectedVideoSource
-  } else if (kind === 'audio') {
+  if (kind === 'audio') {
+    let track = null
+    let selectedSource = null
     track = state.ViewConnection.trackEvent.audio.track
     selectedSource = state.Sources.selectedVideoSource
     selectedSource = state.Sources.selectedAudioSource
-  }
-  commit('Sources/setSelectedSource', { kind, selectedSource: source })
-  if (source && source?.name !== 'none' && track) {
-    await project({ kind, source })
-    if (selectedSource.name !== 'none') {
-      commit('Controls/setTrackWarning', false)
+    if (source && source?.name !== 'none' && track) {
+      await project({ kind, source })
+      if (selectedSource.name !== 'none') {
+        commit('Controls/setTrackWarning', false)
+      }
     }
   }
+  commit('Sources/setSelectedSource', { kind, selectedSource: source })
 }
 
 const project = async ({ kind, source }) => {
   const sourceId = source?.sourceId
   let sources = null
   let transceiver = null
-  if (kind === 'video') {
-    sources = state.Sources.videoSources
-    transceiver = state.ViewConnection.trackEvent?.video?.transceiver
-  } else if (kind === 'audio') {
-    sources = state.Sources.audioSources
-    transceiver = state.ViewConnection.trackEvent?.audio?.transceiver
-  }
+  sources = state.Sources.audioSources
+  transceiver = state.ViewConnection.trackEvent?.audio?.transceiver
 
   if (state.Controls.castIsConnected) {
     sendLoadRequest()
@@ -237,26 +228,115 @@ const project = async ({ kind, source }) => {
   }
 }
 
-export const handleProjectVideo = async (what, where, trackId, layer) => {
+const getKeyByValue = (valueToFind) => {
+  for (let key in state.Sources.trackMId) {
+    if (state.Sources.trackMId[key] === valueToFind) {
+      return key
+    }
+  }
+  return null
+}
+
+export const switchSourcesGrid = async (source) => {
+  if (!state.Controls.isMainVideoFullScreen) {
+    await switchProject(source, false)
+  }
+  commit('Controls/setIsMainVideoFullScreen', !state.Controls.isMainVideoFullScreen)
+}
+
+export const switchProject = async (sourceToSwitch, animation) => {
+  const key = getKeyByValue(sourceToSwitch.mid)
+  const videoMid = sourceToSwitch.mid
+  const midProjectedInMain = state.Sources.selectedVideoSource.mid
+  commit('Sources/setTrackMId', {key: 0, value: sourceToSwitch.mid})
+  commit('Sources/setTrackMId', {key: key, value: state.Sources.selectedVideoSource.mid})
+  const sideSpan = document.getElementById(`sideLabel${key}`)
+  sideSpan.textContent = state.Sources.selectedVideoSource.name
+  let lowQualityLayer
+  if (midProjectedInMain in state.Layers.medias) {
+    lowQualityLayer = state.Layers.medias[midProjectedInMain].layers.slice(-1)[0]
+  }
+  let selectedQualityLayer
+  if (videoMid in state.Layers.medias && state.Layers.selectedQuality?.simulcastIdx !== undefined) {
+    const selectedTranciverMedias = state.Layers.medias[videoMid]
+    commit('Layers/setMainTransceiverMedias', selectedTranciverMedias)
+    const mediaSelected = selectedTranciverMedias.layers.find(layer => layer.simulcastIdx === state.Layers.selectedQuality.simulcastIdx)
+    selectedQualityLayer = {
+      encodingId: mediaSelected?.encodingId,
+      spatialLayerId: mediaSelected?.spatialLayerId,
+      temporalLayerId: mediaSelected?.temporalLayerId
+    }
+  }
+  const layers = {
+    encodingId: lowQualityLayer?.encodingId,
+    spatialLayerId: lowQualityLayer?.spatialLayerId,
+    temporalLayerId: lowQualityLayer?.temporalLayerId
+  }
+  if (!state.Controls.isGrid) {
+    handleProjectVideo(
+      sourceToSwitch.sourceId, 
+      videoMid,
+      sourceToSwitch.trackId, 
+      selectedQualityLayer,
+      !selectedQualityLayer,
+    )
+    handleProjectVideo(
+      state.Sources.selectedVideoSource.sourceId, 
+      midProjectedInMain, 
+      state.Sources.selectedVideoSource.trackId, 
+      layers,
+      false,
+    )
+  }
+  swapVideos(`sidePlayer${key}`, animation)
+  await handleSelectSource({ kind: 'video', source: sourceToSwitch })
+  await commit('Sources/setMainLabel', sourceToSwitch.name)
+}
+
+const swapVideos = async (id, animation = state.Sources.animate) => {
+  gsap.registerPlugin(Flip);
+  const currentElementRef = 'player'
+  const playerVideo = document.getElementById(currentElementRef);
+  const sideVideo = document.getElementById(id);
+  const statePlayer = Flip.getState(playerVideo);
+  const stateSide = Flip.getState(sideVideo);
+  const sideParent = sideVideo.parentElement;
+  sideParent.insertBefore(playerVideo, sideVideo.nextSibling);
+  const playerParent  = document.getElementById('main-source');
+  const spanElement = playerParent.querySelector('span')
+  playerParent.insertBefore(sideVideo, spanElement);
+  playerVideo.id = playerVideo.ref = id
+  sideVideo.id = sideVideo.ref = currentElementRef
+  setVideoPlayer({ videoPlayer: sideVideo, srcObject: sideVideo.srcObject })
+  const duration = animation ? 0.8 : 0
+  Flip.from(statePlayer, {duration, ease: "power1.inOut"});
+  Flip.from(stateSide, {duration, ease: "power1.inOut"});
+}
+
+
+export const handleProjectVideo = async (what, where, trackId, layer, promote) => {
   await state.ViewConnection.millicastView.project(what, [
     {
-      trackId,
+      // trackId,
       mediaId: where,
       media: 'video',
-      layer
+      layer,
+      promote
     },
   ])
 }
 
 export const handleProjectRemoteTracks = async (remoteTrack) => {
   await nextTick()
+  const maxLayerHeight = state.Params.viewer.maxHeight ? Number(state.Params.viewer.maxHeight) : null
   const sidePlayerId = 'sidePlayer' + remoteTrack.transceiver?.mid
   const sidePlayerVideo = document.getElementById(sidePlayerId)
   sidePlayerVideo.srcObject = remoteTrack.mediaStream
   handleProjectVideo(
     remoteTrack.sourceId, 
     remoteTrack.transceiver?.mid ?? null, 
-    state.Sources.transceiverSourceState[remoteTrack.transceiver?.mid].trackId
+    state.Sources.transceiverSourceState[remoteTrack.transceiver?.mid].trackId,
+    maxLayerHeight ? { maxHeight: maxLayerHeight } : null
   )
   sidePlayerVideo.muted = true
   sidePlayerVideo.autoPlay = true

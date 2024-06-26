@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState, mapMutations } from 'vuex'
 
 export default {
   name: 'VideoPlayerControlsPip',
@@ -37,6 +37,7 @@ export default {
     }),
   },
   methods: {
+    ...mapMutations('Controls', ['setPip']),
     togglePip() {
       if (
         !this.pip &&
@@ -44,8 +45,14 @@ export default {
         this.video.nodeName === 'VIDEO'
       ) {
         this.video.requestPictureInPicture()
+        this.setPip(true)
+        this.video.addEventListener('leavepictureinpicture', () => {
+          this.setPip(false)
+          this.video.removeEventListener('leavepictureinpicture', () => {})
+        });
       } else {
         document.exitPictureInPicture()
+        this.setPip(false)
       }
     },
   },

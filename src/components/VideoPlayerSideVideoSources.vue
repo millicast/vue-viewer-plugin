@@ -8,9 +8,13 @@
       v-for="(source, index) in sourceRemoteTracks"
       :key="'p' + index"
     >
-      <div class="videoText" :class="isGrid ? 'videoGrid' : '' ">
+      <div
+        class="videoText"
+        :class="isGrid ? 'videoGrid' : '' "
+        v-on:click="() => enableClick && switchProjection(source.transceiver?.mid)"
+        @dblclick="toggleFullscreen"
+      >
         <video
-          v-on:click="() => enableClick && switchProjection(source.transceiver?.mid)"
           :id="`sidePlayer${source.transceiver?.mid}`"
           :ref="`sidePlayer${source.transceiver?.mid}`"
           :class="!isGrid && isSplittedView ? 'hires-class': ''"
@@ -36,10 +40,11 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 import {
   selectSource,
   projectRemoteTracks,
-  projectVideo,
   unprojectMultiview,
 } from '../service/sdkManager'
+import { switchProject } from '../service/utils/sources'
 import CustomToast from '../service/utils/toast'
+import { switchSourcesGrid } from '../service/utils/sources'
 
 export default {
   name: 'VideoPlayerSideVideoSources',
@@ -49,7 +54,8 @@ export default {
       indexMainMediaSource: 0,
       playerRef: null,
       enableClick: true,
-      toast: new CustomToast()
+      toast: new CustomToast(),
+      fullScreen: false,
     }
   },
   computed: {
@@ -59,12 +65,18 @@ export default {
       'audioSources',
       'transceiverSourceState',
       'audioFollowsVideo',
+      'animate',
+      'trackMId',
+      'selectedVideoSource',
     ]),
     ...mapState('Controls', {
         fullscreen: state => state.fullscreen, 
         isGrid: state => state.isGrid,
         isSplittedView: state => state.isSplittedView, 
         currentElementRef: state => state.currentElementRef,
+    }),
+    ...mapState('Layers', {
+      selectedQuality: (state) => state.selectedQuality,
     }),
     ...mapGetters('Sources', ['getVideoHasMain', 'getSelectedVideoSource']),
     ...mapState('ViewConnection', {
@@ -77,8 +89,11 @@ export default {
   async mounted() {
     selectSource({ kind: 'video', source: this.videoSources[0] })
     this.setMainLabel(this.videoSources[0].name)
-    this.sourceRemoteTracks.forEach(async (remoteTrack) =>
+    this.sourceRemoteTracks.forEach(async (remoteTrack) => {
       await projectRemoteTracks(remoteTrack)
+      const mid = remoteTrack.transceiver.mid
+      this.setTrackMId({key: mid, value: mid})
+    }
     )
 
     this.playerRef = document.getElementById('player')
@@ -95,9 +110,12 @@ export default {
         if (newLenght > currentLenght) {
           const lastIndex = newLenght - 1
           await projectRemoteTracks(this.sourceRemoteTracks[lastIndex])
+          const mid = this.sourceRemoteTracks[lastIndex].transceiver.mid
+          this.setTrackMId({key: mid, value: mid})
         } else {
-          this.sourceRemoteTracks.forEach(async (remoteTrack) =>
+          this.sourceRemoteTracks.forEach(async (remoteTrack) => {
             await projectRemoteTracks(remoteTrack)
+          }
           )
         }
       },
@@ -105,47 +123,23 @@ export default {
   },
   methods: {
     ...mapMutations('Controls', ['toggleFullscreen', 'setIsSplittedView']),
-    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'updateTransceiverSourceState']),
+    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'replaceSourceRemoteTrack','setTrackMId']),//, 'updateTransceiverSourceState']),
+    ...mapMutations('Layers', ['setMainTransceiverMedias']),
     ...mapGetters('Layers', ['getActiveMedias','getActiveMainTransceiverMedias']),
-    async switchProjection(videoMid) {
+    async switchProjection(projectedVideoMid) {
+
+      const videoMid = this.trackMId[projectedVideoMid]
       await nextTick()
-      this.enableClick = false
-      this.playerRef = document.getElementById(this.currentElementRef)
-
-      // Select the source from the transceiver state and project it in the main video
-      let source = this.transceiverSourceState[videoMid]
-      let lowQualityLayer
-      let midProjectedInMain = this.videoSources[0].mid
-      const sourceName =  source.name
-      const audioSource = this.audioSources.find(currentSoruce => currentSoruce.name === sourceName)
-
-      if (this.getVideoHasMain) {
-        if (this.viewer.showLabels) {
-          this.$refs[`sideLabel${videoMid}`][0].textContent = this.transceiverSourceState[midProjectedInMain].name        
-        }
-
-        const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
-        midProjectedInMain = this.transceiverSourceState[midProjectedInMain].mid
-        
-        if (midProjectedInMain in this.getActiveMedias()) {
-          lowQualityLayer = this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
-        }
-        projectVideo(
-          sourceIdProjectedInMain, 
-          videoMid, 
-          this.transceiverSourceState[midProjectedInMain].trackId, 
-          lowQualityLayer
-        )
-        this.updateTransceiverSourceState({ source })
+      const source = this.transceiverSourceState[videoMid]
+      if( this.isGrid ) {
+        switchSourcesGrid(source)
+      } else {
+        this.enableClick = false
+        this.playerRef = document.getElementById(this.currentElementRef)
+        switchProject(source)
+        this.enableClick = true
       }
-
-      this.setMainLabel(source.sourceId ?? source.name)
-      await selectSource({ kind: 'video', source })
-
-      if (this.isGrid) {
-        this.setIsSplittedView(false)
-      }
-
+      const audioSource = this.audioSources.find(currentSoruce => currentSoruce.name === source.name)
       if ( audioSource && this.audioFollowsVideo ) {
         try {
           await selectSource({ kind: 'audio', source: audioSource })
@@ -153,20 +147,58 @@ export default {
           this.toast.showToast('error', 'There was an error selecting the desired source, try again', { timeout: 5000 })
         }
       }
-      this.enableClick = true
-    },
+    }
   },
 }
 </script>
 
+<style>
+
+@media (max-width: 430px) {
+  video.animateVideo {
+    transition: all 0.4s ease-in;
+    padding: 25%;
+    transform: translateY(100%);
+  }
+
+  video.sideAnimateVideo {
+    transition: all 0.4s ease-in;
+    transform: translateY(-100%);
+  }
+}
+
+@media (min-width: 430px) {
+  video.animateVideo {
+    transition: all 0.4s ease-in;
+    width: 40%;
+    margin-left: 60%;
+  }
+
+  video.sideAnimateVideo {
+    transition: all 0.4s ease-in;
+    transform: translateX(-100%);
+    height: 200% !important;
+    width: 200% !important;
+  }
+}
+
+.video-full-screen {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
+}
+
+</style>
+
 <style scoped>
 video {
   height: 100%;
+  max-height: 100vh;
   width: 100%;
   align-self: center;
-  cursor: pointer;
   border-radius: 0.25rem;
-  object-fit: cover;
 }
 
 li {
@@ -194,6 +226,7 @@ li {
   height: 100%;
   width: 100%;
   position: relative;
+  cursor: pointer;
 }
 
 .videoGrid {

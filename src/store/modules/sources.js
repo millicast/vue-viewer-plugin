@@ -9,11 +9,14 @@ const defaulState = {
   },
   isAudioOnly: false,
   audioFollowsVideo: false,
+  animate: false,
   stream: null,
   sourceRemoteTracks: [],
   mainLabel: 'Main',
   transceiverSourceState: {},
-  trackIdMidMap: {}
+  trackIdMidMap: {},
+  trackMId: {0:0},
+  mainSourceVideo: null,
 }
 
 export default {
@@ -60,8 +63,15 @@ export default {
     setAudioFollowsVideo(state, audioFollowsVideo) {
       state.audioFollowsVideo = audioFollowsVideo
     },
+    setAnimate(state, animate) {
+      state.animate = animate
+    },
     addTrackIdMidMapping(state, trackIdMidMapping) {
       state.trackIdMidMap[trackIdMidMapping.mid] = trackIdMidMapping.trackId
+    },
+    setTrackMId(state, trackMid) {
+      const {key,value} = trackMid
+      state.trackMId[key] = value
     },
     addSourceRemoteTrack(state, sourceRemoteTrack) {
       state.sourceRemoteTracks.push(sourceRemoteTrack)
@@ -134,6 +144,9 @@ export default {
       state.transceiverSourceState[state.videoSources[0].mid] = { ...targetSource, mid: state.videoSources[0].mid }
       state.transceiverSourceState[targetKey] = { ...currentSource, mid: targetKey }
     },
+    setMainSourceVideo(state, video) {
+      state.mainSourceVideo = video
+    }
   },
   getters: {
     getVideoSources(state) {

@@ -16,6 +16,8 @@ export const defaultViewerOptions = {
   forcePlayoutDelay: false,
   multisource: false,
   audioFollowsVideo: false,
+  animate: false,
+  maxHeight: null,
   layout: null,
   showLabels: true,
   startingQuality: null,
@@ -36,6 +38,8 @@ export default function processViewerOptions({
   noDelay,
   multisource,
   audioFollowsVideo,
+  animate,
+  maxHeight,
   layout,
   showLabels,
   startingQuality,
@@ -55,6 +59,8 @@ export default function processViewerOptions({
   options.muted = muted ?? false
   options.multisource = multisource ?? false
   options.audioFollowsVideo = audioFollowsVideo ?? false
+  options.animate = animate ?? false
+  options.maxHeight = maxHeight
   options.layout = layout
   options.showLabels = showLabels
   if (multisource) {
@@ -62,6 +68,9 @@ export default function processViewerOptions({
   }
   if (audioFollowsVideo) {
     store.commit('Sources/setAudioFollowsVideo', true)
+  }
+  if (animate) {
+    store.commit('Sources/setAnimate', true)
   }
   if (noDelay) {
     options.forcePlayoutDelay = { min: 0, max: 0 }

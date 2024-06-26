@@ -39,7 +39,8 @@
         :class="{
           show: show,
           'limit-screen': videoSources.length > 1 && isSplittedView && !isGrid,
-          'grid-player': videoSources.length > 1 && isSplittedView && isGrid
+          'grid-player': videoSources.length > 1 && isSplittedView && isGrid,
+          'video-full-screen': isMainVideoFullScreen && isGrid
         }"
         :style="{
         cursor: isGrid? 'pointer' : '',
@@ -102,8 +103,11 @@
       </div>
       <!-- SIDE SOURCES -->
       <div
-        v-if="videoSources.length > 1 && isSplittedView"
-        :class="!isGrid ? 'side-panel overflow-auto sc1': ''"
+        v-if="videoSources.length > 1"
+        :class="{
+          'side-panel overflow-auto sc1': !isGrid,
+          'hide-sidebar': !isSplittedView
+         }"
         :style="!isGrid ? 'scroll-snap-type: y mandatory': 'display: contents'"
         @mousemove="showControls"
       >
@@ -190,6 +194,7 @@ export default {
       fullscreen: (state) => state.fullscreen,
       dropup: (state) => state.dropup,
       isLoading: (state) => state.isLoading,
+      isMainVideoFullScreen: (state) => state.isMainVideoFullScreen,
       volume: (state) => state.volume,
       playerMuted: (state) => state.muted,
       castIsConnected: (state) => state.castIsConnected,
@@ -218,6 +223,7 @@ export default {
       'setVideo',
       'setIsLive',
       'setIsLoading',
+      'setIsMainVideoFullScreen',
       'setTrackWarning',
       'setDropup',
       'setVideoVolume',
@@ -296,7 +302,8 @@ export default {
     },
     handleWholeScreen() {
       if (this.isGrid) {
-        this.setIsSplittedView(!this.isSplittedView)
+        this.setIsMainVideoFullScreen(!this.isMainVideoFullScreen)
+      } else {
         selectSource({kind:'video', source: this.videoSources[0]})
         this.setMainLabel(this.videoSources[0].sourceId ?? this.videoSources[0].name)
       }
@@ -365,6 +372,18 @@ const getFullscreenElement = () => {
 }
 </script>
 
+<style>
+.video-full-screen {
+  position: absolute !important;
+  top: 0;
+  left: 0;
+  z-index: 1;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+}
+</style>
+
 <style lang="scss" scoped>
 .player {
   position: relative;
@@ -382,7 +401,7 @@ const getFullscreenElement = () => {
   gap: 10px;
   margin: auto;
   overflow: auto;
-  max-height: 100%;
+  scrollbar-width: none;
   padding: 10px;
   flex-grow: 0.6;
 }
@@ -392,6 +411,10 @@ const getFullscreenElement = () => {
   justify-content: center;
   align-items: center;
   z-index: 1;
+}
+
+.hide-sidebar {
+  display: none !important;
 }
 
 .controls {
@@ -483,7 +506,7 @@ const getFullscreenElement = () => {
   top: 0;
   right: 0;
   margin-bottom: -55px;
-  z-index: 1;
+  z-index: 2;
 }
 
 .controls-bottom {
@@ -491,7 +514,7 @@ const getFullscreenElement = () => {
   bottom: 0;
   right: 0;
   margin-top: -50px;
-  z-index: 1;
+  z-index: 2;
 }
 
 .side-panel {

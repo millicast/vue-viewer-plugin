@@ -12,6 +12,7 @@ const defaulState = {
   fullscreen: false,
   isLive: false,
   isLoading: true,
+  isMainVideoFullScreen: false,
   trackWarning: false,
   castOptions: {},
   castAvailable: false,
@@ -90,6 +91,9 @@ export default {
     setIsLoading(state, isLoading) {
       state.isLoading = isLoading
       state.castOptions.loading = isLoading
+    },
+    setIsMainVideoFullScreen (state, isMainVideoFullScreen) {
+      state.isMainVideoFullScreen = isMainVideoFullScreen
     },
     toggleFullscreen(state) {
       state.fullscreen = !state.fullscreen

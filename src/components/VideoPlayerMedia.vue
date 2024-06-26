@@ -76,6 +76,7 @@ export default {
       muted: this.viewer.muted,
       autoplay: this.viewer.autoplay,
     })
+    this.setMainSourceVideo(player)
   },
   computed: {
     ...mapState('ViewConnection', {
@@ -124,6 +125,7 @@ export default {
       'addVideoSource',
       'addAudioSource',
       'setStream',
+      'setMainSourceVideo'
     ]),
     ...mapMutations('Layers', ['addLayers', 'selectQuality', 'deleteLayers']),
     ...mapMutations('Controls', [
@@ -187,6 +189,7 @@ export default {
         muted,
         autoplay,
       })
+      this.setMainSourceVideo(player)
     },
     async viewer() {
       await stopStream()
@@ -209,6 +212,7 @@ export default {
 <style scoped>
 video {
   width: 100%;
+  height: 100%;
   max-height: 100vh;
   pointer-events: none;
   border-radius: 0.25rem;

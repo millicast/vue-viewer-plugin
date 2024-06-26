@@ -66,6 +66,7 @@
 
 <script>
 import { selectQuality, selectSource } from '../../service/sdkManager'
+import { switchProject } from '../../service/utils/sources'
 
 import VideoPlayerControlsSettingsVideoTrack from './VideoPlayerControlsSettingsVideoTrack.vue'
 import VideoPlayerControlsSettingsAudioTrack from './VideoPlayerControlsSettingsAudioTrack.vue'
@@ -112,10 +113,11 @@ export default {
         trackId: null,
       },
       toast: null,
+      sourcesFullscreen: false,
     }
   },
   computed: {
-    ...mapGetters('Layers', ['getActiveMainTransceiverMedias']),
+    ...mapGetters('Layers', ['getActiveMainTransceiverMedias','getActiveMedias']),
     ...mapGetters('Sources', [
       'getVideoSources',
       'getAudioSources',
@@ -129,11 +131,13 @@ export default {
       selectedVideoSource: (state) => state.selectedVideoSource,
       selectedAudioSource: (state) => state.selectedAudioSource,
       audioFollowsVideo: (state) => state.audioFollowsVideo,
+      trackMId: (state) => state.trackMId,
     }),
     ...mapState('Controls', {
       dropup: (state) => state.dropup,
       trackWarning: (state) => state.trackWarning,
-      isSplittedView: (state) => state.isSplittedView
+      isSplittedView: (state) => state.isSplittedView,
+      isGrid: state => state.isGrid,
     }),
   },
   methods: {
@@ -144,7 +148,9 @@ export default {
     ...mapMutations('Sources', [
       'setMainLabel',
       'setAudioFollowsVideo',
+      'setTrackMId',
     ]),
+    ...mapMutations('Layers', ['setMainTransceiverMedias']),
     compareItems(entry, current) {
       return entry?.name === current?.name && (entry?.id === current?.id || current?.name === 'Auto')
     },
@@ -211,8 +217,7 @@ export default {
           case 'videoTracks': {
             const videoTrackChange = async (source) => {
               try {
-                await selectSource({ kind: 'video', source })
-                await this.setMainLabel(source.name)
+                await switchProject(source)
               } catch (error) {
                 this.toast.showToast('error','There was an error selecting the desired source, try again', { timeout: 5000 })
               }
