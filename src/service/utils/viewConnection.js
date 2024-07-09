@@ -79,6 +79,7 @@ export const handleConnectToStream = async () => {
   try {
     await setCanAutoPlayStream()
     const connectOptions = {
+      enableDRM: state.Params.viewer.enableDrm,
       events: ['active', 'inactive', 'layers', 'viewercount'],
       absCaptureTime: true,
     }
@@ -102,6 +103,8 @@ export const handleConnectToStream = async () => {
 export const setTrackEvent = () => {
   const millicastView = state.ViewConnection.millicastView
   millicastView.on('track', async (event) => {
+    //Track event is handle by SDK for DRM
+    if (state.Params.viewer.enableDrm) return
     // map video trackId with mid
     if (event.track?.kind === 'video') {
       commit('Sources/addTrackIdMidMapping', {
@@ -126,6 +129,7 @@ export const setTrackEvent = () => {
 
 const setStream = async (entrySrcObject) => {
   const video = state.Controls.video
+  const drmAudio = state.Controls.drmAudio
   addSignalingMigrateListener()
   commit('Controls/setSrcObject', entrySrcObject)
   //If we already had a a stream and is not migrating then we ignore it (Firefox addRemoteTrack issue)
@@ -149,6 +153,7 @@ const setStream = async (entrySrcObject) => {
     const opositeElementRef =
       state.Controls.currentElementRef === 'player' ? 'player2' : 'player'
     const mediaTag = document.getElementById(opositeElementRef)
+    const drmAudio = document.getElementById('drm-audio-' + opositeElementRef)
     mediaTag.srcObject = entrySrcObject
     mediaTag.autoplay = state.Controls.playing
     mediaTag.muted = state.Controls.muted
@@ -157,6 +162,7 @@ const setStream = async (entrySrcObject) => {
     addVideoEventListeners(mediaTag)
     mediaTag.onloadedmetadata = async () => {
       commit('Controls/setVideo', mediaTag)
+      commit('Controls/setDrmAudio', drmAudio)
       commit('Controls/setCurrentElementRef', opositeElementRef)
       commit('Controls/setIsMigrating', false)
       commit('Controls/setIsSplittedView', state.Controls.previousSplitState)
@@ -169,7 +175,7 @@ const setStream = async (entrySrcObject) => {
     //We have to set the listener again since the signaling attribute of millicastView is changed after the migrate.
     addSignalingMigrateListener()
   } else {
-    setVideoPlayer({ videoPlayer: video, srcObject: entrySrcObject })
+    setVideoPlayer({ videoPlayer: video, srcObject: entrySrcObject, drmAudio: drmAudio })
   }
 }
 
