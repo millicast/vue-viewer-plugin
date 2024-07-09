@@ -87,8 +87,6 @@ export default {
     }),
   },
   async mounted() {
-    selectSource({ kind: 'video', source: this.videoSources[0] })
-    this.setMainLabel(this.videoSources[0].name)
     this.sourceRemoteTracks.forEach(async (remoteTrack) => {
       await projectRemoteTracks(remoteTrack)
       const mid = remoteTrack.transceiver.mid
@@ -112,6 +110,9 @@ export default {
           await projectRemoteTracks(this.sourceRemoteTracks[lastIndex])
           const mid = this.sourceRemoteTracks[lastIndex].transceiver.mid
           this.setTrackMId({key: mid, value: mid})
+          if (currentLenght === 0 && !this.getVideoHasMain) {
+            this.switchProjection(mid)
+          }
         } else {
           this.sourceRemoteTracks.forEach(async (remoteTrack) => {
             await projectRemoteTracks(remoteTrack)
@@ -126,11 +127,12 @@ export default {
     ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'replaceSourceRemoteTrack','setTrackMId']),//, 'updateTransceiverSourceState']),
     ...mapMutations('Layers', ['setMainTransceiverMedias']),
     ...mapGetters('Layers', ['getActiveMedias','getActiveMainTransceiverMedias']),
-    async switchProjection(projectedVideoMid) {
+    async switchProjection(projectedVideoMid = 0) {
 
       const videoMid = this.trackMId[projectedVideoMid]
       await nextTick()
       const source = this.transceiverSourceState[videoMid]
+      source.mid = source?.mid || 0
       if( this.isGrid ) {
         switchSourcesGrid(source)
       } else {
@@ -153,6 +155,10 @@ export default {
 </script>
 
 <style>
+
+.hide-video {
+  display: none !important;
+}
 
 @media (max-width: 430px) {
   video.animateVideo {

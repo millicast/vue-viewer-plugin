@@ -91,8 +91,17 @@ const addSource = (kind, sourceId, trackId) => {
           kind,
           selectedSource: source,
         })
+        const mainIsHide = document.getElementsByClassName('hide-video');
         handleSelectSource({ kind, source })
-        commit('Sources/setMainLabel', state.Params.viewer.mainLabel)
+        if (kind === 'video') {
+          if (mainIsHide.length > 0) {
+            const spanElement = mainIsHide[0].querySelector('span')
+            spanElement.textContent = state.Params.viewer.mainLabel
+            mainIsHide[0].classList.remove('hide-video')
+          } else {
+            commit('Sources/setMainLabel', state.Params.viewer.mainLabel)
+          }
+        }
       }
     } else {
       sources.push(source)
@@ -249,9 +258,9 @@ export const switchProject = async (sourceToSwitch, animation) => {
   const videoMid = sourceToSwitch.mid
   const midProjectedInMain = state.Sources.selectedVideoSource.mid
   commit('Sources/setTrackMId', {key: 0, value: sourceToSwitch.mid})
-  commit('Sources/setTrackMId', {key: key, value: state.Sources.selectedVideoSource.mid})
+  commit('Sources/setTrackMId', {key: key, value: state.Sources.selectedVideoSource.mid || 0})
   const sideSpan = document.getElementById(`sideLabel${key}`)
-  sideSpan.textContent = state.Sources.selectedVideoSource.name
+  sideSpan.textContent = state.Sources.selectedVideoSource.name || state.Params.viewer.mainLabel
   let lowQualityLayer
   if (midProjectedInMain in state.Layers.medias) {
     lowQualityLayer = state.Layers.medias[midProjectedInMain].layers.slice(-1)[0]
@@ -288,12 +297,14 @@ export const switchProject = async (sourceToSwitch, animation) => {
       false,
     )
   }
-  swapVideos(`sidePlayer${key}`, animation)
+  const hasMain =  getters['Sources/getVideoHasMain']
+  const hideMain = !hasMain && !midProjectedInMain
+  swapVideos(`sidePlayer${key}`, animation, hideMain)
   await handleSelectSource({ kind: 'video', source: sourceToSwitch })
   await commit('Sources/setMainLabel', sourceToSwitch.name)
 }
 
-const swapVideos = async (id, animation = state.Sources.animate) => {
+const swapVideos = async (id, animation = state.Sources.animate, hideMain) => {
   gsap.registerPlugin(Flip);
   const currentElementRef = 'player'
   const playerVideo = document.getElementById(currentElementRef);
@@ -308,6 +319,10 @@ const swapVideos = async (id, animation = state.Sources.animate) => {
   playerVideo.id = playerVideo.ref = id
   sideVideo.id = sideVideo.ref = currentElementRef
   setVideoPlayer({ videoPlayer: sideVideo, srcObject: sideVideo.srcObject })
+  if (hideMain) {
+    const nodeVideo = playerVideo.parentNode.parentNode
+    nodeVideo.classList.add('hide-video')
+  }
   const duration = animation ? 0.8 : 0
   Flip.from(statePlayer, {duration, ease: "power1.inOut"});
   Flip.from(stateSide, {duration, ease: "power1.inOut"});
