@@ -16,7 +16,7 @@
         :class="{ 'display: none;': currentElementRef === 'player2' }"
         :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
       ></video>
-      <audio v-if="viewer.enableDrm" id="drm-audio-player" playsinline></audio>
+      <audio v-if="viewer.enableDRM" id="drm-audio-player" playsinline></audio>
     </template>
   </template>
   <template v-if="isMigrating || currentElementRef === 'player2'">
@@ -36,7 +36,7 @@
         :class="{ 'display: none;': currentElementRef === 'player' }"
         :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
       ></video>
-      <audio v-if="viewer.enableDrm" id="drm-audio-player2" playsinline autoplay muted></audio>
+      <audio v-if="viewer.enableDRM" id="drm-audio-player2" playsinline autoplay muted></audio>
     </template>
   </template>
   <span
@@ -74,7 +74,7 @@ export default {
   async mounted() {
     let drmAudio
     const player = document.getElementById(this.currentElementRef)
-    if (this.viewer.enableDrm) {
+    if (this.viewer.enableDRM) {
       drmAudio = document.getElementById(this.currentElementRef)
     }
 
@@ -126,8 +126,8 @@ export default {
     ...mapGetters('Sources', ['getVideoHasMain', 'getAudioHasMain']),
     displayAudioOnly() {
       return (
-        (this.isAudioOnly && this.isLive && !this.viewer.enableDrm) ||
-        (this.viewer.placeholderImg === null && !this.isLive && !this.viewer.enableDrm)
+        (this.isAudioOnly && this.isLive && !this.viewer.enableDRM) ||
+        (this.viewer.placeholderImg === null && !this.isLive && !this.viewer.enableDRM)
       )
     },
   },
@@ -193,7 +193,7 @@ export default {
       //Set new tag params
       const player = document.getElementById(this.currentElementRef)
       let drmAudio;
-      if (this.viewer.enableDrm) {
+      if (this.viewer.enableDRM) {
         drmAudio = document.getElementById('drm-audio-' + this.currentElementRef)
       }
 

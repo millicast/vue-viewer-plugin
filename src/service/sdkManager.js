@@ -32,7 +32,7 @@ export const setVideoPlayer = ({
   if (drmAudio) {
     commit('Controls/setDrmAudio', drmAudio)
   }
-  if (srcObject && !state.Params.viewer.enableDrm) {
+  if (srcObject && !state.Params.viewer.enableDRM) {
     commit('Controls/setVideoSource', srcObject)
   }
   if (volume) commit('Controls/setVideoVolume', volume)
@@ -116,7 +116,7 @@ const setBroadcastEvent = () => {
 const configureDrm = (event) => {
     const sourceId = event.data.sourceId
 
-    if (state.Params.viewer.enableDrm && !sourceId) {
+    if (state.Params.viewer.enableDRM && !sourceId) {
       // TODO: remove this once data is coming from media server
       event.data.encryption = {
         keyId: drmKeyId,
@@ -149,7 +149,7 @@ const configureDrm = (event) => {
 }
 
 const updateActiveBroadcastState = (event) => {
-  if (state.Params.viewer.enableDrm) {
+  if (state.Params.viewer.enableDRM) {
     configureDrm(event)
   }
   sources.getTracks(event.data)
@@ -158,7 +158,7 @@ const updateActiveBroadcastState = (event) => {
     commit('Controls/setIsLoading', false)
   }
   viewConnection.setReconnect()
-  if (!state.Controls.video.srcObject && !state.Params.viewer.enableDrm) {
+  if (!state.Controls.video.srcObject && !state.Params.viewer.enableDRM) {
     commit('Controls/setVideoSource', state.Controls.srcObject)
   }
   if (selectingLayerTimeout != null) {

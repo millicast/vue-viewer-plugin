@@ -55,7 +55,7 @@ export default {
           startingQuality: this.paramsOptions?.startingQuality,
           hideToast: this.paramsOptions?.hideToast,
           mainLabel: this.paramsOptions?.mainLabel ?? 'Main',
-          enableDrm: this.paramsOptions.enableDrm ?? false
+          enableDRM: this.paramsOptions.enableDRM ?? false
         })
       }
       processEnvironmentOptions(this.paramsOptions?.environment)
