@@ -87,12 +87,14 @@ const addSource = (kind, sourceId, trackId) => {
           ? state.Sources.selectedVideoSource
           : state.Sources.selectedAudioSource
       if (selectedMediaSource.name !== state.Params.viewer.mainLabel) {
-        commit('Sources/setSelectedSource', {
-          kind,
-          selectedSource: source,
-        })
+        if (kind === 'auido' || state.Sources.selectedVideoSource.name === 'none') {
+          commit('Sources/setSelectedSource', {
+            kind,
+            selectedSource: source,
+          })
+          handleSelectSource({ kind, source })
+        }
         const mainIsHide = document.getElementsByClassName('hide-video');
-        handleSelectSource({ kind, source })
         if (kind === 'video') {
           if (mainIsHide.length > 0) {
             const spanElement = mainIsHide[0].querySelector('span')
@@ -258,7 +260,7 @@ export const switchProject = async (sourceToSwitch, animation) => {
   const videoMid = sourceToSwitch.mid
   const midProjectedInMain = state.Sources.selectedVideoSource.mid
   commit('Sources/setTrackMId', {key: 0, value: sourceToSwitch.mid})
-  commit('Sources/setTrackMId', {key: key, value: state.Sources.selectedVideoSource.mid || 0})
+  commit('Sources/setTrackMId', {key: key, value: state.Sources.selectedVideoSource.mid || '0'})
   const sideSpan = document.getElementById(`sideLabel${key}`)
   sideSpan.textContent = state.Sources.selectedVideoSource.name || state.Params.viewer.mainLabel
   let lowQualityLayer
