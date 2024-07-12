@@ -171,7 +171,7 @@ export default {
       this.stats = { ...this.stats, ...peerStats }
     })
     this.selectedSourceMid = this.getTransceiverSourceState[0]?.mid 
-      ?? Object.values(this.getTransceiverSourceState)[0].mid
+      ?? Object.values(this.getTransceiverSourceState)[0]?.mid
   },
   beforeUnmount() {
     this.millicastView.webRTCPeer.stopStats()
@@ -197,7 +197,7 @@ export default {
     },
     selectMidZero() {
       this.selectedSourceMid = this.getTransceiverSourceState[0]?.mid 
-        ?? Object.values(this.getTransceiverSourceState)[0].mid
+        ?? Object.values(this.getTransceiverSourceState)[0]?.mid
     },
   },
   computed: {
@@ -230,6 +230,10 @@ export default {
       const video = this.stats.video?.inbounds
       const videoLength = video?.length
       if (videoLength) {
+        // If no video is present, selected source mid is undefined
+        if (!this.selectedSourceMid) {
+          return video[0]
+        }
         const trackId = this.trackIdMidMap[this.selectedSourceMid]
         const statsIndex = this.trackIdToStatsIndexMap[trackId]
         return video[statsIndex]
