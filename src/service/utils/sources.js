@@ -144,8 +144,8 @@ export const handleDeleteSource = (sourceId) => {
 }
 
 const deleteSource = (kind, sourceId) => {
-  let sourceCurrentMid
-  let sourceInitialMid
+  // let sourceCurrentMid
+  // let sourceInitialMid
   let selectedSource =
     kind === 'video'
       ? state.Sources.selectedVideoSource
@@ -153,7 +153,32 @@ const deleteSource = (kind, sourceId) => {
   let sourcesToUse =
     kind === 'video' ? state.Sources.videoSources : state.Sources.audioSources
   sourcesToUse = sourcesToUse.filter((source) => source.sourceId !== sourceId)
-
+  if (kind === 'video'){
+    if ( selectedSource.sourceId === sourceId ) {
+      const mid = sourcesToUse[0].mid 
+      const key = getKeyByValue(mid)
+      const id = `sidePlayer${key}`
+      commit('Sources/setTrackMId', {key: 0, value: mid})
+      commit('Sources/setTrackMId', {key: key, value: state.Sources.selectedVideoSource.mid || '0'})
+      swapVideos(id,false,true)
+      commit('Sources/setMainLabel', sourcesToUse[0].name)
+      commit('Sources/setSelectedSource', {
+        kind,
+        selectedSource: sourcesToUse[0],
+      })
+    } else {
+      let sourceToUse = state.Sources.videoSources.filter((source) => source.sourceId === sourceId)[0]
+      const key = getKeyByValue(sourceToUse.mid || 0)
+      const id = `sidePlayer${key}`
+      console.log('key2',key)
+      console.log('id2',id)
+      const sideVideo = document.getElementById(id)
+      const nodeVideo = sideVideo.parentNode.parentNode
+      nodeVideo.classList.add('hide-video')
+    }
+    commit('Sources/removeSource', { kind, sourceId: sourceId })
+  }
+  /*
   if (!sourcesToUse.length) {
     selectedSource = {
       name: 'none',
@@ -196,7 +221,9 @@ const deleteSource = (kind, sourceId) => {
   }
   commit('Sources/removeSourceRemoteTrack', sourceId)
   commit('Sources/removeSource', { kind, sourceId: sourceId })
-  handleSelectSource({ kind, source: selectedSource })
+  console.log('handle',{ kind, source: selectedSource })
+  // handleSelectSource({ kind, source: selectedSource })
+  */
 }
 
 export const handleSelectSource = async ({ kind, source }) => {
