@@ -124,7 +124,7 @@ export const setTrackEvent = () => {
   })
 
   if (state.Params.viewer.metadata) {
-    millicastView.on('onMetadata', (metadata) => {
+    millicastView.on('metadata', (metadata) => {
       const metadataEvent = new CustomEvent("metadata", { detail: { metadata } })
       window.dispatchEvent(metadataEvent)
     })
