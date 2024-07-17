@@ -92,14 +92,17 @@ export const handleSelectQuality = (media) => {
   if (!selectedData.encodingId && media.spatialLayerId !== null) {
     selectedData.spatialLayerId = parseInt(media.spatialLayerId)
   }
-  const data =
-    selectedData.encodingId ||
-    selectedData.encodingId === 0 ||
-    selectedData.spatialLayerId ||
-    selectedData.spatialLayerId === 0
-      ? selectedData
-      : {}
-  state.ViewConnection.millicastView.select(data)
+  const source = state.Sources.selectedVideoSource
+  const mediaLayers = state.Layers.medias[source.mid].layers
+  const quality = mediaLayers.find(layer => layer.simulcastIdx === media.simulcastIdx)
+  state.ViewConnection.millicastView?.project(source.sourceId, [
+    {
+      mediaId: source.mid, 
+      layer: quality,
+      media: 'video',
+      promote: !quality,
+    }
+ ])
   commit('Layers/selectQuality', media)
 }
 
