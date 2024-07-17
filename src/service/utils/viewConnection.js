@@ -79,7 +79,7 @@ export const handleConnectToStream = async () => {
   try {
     await setCanAutoPlayStream()
     const connectOptions = {
-      enableDrm: state.Params.viewer.enableDrm,
+      enableDRM: state.Params.viewer.enableDrm,
       events: ['active', 'inactive', 'layers', 'viewercount'],
       absCaptureTime: true,
     }
