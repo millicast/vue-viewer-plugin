@@ -21,7 +21,7 @@ export const defaultViewerOptions = {
   startingQuality: null,
   hideToast: null,
   mainLabel: null,
-  enableDRM: false
+  enableDrm: false
 }
 
 export default function processViewerOptions({
@@ -42,7 +42,7 @@ export default function processViewerOptions({
   startingQuality,
   hideToast,
   mainLabel,
-  enableDRM
+  enableDrm
 }) {
   const options = {}
 
@@ -59,7 +59,7 @@ export default function processViewerOptions({
   options.audioFollowsVideo = audioFollowsVideo ?? false
   options.layout = layout
   options.showLabels = showLabels
-  options.enableDRM = enableDRM ?? false
+  options.enableDrm = enableDrm ?? false
   if (multisource) {
     store.commit('Controls/setIsSplittedView', true)
   }

@@ -43,7 +43,7 @@ export default {
     togglePip() {
       if (
         !this.pip &&
-        (this.video.srcObject || this.viewer.enableDRM) &&
+        (this.video.srcObject || this.viewer.enableDrm) &&
         this.video.nodeName === 'VIDEO'
       ) {
         this.video.requestPictureInPicture()

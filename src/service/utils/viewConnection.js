@@ -79,7 +79,7 @@ export const handleConnectToStream = async () => {
   try {
     await setCanAutoPlayStream()
     const connectOptions = {
-      enableDRM: state.Params.viewer.enableDRM,
+      enableDrm: state.Params.viewer.enableDrm,
       events: ['active', 'inactive', 'layers', 'viewercount'],
       absCaptureTime: true,
     }
@@ -103,8 +103,8 @@ export const handleConnectToStream = async () => {
 export const setTrackEvent = () => {
   const millicastView = state.ViewConnection.millicastView
   millicastView.on('track', async (event) => {
-    //Track event is handle by SDK for DRM
-    if (state.Params.viewer.enableDRM) return
+    // Track event is handled by SDK for DRM
+    if (state.Params.viewer.enableDrm) return
     // map video trackId with mid
     if (event.track?.kind === 'video') {
       commit('Sources/addTrackIdMidMapping', {
