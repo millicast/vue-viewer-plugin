@@ -54,7 +54,8 @@ export default {
           showLabels: this.paramsOptions?.showLabels ?? true,
           startingQuality: this.paramsOptions?.startingQuality,
           hideToast: this.paramsOptions?.hideToast,
-          mainLabel: this.paramsOptions?.mainLabel ?? 'Main'
+          mainLabel: this.paramsOptions?.mainLabel ?? 'Main',
+          metadata: this.paramsOptions?.metadata
         })
       }
       processEnvironmentOptions(this.paramsOptions?.environment)
