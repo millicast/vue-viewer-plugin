@@ -20,7 +20,8 @@ export const defaultViewerOptions = {
   showLabels: true,
   startingQuality: null,
   hideToast: null,
-  mainLabel: null
+  mainLabel: null,
+  metadata: false
 }
 
 export default function processViewerOptions({
@@ -43,6 +44,7 @@ export default function processViewerOptions({
   mainLabel,
   forcePlayoutDelayMin,
   forcePlayoutDelayMax,
+  metadata,
 }) {
   const options = {}
 
@@ -59,6 +61,7 @@ export default function processViewerOptions({
   options.audioFollowsVideo = audioFollowsVideo ?? false
   options.layout = layout
   options.showLabels = showLabels
+  options.metadata = metadata
   if (multisource) {
     store.commit('Controls/setIsSplittedView', true)
   }
