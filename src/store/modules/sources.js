@@ -17,6 +17,7 @@ const defaulState = {
   trackIdMidMap: {},
   trackMId: {0:0},
   mainSourceVideo: null,
+  // mainSourceAudio: null,
 }
 
 export default {
@@ -146,7 +147,10 @@ export default {
     },
     setMainSourceVideo(state, video) {
       state.mainSourceVideo = video
-    }
+    }, 
+    // setMainSourceAudio(state, audio) {
+    //   state.mainSourceAudio = audio
+    // }
   },
   getters: {
     getVideoSources(state) {

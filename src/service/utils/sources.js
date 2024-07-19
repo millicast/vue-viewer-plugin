@@ -35,7 +35,10 @@ export const getTracks = (data) => {
 }
 
 const addRemoteTracks = async (sourceId) => {
-  if (!sourceId) return
+  if (!sourceId) {
+    state.ViewConnection.millicastView.project(null,[{trackId: 'video',mediaId: '0',media: 'video'}])
+    return
+  }
   const remoteTrackIndex = state.Sources.sourceRemoteTracks.findIndex(
     (t) => t.sourceId === sourceId
   )
@@ -70,11 +73,14 @@ const tracksAvailableAndMainNotExists = () => {
 }
 
 const addSource = (kind, sourceId, trackId) => {
+  // const mainAudio = state.Sources.mainSourceAudio
+  // const mid = kind === 'video' ? sourceId === null ? "0" : null : mainAudio ? null : "1"
+  const mid = sourceId === null ? (kind === 'video' ? "0" : "1") : null
   const source = {
     name: sourceId === null ? state.Params.viewer.mainLabel : sourceId,
     sourceId,
     trackId,
-    mid: sourceId === null ? (kind === 'video' ? "0" : "1") : null
+    mid
   }
   const sourceToUse =
     kind === 'video' ? state.Sources.videoSources : state.Sources.audioSources
@@ -87,14 +93,35 @@ const addSource = (kind, sourceId, trackId) => {
           ? state.Sources.selectedVideoSource
           : state.Sources.selectedAudioSource
       if (selectedMediaSource.name !== state.Params.viewer.mainLabel) {
+        if (kind === 'auido' || state.Sources.selectedVideoSource.name === 'none') {
+          commit('Sources/setSelectedSource', {
+            kind,
+            selectedSource: source,
+          })
+          handleSelectSource({ kind, source })
+        }
+        const mainIsHide = document.getElementsByClassName('hide-video');
+        if (kind === 'video') {
+          if (mainIsHide.length > 0) {
+            const spanElement = mainIsHide[0].querySelector('span')
+            spanElement.textContent = state.Params.viewer.mainLabel
+            mainIsHide[0].classList.remove('hide-video')
+          } else {
+            commit('Sources/setMainLabel', state.Params.viewer.mainLabel)
+          }
+        }
+      }
+    } else {
+      if (kind === 'auido' || state.Sources.selectedAudioSource.name === 'none') {
         commit('Sources/setSelectedSource', {
           kind,
           selectedSource: source,
         })
         handleSelectSource({ kind, source })
-        commit('Sources/setMainLabel', state.Params.viewer.mainLabel)
       }
-    } else {
+      // if ( mid ) {
+      //   commit('Sources/setMainSourceAudio', source)
+      // }
       sources.push(source)
     }
     commit('Sources/setSources', { kind, sources })
@@ -133,8 +160,8 @@ export const handleDeleteSource = (sourceId) => {
 }
 
 const deleteSource = (kind, sourceId) => {
-  let sourceCurrentMid
-  let sourceInitialMid
+  // let sourceCurrentMid
+  // let sourceInitialMid
   let selectedSource =
     kind === 'video'
       ? state.Sources.selectedVideoSource
@@ -142,7 +169,30 @@ const deleteSource = (kind, sourceId) => {
   let sourcesToUse =
     kind === 'video' ? state.Sources.videoSources : state.Sources.audioSources
   sourcesToUse = sourcesToUse.filter((source) => source.sourceId !== sourceId)
-
+  if (kind === 'video'){
+    if ( selectedSource.sourceId === sourceId ) {
+      const mid = sourcesToUse[0].mid 
+      const key = getKeyByValue(mid)
+      const id = `sidePlayer${key}`
+      commit('Sources/setTrackMId', {key: 0, value: mid})
+      commit('Sources/setTrackMId', {key: key, value: state.Sources.selectedVideoSource.mid || '0'})
+      swapVideos(id,false,true)
+      commit('Sources/setMainLabel', sourcesToUse[0].name)
+      commit('Sources/setSelectedSource', {
+        kind,
+        selectedSource: sourcesToUse[0],
+      })
+    } else {
+      let sourceToUse = state.Sources.videoSources.filter((source) => source.sourceId === sourceId)[0]
+      const key = getKeyByValue(sourceToUse.mid || 0)
+      const id = `sidePlayer${key}`
+      const sideVideo = document.getElementById(id)
+      const nodeVideo = sideVideo.parentNode.parentNode
+      nodeVideo.classList.add('hide-video')
+    }
+    commit('Sources/removeSource', { kind, sourceId: sourceId })
+  }
+  /*
   if (!sourcesToUse.length) {
     selectedSource = {
       name: 'none',
@@ -185,13 +235,14 @@ const deleteSource = (kind, sourceId) => {
   }
   commit('Sources/removeSourceRemoteTrack', sourceId)
   commit('Sources/removeSource', { kind, sourceId: sourceId })
-  handleSelectSource({ kind, source: selectedSource })
+  // handleSelectSource({ kind, source: selectedSource })
+  */
 }
 
 export const handleSelectSource = async ({ kind, source }) => {
+  let track = null
+  let selectedSource = null
   if (kind === 'audio') {
-    let track = null
-    let selectedSource = null
     track = state.ViewConnection.trackEvent.audio.track
     selectedSource = state.Sources.selectedVideoSource
     selectedSource = state.Sources.selectedAudioSource
@@ -200,6 +251,13 @@ export const handleSelectSource = async ({ kind, source }) => {
       if (selectedSource.name !== 'none') {
         commit('Controls/setTrackWarning', false)
       }
+    }
+  }
+  commit('Sources/setSelectedSource', { kind, selectedSource: source })
+  if (source && source?.name !== 'none' && track) {
+    await project({ kind, source })
+    if (selectedSource.name !== 'none') {
+      commit('Controls/setTrackWarning', false)
     }
   }
   commit('Sources/setSelectedSource', { kind, selectedSource: source })
@@ -215,8 +273,7 @@ const project = async ({ kind, source }) => {
   if (state.Controls.castIsConnected) {
     sendLoadRequest()
   } else if (!(sourceId === null && !sources.length)) {
-    const mediaId = transceiver?.mid ?? null
-
+    const mediaId = transceiver?.mid ?? "1"
     await state.ViewConnection.millicastView.project(sourceId, [
       {
         trackId: source.trackId,
@@ -249,9 +306,9 @@ export const switchProject = async (sourceToSwitch, animation) => {
   const videoMid = sourceToSwitch.mid
   const midProjectedInMain = state.Sources.selectedVideoSource.mid
   commit('Sources/setTrackMId', {key: 0, value: sourceToSwitch.mid})
-  commit('Sources/setTrackMId', {key: key, value: state.Sources.selectedVideoSource.mid})
+  commit('Sources/setTrackMId', {key: key, value: state.Sources.selectedVideoSource.mid || '0'})
   const sideSpan = document.getElementById(`sideLabel${key}`)
-  sideSpan.textContent = state.Sources.selectedVideoSource.name
+  sideSpan.textContent = state.Sources.selectedVideoSource.name || state.Params.viewer.mainLabel
   let lowQualityLayer
   if (midProjectedInMain in state.Layers.medias) {
     lowQualityLayer = state.Layers.medias[midProjectedInMain].layers.slice(-1)[0]
@@ -288,12 +345,17 @@ export const switchProject = async (sourceToSwitch, animation) => {
       false,
     )
   }
-  swapVideos(`sidePlayer${key}`, animation)
+  const hasMain =  getters['Sources/getVideoHasMain']
+  const hideMain = !hasMain && !midProjectedInMain
+  await swapVideos(`sidePlayer${key}`, animation, hideMain)
   await handleSelectSource({ kind: 'video', source: sourceToSwitch })
   await commit('Sources/setMainLabel', sourceToSwitch.name)
+  if (hideMain) {
+    enableAudioWitchoutMain(sourceToSwitch.name)
+  }
 }
 
-const swapVideos = async (id, animation = state.Sources.animate) => {
+const swapVideos = async (id, animation = state.Sources.animate, hideMain) => {
   gsap.registerPlugin(Flip);
   const currentElementRef = 'player'
   const playerVideo = document.getElementById(currentElementRef);
@@ -308,6 +370,10 @@ const swapVideos = async (id, animation = state.Sources.animate) => {
   playerVideo.id = playerVideo.ref = id
   sideVideo.id = sideVideo.ref = currentElementRef
   setVideoPlayer({ videoPlayer: sideVideo, srcObject: sideVideo.srcObject })
+  if (hideMain) {
+    const nodeVideo = playerVideo.parentNode.parentNode
+    nodeVideo.classList.add('hide-video')
+  }
   const duration = animation ? 0.8 : 0
   Flip.from(statePlayer, {duration, ease: "power1.inOut"});
   Flip.from(stateSide, {duration, ease: "power1.inOut"});
@@ -348,4 +414,13 @@ export const handleUnprojectMultiview = async () => {
   const mids = state.ViewConnection.millicastView.webRTCPeer.peer.getTransceivers()
     .splice(2).map((vt) => { return vt.mid })
   state.ViewConnection.millicastView.unproject(mids)
+}
+
+export const enableAudioWitchoutMain = (where) => {
+  const sidePlayerVideo = document.getElementById('sidePlayer2')
+  const muted = sidePlayerVideo.muted
+  sidePlayerVideo.muted = false
+  state.ViewConnection.millicastView.project(where,[{trackId: 'audio',mediaId: '1',media: 'audio'},{trackId: 'video',mediaId: '0',media: 'video'}])
+  sidePlayerVideo.muted = muted
+  sidePlayerVideo.play()
 }
