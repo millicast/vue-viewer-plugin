@@ -45,6 +45,17 @@
           {{ millicastView.signaling.subscriberId }}
         </td>
       </tr>
+      <tr v-if="millicastView?.signaling?.streamViewId" class="row mx-0">
+        <td class="col-6">Stream View Id</td>
+        <td class="col-5 overflow-ellipsis">
+          {{ millicastView.signaling.streamViewId }}
+        </td>
+        <td class="col-1">
+          <i class="ml-viewer-bi-copy"
+            @click="copyText(millicastView.signaling.streamViewId)" 
+          ></i>
+        </td>
+      </tr>
       <tr v-if="stats.currentRoundTripTime" class="row mx-0">
         <td class="col-6">RTT</td>
         <td class="col-6">
@@ -180,6 +191,9 @@ export default {
   methods: {
     closeTable() {
       this.close()
+    },
+    copyText(text) {
+      navigator.clipboard.writeText(text)
     },
     formatTotalBytes(value) {
       return formatBytesRecursive(value)
@@ -373,5 +387,15 @@ i {
   background: #343a40e6;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+td.overflow-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ml-viewer-bi-copy:active {
+  color: #343a40e6;
 }
 </style>

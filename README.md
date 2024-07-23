@@ -72,6 +72,8 @@ You can now use the plugin in any Vue file of your project as a component.
 | `startingQuality` | `String` | Optional | `null`| Allows to start the stream at a specific resolution when available. Possible values: 'High', 'Medium', 'Low', <Number> specifying the desired frame height (i.e. 360). |
 | `hideToast`   | `String`          | Optional |  `null`              | Allows to hide a specific type of toast notification. To hide multiple toast types, separate them using `,`. Possible values: `success`, `error`, `warning`, `info`. |
 | `audioFollowsVideo`| `Boolean`    | Optional  | `false`             | Allows automatically switching the audio to the one associated with the selected video source.       |
+| `forcePlayoutDelayMin`| `Number`    | Optional  | `null`            | Sets a minimum value for a custom delay to playback the stream. It needs to be set with its maximum value, forcePlayoutDelayMax. |
+| `forcePlayoutDelayMax`| `Number`    | Optional  | `null`            | Sets a maximum value for a custom delay to playback the stream. It needs to be set with its minimum value, forcePlayoutDelayMin. |
 
 To be able to use the viewer, just reference the `VideoPlayer` component, and pass the parameters of your choice as an object in the parameter `paramsOptions`. Refer to the [example usage](#example-apps).
 
