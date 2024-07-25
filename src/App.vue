@@ -55,7 +55,9 @@ export default {
           startingQuality: this.paramsOptions?.startingQuality,
           hideToast: this.paramsOptions?.hideToast,
           mainLabel: this.paramsOptions?.mainLabel ?? 'Main',
-          metadata: this.paramsOptions?.metadata
+          forcePlayoutDelayMin: this.paramsOptions?.forcePlayoutDelayMin,
+          forcePlayoutDelayMax: this.paramsOptions?.forcePlayoutDelayMax,
+          metadata: this.paramsOptions?.metadata,
         })
       }
       processEnvironmentOptions(this.paramsOptions?.environment)
