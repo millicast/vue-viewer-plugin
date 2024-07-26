@@ -17,6 +17,7 @@ const defaulState = {
   trackIdMidMap: {},
   trackMId: {0:0},
   mainSourceVideo: null,
+  startedAsMain: null,
   // mainSourceAudio: null,
 }
 
@@ -35,8 +36,9 @@ export default {
       if (kind === 'video') {
         state.videoSources = sources
         const source = sources[0]
-        if (source?.mid === '0') {
-          state.transceiverSourceState[source.mid] = source
+        if (source?.mid === '0' || (state.startedAsMain && !source?.mid) ) {
+          source.mid = '0'
+          state.transceiverSourceState['0'] = source
         }
       } else if (kind === 'audio') {
         state.audioSources = sources
@@ -148,9 +150,9 @@ export default {
     setMainSourceVideo(state, video) {
       state.mainSourceVideo = video
     }, 
-    // setMainSourceAudio(state, audio) {
-    //   state.mainSourceAudio = audio
-    // }
+    setStartedAsMain(state, source) {
+      state.startedAsMain = source
+    }
   },
   getters: {
     getVideoSources(state) {
@@ -158,6 +160,9 @@ export default {
     },
     getAudioSources(state) {
       return state.audioSources
+    },
+    getStartedAsMain(state) {
+      return state.startedAsMain
     },
     getVideoHasMain(state) {
       return (

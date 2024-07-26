@@ -103,10 +103,10 @@
       </div>
       <!-- SIDE SOURCES -->
       <div
-        v-if="videoSources.length > 0"
+        v-if="videoSources.length > 1"
         :class="{
           'side-panel overflow-auto sc1': !isGrid,
-          'hide-sidebar': !isSplittedView || videoSources.length === 1
+          'hide-sidebar': !isSplittedView
          }"
         :style="!isGrid ? 'scroll-snap-type: y mandatory': 'display: contents'"
         @mousemove="showControls"

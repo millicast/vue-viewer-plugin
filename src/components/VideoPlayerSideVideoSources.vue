@@ -110,9 +110,9 @@ export default {
           await projectRemoteTracks(this.sourceRemoteTracks[lastIndex])
           const mid = this.sourceRemoteTracks[lastIndex].transceiver.mid
           this.setTrackMId({key: mid, value: mid})
-          if (currentLenght === 0 && !this.getVideoHasMain) {
-            this.switchProjection(mid)
-          }
+          // if (currentLenght === 0 && !this.getVideoHasMain) {
+          //   this.switchProjection(mid)
+          // }
         } else {
           this.sourceRemoteTracks.forEach(async (remoteTrack) => {
             await projectRemoteTracks(remoteTrack)
@@ -128,9 +128,8 @@ export default {
     ...mapMutations('Layers', ['setMainTransceiverMedias']),
     ...mapGetters('Layers', ['getActiveMedias','getActiveMainTransceiverMedias']),
     async switchProjection(projectedVideoMid = 0) {
-
-      const videoMid = this.trackMId[projectedVideoMid]
       await nextTick()
+      const videoMid = this.trackMId[projectedVideoMid]
       const source = this.transceiverSourceState[videoMid]
       source.mid = source?.mid || 0
       if( this.isGrid ) {
