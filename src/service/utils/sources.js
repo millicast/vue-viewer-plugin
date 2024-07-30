@@ -188,7 +188,7 @@ const deleteSource = (kind, sourceId) => {
         kind,
         selectedSource: sourcesToUse[0],
       })
-      
+      commit('Sources/setStartedAsMain', sourcesToUse[0].sourceId)
     } else {
       if(!sourceId) {
         const newSource = sourcesToUse[0]
