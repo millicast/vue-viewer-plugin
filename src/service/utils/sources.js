@@ -117,6 +117,9 @@ const addSource = (kind, sourceId, trackId) => {
               selectedSource: source,
             })
             handleSelectSource({ kind, source })
+          } else {
+            const sideSpan = document.getElementById(`sideLabel${key}`)
+            sideSpan.textContent = state.Params.viewer.mainLabel
           }
         }
       }
