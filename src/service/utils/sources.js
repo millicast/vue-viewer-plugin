@@ -109,8 +109,8 @@ const addSource = (kind, sourceId, trackId) => {
           handleSelectSource({ kind, source })
         }
         if (kind === 'video') {
-          const key = getKeyByValue(0)
-          if ( key == 0 || key == '0') {
+          const key = getKeyByValue('0')
+          if ( key == 0) {
             commit('Sources/setMainLabel', state.Params.viewer.mainLabel)
             commit('Sources/setSelectedSource', {
               kind,
@@ -190,7 +190,7 @@ const deleteSource = (kind, sourceId) => {
       if(!sourceId) {
         const newSource = sourcesToUse[0]
         commit('Sources/removeSourceRemoteTrack', sourceId || newSource.sourceId)
-        handleProjectVideo(newSource.sourceId, state.Sources.selectedVideoSource.mid, state.Sources.selectedVideoSource.trackId)
+        // handleProjectVideo(newSource.sourceId, state.Sources.selectedVideoSource.mid, state.Sources.selectedVideoSource.trackId)
       }
       commit('Sources/removeSourceRemoteTrack', sourceId)
     }
@@ -349,14 +349,12 @@ export const switchProject = async (sourceToSwitch, animation) => {
       false,
     )
   }
-  const hasMain = getters['Sources/getVideoHasMain']
-  const hideMain = !hasMain && !midProjectedInMain
-  await swapVideos(`sidePlayer${key}`, animation, hideMain)
+  await swapVideos(`sidePlayer${key}`, animation)
   await handleSelectSource({ kind: 'video', source: sourceToSwitch })
   await commit('Sources/setMainLabel', sourceToSwitch.name)
 }
 
-const swapVideos = async (id, animation = state.Sources.animate, hideMain) => {
+const swapVideos = async (id, animation = state.Sources.animate) => {
   gsap.registerPlugin(Flip);
   const currentElementRef = 'player'
   const playerVideo = document.getElementById(currentElementRef);
