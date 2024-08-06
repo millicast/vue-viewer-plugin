@@ -45,7 +45,7 @@ const addRemoteTracks = async (newSourceId) => {
   if (!newSourceId) {
     state.ViewConnection.millicastView.project(null,[{trackId: 'video',mediaId: '0',media: 'video'}])
     commit('Sources/setStartedAsMain', newSourceId)
-    if (getters['Sources/getVideoHasMain']) {
+    if (!state.Sources.stream) {
       return
     }
   }
@@ -65,11 +65,12 @@ const addRemoteTracks = async (newSourceId) => {
     }
     if (remoteTrackIndex !== -1) {
       commit('Sources/replaceSourceRemoteTrack', {
-        sourceRemoteTrack,
-        remoteTrackIndex,
+        what: sourceRemoteTrack,
+        where: remoteTrackIndex,
       })
     } else {
       commit('Sources/addSourceRemoteTrack', sourceRemoteTrack)
+      commit('Sources/addSourceSideTrack',sourceRemoteTrack)
     }
   }, 50) //We have to set a timeout because it takes a while before the millicastView signaling instance changes on migrate.
 }
@@ -169,8 +170,6 @@ export const handleDeleteSource = (sourceId) => {
 }
 
 const deleteSource = (kind, sourceId) => {
-  // let sourceCurrentMid
-  // let sourceInitialMid
   let selectedSource =
     kind === 'video'
       ? state.Sources.selectedVideoSource
@@ -179,10 +178,11 @@ const deleteSource = (kind, sourceId) => {
     kind === 'video' ? state.Sources.videoSources : state.Sources.audioSources
   sourcesToUse = sourcesToUse.filter((source) => source.sourceId !== sourceId)
   if (kind === 'video'){
+    let newSource = sourcesToUse[0]
+    let replace
+
     if ( selectedSource.sourceId === sourceId ) {
-      const newSource = sourcesToUse[0]
       handleProjectVideo(newSource.sourceId, state.Sources.selectedVideoSource.mid, state.Sources.selectedVideoSource.trackId)
-      commit('Sources/removeSourceRemoteTrack', sourceId || newSource.sourceId)
       commit('Sources/setMainLabel', sourcesToUse[0].name)
       commit('Sources/setSelectedSource', {
         kind,
@@ -191,59 +191,27 @@ const deleteSource = (kind, sourceId) => {
       commit('Sources/setStartedAsMain', sourcesToUse[0].sourceId)
     } else {
       if(!sourceId) {
-        const newSource = sourcesToUse[0]
-        commit('Sources/removeSourceRemoteTrack', sourceId || newSource.sourceId)
-        // handleProjectVideo(newSource.sourceId, state.Sources.selectedVideoSource.mid, state.Sources.selectedVideoSource.trackId)
-      }
-      commit('Sources/removeSourceRemoteTrack', sourceId)
-    }
-    commit('Sources/removeSource', { kind, sourceId: sourceId })
-  }
-  /*
-  if (!sourcesToUse.length) {
-    selectedSource = {
-      name: 'none',
-    }
-  } else if (sourceId === selectedSource.sourceId || sourceId === null) {
-    selectedSource = sourcesToUse[0]
-
-    if (!state.Sources.isAudioOnly) {
-      commit('Sources/setMainLabel', sourcesToUse[0].name)
-    }
-  }
-
-  if (kind === 'video') {
-    sourceCurrentMid = Object.keys(state.Sources.transceiverSourceState).find(key => state.Sources.transceiverSourceState[key].sourceId === sourceId)
-    if (sourceId !== null) {
-      sourceInitialMid = Object.values(state.Sources.sourceRemoteTracks).find(value => value.sourceId === sourceId).transceiver.mid
-    }
-
-    if (state.Controls.isSplittedView) {
-      if (state.Sources.selectedVideoSource.sourceId !== null && sourceId === null) {
-        handleProjectVideo(state.Sources.selectedVideoSource.sourceId, `${sourceCurrentMid}`, state.Sources.selectedVideoSource.trackId)
-        if (state.Params.viewer.showLabels) {
-          document.getElementById(`sideLabel${state.Sources.selectedVideoSource.mid}`).textContent = state.Sources.selectedVideoSource.sourceId
+        if( newSource.name === state.Sources.mainLabel) {
+          newSource = sourcesToUse[1]
         }
-      } else if (state.Sources.selectedVideoSource.sourceId === null && sourceId !== null) {
-        if (sourceCurrentMid !== sourceInitialMid) {
-          handleProjectVideo(state.Sources.transceiverSourceState[sourceInitialMid].sourceId, state.Sources.transceiverSourceState[sourceCurrentMid].mid)
-          if (state.Params.viewer.showLabels) {
-            document.getElementById(`sideLabel${state.Sources.transceiverSourceState[sourceCurrentMid].mid}`).textContent = state.Sources.transceiverSourceState[sourceInitialMid].sourceId
-          }
+        handleProjectVideo(newSource.sourceId, "0", state.Sources.selectedVideoSource.trackId)
+        const result = state.Sources.sourceRemoteTracks.find(source => source.sourceId === newSource.sourceId)
+        replace = {...result} 
+        replace.mediaStream = state.Sources.stream
+        commit('Sources/updateMainMediaTraks', { 
+          what: replace,
+          sourceId: sourceId || newSource.sourceId
         }
-      } else if (state.Sources.selectedVideoSource.sourceId !== null && sourceId !== null && sourceCurrentMid !== sourceInitialMid) {
-        handleProjectVideo(state.Sources.transceiverSourceState[sourceInitialMid].sourceId, state.Sources.selectedVideoSource.mid)
-        if (state.Params.viewer.showLabels) {
-          document.getElementById(`sideLabel${state.Sources.transceiverSourceState[state.Sources.selectedVideoSource.mid].mid}`).textContent = state.Sources.transceiverSourceState[sourceInitialMid].sourceId
-        }
+        )
       }
     }
-    commit('Sources/removeTransceiverSourceState', sourceId)
+    if (!replace) {
+      commit('Sources/removeSourceSideTrack', sourceId || newSource.sourceId)
+    }
+    commit('Sources/removeSourceRemoteTrack', sourceId || newSource.sourceId)
+    commit('Sources/removeTransceiverSourceState',sourceId)
   }
-  commit('Sources/removeSourceRemoteTrack', sourceId)
   commit('Sources/removeSource', { kind, sourceId: sourceId })
-  // handleSelectSource({ kind, source: selectedSource })
-  */
 }
 
 export const handleSelectSource = async ({ kind, source }) => {
@@ -315,6 +283,21 @@ export const switchProject = async (sourceToSwitch, animation) => {
   commit('Sources/setTrackMId', {key: 0, value: sourceToSwitch.mid})
   commit('Sources/setTrackMId', {key: key, value: state.Sources.selectedVideoSource.mid || '0'})
   const sideSpan = document.getElementById(`sideLabel${key}`)
+  const remoteTrackIndex = state.Sources.sourceSideTracks.findIndex(source => source.sourceId === sourceToSwitch.sourceId)
+  let sourceRemoteTrack
+  if (midProjectedInMain === '0') {
+    sourceRemoteTrack = {
+      mediaStream: state.Sources.stream,
+      sourceId: null,
+      transceiver: state.Sources.transceiverSourceState[0],
+    }
+  } else {
+    sourceRemoteTrack = state.Sources.sourceRemoteTracks.find(source => source.sourceId === state.Sources.selectedVideoSource.sourceId)
+  }
+  commit('Sources/replaceSourceSideTrack', {
+    what: sourceRemoteTrack,
+    where: remoteTrackIndex,
+  })
   sideSpan.textContent = state.Sources.selectedVideoSource.name || state.Params.viewer.mainLabel
   let lowQualityLayer
   if (midProjectedInMain in state.Layers.medias) {
@@ -390,16 +373,24 @@ export const handleProjectVideo = async (what, where, trackId, layer, promote) =
   ])
 }
 
-export const handleProjectRemoteTracks = async (remoteTrack) => {
+export const handleProjectRemoteTracks = async ({remoteTrack, index}) => {
+  let remoteIndex = index || remoteTrack.transceiver?.mid
+  if (index != null) {
+    let keys = Object.keys(state.Sources.transceiverSourceState)
+    remoteIndex = keys[index + 1]
+    const sideLabelId = `sideLabel${remoteIndex}`
+    const sidePlayerLabel = document.getElementById(sideLabelId)
+    sidePlayerLabel.textContent = remoteTrack.transceiver?.name || state.Params.viewer.mainLabel
+  }
   await nextTick()
   const maxLayerHeight = state.Params.viewer.maxHeight ? Number(state.Params.viewer.maxHeight) : null
-  const sidePlayerId = 'sidePlayer' + remoteTrack.transceiver?.mid
+  const sidePlayerId = 'sidePlayer' + remoteIndex
   const sidePlayerVideo = document.getElementById(sidePlayerId)
   sidePlayerVideo.srcObject = remoteTrack.mediaStream
   handleProjectVideo(
     remoteTrack.sourceId, 
-    remoteTrack.transceiver?.mid ?? null, 
-    state.Sources.transceiverSourceState[remoteTrack.transceiver?.mid].trackId,
+    remoteIndex ?? null, 
+    state.Sources.transceiverSourceState[remoteIndex].trackId,
     maxLayerHeight ? { maxHeight: maxLayerHeight } : null
   )
   sidePlayerVideo.muted = true
