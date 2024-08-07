@@ -74,11 +74,11 @@
       </tr>
       <tr v-if="video?.bitrate" class="row mx-0">
         <td class="col-6">Video Bitrate</td>
-        <td class="col-6">{{ formatBitrate(video.bitrate) }}</td>
+        <td class="col-6">{{ formatBitrate(video.bitrateBitsPerSecond) }}</td>
       </tr>
       <tr v-if="audio?.bitrate" class="row mx-0">
         <td class="col-6">Audio Bitrate</td>
-        <td class="col-6">{{ formatBitrate(audio.bitrate) }}</td>
+        <td class="col-6">{{ formatBitrate(audio.bitrateBitsPerSecond) }}</td>
       </tr>
       <tr v-if="video?.totalBytesReceived" class="row mx-0">
         <td class="col-6">Video Total Received</td>
@@ -202,7 +202,7 @@ export default {
       return formatBitsRecursive(value)
     },
     formatMilliseconds(value) {
-      return `${(value || 0) * 1000} ms`
+      return `${(+value.toFixed(2) || 0) * 1000} ms`
     },
     handleSourceChange() {
       const mid = this.selectedSourceMid ?? 0
