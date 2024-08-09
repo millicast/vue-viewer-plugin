@@ -112,6 +112,8 @@ export default {
           const mid = this.sourceRemoteTracks[lastIndex].transceiver.mid
           this.setTrackMId({key: mid, value: mid})
         } else {
+          const mainMid = this.selectedVideoSource.mid
+          this.resetTrackMId(mainMid)
           this.sourceSideTracks.forEach(async (remoteTrack, index) => {
             await projectRemoteTracks({remoteTrack, index})
           }
@@ -122,7 +124,7 @@ export default {
   },
   methods: {
     ...mapMutations('Controls', ['toggleFullscreen', 'setIsSplittedView']),
-    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'replaceSourceRemoteTrack','setTrackMId']),//, 'updateTransceiverSourceState']),
+    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'replaceSourceRemoteTrack','setTrackMId','resetTrackMId']),//, 'updateTransceiverSourceState']),
     ...mapMutations('Layers', ['setMainTransceiverMedias']),
     ...mapGetters('Layers', ['getActiveMedias','getActiveMainTransceiverMedias']),
     async switchProjection(projectedVideoMid = 0) {

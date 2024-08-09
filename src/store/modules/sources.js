@@ -57,7 +57,16 @@ export default {
           state.audioSources.splice(sourceIndex, 1)
         }
       }
-    }, 
+    },
+    removeSourceAndUpdateMain(state, {sourceId}) {
+      const sourceIndex = state.videoSources.findIndex(source => source.sourceId === sourceId)
+      const mainIndex = state.videoSources.findIndex(source => source.sourceId === null)
+      if (sourceIndex !== -1) {
+        state.videoSources.splice(sourceIndex, 1)
+        state.videoSources[mainIndex].sourceId = sourceId
+        state.videoSources[mainIndex].name = sourceId
+      }
+    },
     setStream(state, stream) {
       state.stream = stream
     },
@@ -76,6 +85,9 @@ export default {
     setTrackMId(state, trackMid) {
       const {key,value} = trackMid
       state.trackMId[key] = value
+    },
+    resetTrackMId(state, trackMid) {
+      state.trackMId = {'0': trackMid}
     },
     addSourceRemoteTrack(state, sourceRemoteTrack) {
       state.sourceRemoteTracks.push(sourceRemoteTrack)
@@ -102,7 +114,7 @@ export default {
       const mainToReplaceIndex = state.sourceSideTracks.findIndex(
         (remoteTrack) => remoteTrack.sourceId === null
       )
-      state.sourceRemoteTracks[mainToReplaceIndex] = what
+       state.sourceSideTracks[mainToReplaceIndex] = what
       if (remoteToDeleteIndex !== -1) {
         state.sourceSideTracks.splice(remoteToDeleteIndex, 1)
       }
@@ -134,35 +146,19 @@ export default {
         state.sourceSideTracks.splice(remoteToDeleteIndex, 1)
       }
     },
-    removeTransceiverSourceState(state, id) {
-      const sourceInitialMid = Object.values(state.transceiverSourceState).find(value => value.sourceId === id)
-      delete state.transceiverSourceState[sourceInitialMid.mid]
-      delete state.trackIdMidMap[sourceInitialMid.mid]
-      // const sourceCurrentMid = Object.keys(state.transceiverSourceState).find(key => state.transceiverSourceState[key].sourceId === sourceId)
-      // const mainMidKey = Object.keys(state.transceiverSourceState).find(key => state.transceiverSourceState[key].sourceId === null)
-      // if (sourceCurrentMid !== -1 && sourceId !== null) {
-      //   let sourceInitialMid = Object.values(state.sourceRemoteTracks).find(value => value.sourceId === sourceId).transceiver.mid
-      //   if (state.transceiverSourceState[sourceCurrentMid].mid  === '0') {
-      //     if(sourceInitialMid !== mainMidKey) {
-      //       let sourceAtInitialMid = state.transceiverSourceState[sourceInitialMid]
-      //       state.transceiverSourceState[sourceCurrentMid] = { ...state.transceiverSourceState[mainMidKey] , mid: sourceCurrentMid }
-      //       state.transceiverSourceState[mainMidKey] = { ...sourceAtInitialMid, mid: mainMidKey }
-      //       delete state.transceiverSourceState[sourceInitialMid]
-      //     } else {
-      //       sourceInitialMid = state.videoSources.find(source => source.sourceId === sourceId).mid
-      //       delete state.transceiverSourceState[sourceInitialMid]
-      //       state.transceiverSourceState[sourceCurrentMid] = state.videoSources[sourceCurrentMid]
-      //     }
-      //   } else {
-      //     state.transceiverSourceState[sourceCurrentMid] = { ...state.transceiverSourceState[sourceInitialMid] , mid: `${sourceCurrentMid}` }
-      //     delete state.transceiverSourceState[sourceInitialMid]
-      //   }
-      // } else if (sourceCurrentMid !== -1) {
-      //   if (state.transceiverSourceState[sourceCurrentMid].mid !== '0') {
-      //     state.transceiverSourceState[sourceCurrentMid] = { ...state.transceiverSourceState[0] , mid: `${sourceCurrentMid}` }
-      //     delete state.transceiverSourceState[0]
-      //   }
-      // }
+    removeTransceiverSourceState(state, {sourceId, replace}) {
+      const sourceInitialMid = Object.values(state.transceiverSourceState).find(value => value.sourceId === sourceId)
+      if(!sourceId) {
+        const sourceToReplaceMid = Object.values(state.transceiverSourceState).find(value => value.sourceId === replace.sourceId)
+        state.transceiverSourceState[sourceInitialMid.mid] = {...state.transceiverSourceState[sourceToReplaceMid.mid]}
+        state.trackIdMidMap[sourceInitialMid.mid] = `${state.trackIdMidMap[sourceToReplaceMid.mid]}`
+        state.transceiverSourceState[sourceInitialMid.mid].mid = sourceInitialMid.mid
+        delete state.transceiverSourceState[sourceToReplaceMid.mid]
+        delete state.trackIdMidMap[sourceToReplaceMid.mid]
+      } else {
+        delete state.transceiverSourceState[sourceInitialMid.mid]
+        delete state.trackIdMidMap[sourceInitialMid.mid]
+      }
     },
     setMainLabel(state, label) {
       state.mainLabel = label

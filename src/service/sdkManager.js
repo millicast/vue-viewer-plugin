@@ -238,7 +238,7 @@ export const selectSource = async ({ kind, source }) => {
 }
 
 export const projectRemoteTracks = async ({remoteTrack,index}) => {
-  sources.handleProjectRemoteTracks({remoteTrack,index})
+  await sources.handleProjectRemoteTracks({remoteTrack,index})
 }
 
 export const projectVideo = async (what, where, trackId, layer, promote) => {
