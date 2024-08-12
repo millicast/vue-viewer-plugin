@@ -184,11 +184,11 @@ const deleteSource = (kind, sourceId) => {
     const isMainLabel = newSource.name === state.Sources.mainLabel
     const needsNewSource = !sourceId && isMainLabel
     if (isSameSource) {
-      newSource.mid = "0"
       handleProjectVideo(newSource.sourceId, state.Sources.selectedVideoSource.mid, state.Sources.selectedVideoSource.trackId)
       commit('Sources/setMainLabel', newSource.name)
       commit('Sources/setSelectedSource', { kind, selectedSource: newSource })
       if (!sourceId) {
+        newSource.mid = "0"
         const transceiver = { ...state.Sources.transceiverSourceState[newSource.mid], mid: "0" }
         replace = {
           mediaStream: state.Sources.stream,
