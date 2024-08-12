@@ -169,7 +169,7 @@ export const handleDeleteSource = (sourceId) => {
   }
 }
 
-const deleteSource = (kind, sourceId) => {
+const deleteSource = async (kind, sourceId) => {
   let selectedSource =
     kind === 'video'
       ? state.Sources.selectedVideoSource
@@ -183,11 +183,14 @@ const deleteSource = (kind, sourceId) => {
     const isSameSource = selectedSource.sourceId === sourceId
     const isMainLabel = newSource.name === state.Sources.mainLabel
     const needsNewSource = !sourceId && isMainLabel
+    if (needsNewSource) {
+      newSource = sourcesToUse[1]
+    }
     if (isSameSource) {
-      handleProjectVideo(newSource.sourceId, state.Sources.selectedVideoSource.mid, state.Sources.selectedVideoSource.trackId)
-      commit('Sources/setMainLabel', newSource.name)
-      commit('Sources/setSelectedSource', { kind, selectedSource: newSource })
       if (!sourceId) {
+        handleProjectVideo(newSource.sourceId, state.Sources.selectedVideoSource.mid, state.Sources.selectedVideoSource.trackId)
+        commit('Sources/setMainLabel', newSource.name)
+        commit('Sources/setSelectedSource', { kind, selectedSource: newSource })
         newSource.mid = "0"
         const transceiver = { ...state.Sources.transceiverSourceState[newSource.mid], mid: "0" }
         replace = {
@@ -199,11 +202,10 @@ const deleteSource = (kind, sourceId) => {
           what: replace,
           sourceId: newSource.sourceId
         })
+      } else {
+        await switchProject(newSource, false)
       }
     } else if (!sourceId) {
-      if (needsNewSource) {
-        newSource = sourcesToUse[1]
-      }
       handleProjectVideo(newSource.sourceId, "0", state.Sources.selectedVideoSource.trackId)
       const transceiver = { ...state.Sources.transceiverSourceState[newSource.mid], mid: "0" }
       replace = {
@@ -422,13 +424,4 @@ export const handleUnprojectMultiview = async () => {
   const mids = state.ViewConnection.millicastView.webRTCPeer.peer.getTransceivers()
     .splice(2).map((vt) => { return vt.mid })
   state.ViewConnection.millicastView.unproject(mids)
-}
-
-export const enableAudioWitchoutMain = (where) => {
-  const sidePlayerVideo = document.getElementById('sidePlayer2')
-  const muted = sidePlayerVideo.muted
-  sidePlayerVideo.muted = false
-  state.ViewConnection.millicastView.project(where,[{trackId: 'audio',mediaId: '1',media: 'audio'},{trackId: 'video',mediaId: '0',media: 'video'}])
-  sidePlayerVideo.muted = muted
-  sidePlayerVideo.play()
 }
