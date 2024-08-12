@@ -179,14 +179,29 @@ const deleteSource = (kind, sourceId) => {
   sourcesToUse = sourcesToUse.filter((source) => source.sourceId !== sourceId)
   let replace
   if (kind === 'video'){
-    let newSource = sourcesToUse[0]
+    let newSource = {...sourcesToUse[0]}
     if ( selectedSource.sourceId === sourceId ) {
+      newSource.mid = "0"
       handleProjectVideo(newSource.sourceId, state.Sources.selectedVideoSource.mid, state.Sources.selectedVideoSource.trackId)
       commit('Sources/setMainLabel', sourcesToUse[0].name)
       commit('Sources/setSelectedSource', {
         kind,
-        selectedSource: sourcesToUse[0],
+        selectedSource: newSource,
       })
+      if (!sourceId){
+        const transceiver = { ...state.Sources.transceiverSourceState[newSource.mid]}
+        transceiver.mid = "0"
+        replace = {
+          mediaStream: state.Sources.stream,
+          sourceId: newSource.sourceId,
+          transceiver: transceiver
+        }
+        commit('Sources/updateMainMediaTraks', { 
+          what: replace,
+          sourceId: sourceId || newSource.sourceId
+        }
+        )
+      }
     } else if(!sourceId) {
       if( newSource.name === state.Sources.mainLabel) {
         newSource = sourcesToUse[1]
@@ -213,7 +228,7 @@ const deleteSource = (kind, sourceId) => {
     commit('Sources/removeTransceiverSourceState',{sourceId, replace})
   }
   if (replace) {
-    commit('Sources/removeSourceAndUpdateMain', { mid: replace.transceiver.mid , sourceId: replace.sourceId })
+    commit('Sources/removeSourceAndUpdateMain', { sourceId: replace.sourceId })
   } else {
     commit('Sources/removeSource', { kind, sourceId: sourceId })
   }
