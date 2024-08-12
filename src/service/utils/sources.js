@@ -178,19 +178,18 @@ const deleteSource = (kind, sourceId) => {
     kind === 'video' ? state.Sources.videoSources : state.Sources.audioSources
   sourcesToUse = sourcesToUse.filter((source) => source.sourceId !== sourceId)
   let replace
-  if (kind === 'video'){
-    let newSource = {...sourcesToUse[0]}
-    if ( selectedSource.sourceId === sourceId ) {
+  if (kind === 'video') {
+    let newSource = { ...sourcesToUse[0] }
+    const isSameSource = selectedSource.sourceId === sourceId
+    const isMainLabel = newSource.name === state.Sources.mainLabel
+    const needsNewSource = !sourceId && isMainLabel
+    if (isSameSource) {
       newSource.mid = "0"
       handleProjectVideo(newSource.sourceId, state.Sources.selectedVideoSource.mid, state.Sources.selectedVideoSource.trackId)
-      commit('Sources/setMainLabel', sourcesToUse[0].name)
-      commit('Sources/setSelectedSource', {
-        kind,
-        selectedSource: newSource,
-      })
-      if (!sourceId){
-        const transceiver = { ...state.Sources.transceiverSourceState[newSource.mid]}
-        transceiver.mid = "0"
+      commit('Sources/setMainLabel', newSource.name)
+      commit('Sources/setSelectedSource', { kind, selectedSource: newSource })
+      if (!sourceId) {
+        const transceiver = { ...state.Sources.transceiverSourceState[newSource.mid], mid: "0" }
         replace = {
           mediaStream: state.Sources.stream,
           sourceId: newSource.sourceId,
@@ -198,17 +197,15 @@ const deleteSource = (kind, sourceId) => {
         }
         commit('Sources/updateMainMediaTraks', { 
           what: replace,
-          sourceId: sourceId || newSource.sourceId
-        }
-        )
+          sourceId: newSource.sourceId
+        })
       }
-    } else if(!sourceId) {
-      if( newSource.name === state.Sources.mainLabel) {
+    } else if (!sourceId) {
+      if (needsNewSource) {
         newSource = sourcesToUse[1]
       }
       handleProjectVideo(newSource.sourceId, "0", state.Sources.selectedVideoSource.trackId)
-      const transceiver ={ ...state.Sources.transceiverSourceState[newSource.mid]}
-      transceiver.mid = "0"
+      const transceiver = { ...state.Sources.transceiverSourceState[newSource.mid], mid: "0" }
       replace = {
         mediaStream: state.Sources.stream,
         sourceId: newSource.sourceId,
@@ -216,21 +213,20 @@ const deleteSource = (kind, sourceId) => {
       }
       commit('Sources/updateMainMediaTraks', { 
         what: replace,
-        sourceId: sourceId || newSource.sourceId
-      }
-      )
+        sourceId: newSource.sourceId
+      })
     }
     commit('Sources/setStartedAsMain', newSource.sourceId)
     if (!replace) {
       commit('Sources/removeSourceSideTrack', sourceId || newSource.sourceId)
     }
     commit('Sources/removeSourceRemoteTrack', sourceId || newSource.sourceId)
-    commit('Sources/removeTransceiverSourceState',{sourceId, replace})
+    commit('Sources/removeTransceiverSourceState', { sourceId, replace })
   }
   if (replace) {
     commit('Sources/removeSourceAndUpdateMain', { sourceId: replace.sourceId })
   } else {
-    commit('Sources/removeSource', { kind, sourceId: sourceId })
+    commit('Sources/removeSource', { kind, sourceId })
   }
 }
 
