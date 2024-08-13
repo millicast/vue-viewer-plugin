@@ -61,6 +61,7 @@ export default {
   computed: {
     ...mapState('Sources', [
       'sourceRemoteTracks',
+      'sourceSideTracks',
       'videoSources',
       'audioSources',
       'transceiverSourceState',
@@ -88,7 +89,7 @@ export default {
   },
   async mounted() {
     this.sourceRemoteTracks.forEach(async (remoteTrack) => {
-      await projectRemoteTracks(remoteTrack)
+      await projectRemoteTracks({remoteTrack})
       const mid = remoteTrack.transceiver.mid
       this.setTrackMId({key: mid, value: mid})
     }
@@ -107,15 +108,14 @@ export default {
       handler: async function (newLenght, currentLenght) {
         if (newLenght > currentLenght) {
           const lastIndex = newLenght - 1
-          await projectRemoteTracks(this.sourceRemoteTracks[lastIndex])
+          await projectRemoteTracks({remoteTrack: this.sourceRemoteTracks[lastIndex]})
           const mid = this.sourceRemoteTracks[lastIndex].transceiver.mid
           this.setTrackMId({key: mid, value: mid})
-          if (currentLenght === 0 && !this.getVideoHasMain) {
-            this.switchProjection(mid)
-          }
         } else {
-          this.sourceRemoteTracks.forEach(async (remoteTrack) => {
-            await projectRemoteTracks(remoteTrack)
+          const mainMid = this.selectedVideoSource.mid
+          this.resetTrackMId(mainMid)
+          this.sourceSideTracks.forEach(async (remoteTrack, index) => {
+            await projectRemoteTracks({remoteTrack, index})
           }
           )
         }
@@ -124,13 +124,12 @@ export default {
   },
   methods: {
     ...mapMutations('Controls', ['toggleFullscreen', 'setIsSplittedView']),
-    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'replaceSourceRemoteTrack','setTrackMId']),//, 'updateTransceiverSourceState']),
+    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'replaceSourceRemoteTrack','setTrackMId','resetTrackMId']),//, 'updateTransceiverSourceState']),
     ...mapMutations('Layers', ['setMainTransceiverMedias']),
     ...mapGetters('Layers', ['getActiveMedias','getActiveMainTransceiverMedias']),
     async switchProjection(projectedVideoMid = 0) {
-
-      const videoMid = this.trackMId[projectedVideoMid]
       await nextTick()
+      const videoMid = this.trackMId[projectedVideoMid]
       const source = this.transceiverSourceState[videoMid]
       source.mid = source?.mid || 0
       if( this.isGrid ) {
