@@ -55,7 +55,10 @@ export default {
           startingQuality: this.paramsOptions?.startingQuality,
           hideToast: this.paramsOptions?.hideToast,
           mainLabel: this.paramsOptions?.mainLabel ?? 'Main',
-          enableDrm: this.paramsOptions.enableDrm ?? false
+          enableDrm: this.paramsOptions.enableDrm ?? false,
+          forcePlayoutDelayMin: this.paramsOptions?.forcePlayoutDelayMin,
+          forcePlayoutDelayMax: this.paramsOptions?.forcePlayoutDelayMax,
+          metadata: this.paramsOptions?.metadata,
         })
       }
       processEnvironmentOptions(this.paramsOptions?.environment)

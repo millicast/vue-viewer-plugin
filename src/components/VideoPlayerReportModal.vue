@@ -75,16 +75,10 @@ export default {
         name: '',
         email: '',
         description: '',
-        streamId: '',
-        accountId: '',
-        serverId: '',
-        clusterId: '',
+        diagnostics: {},
         url: '',
-        log: [],
-        statsInitialized: false,
-        toast: new CustomToast(),
       },
-      localStats: [],
+      toast: new CustomToast(),
       isLoading: false,
     }
   },
@@ -92,21 +86,15 @@ export default {
     async sendReport() {
       if (this.isLoading) return
 
-      let log = Logger.getHistory()
-      for (let i = 0; i < this.localStats.length; i++) {
-        log.push(
-          '[PeerConnectionStats] - ' + JSON.stringify(this.localStats[i])
-        )
-      }
+      this.report.diagnostics = Logger.diagnose()
 
-      this.report.log = log
       try {
         this.isLoading = true
         const headers = { 'Content-Type': 'application/json' }
-        this.report.serverId =
-          this.millicastView?.signaling?.serverId ?? 'NOT_CONNECTED'
-        this.report.clusterId =
-          this.millicastView?.signaling?.clusterId ?? 'NOT_CONNECTED'
+        this.report.diagnostics.serverId =
+          this.report.diagnostics?.subscriberId ?? 'NOT_CONNECTED'
+        this.report.diagnostics.clusterId =
+          this.report.diagnostics?.clusterId ?? 'NOT_CONNECTED'
         await fetch(this.reportUrl + '/reports', {
           method: 'POST',
           headers,
@@ -124,14 +112,6 @@ export default {
         this.close()
       }
     },
-    statsHandler(stats) {
-      const MAX_STATS_LENGTH = 40
-
-      this.localStats.push(stats)
-      if (this.localStats.length >= MAX_STATS_LENGTH) {
-        this.localStats = this.localStats.slice(-MAX_STATS_LENGTH)
-      }
-    },
   },
   computed: {
     ...mapState('ViewConnection', {
@@ -142,23 +122,7 @@ export default {
     }),
   },
   mounted() {
-    this.report.accountId = this.streamId?.match(/^(.*?)\/.*$/)[1]
-    this.report.streamId = this.streamId?.match(/^.*?\/(.*)$/)[1]
     this.report.url = window.location.href
-    if (
-      this.millicastView?.webRTCPeer &&
-      !this.millicastView?.webRTCPeer?.peerConnectionStats
-    ) {
-      this.millicastView.webRTCPeer.initStats()
-      this.statsInitialized = true
-    }
-    this.millicastView.webRTCPeer.on('stats', this.statsHandler)
-  },
-  beforeUnmount() {
-    if (this.statsInitialized) {
-      this.millicastView.webRTCPeer.stopStats()
-    }
-    this.millicastView.webRTCPeer.removeListener('stats', this.statsHandler)
   },
 }
 </script>
