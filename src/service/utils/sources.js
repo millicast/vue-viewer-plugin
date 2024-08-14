@@ -184,7 +184,7 @@ const deleteSource = async (kind, sourceId) => {
     const isMainLabel = newSource.name === state.Sources.mainLabel
     const needsNewSource = !sourceId && isMainLabel
     if (needsNewSource) {
-      newSource = sourcesToUse[1]
+      newSource = { ...sourcesToUse[1] }
     }
     if (isSameSource) {
       if (!sourceId) {
