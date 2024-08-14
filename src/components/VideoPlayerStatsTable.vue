@@ -202,7 +202,7 @@ export default {
       return formatBitsRecursive(value)
     },
     formatMilliseconds(value) {
-      return `${(+value.toFixed(2) || 0) * 1000} ms`
+      return `${+((value || 0) * 1000).toFixed(2)} ms`
     },
     handleSourceChange() {
       const mid = this.selectedSourceMid ?? 0
