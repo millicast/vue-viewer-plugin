@@ -10,6 +10,7 @@
     >
       <div
         class="videoText"
+        :id="`videoText${source.transceiver?.mid}`"
         :class="isGrid ? 'videoGrid' : '' "
         v-on:click="() => enableClick && switchProjection(source.transceiver?.mid)"
         @dblclick="toggleFullscreen"
