@@ -146,7 +146,7 @@ export default {
         state.sourceSideTracks.splice(remoteToDeleteIndex, 1)
       }
     },
-    removeTransceiverSourceState(state, {sourceId, replace}) {
+    removeTransceiverSourceState(state, { sourceId, replace }) {
       const sourceInitialMid = Object.values(state.transceiverSourceState).find(value => value.sourceId === sourceId)
       if(!sourceId && replace) {
         const sourceToReplaceMid = Object.values(state.transceiverSourceState).find(value => value.sourceId === replace.sourceId)
