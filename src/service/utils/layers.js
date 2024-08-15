@@ -46,14 +46,14 @@ export const updateLayers = (evntData) => {
         }
       })
     } else {
-      encoding.active?.forEach((quality) => {
+      encoding?.active?.forEach((quality) => {
         if (!activeQualities.some((info) => info.id === quality.id)) {
           quality.selectId = quality.id
           quality.disabled = quality.bitrate ? false : true
           activeQualities.push(quality)
         }
       })
-      encoding.inactive?.forEach((quality) => {
+      encoding?.inactive?.forEach((quality) => {
         if (!inactiveQualities.some((info) => info.id === quality.id)) {
           inactiveQualities.push(quality)
         }
@@ -72,7 +72,7 @@ export const updateLayers = (evntData) => {
     activeQualities.unshift({name: 'Auto'})
   }
 
-  if (activeQualities.length != state.Layers.mainTransceiverMedias.active.length) {
+  if (activeQualities.length != state.Layers.mainTransceiverMedias?.active.length) {
     commit('Layers/setSelectedQuality', { name: 'Auto' })
   }
   commit('Layers/setMainTransceiverMedias', {
@@ -124,7 +124,7 @@ const setSideSourcesQualityLow = (newLayers) => {
     const difference = newLayersMids.filter(key => !layersMids.includes(key))
 
     const diffActiveLayers = difference.reduce((diffActiveLayers, key) => {
-      const activeLayers = newLayers[key].active.length > 0 ? newLayers[key].active : null
+      const activeLayers = newLayers[key]?.active.length > 0 ? newLayers[key].active : null
       if (activeLayers != null) diffActiveLayers[key] = activeLayers
       return diffActiveLayers
     }, {})

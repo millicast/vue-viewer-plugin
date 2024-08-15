@@ -126,8 +126,8 @@ export default {
         (v) => v.sourceId === sourceRemoteTrack.sourceId
       )
       if (sid !== -1) {
-        state.videoSources[sid].mid = sourceRemoteTrack.transceiver.mid
-        state.transceiverSourceState[sourceRemoteTrack.transceiver.mid] = state.videoSources[sid]
+        state.videoSources[sid].mid = sourceRemoteTrack.transceiver?.mid
+        state.transceiverSourceState[sourceRemoteTrack.transceiver?.mid] = state.videoSources[sid]
       }
     },
     removeSourceRemoteTrack(state, sourceId) {
@@ -148,7 +148,7 @@ export default {
     },
     removeTransceiverSourceState(state, {sourceId, replace}) {
       const sourceInitialMid = Object.values(state.transceiverSourceState).find(value => value.sourceId === sourceId)
-      if(!sourceId) {
+      if(!sourceId && replace) {
         const sourceToReplaceMid = Object.values(state.transceiverSourceState).find(value => value.sourceId === replace.sourceId)
         state.transceiverSourceState[sourceInitialMid.mid] = {...state.transceiverSourceState[sourceToReplaceMid.mid]}
         state.trackIdMidMap[sourceInitialMid.mid] = `${state.trackIdMidMap[sourceToReplaceMid.mid]}`

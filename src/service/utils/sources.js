@@ -45,7 +45,7 @@ const addRemoteTracks = async (newSourceId) => {
   if (!newSourceId) {
     state.ViewConnection.millicastView.project(null,[{trackId: 'video',mediaId: '0',media: 'video'}])
     commit('Sources/setStartedAsMain', newSourceId)
-    if (!state.Sources.stream) {
+    if (state.Sources.videoSources.length === 0) {
       return
     }
   }
@@ -148,7 +148,7 @@ const processTrackWarning = () => {
 }
 
 export const handleDeleteSource = (sourceId) => {
-  if (state.Layers.mainTransceiverMedias.active.length) {
+  if (state.Layers.mainTransceiverMedias?.active.length) {
     // If stream has simulcast enabled, set the source quality to auto before droping the source
     layers.handleSelectQuality({name: 'Auto'})
   }
@@ -186,12 +186,28 @@ const deleteSource = async (kind, sourceId) => {
     if (needsNewSource) {
       newSource = { ...sourcesToUse[1] }
     }
-    if (isSameSource) {
-      if (!sourceId) {
-        handleProjectVideo(newSource.sourceId, state.Sources.selectedVideoSource.mid, state.Sources.selectedVideoSource.trackId)
-        commit('Sources/setMainLabel', newSource.name)
-        commit('Sources/setSelectedSource', { kind, selectedSource: newSource })
-        newSource.mid = "0"
+    if (Object.keys(newSource).length > 0) {
+      if (isSameSource) {
+        if (!sourceId) {
+          handleProjectVideo(newSource.sourceId, state.Sources.selectedVideoSource.mid, state.Sources.selectedVideoSource.trackId)
+          commit('Sources/setMainLabel', newSource.name)
+          commit('Sources/setSelectedSource', { kind, selectedSource: newSource })
+          newSource.mid = "0"
+          const transceiver = { ...state.Sources.transceiverSourceState[newSource.mid], mid: "0" }
+          replace = {
+            mediaStream: state.Sources.stream,
+            sourceId: newSource.sourceId,
+            transceiver: transceiver
+          }
+          commit('Sources/updateMainMediaTraks', { 
+            what: replace,
+            sourceId: newSource.sourceId
+          })
+        } else {
+          await switchProject(newSource, false)
+        }
+      } else if (!sourceId) {
+        handleProjectVideo(newSource.sourceId, "0", state.Sources.selectedVideoSource.trackId)
         const transceiver = { ...state.Sources.transceiverSourceState[newSource.mid], mid: "0" }
         replace = {
           mediaStream: state.Sources.stream,
@@ -202,21 +218,7 @@ const deleteSource = async (kind, sourceId) => {
           what: replace,
           sourceId: newSource.sourceId
         })
-      } else {
-        await switchProject(newSource, false)
       }
-    } else if (!sourceId) {
-      handleProjectVideo(newSource.sourceId, "0", state.Sources.selectedVideoSource.trackId)
-      const transceiver = { ...state.Sources.transceiverSourceState[newSource.mid], mid: "0" }
-      replace = {
-        mediaStream: state.Sources.stream,
-        sourceId: newSource.sourceId,
-        transceiver: transceiver
-      }
-      commit('Sources/updateMainMediaTraks', { 
-        what: replace,
-        sourceId: newSource.sourceId
-      })
     }
     commit('Sources/setStartedAsMain', newSource.sourceId)
     if (!replace) {
