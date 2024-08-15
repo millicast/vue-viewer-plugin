@@ -107,7 +107,7 @@ export default {
     replaceSourceSideTrack(state, { what, where }) {
       state.sourceSideTracks[where] = what
     },
-    updateMainMediaTraks(state,  { what, sourceId}){
+    updateMainMediaTraks(state,  { what, sourceId }) {
       const remoteToDeleteIndex = state.sourceSideTracks.findIndex(
         (remoteTrack) => remoteTrack.sourceId === sourceId
       )
