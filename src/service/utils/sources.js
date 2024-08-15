@@ -393,7 +393,7 @@ export const handleProjectVideo = async (what, where, trackId, layer, promote) =
   ])
 }
 
-export const handleProjectRemoteTracks = async ({remoteTrack, index}) => {
+export const handleProjectRemoteTracks = async ({ remoteTrack, index }) => {
   await nextTick()
   let remoteIndex = index || remoteTrack.transceiver?.mid
   if (index != null) {
