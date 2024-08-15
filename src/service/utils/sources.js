@@ -402,7 +402,7 @@ export const handleProjectRemoteTracks = async ({ remoteTrack, index }) => {
     const sideLabelId = `sideLabel${remoteIndex}`
     const sidePlayerLabel = document.getElementById(sideLabelId)
     sidePlayerLabel.textContent = remoteTrack.sourceId || state.Params.viewer.mainLabel
-    commit('Sources/setTrackMId', {key: remoteIndex, value: remoteTrack?.transceiver?.mid})
+    commit('Sources/setTrackMId', { key: remoteIndex, value: remoteTrack?.transceiver?.mid })
     const playerVideo = document.getElementById(`videoText${remoteIndex}`);
     const videoId = playerVideo.querySelector('video');
     videoId.id = `sidePlayer${remoteIndex}`
