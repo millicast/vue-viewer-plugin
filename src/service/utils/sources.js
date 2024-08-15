@@ -70,7 +70,7 @@ const addRemoteTracks = async (newSourceId) => {
       })
     } else {
       commit('Sources/addSourceRemoteTrack', sourceRemoteTrack)
-      commit('Sources/addSourceSideTrack',sourceRemoteTrack)
+      commit('Sources/addSourceSideTrack', sourceRemoteTrack)
     }
   }, 50) //We have to set a timeout because it takes a while before the millicastView signaling instance changes on migrate.
 }
