@@ -19,7 +19,6 @@ const defaulState = {
   trackMId: {0:'0'},
   mainSourceVideo: null,
   startedAsMain: null,
-  // mainSourceAudio: null,
 }
 
 export default {

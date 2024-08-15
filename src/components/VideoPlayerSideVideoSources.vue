@@ -156,10 +156,6 @@ export default {
 
 <style>
 
-.hide-video {
-  display: none !important;
-}
-
 @media (max-width: 430px) {
   video.animateVideo {
     transition: all 0.4s ease-in;
