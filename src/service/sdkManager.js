@@ -176,7 +176,7 @@ const updateLayersBroadcastState = (event) => {
   } else {
     layers.deleteLayers()
   }
-  const medias = state.Layers.mainTransceiverMedias.active
+  const medias = state.Layers.mainTransceiverMedias?.active
   if (medias.length === 0) {
     console.warn('No active layers available, will wait for next event. Switching to Auto until then.')
     if (selectingLayerTimeout != null) {
@@ -237,8 +237,8 @@ export const selectSource = async ({ kind, source }) => {
   return await sources.handleSelectSource({ kind, source })
 }
 
-export const projectRemoteTracks = async (remoteTrack) => {
-  sources.handleProjectRemoteTracks(remoteTrack)
+export const projectRemoteTracks = async ({ remoteTrack, index }) => {
+  await sources.handleProjectRemoteTracks({ remoteTrack, index })
 }
 
 export const projectVideo = async (what, where, trackId, layer, promote) => {

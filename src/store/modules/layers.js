@@ -34,7 +34,7 @@ export default {
       return state.medias
     },
     getActiveMainTransceiverMedias(state){
-      return state.mainTransceiverMedias.active
+      return state.mainTransceiverMedias?.active
     },
   },
 }

@@ -111,6 +111,7 @@ export const setTrackEvent = () => {
     }
     if (event.streams.length) {
       await setStream(event.streams[0])
+      commit('Sources/setStream',event.streams[0])
     }
     if (!state.ViewConnection.trackEvent[event.track.kind].transceiver[0]) {
       state.ViewConnection.trackEvent[event.track.kind].transceiver[0] =
