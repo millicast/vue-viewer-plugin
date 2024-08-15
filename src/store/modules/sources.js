@@ -16,7 +16,7 @@ const defaulState = {
   mainLabel: 'Main',
   transceiverSourceState: {},
   trackIdMidMap: {},
-  trackMId: {0:'0'},
+  trackMId: { 0: '0' },
   mainSourceVideo: null,
   startedAsMain: null,
   // mainSourceAudio: null,
