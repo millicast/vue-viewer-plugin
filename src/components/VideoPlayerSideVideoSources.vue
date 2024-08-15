@@ -109,7 +109,7 @@ export default {
       handler: async function (newLenght, currentLenght) {
         if (newLenght > currentLenght) {
           const lastIndex = newLenght - 1
-          await projectRemoteTracks({remoteTrack: this.sourceRemoteTracks[lastIndex]})
+          await projectRemoteTracks({ remoteTrack: this.sourceRemoteTracks[lastIndex] })
           const mid = this.sourceRemoteTracks[lastIndex].transceiver.mid
           this.setTrackMId({key: mid, value: mid})
         } else {
