@@ -58,7 +58,7 @@ export default {
         }
       }
     },
-    removeSourceAndUpdateMain(state, {sourceId}) {
+    removeSourceAndUpdateMain(state, { sourceId }) {
       const sourceIndex = state.videoSources.findIndex(source => source.sourceId === sourceId)
       const mainIndex = state.videoSources.findIndex(source => source.sourceId === null)
       if (sourceIndex !== -1) {
