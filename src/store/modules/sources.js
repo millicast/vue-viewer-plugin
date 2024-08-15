@@ -16,7 +16,7 @@ const defaulState = {
   mainLabel: 'Main',
   transceiverSourceState: {},
   trackIdMidMap: {},
-  trackMId: {0:'0'},
+  trackMId: { 0: '0' },
   mainSourceVideo: null,
   startedAsMain: null,
 }
@@ -57,7 +57,7 @@ export default {
         }
       }
     },
-    removeSourceAndUpdateMain(state, {sourceId}) {
+    removeSourceAndUpdateMain(state, { sourceId }) {
       const sourceIndex = state.videoSources.findIndex(source => source.sourceId === sourceId)
       const mainIndex = state.videoSources.findIndex(source => source.sourceId === null)
       if (sourceIndex !== -1) {
@@ -86,7 +86,7 @@ export default {
       state.trackMId[key] = value
     },
     resetTrackMId(state, trackMid) {
-      state.trackMId = {'0': trackMid}
+      state.trackMId = { '0': trackMid }
     },
     addSourceRemoteTrack(state, sourceRemoteTrack) {
       state.sourceRemoteTracks.push(sourceRemoteTrack)
@@ -106,7 +106,7 @@ export default {
     replaceSourceSideTrack(state, { what, where }) {
       state.sourceSideTracks[where] = what
     },
-    updateMainMediaTraks(state,  { what, sourceId}){
+    updateMainMediaTraks(state,  { what, sourceId }) {
       const remoteToDeleteIndex = state.sourceSideTracks.findIndex(
         (remoteTrack) => remoteTrack.sourceId === sourceId
       )
@@ -145,7 +145,7 @@ export default {
         state.sourceSideTracks.splice(remoteToDeleteIndex, 1)
       }
     },
-    removeTransceiverSourceState(state, {sourceId, replace}) {
+    removeTransceiverSourceState(state, { sourceId, replace }) {
       const sourceInitialMid = Object.values(state.transceiverSourceState).find(value => value.sourceId === sourceId)
       if(!sourceId && replace) {
         const sourceToReplaceMid = Object.values(state.transceiverSourceState).find(value => value.sourceId === replace.sourceId)

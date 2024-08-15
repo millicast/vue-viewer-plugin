@@ -70,7 +70,7 @@ const addRemoteTracks = async (newSourceId) => {
       })
     } else {
       commit('Sources/addSourceRemoteTrack', sourceRemoteTrack)
-      commit('Sources/addSourceSideTrack',sourceRemoteTrack)
+      commit('Sources/addSourceSideTrack', sourceRemoteTrack)
     }
   }, 50) //We have to set a timeout because it takes a while before the millicastView signaling instance changes on migrate.
 }
@@ -301,7 +301,7 @@ export const switchProject = async (sourceToSwitch, animation) => {
   const videoMid = sourceToSwitch.mid
   const midProjectedInMain = state.Sources.selectedVideoSource.mid
   commit('Sources/setTrackMId', {key: 0, value: sourceToSwitch.mid})
-  commit('Sources/setTrackMId', {key: key, value: state.Sources.selectedVideoSource.mid || '0'})
+  commit('Sources/setTrackMId', { key: key, value: state.Sources.selectedVideoSource.mid || '0' })
   const sideSpan = document.getElementById(`sideLabel${key}`)
   const remoteTrackIndex = state.Sources.sourceSideTracks.findIndex(source => source.sourceId === sourceToSwitch.sourceId)
   let sourceRemoteTrack
@@ -393,7 +393,7 @@ export const handleProjectVideo = async (what, where, trackId, layer, promote) =
   ])
 }
 
-export const handleProjectRemoteTracks = async ({remoteTrack, index}) => {
+export const handleProjectRemoteTracks = async ({ remoteTrack, index }) => {
   await nextTick()
   let remoteIndex = index || remoteTrack.transceiver?.mid
   if (index != null) {
@@ -402,7 +402,7 @@ export const handleProjectRemoteTracks = async ({remoteTrack, index}) => {
     const sideLabelId = `sideLabel${remoteIndex}`
     const sidePlayerLabel = document.getElementById(sideLabelId)
     sidePlayerLabel.textContent = remoteTrack.sourceId || state.Params.viewer.mainLabel
-    commit('Sources/setTrackMId', {key: remoteIndex, value: remoteTrack?.transceiver?.mid})
+    commit('Sources/setTrackMId', { key: remoteIndex, value: remoteTrack?.transceiver?.mid })
     const playerVideo = document.getElementById(`videoText${remoteIndex}`);
     const videoId = playerVideo.querySelector('video');
     videoId.id = `sidePlayer${remoteIndex}`
