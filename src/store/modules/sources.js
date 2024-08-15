@@ -87,7 +87,7 @@ export default {
       state.trackMId[key] = value
     },
     resetTrackMId(state, trackMid) {
-      state.trackMId = {'0': trackMid}
+      state.trackMId = { '0': trackMid }
     },
     addSourceRemoteTrack(state, sourceRemoteTrack) {
       state.sourceRemoteTracks.push(sourceRemoteTrack)
