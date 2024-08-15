@@ -301,7 +301,7 @@ export const switchProject = async (sourceToSwitch, animation) => {
   const videoMid = sourceToSwitch.mid
   const midProjectedInMain = state.Sources.selectedVideoSource.mid
   commit('Sources/setTrackMId', {key: 0, value: sourceToSwitch.mid})
-  commit('Sources/setTrackMId', {key: key, value: state.Sources.selectedVideoSource.mid || '0'})
+  commit('Sources/setTrackMId', { key: key, value: state.Sources.selectedVideoSource.mid || '0' })
   const sideSpan = document.getElementById(`sideLabel${key}`)
   const remoteTrackIndex = state.Sources.sourceSideTracks.findIndex(source => source.sourceId === sourceToSwitch.sourceId)
   let sourceRemoteTrack
