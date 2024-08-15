@@ -45,6 +45,17 @@
           {{ millicastView.signaling.subscriberId }}
         </td>
       </tr>
+      <tr v-if="millicastView?.signaling?.streamViewId" class="row mx-0">
+        <td class="col-6">Stream View Id</td>
+        <td class="col-5 overflow-ellipsis">
+          {{ millicastView.signaling.streamViewId }}
+        </td>
+        <td class="col-1">
+          <i class="ml-viewer-bi-copy"
+            @click="copyText(millicastView.signaling.streamViewId)" 
+          ></i>
+        </td>
+      </tr>
       <tr v-if="stats.currentRoundTripTime" class="row mx-0">
         <td class="col-6">RTT</td>
         <td class="col-6">
@@ -63,11 +74,11 @@
       </tr>
       <tr v-if="video?.bitrate" class="row mx-0">
         <td class="col-6">Video Bitrate</td>
-        <td class="col-6">{{ formatBitrate(video.bitrate) }}</td>
+        <td class="col-6">{{ formatBitrate(video.bitrateBitsPerSecond) }}</td>
       </tr>
       <tr v-if="audio?.bitrate" class="row mx-0">
         <td class="col-6">Audio Bitrate</td>
-        <td class="col-6">{{ formatBitrate(audio.bitrate) }}</td>
+        <td class="col-6">{{ formatBitrate(audio.bitrateBitsPerSecond) }}</td>
       </tr>
       <tr v-if="video?.totalBytesReceived" class="row mx-0">
         <td class="col-6">Video Total Received</td>
@@ -171,7 +182,7 @@ export default {
       this.stats = { ...this.stats, ...peerStats }
     })
     this.selectedSourceMid = this.getTransceiverSourceState[0]?.mid 
-      ?? Object.values(this.getTransceiverSourceState)[0].mid
+      ?? Object.values(this.getTransceiverSourceState)[0]?.mid
   },
   beforeUnmount() {
     this.millicastView.webRTCPeer.stopStats()
@@ -181,6 +192,9 @@ export default {
     closeTable() {
       this.close()
     },
+    copyText(text) {
+      navigator.clipboard.writeText(text)
+    },
     formatTotalBytes(value) {
       return formatBytesRecursive(value)
     },
@@ -188,7 +202,7 @@ export default {
       return formatBitsRecursive(value)
     },
     formatMilliseconds(value) {
-      return `${(value || 0) * 1000} ms`
+      return `${+((value || 0) * 1000).toFixed(2)} ms`
     },
     handleSourceChange() {
       const mid = this.selectedSourceMid ?? 0
@@ -197,7 +211,7 @@ export default {
     },
     selectMidZero() {
       this.selectedSourceMid = this.getTransceiverSourceState[0]?.mid 
-        ?? Object.values(this.getTransceiverSourceState)[0].mid
+        ?? Object.values(this.getTransceiverSourceState)[0]?.mid
     },
   },
   computed: {
@@ -230,6 +244,10 @@ export default {
       const video = this.stats.video?.inbounds
       const videoLength = video?.length
       if (videoLength) {
+        // If no video is present, selected source mid is undefined
+        if (!this.selectedSourceMid) {
+          return video[0]
+        }
         const trackId = this.trackIdMidMap[this.selectedSourceMid]
         const statsIndex = this.trackIdToStatsIndexMap[trackId]
         return video[statsIndex]
@@ -369,5 +387,15 @@ i {
   background: #343a40e6;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+td.overflow-ellipsis {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.ml-viewer-bi-copy:active {
+  color: #343a40e6;
 }
 </style>

@@ -85,6 +85,7 @@ export const handleConnectToStream = async () => {
     if (state.Params.viewer.audioOnly) {connectOptions.disableVideo = true}
     if (state.Params.viewer.videoOnly) {connectOptions.disableAudio = true}
     if (state.Params.viewer.forcePlayoutDelay) {connectOptions.forcePlayoutDelay = state.Params.viewer.forcePlayoutDelay}
+    if (state.Params.viewer.metadata) {connectOptions.metadata = state.Params.viewer.metadata}
     await millicastView.connect(connectOptions)
     addSignalingMigrateListener()
   } catch (e) {
@@ -123,6 +124,13 @@ export const setTrackEvent = () => {
     }
     state.ViewConnection.trackEvent[event.track.kind].track = true
   })
+
+  if (state.Params.viewer.metadata) {
+    millicastView.on('metadata', (metadata) => {
+      const metadataEvent = new CustomEvent("metadata", { detail: { metadata } })
+      window.dispatchEvent(metadataEvent)
+    })
+  }
 }
 
 const setStream = async (entrySrcObject) => {

@@ -56,7 +56,10 @@ export default {
           showLabels: this.paramsOptions?.showLabels ?? true,
           startingQuality: this.paramsOptions?.startingQuality,
           hideToast: this.paramsOptions?.hideToast,
-          mainLabel: this.paramsOptions?.mainLabel ?? 'Main'
+          mainLabel: this.paramsOptions?.mainLabel ?? 'Main',
+          forcePlayoutDelayMin: this.paramsOptions?.forcePlayoutDelayMin,
+          forcePlayoutDelayMax: this.paramsOptions?.forcePlayoutDelayMax,
+          metadata: this.paramsOptions?.metadata,
         })
       }
       processEnvironmentOptions(this.paramsOptions?.environment)

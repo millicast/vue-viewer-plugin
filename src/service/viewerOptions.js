@@ -22,7 +22,8 @@ export const defaultViewerOptions = {
   showLabels: true,
   startingQuality: null,
   hideToast: null,
-  mainLabel: null
+  mainLabel: null,
+  metadata: false
 }
 
 export default function processViewerOptions({
@@ -44,7 +45,10 @@ export default function processViewerOptions({
   showLabels,
   startingQuality,
   hideToast,
-  mainLabel
+  mainLabel,
+  forcePlayoutDelayMin,
+  forcePlayoutDelayMax,
+  metadata,
 }) {
   const options = {}
 
@@ -63,6 +67,7 @@ export default function processViewerOptions({
   options.maxHeight = maxHeight
   options.layout = layout
   options.showLabels = showLabels
+  options.metadata = metadata
   if (multisource) {
     store.commit('Controls/setIsSplittedView', true)
   }
@@ -89,6 +94,11 @@ export default function processViewerOptions({
   if (mainLabel) {
     options.mainLabel = mainLabel
     store.commit('Sources/setMainLabel', options.mainLabel)
+  }
+  if (forcePlayoutDelayMin && forcePlayoutDelayMax) {
+    if (parseInt(forcePlayoutDelayMin) && parseInt(forcePlayoutDelayMax)) {
+      options.forcePlayoutDelay = { min: parseInt(forcePlayoutDelayMin), max: parseInt(forcePlayoutDelayMax) }
+    }
   }
 
   store.commit('Params/setViewerOptions', { ...defaultViewerOptions, ...options })

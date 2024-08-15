@@ -92,7 +92,7 @@ export const handleSelectQuality = (media) => {
   if (!selectedData.encodingId && media.spatialLayerId !== null) {
     selectedData.spatialLayerId = parseInt(media.spatialLayerId)
   }
-
+  //Replaced select with project, as select can cause errors when used with transcoders
   const source = state.Sources.selectedVideoSource
   const mediaLayers = state.Layers.medias[source.mid].layers
   const quality = mediaLayers.find(layer => layer.simulcastIdx === media.simulcastIdx)
@@ -102,7 +102,8 @@ export const handleSelectQuality = (media) => {
       layer: quality,
       media: 'video',
       promote: !quality,
-    }  ])
+    }
+  ])
   commit('Layers/selectQuality', media)
 }
 
