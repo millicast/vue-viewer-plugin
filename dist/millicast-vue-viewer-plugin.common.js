@@ -12672,7 +12672,7 @@ var defaultEnvOptions = {
 function processEnvironmentOptions(environment) {
   var _environment$NODE_ENV, _environment$VUE_APP_, _environment$VUE_APP_2, _environment$VUE_APP_3, _environment$VUE_APP_4, _environment$VUE_APP_5, _environment$VUE_APP_6;
   var options = {
-    NODE_ENV: (_environment$NODE_ENV = environment === null || environment === void 0 ? void 0 : environment.NODE_ENV) !== null && _environment$NODE_ENV !== void 0 ? _environment$NODE_ENV : Object({"NODE_ENV":"production","VUE_APP_DEFAULT_TURN_ENDPOINT":"","VUE_APP_DEFAULT_LIVEWS_ENDPOINT":"","VUE_APP_DEFAULT_DIRECTOR_ENDPOINT":"https://director.millicast.com/","VUE_APP_DEFAULT_PUBLIC_PATH":"/","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).DEFAULT_NODE_ENV,
+    NODE_ENV: (_environment$NODE_ENV = environment === null || environment === void 0 ? void 0 : environment.NODE_ENV) !== null && _environment$NODE_ENV !== void 0 ? _environment$NODE_ENV : Object({"NODE_ENV":"production","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_DIRECTOR_ENDPOINT":"https://director.millicast.com/","VUE_APP_DEFAULT_LIVEWS_ENDPOINT":"","VUE_APP_DEFAULT_PUBLIC_PATH":"/","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","VUE_APP_DEFAULT_TURN_ENDPOINT":"","BASE_URL":"/"}).DEFAULT_NODE_ENV,
     VUE_APP_TURN_ENDPOINT: (_environment$VUE_APP_ = environment === null || environment === void 0 ? void 0 : environment.VUE_APP_TURN_ENDPOINT) !== null && _environment$VUE_APP_ !== void 0 ? _environment$VUE_APP_ : "",
     VUE_APP_LIVEWS_ENDPOINT: (_environment$VUE_APP_2 = environment === null || environment === void 0 ? void 0 : environment.VUE_APP_LIVEWS_ENDPOINT) !== null && _environment$VUE_APP_2 !== void 0 ? _environment$VUE_APP_2 : "",
     VUE_APP_DIRECTOR_ENDPOINT: (_environment$VUE_APP_3 = environment === null || environment === void 0 ? void 0 : environment.VUE_APP_DIRECTOR_ENDPOINT) !== null && _environment$VUE_APP_3 !== void 0 ? _environment$VUE_APP_3 : "https://director.millicast.com/",
@@ -21741,7 +21741,7 @@ var getTracks = function getTracks(data) {
 };
 var addRemoteTracks = /*#__PURE__*/function () {
   var _ref = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee2(newSourceId) {
-    var sourceId, remoteTrackIndex, mediaStream;
+    var sourceId, remoteSideIndex, side, transceiver, remoteTrackIndex, mediaStream;
     return _regeneratorRuntime().wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
@@ -21760,7 +21760,7 @@ var addRemoteTracks = /*#__PURE__*/function () {
           return _context2.abrupt("return");
         case 6:
           if (newSourceId) {
-            _context2.next = 11;
+            _context2.next = 13;
             break;
           }
           sources_state.ViewConnection.millicastView.project(null, [{
@@ -21775,6 +21775,21 @@ var addRemoteTracks = /*#__PURE__*/function () {
           }
           return _context2.abrupt("return");
         case 11:
+          remoteSideIndex = sources_state.Sources.sourceSideTracks.findIndex(function (t) {
+            return t.sourceId === sourceId;
+          });
+          if (remoteSideIndex >= 0) {
+            side = sources_state.Sources.sourceSideTracks[remoteSideIndex];
+            transceiver = {
+              name: sources_state.Params.viewer.mainLabel,
+              sourceId: null,
+              trackId: 'video',
+              mid: '0'
+            };
+            side.sourceId = null;
+            side.transceiver = transceiver;
+          }
+        case 13:
           remoteTrackIndex = sources_state.Sources.sourceRemoteTracks.findIndex(function (t) {
             return t.sourceId === sourceId;
           });
@@ -21808,7 +21823,7 @@ var addRemoteTracks = /*#__PURE__*/function () {
               }
             }, _callee);
           })), 50); //We have to set a timeout because it takes a while before the millicastView signaling instance changes on migrate.
-        case 14:
+        case 16:
         case "end":
           return _context2.stop();
       }
@@ -22466,7 +22481,7 @@ var pauseControlListener = function pauseControlListener() {
 
 var sdkManager_initViewModule = function initViewModule() {
   //Expose Viewer version and SDK Logger into the console
-  window.Version = Object({"NODE_ENV":"production","VUE_APP_DEFAULT_TURN_ENDPOINT":"","VUE_APP_DEFAULT_LIVEWS_ENDPOINT":"","VUE_APP_DEFAULT_DIRECTOR_ENDPOINT":"https://director.millicast.com/","VUE_APP_DEFAULT_PUBLIC_PATH":"/","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).PACKAGE_VERSION;
+  window.Version = Object({"NODE_ENV":"production","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_DIRECTOR_ENDPOINT":"https://director.millicast.com/","VUE_APP_DEFAULT_LIVEWS_ENDPOINT":"","VUE_APP_DEFAULT_PUBLIC_PATH":"/","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","VUE_APP_DEFAULT_TURN_ENDPOINT":"","BASE_URL":"/"}).PACKAGE_VERSION;
   window.Logger = millicast_umd["Logger"];
   var accountId = getAccountId();
   var streamName = getStreamName();

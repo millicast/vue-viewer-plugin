@@ -113,7 +113,7 @@ export default {
       const mainToReplaceIndex = state.sourceSideTracks.findIndex(
         (remoteTrack) => remoteTrack.sourceId === null
       )
-       state.sourceSideTracks[mainToReplaceIndex] = what
+      state.sourceSideTracks[mainToReplaceIndex] = what
       if (remoteToDeleteIndex !== -1) {
         state.sourceSideTracks.splice(remoteToDeleteIndex, 1)
       }

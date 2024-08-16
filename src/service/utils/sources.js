@@ -48,6 +48,20 @@ const addRemoteTracks = async (newSourceId) => {
     if (state.Sources.videoSources.length === 0) {
       return
     }
+    const remoteSideIndex = state.Sources.sourceSideTracks.findIndex(
+      (t) => t.sourceId === sourceId
+    )
+    if (remoteSideIndex >= 0) {
+      const side = state.Sources.sourceSideTracks[remoteSideIndex]
+      const transceiver = {
+        name: state.Params.viewer.mainLabel ,
+        sourceId: null,
+        trackId: 'video',
+        mid: '0'
+      }
+      side.sourceId = null
+      side.transceiver = transceiver
+    }
   }
   const remoteTrackIndex = state.Sources.sourceRemoteTracks.findIndex(
     (t) => t.sourceId === sourceId
