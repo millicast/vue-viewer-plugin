@@ -12248,7 +12248,6 @@ var defaulState = {
           return value.sourceId === replace.sourceId;
         });
         state.transceiverSourceState[sourceInitialMid.mid] = _extends({}, state.transceiverSourceState[sourceToReplaceMid.mid]);
-        state.trackIdMidMap[sourceInitialMid.mid] = "".concat(state.trackIdMidMap[sourceToReplaceMid.mid]);
         state.transceiverSourceState[sourceInitialMid.mid].mid = sourceInitialMid.mid;
         delete state.transceiverSourceState[sourceToReplaceMid.mid];
         delete state.trackIdMidMap[sourceToReplaceMid.mid];
@@ -22265,6 +22264,7 @@ var swapVideos = /*#__PURE__*/function () {
   var _ref10 = _asyncToGenerator( /*#__PURE__*/_regeneratorRuntime().mark(function _callee8(id) {
     var animation,
       currentElementRef,
+      mainSource,
       playerVideo,
       sideVideo,
       statePlayer,
@@ -22280,7 +22280,8 @@ var swapVideos = /*#__PURE__*/function () {
           animation = _args8.length > 1 && _args8[1] !== undefined ? _args8[1] : sources_state.Sources.animate;
           gsapWithCSS.registerPlugin(Flip_Flip);
           currentElementRef = 'player';
-          playerVideo = document.getElementById(currentElementRef);
+          mainSource = document.getElementById('main-source');
+          playerVideo = mainSource.querySelector('video');
           sideVideo = document.getElementById(id);
           statePlayer = Flip_Flip.getState(playerVideo);
           stateSide = Flip_Flip.getState(sideVideo);
@@ -22304,7 +22305,7 @@ var swapVideos = /*#__PURE__*/function () {
             duration: duration,
             ease: "power1.inOut"
           });
-        case 18:
+        case 19:
         case "end":
           return _context8.stop();
       }

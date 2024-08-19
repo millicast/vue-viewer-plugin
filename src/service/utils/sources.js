@@ -377,7 +377,8 @@ export const switchProject = async (sourceToSwitch, animation) => {
 const swapVideos = async (id, animation = state.Sources.animate) => {
   gsap.registerPlugin(Flip);
   const currentElementRef = 'player'
-  const playerVideo = document.getElementById(currentElementRef);
+  const mainSource = document.getElementById('main-source');
+  const playerVideo = mainSource.querySelector('video');
   const sideVideo = document.getElementById(id);
   const statePlayer = Flip.getState(playerVideo);
   const stateSide = Flip.getState(sideVideo);

@@ -150,7 +150,6 @@ export default {
       if(!sourceId && replace) {
         const sourceToReplaceMid = Object.values(state.transceiverSourceState).find(value => value.sourceId === replace.sourceId)
         state.transceiverSourceState[sourceInitialMid.mid] = {...state.transceiverSourceState[sourceToReplaceMid.mid]}
-        state.trackIdMidMap[sourceInitialMid.mid] = `${state.trackIdMidMap[sourceToReplaceMid.mid]}`
         state.transceiverSourceState[sourceInitialMid.mid].mid = sourceInitialMid.mid
         delete state.transceiverSourceState[sourceToReplaceMid.mid]
         delete state.trackIdMidMap[sourceToReplaceMid.mid]
