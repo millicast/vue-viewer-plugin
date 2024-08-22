@@ -11,6 +11,7 @@ import store from '../store'
 const { commit, state } = store
 let selectingLayerTimeout = null
 
+
 // VIDEO PLAYER
 
 // Similar logic to playerChange event
@@ -20,12 +21,16 @@ export const setVideoPlayer = ({
   volume,
   muted,
   autoplay,
+  drmAudio
 }) => {
   if (videoPlayer) {
     commit('Controls/setVideo', videoPlayer)
     commit('Controls/setCurrentElementRef', videoPlayer.id)
   }
-  if (srcObject) {
+  if (drmAudio) {
+    commit('Controls/setDrmAudio', drmAudio)
+  }
+  if (srcObject && !state.Params.viewer.enableDrm) {
     commit('Controls/setVideoSource', srcObject)
   }
   if (volume) commit('Controls/setVideoVolume', volume)
@@ -106,14 +111,47 @@ const setBroadcastEvent = () => {
     })
 }
 
+const configureDrm = (event) => {
+  const sourceId = event.data.sourceId
+
+  if (state.Params.viewer.enableDrm && !sourceId) {
+
+    const tracksMapping = event.data.tracks.map(track => {
+      const { media } = track
+      const mediaId = media === 'video' ? '0' : '1'
+      return {
+        ...track,
+        mediaId
+      }
+    })
+    const mainVideoElement = state.Controls.video
+    const mainAudioElement = state.Controls.drmAudio
+    const drmOptions = {
+      videoElement: mainVideoElement,
+      audioElement: mainAudioElement,
+      videoEncryptionParams: event.data.encryption,
+      videoMid: '0',
+    }
+    const audioTrackMapping = tracksMapping.find(track => track.media === 'audio')
+    if (audioTrackMapping) {
+      drmOptions.audioMid = audioTrackMapping.mediaId
+    }
+    const millicastView = state.ViewConnection.millicastView
+    millicastView.configureDRM(drmOptions)
+  }
+}
+
 const updateActiveBroadcastState = (event) => {
+  if (event.data.encryption && state.Params.viewer.enableDrm) {
+    configureDrm(event)
+  }
   sources.getTracks(event.data)
   commit('Controls/setIsLive', true)
   if (!state.Controls.isSelectingLayer) {
     commit('Controls/setIsLoading', false)
   }
   viewConnection.setReconnect()
-  if (!state.Controls.video.srcObject) {
+  if (!state.Controls.video.srcObject && !state.Params.viewer.enableDrm) {
     commit('Controls/setVideoSource', state.Controls.srcObject)
   }
   if (selectingLayerTimeout != null) {
