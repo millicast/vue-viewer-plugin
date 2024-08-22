@@ -616,5 +616,6 @@ const getFullscreenElement = () => {
   display: flex;
   width: 100%;
   z-index: 1;
+  background: #000
 }
 </style>
