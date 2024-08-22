@@ -23,7 +23,7 @@ const setDirectorEndpoint = () => {
   ) {
     Director.setEndpoint(
       state.Params.viewer.directorUrl ??
-      state.Params.environment.VUE_APP_DIRECTOR_ENDPOINT
+        state.Params.environment.VUE_APP_DIRECTOR_ENDPOINT
     )
   }
 }
@@ -46,21 +46,22 @@ export const handleInitViewConnection = (accountId, streamName) => {
   }
   setEnvironment()
   const tokenGenerator = () => {
-      const subscriber = Director.getSubscriber(
-        streamName,
-        accountId,
-        state.Params.viewer.token
-      )
-      subscriber.catch((error) => {
-        const errorMessage = `${error}`
-        if(!errorMessage.includes('stream not being published')) {
-          const splitedMessage = errorMessage.replace('FetchError: ','')
-          commit('Errors/setMessage', splitedMessage)
-          commit('Errors/setType', 'SubscriberError')
-          commit('Errors/setShowError', true)
-        }
-      })
-      return subscriber
+    const subscriber = Director.getSubscriber(
+      streamName,
+      accountId,
+      state.Params.viewer.token,
+      state.Params.viewer.enableDrm
+    )
+    subscriber.catch((error) => {
+      const errorMessage = `${error}`
+      if(!errorMessage.includes('stream not being published')) {
+        const splitedMessage = errorMessage.replace('FetchError: ','')
+        commit('Errors/setMessage', splitedMessage)
+        commit('Errors/setType', 'SubscriberError')
+        commit('Errors/setShowError', true)
+      }
+    })
+    return subscriber
   }
 
   const millicastView = new View(streamName, tokenGenerator)
