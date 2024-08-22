@@ -23,7 +23,7 @@ const setDirectorEndpoint = () => {
   ) {
     Director.setEndpoint(
       state.Params.viewer.directorUrl ??
-      state.Params.environment.VUE_APP_DIRECTOR_ENDPOINT
+        state.Params.environment.VUE_APP_DIRECTOR_ENDPOINT
     )
   }
 }
@@ -46,21 +46,22 @@ export const handleInitViewConnection = (accountId, streamName) => {
   }
   setEnvironment()
   const tokenGenerator = () => {
-      const subscriber = Director.getSubscriber(
-        streamName,
-        accountId,
-        state.Params.viewer.token
-      )
-      subscriber.catch((error) => {
-        const errorMessage = `${error}`
-        if(!errorMessage.includes('stream not being published')) {
-          const splitedMessage = errorMessage.replace('FetchError: ','')
-          commit('Errors/setMessage', splitedMessage)
-          commit('Errors/setType', 'SubscriberError')
-          commit('Errors/setShowError', true)
-        }
-      })
-      return subscriber
+    const subscriber = Director.getSubscriber(
+      streamName,
+      accountId,
+      state.Params.viewer.token,
+      state.Params.viewer.enableDrm
+    )
+    subscriber.catch((error) => {
+      const errorMessage = `${error}`
+      if(!errorMessage.includes('stream not being published')) {
+        const splitedMessage = errorMessage.replace('FetchError: ','')
+        commit('Errors/setMessage', splitedMessage)
+        commit('Errors/setType', 'SubscriberError')
+        commit('Errors/setShowError', true)
+      }
+    })
+    return subscriber
   }
 
   const millicastView = new View(streamName, tokenGenerator)
@@ -86,6 +87,7 @@ export const handleConnectToStream = async () => {
     if (state.Params.viewer.audioOnly) {connectOptions.disableVideo = true}
     if (state.Params.viewer.videoOnly) {connectOptions.disableAudio = true}
     if (state.Params.viewer.forcePlayoutDelay) {connectOptions.forcePlayoutDelay = state.Params.viewer.forcePlayoutDelay}
+    if (state.Params.viewer.metadata) {connectOptions.metadata = state.Params.viewer.metadata}
     await millicastView.connect(connectOptions)
     addSignalingMigrateListener()
   } catch (e) {
@@ -125,6 +127,13 @@ export const setTrackEvent = () => {
     }
     state.ViewConnection.trackEvent[event.track.kind].track = true
   })
+
+  if (state.Params.viewer.metadata) {
+    millicastView.on('metadata', (metadata) => {
+      const metadataEvent = new CustomEvent("metadata", { detail: { metadata } })
+      window.dispatchEvent(metadataEvent)
+    })
+  }
 }
 
 const setStream = async (entrySrcObject) => {

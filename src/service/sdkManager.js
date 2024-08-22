@@ -11,8 +11,6 @@ import store from '../store'
 const { commit, state } = store
 let selectingLayerTimeout = null
 
-const drmKeyId = process.env.VUE_APP_DRM_KEYID
-const drmIv = process.env.VUE_APP_DRM_IV
 
 // VIDEO PLAYER
 
@@ -114,42 +112,37 @@ const setBroadcastEvent = () => {
 }
 
 const configureDrm = (event) => {
-    const sourceId = event.data.sourceId
+  const sourceId = event.data.sourceId
 
-    if (state.Params.viewer.enableDrm && !sourceId) {
-      // TODO: remove this once data is coming from media server
-      event.data.encryption = {
-        keyId: drmKeyId,
-        iv: drmIv
+  if (state.Params.viewer.enableDrm && !sourceId) {
+
+    const tracksMapping = event.data.tracks.map(track => {
+      const { media } = track
+      const mediaId = media === 'video' ? '0' : '1'
+      return {
+        ...track,
+        mediaId
       }
-  
-      const tracksMapping = event.data.tracks.map(track => {
-        const { media } = track
-        const mediaId = media === 'video' ? '0' : '1'
-        return {
-          ...track,
-          mediaId
-        }
-      })
-      const mainVideoElement = state.Controls.video
-      const mainAudioElement = state.Controls.drmAudio
-      const drmOptions = {
-        videoElement: mainVideoElement,
-        audioElement: mainAudioElement,
-        videoEncParams: event.data.encryption,
-        videoMid: '0',
-      }
-      const audioTrackMapping = tracksMapping.find(track => track.media === 'audio')
-      if (audioTrackMapping) {
-        drmOptions.audioMid = audioTrackMapping.mediaId
-      }
-      const millicastView = state.ViewConnection.millicastView
-      millicastView.configureDRM(drmOptions)
+    })
+    const mainVideoElement = state.Controls.video
+    const mainAudioElement = state.Controls.drmAudio
+    const drmOptions = {
+      videoElement: mainVideoElement,
+      audioElement: mainAudioElement,
+      videoEncryptionParams: event.data.encryption,
+      videoMid: '0',
     }
+    const audioTrackMapping = tracksMapping.find(track => track.media === 'audio')
+    if (audioTrackMapping) {
+      drmOptions.audioMid = audioTrackMapping.mediaId
+    }
+    const millicastView = state.ViewConnection.millicastView
+    millicastView.configureDRM(drmOptions)
+  }
 }
 
 const updateActiveBroadcastState = (event) => {
-  if (state.Params.viewer.enableDrm) {
+  if (event.data.encryption && state.Params.viewer.enableDrm) {
     configureDrm(event)
   }
   sources.getTracks(event.data)
