@@ -30,7 +30,7 @@ export const setVideoPlayer = ({
   if (drmAudio) {
     commit('Controls/setDrmAudio', drmAudio)
   }
-  if (srcObject && !state.Params.viewer.enableDrm) {
+  if (srcObject && !state.Params.viewer.drm) {
     commit('Controls/setVideoSource', srcObject)
   }
   if (volume) commit('Controls/setVideoVolume', volume)
@@ -114,7 +114,7 @@ const setBroadcastEvent = () => {
 const configureDrm = (event) => {
   const sourceId = event.data.sourceId
 
-  if (state.Params.viewer.enableDrm && !sourceId) {
+  if (state.Params.viewer.drm && !sourceId) {
 
     const tracksMapping = event.data.tracks.map(track => {
       const { media } = track
@@ -142,7 +142,7 @@ const configureDrm = (event) => {
 }
 
 const updateActiveBroadcastState = (event) => {
-  if (event.data.encryption && state.Params.viewer.enableDrm) {
+  if (event.data.encryption && state.Params.viewer.drm) {
     configureDrm(event)
   }
   sources.getTracks(event.data)
@@ -151,7 +151,7 @@ const updateActiveBroadcastState = (event) => {
     commit('Controls/setIsLoading', false)
   }
   viewConnection.setReconnect()
-  if (!state.Controls.video.srcObject && !state.Params.viewer.enableDrm) {
+  if (!state.Controls.video.srcObject && !state.Params.viewer.drm) {
     commit('Controls/setVideoSource', state.Controls.srcObject)
   }
   if (selectingLayerTimeout != null) {

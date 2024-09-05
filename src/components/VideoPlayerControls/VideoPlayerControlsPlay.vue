@@ -30,7 +30,7 @@ export default {
       if (this.playing) {
         await this.video.pause()
         await this.drmAudio?.pause()
-      } else if (this.video?.srcObject !== null || this.viewer.enableDrm) {
+      } else if (this.video?.srcObject !== null || this.viewer.drm) {
         //For DRM streams srcObject never exists on the video.
         await connectToStream()
         await this.video.play()
