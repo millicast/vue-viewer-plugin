@@ -117,20 +117,12 @@ const addSource = (kind, sourceId, trackId) => {
           : state.Sources.selectedAudioSource
       if (selectedMediaSource.name !== state.Params.viewer.mainLabel) {
         if (kind === 'auido' || state.Sources.selectedVideoSource.name === 'none') {
-          commit('Sources/setSelectedSource', {
-            kind,
-            selectedSource: source,
-          })
           handleSelectSource({ kind, source })
         }
         if (kind === 'video') {
           const key = getKeyByValue('0')
           if ( key == 0) {
             commit('Sources/setMainLabel', state.Params.viewer.mainLabel)
-            commit('Sources/setSelectedSource', {
-              kind,
-              selectedSource: source,
-            })
             handleSelectSource({ kind, source })
           } else {
             const sideSpan = document.getElementById(`sideLabel${key}`)
@@ -139,11 +131,7 @@ const addSource = (kind, sourceId, trackId) => {
         }
       }
     } else {
-      if (kind === 'auido' || state.Sources.selectedAudioSource.name === 'none' || (getters['Sources/getStartedAsMain'] === source.name)) {
-        commit('Sources/setSelectedSource', {
-          kind,
-          selectedSource: source,
-        })
+      if (kind === 'auido' || state.Sources.selectedVideoSource.name === 'none' || (getters['Sources/getStartedAsMain'] === source.name)) {
         handleSelectSource({ kind, source })
       }
       sources.push(source)
@@ -269,7 +257,6 @@ export const handleSelectSource = async ({ kind, source }) => {
       commit('Controls/setTrackWarning', false)
     }
   }
-  commit('Sources/setSelectedSource', { kind, selectedSource: source })
 }
 
 const project = async ({ kind, source }) => {

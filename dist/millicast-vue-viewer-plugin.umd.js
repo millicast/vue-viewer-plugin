@@ -21862,10 +21862,6 @@ var addSource = function addSource(kind, sourceId, trackId) {
       var selectedMediaSource = kind === 'video' ? sources_state.Sources.selectedVideoSource : sources_state.Sources.selectedAudioSource;
       if (selectedMediaSource.name !== sources_state.Params.viewer.mainLabel) {
         if (kind === 'auido' || sources_state.Sources.selectedVideoSource.name === 'none') {
-          sources_commit('Sources/setSelectedSource', {
-            kind: kind,
-            selectedSource: source
-          });
           handleSelectSource({
             kind: kind,
             source: source
@@ -21875,10 +21871,6 @@ var addSource = function addSource(kind, sourceId, trackId) {
           var key = getKeyByValue('0');
           if (key == 0) {
             sources_commit('Sources/setMainLabel', sources_state.Params.viewer.mainLabel);
-            sources_commit('Sources/setSelectedSource', {
-              kind: kind,
-              selectedSource: source
-            });
             handleSelectSource({
               kind: kind,
               source: source
@@ -21890,11 +21882,7 @@ var addSource = function addSource(kind, sourceId, trackId) {
         }
       }
     } else {
-      if (kind === 'auido' || sources_state.Sources.selectedAudioSource.name === 'none' || getters['Sources/getStartedAsMain'] === source.name) {
-        sources_commit('Sources/setSelectedSource', {
-          kind: kind,
-          selectedSource: source
-        });
+      if (kind === 'auido' || sources_state.Sources.selectedVideoSource.name === 'none' || getters['Sources/getStartedAsMain'] === source.name) {
         handleSelectSource({
           kind: kind,
           source: source
@@ -22096,11 +22084,6 @@ var handleSelectSource = /*#__PURE__*/function () {
             sources_commit('Controls/setTrackWarning', false);
           }
         case 16:
-          sources_commit('Sources/setSelectedSource', {
-            kind: kind,
-            selectedSource: source
-          });
-        case 17:
         case "end":
           return _context4.stop();
       }
