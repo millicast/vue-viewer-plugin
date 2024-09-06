@@ -55,7 +55,6 @@ export default {
           startingQuality: this.paramsOptions?.startingQuality,
           hideToast: this.paramsOptions?.hideToast,
           mainLabel: this.paramsOptions?.mainLabel ?? 'Main',
-          drm: this.paramsOptions.drm ?? false,
           forcePlayoutDelayMin: this.paramsOptions?.forcePlayoutDelayMin,
           forcePlayoutDelayMax: this.paramsOptions?.forcePlayoutDelayMax,
           metadata: this.paramsOptions?.metadata,
