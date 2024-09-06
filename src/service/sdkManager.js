@@ -57,13 +57,13 @@ const pauseControlListener = () => {
 }
 // SDK VIEW MODULE INITIALIZATION
 
-export const initViewModule = () => {
+export const initViewModule = async () => {
   //Expose Viewer version and SDK Logger into the console
   window.Version = process.env.PACKAGE_VERSION
   window.Logger = Logger
   const accountId = params.getAccountId()
   const streamName = params.getStreamName()
-  viewConnection.handleInitViewConnection(accountId, streamName)
+  await viewConnection.handleInitViewConnection(accountId, streamName)
   setViewerEvents()
 }
 
@@ -142,7 +142,7 @@ const configureDrm = (event) => {
 }
 
 const updateActiveBroadcastState = (event) => {
-  if (event.data.encryption && state.Params.viewer.drm) {
+  if (event.data.encryption) {
     configureDrm(event)
   }
   sources.getTracks(event.data)
