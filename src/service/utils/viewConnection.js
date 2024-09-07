@@ -40,7 +40,7 @@ const setPeerConnection = () => {
   }
 }
 
-export const handleInitViewConnection = (accountId, streamName) => {
+export const handleInitViewConnection = async (accountId, streamName) => {
   if (!streamName || !accountId) {
     throw new Error('Stream ID not provided.')
   }
@@ -49,8 +49,7 @@ export const handleInitViewConnection = (accountId, streamName) => {
     const subscriber = Director.getSubscriber(
       streamName,
       accountId,
-      state.Params.viewer.token,
-      state.Params.viewer.drm
+      state.Params.viewer.token
     )
     subscriber.catch((error) => {
       const errorMessage = `${error}`
@@ -63,7 +62,17 @@ export const handleInitViewConnection = (accountId, streamName) => {
     })
     return subscriber
   }
-
+  const subResp = await Director.getSubscriber(
+    streamName,
+    accountId,
+    state.Params.viewer.token
+  )
+  if (subResp.drmObject) {
+    console.log('### setting DRM true')
+    commit('Params/setDrm', true)
+    console.log('### state.Params.viewer.drm', state.Params.viewer.drm)
+  }
+  console.log('### subResp', subResp)
   const millicastView = new View(streamName, tokenGenerator)
   window.millicastView = millicastView
   window.__defineGetter__('peer', () => {

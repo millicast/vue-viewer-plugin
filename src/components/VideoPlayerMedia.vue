@@ -210,7 +210,7 @@ export default {
       await stopStream()
       await nextTick()
 
-      initViewModule()
+      await initViewModule()
       try {
         await connectToStream()
         setTimeout(() => {

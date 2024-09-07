@@ -16,5 +16,8 @@ export default {
     setEnvironmentOptions(state, environment) {
       state.environment = environment
     },
+    setDrm(state, drm) {
+      state.viewer.drm = drm
+    },
   },
 }
