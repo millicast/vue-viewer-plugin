@@ -68,11 +68,8 @@ export const handleInitViewConnection = async (accountId, streamName) => {
     state.Params.viewer.token
   )
   if (subResp.drmObject) {
-    console.log('### setting DRM true')
     commit('Params/setDrm', true)
-    console.log('### state.Params.viewer.drm', state.Params.viewer.drm)
   }
-  console.log('### subResp', subResp)
   const millicastView = new View(streamName, tokenGenerator)
   window.millicastView = millicastView
   window.__defineGetter__('peer', () => {

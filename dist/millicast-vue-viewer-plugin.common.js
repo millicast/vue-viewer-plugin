@@ -12734,18 +12734,15 @@ var handleInitViewConnection = /*#__PURE__*/function () {
         case 6:
           subResp = _context.sent;
           if (subResp.drmObject) {
-            console.log('### setting DRM true');
             commit('Params/setDrm', true);
-            console.log('### state.Params.viewer.drm', viewConnection_state.Params.viewer.drm);
           }
-          console.log('### subResp', subResp);
           millicastView = new millicast_umd["View"](streamName, tokenGenerator);
           window.millicastView = millicastView;
           window.__defineGetter__('peer', function () {
             return millicastView.getRTCPeerConnection();
           });
           commit('ViewConnection/setMillicastView', millicastView);
-        case 13:
+        case 12:
         case "end":
           return _context.stop();
       }
