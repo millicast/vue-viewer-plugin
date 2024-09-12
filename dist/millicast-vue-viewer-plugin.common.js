@@ -21752,7 +21752,6 @@ var addRemoteTracks = /*#__PURE__*/function () {
           sources_commit('Sources/setStartedAsMain', newSourceId);
           sources_commit('Sources/setMainLabel', newSourceId);
           sources_state.ViewConnection.millicastView.project(newSourceId, [{
-            trackId: 'video',
             mediaId: '0',
             media: 'video'
           }]);
@@ -21763,7 +21762,6 @@ var addRemoteTracks = /*#__PURE__*/function () {
             break;
           }
           sources_state.ViewConnection.millicastView.project(null, [{
-            trackId: 'video',
             mediaId: '0',
             media: 'video'
           }]);
@@ -22112,7 +22110,7 @@ var project = /*#__PURE__*/function () {
           mediaId = (_transceiver$mid = (_transceiver2 = transceiver) === null || _transceiver2 === void 0 ? void 0 : _transceiver2.mid) !== null && _transceiver$mid !== void 0 ? _transceiver$mid : "1";
           _context5.next = 14;
           return sources_state.ViewConnection.millicastView.project(sourceId, [_extends(_extends({
-            trackId: source.trackId,
+            // trackId: source.trackId,
             mediaId: mediaId
           }, kind === 'video' && {
             promote: true

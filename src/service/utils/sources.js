@@ -39,11 +39,11 @@ const addRemoteTracks = async (newSourceId) => {
   if (!getters['Sources/getVideoHasMain'] && newSourceId && !getters['Sources/getStartedAsMain']) {
     commit('Sources/setStartedAsMain', newSourceId)
     commit('Sources/setMainLabel', newSourceId)
-    state.ViewConnection.millicastView.project(newSourceId,[{trackId: 'video',mediaId: '0',media: 'video'}])
+    state.ViewConnection.millicastView.project(newSourceId,[{mediaId: '0',media: 'video'}])
     return
   }
   if (!newSourceId) {
-    state.ViewConnection.millicastView.project(null,[{trackId: 'video',mediaId: '0',media: 'video'}])
+    state.ViewConnection.millicastView.project(null,[{mediaId: '0',media: 'video'}])
     commit('Sources/setStartedAsMain', newSourceId)
     if (state.Sources.videoSources.length === 0) {
       return
@@ -272,7 +272,7 @@ const project = async ({ kind, source }) => {
     const mediaId = transceiver?.mid ?? "1"
     await state.ViewConnection.millicastView.project(sourceId, [
       {
-        trackId: source.trackId,
+        // trackId: source.trackId,
         mediaId,
         ...(kind === 'video' && { promote: true }),
         media: kind
