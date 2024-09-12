@@ -116,7 +116,7 @@ const addSource = (kind, sourceId, trackId) => {
           ? state.Sources.selectedVideoSource
           : state.Sources.selectedAudioSource
       if (selectedMediaSource.name !== state.Params.viewer.mainLabel) {
-        if (kind === 'auido' || state.Sources.selectedVideoSource.name === 'none') {
+        if (kind === 'audio' || state.Sources.selectedVideoSource.name === 'none') {
           handleSelectSource({ kind, source })
         }
         if (kind === 'video') {
@@ -131,7 +131,7 @@ const addSource = (kind, sourceId, trackId) => {
         }
       }
     } else {
-      if (kind === 'auido' || state.Sources.selectedVideoSource.name === 'none' || (getters['Sources/getStartedAsMain'] === source.name)) {
+      if (kind === 'audio' || state.Sources.selectedVideoSource.name === 'none' || (getters['Sources/getStartedAsMain'] === source.name)) {
         handleSelectSource({ kind, source })
       }
       sources.push(source)
@@ -272,7 +272,6 @@ const project = async ({ kind, source }) => {
     const mediaId = transceiver?.mid ?? "1"
     await state.ViewConnection.millicastView.project(sourceId, [
       {
-        // trackId: source.trackId,
         mediaId,
         ...(kind === 'video' && { promote: true }),
         media: kind

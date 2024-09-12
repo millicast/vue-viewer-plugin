@@ -12671,7 +12671,7 @@ var defaultEnvOptions = {
 function processEnvironmentOptions(environment) {
   var _environment$NODE_ENV, _environment$VUE_APP_, _environment$VUE_APP_2, _environment$VUE_APP_3, _environment$VUE_APP_4, _environment$VUE_APP_5, _environment$VUE_APP_6;
   var options = {
-    NODE_ENV: (_environment$NODE_ENV = environment === null || environment === void 0 ? void 0 : environment.NODE_ENV) !== null && _environment$NODE_ENV !== void 0 ? _environment$NODE_ENV : Object({"NODE_ENV":"production","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_DIRECTOR_ENDPOINT":"https://director.millicast.com/","VUE_APP_DEFAULT_LIVEWS_ENDPOINT":"","VUE_APP_DEFAULT_PUBLIC_PATH":"/","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","VUE_APP_DEFAULT_TURN_ENDPOINT":"","BASE_URL":"/"}).DEFAULT_NODE_ENV,
+    NODE_ENV: (_environment$NODE_ENV = environment === null || environment === void 0 ? void 0 : environment.NODE_ENV) !== null && _environment$NODE_ENV !== void 0 ? _environment$NODE_ENV : Object({"NODE_ENV":"production","VUE_APP_DEFAULT_TURN_ENDPOINT":"","VUE_APP_DEFAULT_LIVEWS_ENDPOINT":"","VUE_APP_DEFAULT_DIRECTOR_ENDPOINT":"https://director.millicast.com/","VUE_APP_DEFAULT_PUBLIC_PATH":"/","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).DEFAULT_NODE_ENV,
     VUE_APP_TURN_ENDPOINT: (_environment$VUE_APP_ = environment === null || environment === void 0 ? void 0 : environment.VUE_APP_TURN_ENDPOINT) !== null && _environment$VUE_APP_ !== void 0 ? _environment$VUE_APP_ : "",
     VUE_APP_LIVEWS_ENDPOINT: (_environment$VUE_APP_2 = environment === null || environment === void 0 ? void 0 : environment.VUE_APP_LIVEWS_ENDPOINT) !== null && _environment$VUE_APP_2 !== void 0 ? _environment$VUE_APP_2 : "",
     VUE_APP_DIRECTOR_ENDPOINT: (_environment$VUE_APP_3 = environment === null || environment === void 0 ? void 0 : environment.VUE_APP_DIRECTOR_ENDPOINT) !== null && _environment$VUE_APP_3 !== void 0 ? _environment$VUE_APP_3 : "https://director.millicast.com/",
@@ -21850,7 +21850,7 @@ var addSource = function addSource(kind, sourceId, trackId) {
       sources.unshift(source);
       var selectedMediaSource = kind === 'video' ? sources_state.Sources.selectedVideoSource : sources_state.Sources.selectedAudioSource;
       if (selectedMediaSource.name !== sources_state.Params.viewer.mainLabel) {
-        if (kind === 'auido' || sources_state.Sources.selectedVideoSource.name === 'none') {
+        if (kind === 'audio' || sources_state.Sources.selectedVideoSource.name === 'none') {
           handleSelectSource({
             kind: kind,
             source: source
@@ -21871,7 +21871,7 @@ var addSource = function addSource(kind, sourceId, trackId) {
         }
       }
     } else {
-      if (kind === 'auido' || sources_state.Sources.selectedVideoSource.name === 'none' || getters['Sources/getStartedAsMain'] === source.name) {
+      if (kind === 'audio' || sources_state.Sources.selectedVideoSource.name === 'none' || getters['Sources/getStartedAsMain'] === source.name) {
         handleSelectSource({
           kind: kind,
           source: source
@@ -22110,7 +22110,6 @@ var project = /*#__PURE__*/function () {
           mediaId = (_transceiver$mid = (_transceiver2 = transceiver) === null || _transceiver2 === void 0 ? void 0 : _transceiver2.mid) !== null && _transceiver$mid !== void 0 ? _transceiver$mid : "1";
           _context5.next = 14;
           return sources_state.ViewConnection.millicastView.project(sourceId, [_extends(_extends({
-            // trackId: source.trackId,
             mediaId: mediaId
           }, kind === 'video' && {
             promote: true
@@ -22463,7 +22462,7 @@ var pauseControlListener = function pauseControlListener() {
 
 var sdkManager_initViewModule = function initViewModule() {
   //Expose Viewer version and SDK Logger into the console
-  window.Version = Object({"NODE_ENV":"production","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_DIRECTOR_ENDPOINT":"https://director.millicast.com/","VUE_APP_DEFAULT_LIVEWS_ENDPOINT":"","VUE_APP_DEFAULT_PUBLIC_PATH":"/","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","VUE_APP_DEFAULT_TURN_ENDPOINT":"","BASE_URL":"/"}).PACKAGE_VERSION;
+  window.Version = Object({"NODE_ENV":"production","VUE_APP_DEFAULT_TURN_ENDPOINT":"","VUE_APP_DEFAULT_LIVEWS_ENDPOINT":"","VUE_APP_DEFAULT_DIRECTOR_ENDPOINT":"https://director.millicast.com/","VUE_APP_DEFAULT_PUBLIC_PATH":"/","VUE_APP_DEFAULT_CHROMECAST_ID":"EC3A02DA","VUE_APP_DEFAULT_REPORT_URL":"https://playback-report.millicast.com","BASE_URL":"/"}).PACKAGE_VERSION;
   window.Logger = millicast_umd["Logger"];
   var accountId = getAccountId();
   var streamName = getStreamName();
