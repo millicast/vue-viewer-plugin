@@ -1,6 +1,15 @@
 import store from '../store'
 
-export const availableControls = ['play', 'volume', 'pip', 'fullscreen', 'cast', 'liveBadge', 'userCount', 'settings']
+export const availableControls = [
+  'play',
+  'volume',
+  'pip',
+  'fullscreen',
+  'cast',
+  'liveBadge',
+  'userCount',
+  'settings',
+]
 
 export const defaultViewerOptions = {
   audioOnly: false,
@@ -22,7 +31,8 @@ export const defaultViewerOptions = {
   hideToast: null,
   mainLabel: null,
   drm: false,
-  metadata: false
+  metadata: false,
+  mediaBufferMs: 0,
 }
 
 export default function processViewerOptions({
@@ -47,6 +57,7 @@ export default function processViewerOptions({
   forcePlayoutDelayMin,
   forcePlayoutDelayMax,
   metadata,
+  mediaBufferMs,
 }) {
   const options = {}
 
@@ -91,9 +102,18 @@ export default function processViewerOptions({
   }
   if (forcePlayoutDelayMin && forcePlayoutDelayMax) {
     if (parseInt(forcePlayoutDelayMin) && parseInt(forcePlayoutDelayMax)) {
-      options.forcePlayoutDelay = { min: parseInt(forcePlayoutDelayMin), max: parseInt(forcePlayoutDelayMax) }
+      options.forcePlayoutDelay = {
+        min: parseInt(forcePlayoutDelayMin),
+        max: parseInt(forcePlayoutDelayMax),
+      }
     }
   }
+  if (parseInt(mediaBufferMs)) {
+    options.mediaBufferMs = parseInt(mediaBufferMs)
+  }
 
-  store.commit('Params/setViewerOptions', { ...defaultViewerOptions, ...options })
+  store.commit('Params/setViewerOptions', {
+    ...defaultViewerOptions,
+    ...options,
+  })
 }
