@@ -16,6 +16,9 @@
         :streamId="streamId"
         v-if="showButton('settings')"
       />
+      <VideoPlayerControlsAirPlay
+        v-if="showButton('airplay') && airPlayAvailable"
+      />
       <VideoPlayerControlsCast v-if="showButton('cast') && castAvailable" />
       <VideoPlayerControlsPip v-if="pipEnabled" />
       <VideoPlayerControlsFullscreen
@@ -62,7 +65,7 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex'
-import { setCast } from '../../service/sdkManager'
+import { setAirPlay, setCast } from '../../service/sdkManager'
 import {
   VideoPlayerControlsFullscreen,
   VideoPlayerControlsPip,
@@ -71,6 +74,7 @@ import {
   VideoPlayerControlsVolume,
 } from './index'
 import VideoPlayerControlsCast from './VideoPlayerControlsCast.vue'
+import VideoPlayerControlsAirPlay from './VideoPlayerControlsAirPlay.vue'
 
 export default {
   name: 'VideoPlayer',
@@ -81,6 +85,7 @@ export default {
     VideoPlayerControlsSettings,
     VideoPlayerControlsVolume,
     VideoPlayerControlsCast,
+    VideoPlayerControlsAirPlay,
   },
   props: {
     showButton: Function,
@@ -100,6 +105,7 @@ export default {
       isMobile: (state) => state.isMobile,
       isLive: (state) => state.isLive,
       castAvailable: (state) => state.castAvailable,
+      airPlayAvailable: (state) => state.airPlayAvailable,
     }),
     isVideoTag() {
       return this.video?.nodeName === 'VIDEO'
@@ -118,6 +124,7 @@ export default {
   },
   async beforeMount() {
     await setCast()
+    await setAirPlay()
   },
 }
 </script>

@@ -15,6 +15,7 @@ const defaulState = {
   trackWarning: false,
   castOptions: {},
   castAvailable: false,
+  airPlayAvailable: false,
   castIsConnected: false,
   castDevice: {},
   viewerCount: null,
@@ -28,7 +29,7 @@ const defaulState = {
   isGrid: false,
   isSelectingLayer: false,
   hideToast: false,
-  selectingLayerTimeouts: null
+  selectingLayerTimeouts: null,
 }
 
 export default {
@@ -106,6 +107,9 @@ export default {
     setCastAvailable(state, castAvailable) {
       state.castAvailable = castAvailable
     },
+    setAirPlayAvailable(state, airPlayAvailable) {
+      state.airPlayAvailable = airPlayAvailable
+    },
     setCastIsConnected(state, castIsConnected) {
       state.castIsConnected = castIsConnected
     },
@@ -150,7 +154,7 @@ export default {
     },
     setSelectingLayerTimeout(state, selectingLayerTimeout) {
       state.selectingLayerTimeouts = selectingLayerTimeout
-    }
+    },
   },
   getters: {},
 }

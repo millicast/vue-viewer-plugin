@@ -5,6 +5,7 @@ import * as viewConnection from './utils/viewConnection'
 import * as sources from './utils/sources'
 import * as layers from './utils/layers'
 import * as cast from './utils/cast'
+import * as airplay from './utils/airplay'
 
 //Import Vuex Store.
 import store from '../store'
@@ -118,7 +119,7 @@ const updateActiveBroadcastState = (event) => {
   }
   if (selectingLayerTimeout != null) {
     const timeoutId = setTimeout(() => {
-      console.warn('Starting quality selected, but no layer event available.');
+      console.warn('Starting quality selected, but no layer event available.')
       commit('Controls/setIsLoading', false)
     }, 5000)
     selectingLayerTimeout = timeoutId
@@ -168,7 +169,9 @@ const updateLayersBroadcastState = (event) => {
   }
   const medias = state.Layers.mainTransceiverMedias.active
   if (medias.length === 0) {
-    console.warn('No active layers available, will wait for next event. Switching to Auto until then.')
+    console.warn(
+      'No active layers available, will wait for next event. Switching to Auto until then.'
+    )
     if (selectingLayerTimeout != null) {
       clearTimeout(selectingLayerTimeout)
     }
@@ -176,13 +179,20 @@ const updateLayersBroadcastState = (event) => {
     commit('Controls/setIsLoading', false)
     return
   }
-  if (state.Controls.isSelectingLayer && state.Params.viewer.startingQuality !== null) {
+  if (
+    state.Controls.isSelectingLayer &&
+    state.Params.viewer.startingQuality !== null
+  ) {
     let selectedMedia = {}
     const startingQuality = state.Params.viewer.startingQuality
-    const qualityIndex = ['auto', 'high', 'medium', 'low'].indexOf(startingQuality.toLowerCase())
+    const qualityIndex = ['auto', 'high', 'medium', 'low'].indexOf(
+      startingQuality.toLowerCase()
+    )
     if (/^\d{3,4}$/.test(startingQuality)) {
       // Select layer with specific height
-      selectedMedia = medias.find((media) => media.height === parseInt(startingQuality))
+      selectedMedia = medias.find(
+        (media) => media.height === parseInt(startingQuality)
+      )
       console.log('Selected media, height:', selectedMedia?.id)
     } else if (qualityIndex >= 0) {
       if (startingQuality.toLowerCase() === 'low') {
@@ -243,4 +253,8 @@ export const unprojectMultiview = async () => {
 
 export const setCast = async () => {
   cast.handleSetCast()
+}
+
+export const setAirPlay = async () => {
+  airplay.handleSetAirPlay()
 }
