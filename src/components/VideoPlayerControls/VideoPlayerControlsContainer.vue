@@ -16,6 +16,9 @@
         :streamId="streamId"
         v-if="showButton('settings')"
       />
+      <VideoPlayerControlsAirPlay
+        v-if="showButton('airplay') && airPlayAvailable"
+      />
       <VideoPlayerControlsCast v-if="showButton('cast') && castAvailable" />
       <VideoPlayerControlsPip v-if="pipEnabled" />
       <VideoPlayerControlsFullscreen
@@ -31,6 +34,7 @@
       <span
         v-if="
           (showButton('cast') && castAvailable) ||
+          (showButton('airplay') && airPlayAvailable) ||
           (isLive && pipEnabled && showButton('pip') && isVideoTag) ||
           showButton('fullscreen')
         "
@@ -48,6 +52,9 @@
           <div class="dropdown-header d-flex m-0 col-12">
             <h6 class="p-0 m-0">Options</h6>
           </div>
+          <VideoPlayerControlsAirPlay
+            v-if="showButton('airplay') && airPlayAvailable"
+          />
           <VideoPlayerControlsCast v-if="showButton('cast') && castAvailable" />
           <VideoPlayerControlsPip v-if="pipEnabled" />
           <VideoPlayerControlsFullscreen
@@ -62,7 +69,7 @@
 
 <script>
 import { mapMutations, mapState } from 'vuex'
-import { setCast } from '../../service/sdkManager'
+import { setAirPlay, setCast } from '../../service/sdkManager'
 import {
   VideoPlayerControlsFullscreen,
   VideoPlayerControlsPip,
@@ -71,6 +78,7 @@ import {
   VideoPlayerControlsVolume,
 } from './index'
 import VideoPlayerControlsCast from './VideoPlayerControlsCast.vue'
+import VideoPlayerControlsAirPlay from './VideoPlayerControlsAirPlay.vue'
 
 export default {
   name: 'VideoPlayer',
@@ -81,6 +89,7 @@ export default {
     VideoPlayerControlsSettings,
     VideoPlayerControlsVolume,
     VideoPlayerControlsCast,
+    VideoPlayerControlsAirPlay,
   },
   props: {
     showButton: Function,
@@ -100,6 +109,7 @@ export default {
       isMobile: (state) => state.isMobile,
       isLive: (state) => state.isLive,
       castAvailable: (state) => state.castAvailable,
+      airPlayAvailable: (state) => state.airPlayAvailable,
     }),
     isVideoTag() {
       return this.video?.nodeName === 'VIDEO'
@@ -118,6 +128,7 @@ export default {
   },
   async beforeMount() {
     await setCast()
+    await setAirPlay()
   },
 }
 </script>
