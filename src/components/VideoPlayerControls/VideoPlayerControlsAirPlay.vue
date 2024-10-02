@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[isMobile ? 'dropdown-item d-flex row mx-0' : 'mobile-setting']"
-    v-if="!options.loading"
+    v-if="airPlayAvailable"
     @click="clickAirPlay"
   >
     <div :class="[isMobile ? '' : 'mobile-setting']">
@@ -22,6 +22,7 @@ export default {
   computed: {
     ...mapState('Controls', {
       isMobile: (state) => state.isMobile,
+      airPlayAvailable: (state) => state.airPlayAvailable,
     }),
   },
   methods: {

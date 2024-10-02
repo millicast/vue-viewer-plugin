@@ -34,6 +34,7 @@
       <span
         v-if="
           (showButton('cast') && castAvailable) ||
+          (showButton('airplay') && airPlayAvailable) ||
           (isLive && pipEnabled && showButton('pip') && isVideoTag) ||
           showButton('fullscreen')
         "
@@ -51,6 +52,9 @@
           <div class="dropdown-header d-flex m-0 col-12">
             <h6 class="p-0 m-0">Options</h6>
           </div>
+          <VideoPlayerControlsAirPlay
+            v-if="showButton('airplay') && airPlayAvailable"
+          />
           <VideoPlayerControlsCast v-if="showButton('cast') && castAvailable" />
           <VideoPlayerControlsPip v-if="pipEnabled" />
           <VideoPlayerControlsFullscreen

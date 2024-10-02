@@ -13,6 +13,8 @@ export const handleSetAirPlay = async () => {
           case 'not-available':
             commit('Controls/setAirPlayAvailable', false)
             break
+          default:
+            break
         }
       })
   }
