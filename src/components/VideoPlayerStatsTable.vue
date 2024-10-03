@@ -45,6 +45,12 @@
           {{ millicastView.signaling.subscriberId }}
         </td>
       </tr>
+      <tr v-if="castOptions?.streamId" class="row mx-0">
+        <td class="col-6">Stream Id</td>
+        <td class="col-6">
+          {{ castOptions.streamId }}
+        </td>
+      </tr>
       <tr v-if="millicastView?.signaling?.streamViewId" class="row mx-0">
         <td class="col-6">Stream View Id</td>
         <td class="col-5 overflow-ellipsis">
@@ -217,7 +223,8 @@ export default {
   computed: {
     ...mapState('Controls', [
       'isMobile',
-      'isSplittedView'
+      'isSplittedView',
+      'castOptions'
     ]),
     ...mapState('ViewConnection', {
       millicastView: (state) => state.millicastView,
