@@ -188,7 +188,7 @@ const setCanAutoPlayStream = async () => {
       muted: state.Params.viewer.muted,
     })
     const muted = !state.Params.viewer.muted
-      ? !canAutoPlayVideo.result
+      ? canAutoPlayVideo.result
       : state.Params.viewer.muted
     commit('Controls/setVideoMuted', muted)
     commit('Controls/setAutoPlayMuted', muted)

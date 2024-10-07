@@ -56,7 +56,6 @@ export default function processViewerOptions({
   options.directorUrl = directorUrl
   options.hideButtons = hideButtons ?? []
   options.autoplay = autoplay ?? true
-  options.muted = muted ?? false
   options.multisource = multisource ?? false
   options.audioFollowsVideo = audioFollowsVideo ?? false
   options.layout = layout
@@ -90,6 +89,10 @@ export default function processViewerOptions({
     if (parseInt(forcePlayoutDelayMin) && parseInt(forcePlayoutDelayMax)) {
       options.forcePlayoutDelay = { min: parseInt(forcePlayoutDelayMin), max: parseInt(forcePlayoutDelayMax) }
     }
+  }
+  if (muted !== null) {
+    options.muted = muted ?? false
+    store.commit('Controls/setVideoMuted', muted)
   }
 
   store.commit('Params/setViewerOptions', { ...defaultViewerOptions, ...options })
