@@ -55,12 +55,15 @@ export default function processViewerOptions({
   options.placeholderImg = image
   options.directorUrl = directorUrl
   options.hideButtons = hideButtons ?? []
-  options.autoplay = autoplay ?? true
   options.multisource = multisource ?? false
   options.audioFollowsVideo = audioFollowsVideo ?? false
   options.layout = layout
   options.showLabels = showLabels
   options.metadata = metadata
+  options.muted = muted ?? false
+  store.commit('Controls/setVideoMuted', muted)
+  options.autoplay = autoplay ?? true
+  store.commit('Controls/setVideoAutoplay', autoplay)
   if (multisource) {
     store.commit('Controls/setIsSplittedView', true)
   }
@@ -90,10 +93,7 @@ export default function processViewerOptions({
       options.forcePlayoutDelay = { min: parseInt(forcePlayoutDelayMin), max: parseInt(forcePlayoutDelayMax) }
     }
   }
-  if (muted !== null) {
-    options.muted = muted ?? false
-    store.commit('Controls/setVideoMuted', muted)
-  }
+
 
   store.commit('Params/setViewerOptions', { ...defaultViewerOptions, ...options })
 }
