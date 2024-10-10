@@ -100,8 +100,11 @@ export const handleSelectQuality = (media) => {
   }
   //Replaced select with project, as select can cause errors when used with transcoders
   const source = state.Sources.selectedVideoSource
-  const mediaLayers =
-    state.Layers.medias[source.mid]?.layers || state.Layers.medias['0']?.layers
+  let layerIdx = source?.mid
+  if (!state.Layers.medias[layerIdx]?.layers) {
+    layerIdx = '0'
+  }
+  const mediaLayers = state.Layers.medias[layerIdx]?.layers
   const quality = mediaLayers.find(
     (layer) => layer.simulcastIdx === media.simulcastIdx
   )
