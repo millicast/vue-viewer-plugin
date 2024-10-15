@@ -39,6 +39,12 @@
       :style="[isMobile ? 'overflow-x: auto;' : 'overflow-x: hidden;']"
       class="text-left videoStats"
     >
+      <tr v-if="streamId" class="row mx-0">
+        <td class="col-6">Stream Id</td>
+        <td class="col-6">
+          {{ streamId }}
+        </td>
+      </tr>
       <tr v-if="millicastView?.signaling?.subscriberId" class="row mx-0">
         <td class="col-6">Server Id</td>
         <td class="col-6">
@@ -215,6 +221,9 @@ export default {
     },
   },
   computed: {
+    ...mapState('Params', {
+      streamId: (state) => state.viewer.streamId,
+    }),
     ...mapState('Controls', [
       'isMobile',
       'isSplittedView'
