@@ -58,7 +58,6 @@ export default {
           forcePlayoutDelayMin: this.paramsOptions?.forcePlayoutDelayMin,
           forcePlayoutDelayMax: this.paramsOptions?.forcePlayoutDelayMax,
           metadata: this.paramsOptions?.metadata,
-          mediaBufferMs: this.paramsOptions?.mediaBufferMs,
         })
       }
       processEnvironmentOptions(this.paramsOptions?.environment)

@@ -129,7 +129,6 @@ const configureDrm = (event) => {
       audioElement: mainAudioElement,
       videoEncryptionParams: event.data.encryption,
       videoMid: '0',
-      mediaBufferMs: state.Params.viewer.mediaBufferMs,
     }
     const audioTrackMapping = tracksMapping.find(
       (track) => track.media === 'audio'
