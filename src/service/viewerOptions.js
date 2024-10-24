@@ -1,6 +1,15 @@
 import store from '../store'
 
-export const availableControls = ['play', 'volume', 'pip', 'fullscreen', 'cast', 'liveBadge', 'userCount', 'settings']
+export const availableControls = [
+  'play',
+  'volume',
+  'pip',
+  'fullscreen',
+  'cast',
+  'liveBadge',
+  'userCount',
+  'settings',
+]
 
 export const defaultViewerOptions = {
   audioOnly: false,
@@ -21,7 +30,9 @@ export const defaultViewerOptions = {
   startingQuality: null,
   hideToast: null,
   mainLabel: null,
-  metadata: false
+  drm: false,
+  metadata: false,
+  mediaBufferMs: 0,
 }
 
 export default function processViewerOptions({
@@ -42,9 +53,11 @@ export default function processViewerOptions({
   startingQuality,
   hideToast,
   mainLabel,
+  drm,
   forcePlayoutDelayMin,
   forcePlayoutDelayMax,
   metadata,
+  mediaBufferMs,
 }) {
   const options = {}
 
@@ -56,13 +69,12 @@ export default function processViewerOptions({
   options.directorUrl = directorUrl
   options.hideButtons = hideButtons ?? []
   options.muted = muted ?? false
-  store.commit('Controls/setVideoMuted', muted)
   options.autoplay = autoplay ?? true
-  store.commit('Controls/setVideoAutoplay', autoplay)
   options.multisource = multisource ?? false
   options.audioFollowsVideo = audioFollowsVideo ?? false
   options.layout = layout
   options.showLabels = showLabels
+  options.drm = drm ?? false
   options.metadata = metadata
   if (multisource) {
     store.commit('Controls/setIsSplittedView', true)
@@ -90,9 +102,18 @@ export default function processViewerOptions({
   }
   if (forcePlayoutDelayMin && forcePlayoutDelayMax) {
     if (parseInt(forcePlayoutDelayMin) && parseInt(forcePlayoutDelayMax)) {
-      options.forcePlayoutDelay = { min: parseInt(forcePlayoutDelayMin), max: parseInt(forcePlayoutDelayMax) }
+      options.forcePlayoutDelay = {
+        min: parseInt(forcePlayoutDelayMin),
+        max: parseInt(forcePlayoutDelayMax),
+      }
     }
   }
+  if (parseInt(mediaBufferMs)) {
+    options.mediaBufferMs = parseInt(mediaBufferMs)
+  }
 
-  store.commit('Params/setViewerOptions', { ...defaultViewerOptions, ...options })
+  store.commit('Params/setViewerOptions', {
+    ...defaultViewerOptions,
+    ...options,
+  })
 }

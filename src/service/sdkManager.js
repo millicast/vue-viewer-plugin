@@ -20,12 +20,16 @@ export const setVideoPlayer = ({
   volume,
   muted,
   autoplay,
+  drmAudio,
 }) => {
   if (videoPlayer) {
     commit('Controls/setVideo', videoPlayer)
     commit('Controls/setCurrentElementRef', videoPlayer.id)
   }
-  if (srcObject) {
+  if (drmAudio) {
+    commit('Controls/setDrmAudio', drmAudio)
+  }
+  if (srcObject && !state.Params.viewer.drm) {
     commit('Controls/setVideoSource', srcObject)
   }
   if (volume) commit('Controls/setVideoVolume', volume)
@@ -106,19 +110,54 @@ const setBroadcastEvent = () => {
     })
 }
 
+const configureDrm = (event) => {
+  const sourceId = event.data.sourceId
+
+  if (state.Params.viewer.drm && !sourceId) {
+    const tracksMapping = event.data.tracks.map((track) => {
+      const { media } = track
+      const mediaId = media === 'video' ? '0' : '1'
+      return {
+        ...track,
+        mediaId,
+      }
+    })
+    const mainVideoElement = state.Controls.video
+    const mainAudioElement = state.Controls.drmAudio
+    const drmOptions = {
+      videoElement: mainVideoElement,
+      audioElement: mainAudioElement,
+      videoEncryptionParams: event.data.encryption,
+      videoMid: '0',
+      mediaBufferMs: state.Params.viewer.mediaBufferMs,
+    }
+    const audioTrackMapping = tracksMapping.find(
+      (track) => track.media === 'audio'
+    )
+    if (audioTrackMapping) {
+      drmOptions.audioMid = audioTrackMapping.mediaId
+    }
+    const millicastView = state.ViewConnection.millicastView
+    millicastView.configureDRM(drmOptions)
+  }
+}
+
 const updateActiveBroadcastState = (event) => {
+  if (event.data.encryption && state.Params.viewer.drm) {
+    configureDrm(event)
+  }
   sources.getTracks(event.data)
   commit('Controls/setIsLive', true)
   if (!state.Controls.isSelectingLayer) {
     commit('Controls/setIsLoading', false)
   }
   viewConnection.setReconnect()
-  if (!state.Controls.video.srcObject) {
+  if (!state.Controls.video.srcObject && !state.Params.viewer.drm) {
     commit('Controls/setVideoSource', state.Controls.srcObject)
   }
   if (selectingLayerTimeout != null) {
     const timeoutId = setTimeout(() => {
-      console.warn('Starting quality selected, but no layer event available.');
+      console.warn('Starting quality selected, but no layer event available.')
       commit('Controls/setIsLoading', false)
     }, 5000)
     selectingLayerTimeout = timeoutId
@@ -168,7 +207,9 @@ const updateLayersBroadcastState = (event) => {
   }
   const medias = state.Layers.mainTransceiverMedias.active
   if (medias.length === 0) {
-    console.warn('No active layers available, will wait for next event. Switching to Auto until then.')
+    console.warn(
+      'No active layers available, will wait for next event. Switching to Auto until then.'
+    )
     if (selectingLayerTimeout != null) {
       clearTimeout(selectingLayerTimeout)
     }
@@ -176,13 +217,20 @@ const updateLayersBroadcastState = (event) => {
     commit('Controls/setIsLoading', false)
     return
   }
-  if (state.Controls.isSelectingLayer && state.Params.viewer.startingQuality !== null) {
+  if (
+    state.Controls.isSelectingLayer &&
+    state.Params.viewer.startingQuality !== null
+  ) {
     let selectedMedia = {}
     const startingQuality = state.Params.viewer.startingQuality
-    const qualityIndex = ['auto', 'high', 'medium', 'low'].indexOf(startingQuality.toLowerCase())
+    const qualityIndex = ['auto', 'high', 'medium', 'low'].indexOf(
+      startingQuality.toLowerCase()
+    )
     if (/^\d{3,4}$/.test(startingQuality)) {
       // Select layer with specific height
-      selectedMedia = medias.find((media) => media.height === parseInt(startingQuality))
+      selectedMedia = medias.find(
+        (media) => media.height === parseInt(startingQuality)
+      )
       console.log('Selected media, height:', selectedMedia?.id)
     } else if (qualityIndex >= 0) {
       if (startingQuality.toLowerCase() === 'low') {

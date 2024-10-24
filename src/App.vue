@@ -1,5 +1,5 @@
 <template>
-  <VideoPlayerContainer class="ml-viewer" id="viewer-container"/>
+  <VideoPlayerContainer class="ml-viewer" id="viewer-container" />
 </template>
 
 <script>
@@ -26,7 +26,8 @@ export default {
     ...mapMutations('Controls', ['setMobile']),
     updateParams() {
       if (this.paramsOptions) {
-        let NODE_ENV = this.paramsOptions?.environment?.NODE_ENV ?? process.env.NODE_ENV
+        let NODE_ENV =
+          this.paramsOptions?.environment?.NODE_ENV ?? process.env.NODE_ENV
 
         processViewerOptions({
           streamId:
@@ -38,13 +39,11 @@ export default {
           token: this.paramsOptions?.token,
           image: this.paramsOptions?.image,
           directorUrl:
-            NODE_ENV !== 'production'
-              ? this.paramsOptions?.directorUrl
-              : null,
-          hideButtons: 
-            this.paramsOptions.controls === false 
+            NODE_ENV !== 'production' ? this.paramsOptions?.directorUrl : null,
+          hideButtons:
+            this.paramsOptions.controls === false
               ? availableControls
-              : (this.paramsOptions.hideButtons ?? []),
+              : this.paramsOptions.hideButtons ?? [],
           autoplay: this.paramsOptions.autoplay ?? true,
           muted: this.paramsOptions.muted ?? false,
           noDelay: this.paramsOptions?.noDelay ?? false,
@@ -55,9 +54,11 @@ export default {
           startingQuality: this.paramsOptions?.startingQuality,
           hideToast: this.paramsOptions?.hideToast,
           mainLabel: this.paramsOptions?.mainLabel ?? 'Main',
+          drm: this.paramsOptions.drm ?? false,
           forcePlayoutDelayMin: this.paramsOptions?.forcePlayoutDelayMin,
           forcePlayoutDelayMax: this.paramsOptions?.forcePlayoutDelayMax,
           metadata: this.paramsOptions?.metadata,
+          mediaBufferMs: this.paramsOptions?.mediaBufferMs,
         })
       }
       processEnvironmentOptions(this.paramsOptions?.environment)
@@ -74,7 +75,9 @@ export default {
 
     // Starting quality toast
     if (this.paramsOptions?.startingQuality) {
-      toast.showToast('info','Fetching starting quality layer', { timeout: 1500 })
+      toast.showToast('info', 'Fetching starting quality layer', {
+        timeout: 1500,
+      })
     }
 
     ElementQueries.listen()
@@ -86,13 +89,13 @@ export default {
     })
 
     // API for Chromecast
-    const plugin = document.createElement("script");
+    const plugin = document.createElement('script')
     plugin.setAttribute(
-      "src",
-      "//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1"
-    );
-    plugin.async = true;
-    document.head.appendChild(plugin);
+      'src',
+      '//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1'
+    )
+    plugin.async = true
+    document.head.appendChild(plugin)
   },
   watch: {
     paramsOptions() {
@@ -137,17 +140,18 @@ export default {
   grid-template-columns: 1fr 1fr;
   gap: 10px;
 }
-  
-#viewer-container[max-width~='429.9px'] :deep(.list-item){
+
+#viewer-container[max-width~='429.9px'] :deep(.list-item) {
   padding: 0;
   max-width: 100%;
 }
 
-#viewer-container[min-width~='721'][max-width~='1920'] :deep(.grid-container){
+#viewer-container[min-width~='721'][max-width~='1920'] :deep(.grid-container) {
   max-width: 85%;
 }
 
-#viewer-container[min-width~='429.98px'][max-width~='721px'] :deep(.grid-container){
+#viewer-container[min-width~='429.98px'][max-width~='721px']
+  :deep(.grid-container) {
   padding: 0 40px;
   display: -webkit-inline-box;
 }
