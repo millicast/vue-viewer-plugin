@@ -14,7 +14,7 @@
     </div>
     <!-- TAP TO UNMUTE OVERLAY -->
     <div
-      v-if="autoPlayMuted && isLive"
+      v-if="(isLive && !this.viewer.muted && this.viewer.autoplay)"
       @click="tapUnmute"
       class="overlay tap-unmute d-flex align-items-center justify-content-center"
     >
