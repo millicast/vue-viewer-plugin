@@ -67,9 +67,7 @@ export default function processViewerOptions({
   options.directorUrl = directorUrl
   options.hideButtons = hideButtons ?? []
   options.muted = muted ?? false
-  store.commit('Controls/setVideoMuted', muted)
   options.autoplay = autoplay ?? true
-  store.commit('Controls/setVideoAutoplay', autoplay)
   options.multisource = multisource ?? false
   options.audioFollowsVideo = audioFollowsVideo ?? false
   options.layout = layout
