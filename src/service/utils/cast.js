@@ -6,8 +6,8 @@ let castSession = null
 let receiverApplicationId = null
 
 export const handleSetCast = async () => {
-  while (!receiverApplicationId){
-    await new Promise(r => setTimeout(r, 20));
+  while (!receiverApplicationId) {
+    await new Promise((r) => setTimeout(r, 20))
     receiverApplicationId = state.Params.environment.VUE_APP_CHROMECAST_ID
   }
 
@@ -44,27 +44,32 @@ export const handleSetCast = async () => {
 
   window['__onGCastApiAvailable'] = async (isAvailable) => {
     if (isAvailable) {
-      setTimeout(async () => {
-        // isAvaiable is returning true but window.cast is null if we don't use a timer for some reason
-        castContext = await window.cast.framework.CastContext.getInstance()
-        if (window.chrome.cast && window.chrome.cast.AutoJoinPolicy) {
-          castContext.setOptions({
-            autoJoinPolicy: window.chrome.cast.AutoJoinPolicy.PAGE_SCOPED,
-            receiverApplicationId,
-          })
-          const { CAST_STATE_CHANGED, SESSION_STATE_CHANGED } =
-            window.cast.framework.CastContextEventType
-          await castContext.addEventListener(
-            CAST_STATE_CHANGED,
-            async ({ castState }) => await castStateListener(castState)
-          )
-          await castContext.addEventListener(SESSION_STATE_CHANGED, (e) =>
-            sessionListener(e)
-          )
-        } else {
-          commit('Controls/setCastAvailable', false)
+      // isAvaiable is returning true but window.cast is null sometimes. Using an interval until it exists
+      let castInterval
+      castInterval = setInterval(async () => {
+        castContext = await window.cast?.framework.CastContext.getInstance()
+        if (castContext) {
+          if (window.chrome.cast && window.chrome.cast.AutoJoinPolicy) {
+            castContext.setOptions({
+              autoJoinPolicy: window.chrome.cast.AutoJoinPolicy.PAGE_SCOPED,
+              receiverApplicationId,
+            })
+            const { CAST_STATE_CHANGED, SESSION_STATE_CHANGED } =
+              window.cast.framework.CastContextEventType
+            await castContext.addEventListener(
+              CAST_STATE_CHANGED,
+              async ({ castState }) => await castStateListener(castState)
+            )
+            await castContext.addEventListener(
+              SESSION_STATE_CHANGED,
+              async (e) => await sessionListener(e)
+            )
+          } else {
+            commit('Controls/setCastAvailable', false)
+          }
+          clearInterval(castInterval)
         }
-      }, 20)
+      }, 50)
     }
   }
 }
@@ -87,11 +92,14 @@ export const sendLoadRequest = async () => {
   mediaInfo.streamType = chrome.cast.media.StreamType.LIVE
 
   const loadRequest = new chrome.cast.media.LoadRequest(mediaInfo)
-  castSession.loadMedia(loadRequest).then(() => {
-    stopStream()
-    commit('Controls/setCastDevice', castSession.getCastDevice())
-    commit('Controls/setCastIsConnected', true)
-  }).catch((error) => {
-    console.log(error)
-  })
+  castSession
+    .loadMedia(loadRequest)
+    .then(() => {
+      stopStream()
+      commit('Controls/setCastDevice', castSession.getCastDevice())
+      commit('Controls/setCastIsConnected', true)
+    })
+    .catch((error) => {
+      console.log(error)
+    })
 }

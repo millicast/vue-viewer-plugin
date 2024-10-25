@@ -39,6 +39,12 @@
       :style="[isMobile ? 'overflow-x: auto;' : 'overflow-x: hidden;']"
       class="text-left videoStats"
     >
+      <tr v-if="streamId" class="row mx-0">
+        <td class="col-6">Stream Id</td>
+        <td class="col-6">
+          {{ streamId }}
+        </td>
+      </tr>
       <tr v-if="millicastView?.signaling?.subscriberId" class="row mx-0">
         <td class="col-6">Server Id</td>
         <td class="col-6">
@@ -74,11 +80,11 @@
       </tr>
       <tr v-if="video?.bitrate" class="row mx-0">
         <td class="col-6">Video Bitrate</td>
-        <td class="col-6">{{ formatBitrate(video.bitrate) }}</td>
+        <td class="col-6">{{ formatBitrate(video.bitrateBitsPerSecond) }}</td>
       </tr>
       <tr v-if="audio?.bitrate" class="row mx-0">
         <td class="col-6">Audio Bitrate</td>
-        <td class="col-6">{{ formatBitrate(audio.bitrate) }}</td>
+        <td class="col-6">{{ formatBitrate(audio.bitrateBitsPerSecond) }}</td>
       </tr>
       <tr v-if="video?.totalBytesReceived" class="row mx-0">
         <td class="col-6">Video Total Received</td>
@@ -202,7 +208,7 @@ export default {
       return formatBitsRecursive(value)
     },
     formatMilliseconds(value) {
-      return `${(value || 0) * 1000} ms`
+      return `${+((value || 0) * 1000).toFixed(2)} ms`
     },
     handleSourceChange() {
       const mid = this.selectedSourceMid ?? 0
@@ -215,6 +221,9 @@ export default {
     },
   },
   computed: {
+    ...mapState('Params', {
+      streamId: (state) => state.viewer.streamId,
+    }),
     ...mapState('Controls', [
       'isMobile',
       'isSplittedView'
