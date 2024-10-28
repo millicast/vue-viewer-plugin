@@ -64,7 +64,7 @@ export const handleInitViewConnection = (accountId, streamName) => {
     return subscriber
   }
 
-  const millicastView = new View(streamName, tokenGenerator)
+  const millicastView = new View(tokenGenerator)
   window.millicastView = millicastView
   window.__defineGetter__('peer', () => {
     return millicastView.getRTCPeerConnection()
@@ -224,8 +224,8 @@ export const setReconnect = () => {
 
 export const handleStopStream = () => {
   state.ViewConnection.millicastView?.stop()
-  commit('Controls/setVideoSource', null)
-  commit('Controls/setSrcObject', null)
+  commit('Controls/setVideoSource', '')
+  commit('Controls/setSrcObject', '')
 }
 
 const addSignalingMigrateListener = () => {
