@@ -35,12 +35,15 @@ export default {
       pip: (state) => state.pip,
       video: (state) => state.video,
     }),
+    ...mapState('Params', {
+      viewer: (state) => state.viewer
+    })
   },
   methods: {
     togglePip() {
       if (
         !this.pip &&
-        this.video.srcObject &&
+        (this.video.srcObject || this.viewer.drm) &&
         this.video.nodeName === 'VIDEO'
       ) {
         this.video.requestPictureInPicture()

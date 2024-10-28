@@ -38,6 +38,9 @@ export default {
     setVideo(state, video) {
       state.video = video
     },
+    setDrmAudio(state, audio) {
+      state.drmAudio = audio
+    },
     setPlaying(state, playing) {
       if (!state.isMigrating) state.playing = playing
     },
@@ -61,13 +64,22 @@ export default {
     },
     setVideoVolume(state, volume) {
       state.video.volume = volume
+      if (state.drmAudio) {
+        state.drmAudio.volume = volume
+      }
     },
     setVideoMuted(state, muted) {
       state.video.muted = muted
       state.muted = muted
+      if (state.drmAudio) {
+        state.drmAudio.muted = muted
+      }
     },
     setVideoAutoplay(state, autoplay) {
       state.video.autoplay = autoplay
+      if (state.drmAudio) {
+        state.drmAudio.autoplay = autoplay
+      }
     },
     setVideoSource(state, source) {
       state.video.srcObject = source

@@ -7,15 +7,17 @@
       ref="player"
       :class="{ 'display: none;': currentElementRef === 'player2' }"
     ></audio>
-    <video
-      v-else
-      playsinline
-      id="player"
-      ref="player"
-      :poster="viewer.placeholderImg"
-      :class="{ 'display: none;': currentElementRef === 'player2' }"
-      :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
-    ></video>
+    <template v-else>
+      <video
+        playsinline
+        id="player"
+        ref="player"
+        :poster="viewer.placeholderImg"
+        :class="{ 'display: none;': currentElementRef === 'player2' }"
+        :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
+      ></video>
+      <audio v-if="viewer.drm" id="drm-audio-player" playsinline></audio>
+    </template>
   </template>
   <template v-if="isMigrating || currentElementRef === 'player2'">
     <audio
@@ -25,15 +27,17 @@
       ref="player2"
       :class="{ 'display: none;': currentElementRef === 'player' }"
     ></audio>
-    <video
-      v-else
-      playsinline
-      id="player2"
-      ref="player2"
-      :poster="viewer.placeholderImg"
-      :class="{ 'display: none;': currentElementRef === 'player' }"
-      :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
-    ></video>
+    <template v-else>
+      <video
+        playsinline
+        id="player2"
+        ref="player2"
+        :poster="viewer.placeholderImg"
+        :class="{ 'display: none;': currentElementRef === 'player' }"
+        :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
+      ></video>
+      <audio v-if="viewer.drm" id="drm-audio-player2" playsinline autoplay muted></audio>
+    </template>
   </template>
   <span
     v-if="videoSources.length > 1 && isSplittedView && !fullscreen && viewer.showLabels"
@@ -68,13 +72,19 @@ export default {
     }
   },
   async mounted() {
+    let drmAudio
     const player = document.getElementById(this.currentElementRef)
+    if (this.viewer.drm) {
+      drmAudio = document.getElementById(this.currentElementRef)
+    }
+
     setVideoPlayer({
       videoPlayer: player,
       srcObject: null,
       volume: 1,
       muted: this.viewer.muted,
       autoplay: this.viewer.autoplay,
+      drmAudio: drmAudio
     })
   },
   computed: {
@@ -96,6 +106,7 @@ export default {
     }),
     ...mapState('Controls', {
       video: (state) => state.video,
+      drmAudio: (state) => state.drmAudio,
       dropup: (state) => state.dropup,
       playerMuted: (state) => state.muted,
       isLive: (state) => state.isLive,
@@ -107,6 +118,7 @@ export default {
       previousSplitState: state => state.previousSplitState,
       isGrid: state => state.isGrid,
       fullscreen: (state) => state.fullscreen,
+      playing: (state) => state.playing,
     }),
     ...mapState('Params', {
       viewer: (state) => state.viewer,
@@ -114,8 +126,8 @@ export default {
     ...mapGetters('Sources', ['getVideoHasMain', 'getAudioHasMain']),
     displayAudioOnly() {
       return (
-        (this.isAudioOnly && this.isLive) ||
-        (this.viewer.placeholderImg === null && !this.isLive)
+        (this.isAudioOnly && this.isLive && !this.viewer.drm) ||
+        (this.viewer.placeholderImg === null && !this.isLive && !this.viewer.drm)
       )
     },
   },
@@ -180,12 +192,18 @@ export default {
       await nextTick()
       //Set new tag params
       const player = document.getElementById(this.currentElementRef)
+      let drmAudio;
+      if (this.viewer.drm) {
+        drmAudio = document.getElementById('drm-audio-' + this.currentElementRef)
+      }
+
       setVideoPlayer({
         videoPlayer: player,
         srcObject,
         volume,
         muted,
         autoplay,
+        drmAudio,
       })
     },
     async viewer() {
@@ -202,6 +220,12 @@ export default {
         this.toast.showToast('error', e.message)
       }
     },
+    playerMuted: function () {
+      // You cannot autoplay muted audio elements so we have to wait for user interaction to call play on the audio element
+      if (!this.playerMuted && this.drmAudio && this.drmAudio.paused && this.playing) {
+        this.drmAudio.play()
+      }
+    }
   },
 }
 </script>
