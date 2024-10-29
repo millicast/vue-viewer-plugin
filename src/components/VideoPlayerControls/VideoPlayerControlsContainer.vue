@@ -48,7 +48,9 @@
           <div class="dropdown-header d-flex m-0 col-12">
             <h6 class="p-0 m-0">Options</h6>
           </div>
-          <VideoPlayerControlsCast v-if="showButton('cast') && castAvailable" />
+          <VideoPlayerControlsCast
+            v-if="showButton('cast') && castAvailable && !this.viewer.drm"
+          />
           <VideoPlayerControlsPip v-if="pipEnabled" />
           <VideoPlayerControlsFullscreen
             v-if="showButton('fullscreen')"
@@ -101,6 +103,9 @@ export default {
       isLive: (state) => state.isLive,
       castAvailable: (state) => state.castAvailable,
     }),
+    ...mapState('Params', {
+      viewer: (state) => state.viewer,
+    }),
     isVideoTag() {
       return this.video?.nodeName === 'VIDEO'
     },
@@ -109,7 +114,8 @@ export default {
         this.showButton('pip') &&
         document.pictureInPictureEnabled &&
         this.isLive &&
-        this.isVideoTag
+        this.isVideoTag &&
+        !this.viewer.drm
       )
     },
   },
@@ -117,6 +123,7 @@ export default {
     ...mapMutations('Controls', ['setDropup', 'toggleFullscreen']),
   },
   async beforeMount() {
+    console.log('!!! before mount this.drm: ', this.viewer.drm)
     await setCast()
   },
 }
