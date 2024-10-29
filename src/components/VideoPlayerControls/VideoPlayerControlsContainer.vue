@@ -16,7 +16,7 @@
         :streamId="streamId"
         v-if="showButton('settings')"
       />
-      <VideoPlayerControlsCast v-if="showButton('cast') && castAvailable" />
+      <VideoPlayerControlsCast v-if="castEnabled" />
       <VideoPlayerControlsPip v-if="pipEnabled" />
       <VideoPlayerControlsFullscreen
         v-if="showButton('fullscreen')"
@@ -30,7 +30,7 @@
       />
       <span
         v-if="
-          (showButton('cast') && castAvailable) ||
+          castEnabled ||
           (isLive && pipEnabled && showButton('pip') && isVideoTag) ||
           showButton('fullscreen')
         "
@@ -118,12 +118,14 @@ export default {
         !this.viewer.drm
       )
     },
+    castEnabled() {
+      return showButton('cast') && castAvailable && !this.viewer.drm
+    },
   },
   methods: {
     ...mapMutations('Controls', ['setDropup', 'toggleFullscreen']),
   },
   async beforeMount() {
-    console.log('!!! before mount this.drm: ', this.viewer.drm)
     await setCast()
   },
 }
