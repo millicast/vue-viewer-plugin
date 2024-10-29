@@ -119,7 +119,7 @@ export default {
       )
     },
     castEnabled() {
-      return showButton('cast') && castAvailable && !this.viewer.drm
+      return this.showButton('cast') && this.castAvailable && !this.viewer.drm
     },
   },
   methods: {
