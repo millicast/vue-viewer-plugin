@@ -5,7 +5,7 @@
         <VideoPlayerControlsPlay v-if="showButton('play')" />
         <VideoPlayerControlsVolume v-if="showButton('volume')" />
         <span
-          v-if="!isMobile"
+          v-if="viewer.showTimer && !isMobile"
           class="h5 align-middle p-2"
           v-text="currentTime"
         ></span>
@@ -100,6 +100,9 @@ export default {
       isMobile: (state) => state.isMobile,
       isLive: (state) => state.isLive,
       castAvailable: (state) => state.castAvailable,
+    }),
+    ...mapState('Params', {
+      viewer: (state) => state.viewer,
     }),
     isVideoTag() {
       return this.video?.nodeName === 'VIDEO'
