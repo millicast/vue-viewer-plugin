@@ -82,6 +82,9 @@ export default {
       }
     },
     setVideoSource(state, source) {
+      if (!source) {
+        state.video.src = ''
+      }
       state.video.srcObject = source
     },
     setAutoPlayMuted(state, autoPlayMuted) {
