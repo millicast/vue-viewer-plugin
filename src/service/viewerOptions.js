@@ -33,6 +33,7 @@ export const defaultViewerOptions = {
   drm: false,
   metadata: false,
   mediaBufferMs: 0,
+  showTimer: false,
 }
 
 export default function processViewerOptions({
@@ -58,6 +59,7 @@ export default function processViewerOptions({
   forcePlayoutDelayMax,
   metadata,
   mediaBufferMs,
+  showTimer,
 }) {
   const options = {}
 
@@ -113,6 +115,7 @@ export default function processViewerOptions({
   if (parseInt(mediaBufferMs)) {
     options.mediaBufferMs = parseInt(mediaBufferMs)
   }
+  options.showTimer = showTimer ?? false
 
   store.commit('Params/setViewerOptions', {
     ...defaultViewerOptions,
