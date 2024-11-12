@@ -1,7 +1,7 @@
 <template>
   <div
     :class="[isMobile ? 'dropdown-item d-flex row mx-0' : 'mobile-setting']"
-    v-if="castAvailable && !options.loading"
+    v-if="castAvailable && !options.loading && !this.viewer.drm"
     @click="clickCast"
   >
     <div :class="[isMobile ? '' : 'mobile-setting']">
@@ -28,6 +28,9 @@ export default {
       isMobile: (state) => state.isMobile,
       castAvailable: (state) => state.castAvailable,
       options: (state) => state.castOptions,
+    }),
+    ...mapState('Params', {
+      viewer: (state) => state.viewer,
     }),
   },
   methods: {
