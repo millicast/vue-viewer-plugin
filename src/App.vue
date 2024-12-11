@@ -38,8 +38,7 @@ export default {
           videoOnly: this.paramsOptions?.videoOnly ?? false,
           token: this.paramsOptions?.token,
           image: this.paramsOptions?.image,
-          directorUrl:
-            NODE_ENV !== 'production' ? this.paramsOptions?.directorUrl : null,
+          directorUrl: this.paramsOptions?.directorUrl,
           hideButtons:
             this.paramsOptions.controls === false
               ? availableControls
