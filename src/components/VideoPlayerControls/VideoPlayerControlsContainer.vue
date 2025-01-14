@@ -16,7 +16,7 @@
         :streamId="streamId"
         v-if="showButton('settings')"
       />
-      <VideoPlayerControlsCast v-if="showButton('cast') && castAvailable" />
+      <VideoPlayerControlsCast v-if="castEnabled" />
       <VideoPlayerControlsPip v-if="pipEnabled" />
       <VideoPlayerControlsFullscreen
         v-if="showButton('fullscreen')"
@@ -30,7 +30,7 @@
       />
       <span
         v-if="
-          (showButton('cast') && castAvailable) ||
+          castEnabled ||
           (isLive && pipEnabled && showButton('pip') && isVideoTag) ||
           showButton('fullscreen')
         "
@@ -48,7 +48,9 @@
           <div class="dropdown-header d-flex m-0 col-12">
             <h6 class="p-0 m-0">Options</h6>
           </div>
-          <VideoPlayerControlsCast v-if="showButton('cast') && castAvailable" />
+          <VideoPlayerControlsCast
+            v-if="showButton('cast') && castAvailable && !this.viewer.drm"
+          />
           <VideoPlayerControlsPip v-if="pipEnabled" />
           <VideoPlayerControlsFullscreen
             v-if="showButton('fullscreen')"
@@ -112,8 +114,12 @@ export default {
         this.showButton('pip') &&
         document.pictureInPictureEnabled &&
         this.isLive &&
-        this.isVideoTag
+        this.isVideoTag &&
+        !this.viewer.drm
       )
+    },
+    castEnabled() {
+      return this.showButton('cast') && this.castAvailable && !this.viewer.drm
     },
   },
   methods: {
