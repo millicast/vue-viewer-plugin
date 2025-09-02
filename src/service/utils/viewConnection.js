@@ -36,7 +36,9 @@ const setLiveDomain = () => {
 
 const setPeerConnection = () => {
   if (state.Params.environment.VUE_APP_TURN_ENDPOINT) {
-    PeerConnection.setTurnServerLocation(state.Params.environment.VUE_APP_TURN_ENDPOINT)
+    PeerConnection.setTurnServerLocation(
+      state.Params.environment.VUE_APP_TURN_ENDPOINT
+    )
   }
 }
 
@@ -54,8 +56,8 @@ export const handleInitViewConnection = (accountId, streamName) => {
     )
     subscriber.catch((error) => {
       const errorMessage = `${error}`
-      if(!errorMessage.includes('stream not being published')) {
-        const splitedMessage = errorMessage.replace('FetchError: ','')
+      if (!errorMessage.includes('stream not being published')) {
+        const splitedMessage = errorMessage.replace('FetchError: ', '')
         commit('Errors/setMessage', splitedMessage)
         commit('Errors/setType', 'SubscriberError')
         commit('Errors/setShowError', true)
@@ -84,18 +86,25 @@ export const handleConnectToStream = async () => {
       events: ['active', 'inactive', 'layers', 'viewercount'],
       absCaptureTime: true,
     }
-    if (state.Params.viewer.audioOnly) {connectOptions.disableVideo = true}
-    if (state.Params.viewer.videoOnly) {connectOptions.disableAudio = true}
-    if (state.Params.viewer.forcePlayoutDelay) {connectOptions.forcePlayoutDelay = state.Params.viewer.forcePlayoutDelay}
-    if (state.Params.viewer.metadata) {connectOptions.metadata = state.Params.viewer.metadata}
+    if (state.Params.viewer.audioOnly) {
+      connectOptions.disableVideo = true
+    }
+    if (state.Params.viewer.videoOnly) {
+      connectOptions.disableAudio = true
+    }
+    if (state.Params.viewer.forcePlayoutDelay) {
+      connectOptions.forcePlayoutDelay = state.Params.viewer.forcePlayoutDelay
+    }
+    if (state.Params.viewer.metadata) {
+      connectOptions.metadata = state.Params.viewer.metadata
+    }
     if (state.Params.viewer.abrStrategy) {
       connectOptions.abrConfiguration = {
-        strategy: state.Params.viewer.abrStrategy
+        strategy: state.Params.viewer.abrStrategy,
       }
-      if(state.Params.viewer.abrBandwidth) {
-        connectOptions.abrConfiguration.metadata = {
-          bitrate: state.Params.viewer.abrBandwidth
-        }
+      if (state.Params.viewer.abrBandwidth) {
+        connectOptions.abrConfiguration.bitrate =
+          state.Params.viewer.abrBandwidth
       }
     }
 
@@ -122,7 +131,7 @@ export const setTrackEvent = () => {
     if (event.track?.kind === 'video') {
       commit('Sources/addTrackIdMidMapping', {
         trackId: event.track?.id,
-        mid: event.transceiver?.mid
+        mid: event.transceiver?.mid,
       })
     }
     if (event.streams.length) {
@@ -141,7 +150,9 @@ export const setTrackEvent = () => {
 
   if (state.Params.viewer.metadata) {
     millicastView.on('metadata', (metadata) => {
-      const metadataEvent = new CustomEvent("metadata", { detail: { metadata } })
+      const metadataEvent = new CustomEvent('metadata', {
+        detail: { metadata },
+      })
       window.dispatchEvent(metadataEvent)
     })
   }
@@ -195,7 +206,11 @@ const setStream = async (entrySrcObject) => {
     //We have to set the listener again since the signaling attribute of millicastView is changed after the migrate.
     addSignalingMigrateListener()
   } else {
-    setVideoPlayer({ videoPlayer: video, srcObject: entrySrcObject, drmAudio: drmAudio })
+    setVideoPlayer({
+      videoPlayer: video,
+      srcObject: entrySrcObject,
+      drmAudio: drmAudio,
+    })
   }
 }
 
