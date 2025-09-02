@@ -124,9 +124,9 @@ export default function processViewerOptions({
   if (abrStrategies.some((x) => x === abrStrategy.toLowerCase())) {
     options.abrStrategy = abrStrategy
   }
-  
-  if (parseInt(abrBandwidth)) {
-    options.abrBandwidth = abrBandwidth
+
+  if (!isNaN(abrBandwidth)) {
+    options.abrBandwidth = parseInt(abrBandwidth)
   }
 
   store.commit('Params/setViewerOptions', {

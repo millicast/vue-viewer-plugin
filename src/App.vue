@@ -26,8 +26,6 @@ export default {
     ...mapMutations('Controls', ['setMobile']),
     updateParams() {
       if (this.paramsOptions) {
-        let NODE_ENV =
-          this.paramsOptions?.environment?.NODE_ENV ?? process.env.NODE_ENV
 
         processViewerOptions({
           streamId:

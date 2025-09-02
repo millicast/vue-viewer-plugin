@@ -92,9 +92,9 @@ export const handleConnectToStream = async () => {
       connectOptions.abrConfiguration = {
         strategy: state.Params.viewer.abrStrategy
       }
-      if(state.Params.viewer.abrMetadata) {
+      if(state.Params.viewer.abrBandwidth) {
         connectOptions.abrConfiguration.metadata = {
-          bitrate: state.Params.viewer.abrMetadata
+          bitrate: state.Params.viewer.abrBandwidth
         }
       }
     }

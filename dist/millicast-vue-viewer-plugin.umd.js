@@ -4654,6 +4654,17 @@ module.exports = Object.create || function create(O, Properties) {
 
 /***/ }),
 
+/***/ "7d09":
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_681a40a4_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("908e");
+/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_681a40a4_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_681a40a4_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
+/* unused harmony reexport * */
+
+
+/***/ }),
+
 /***/ "7d54":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -4691,13 +4702,6 @@ $({ target: 'Iterator', proto: true, real: true, forced: forEachWithoutClosingOn
   }
 });
 
-
-/***/ }),
-
-/***/ "7d55":
-/***/ (function(module, exports, __webpack_require__) {
-
-// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -4913,6 +4917,13 @@ module.exports = function (S, index, unicode) {
 /***/ (function(module, exports) {
 
 module.exports = __WEBPACK_EXTERNAL_MODULE__8bbf__;
+
+/***/ }),
+
+/***/ "908e":
+/***/ (function(module, exports, __webpack_require__) {
+
+// extracted by mini-css-extract-plugin
 
 /***/ }),
 
@@ -9834,17 +9845,6 @@ module.exports = !!webkit && +webkit[1];
 
 /***/ }),
 
-/***/ "ea94":
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_432228b7_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__("7d55");
-/* harmony import */ var _node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_432228b7_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_node_modules_mini_css_extract_plugin_dist_loader_js_ref_7_oneOf_1_0_node_modules_css_loader_dist_cjs_js_ref_7_oneOf_1_1_node_modules_vue_loader_v16_dist_stylePostLoader_js_node_modules_postcss_loader_src_index_js_ref_7_oneOf_1_2_node_modules_cache_loader_dist_cjs_js_ref_1_0_node_modules_vue_loader_v16_dist_index_js_ref_1_1_App_vue_vue_type_style_index_0_id_432228b7_scoped_true_lang_css__WEBPACK_IMPORTED_MODULE_0__);
-/* unused harmony reexport * */
-
-
-/***/ }),
-
 /***/ "eb1d":
 /***/ (function(module, exports, __webpack_require__) {
 
@@ -10217,7 +10217,7 @@ var es_object_to_string = __webpack_require__("d3b7");
 // EXTERNAL MODULE: external {"commonjs":"vue","commonjs2":"vue","root":"Vue"}
 var external_commonjs_vue_commonjs2_vue_root_Vue_ = __webpack_require__("8bbf");
 
-// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/App.vue?vue&type=template&id=432228b7&scoped=true
+// CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/App.vue?vue&type=template&id=681a40a4&scoped=true
 
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   var _component_VideoPlayerContainer = Object(external_commonjs_vue_commonjs2_vue_root_Vue_["resolveComponent"])("VideoPlayerContainer");
@@ -10226,7 +10226,7 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     id: "viewer-container"
   });
 }
-// CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=432228b7&scoped=true
+// CONCATENATED MODULE: ./src/App.vue?vue&type=template&id=681a40a4&scoped=true
 
 // EXTERNAL MODULE: ./node_modules/core-js/modules/es.symbol.js
 var es_symbol = __webpack_require__("a4d3");
@@ -12974,8 +12974,8 @@ function processViewerOptions(_ref) {
   })) {
     options.abrStrategy = abrStrategy;
   }
-  if (parseInt(abrBandwidth)) {
-    options.abrBandwidth = abrBandwidth;
+  if (!isNaN(abrBandwidth)) {
+    options.abrBandwidth = parseInt(abrBandwidth);
   }
   src_store.commit('Params/setViewerOptions', _extends(_extends({}, defaultViewerOptions), options));
 }
@@ -13300,9 +13300,9 @@ var handleConnectToStream = /*#__PURE__*/function () {
             connectOptions.abrConfiguration = {
               strategy: viewConnection_state.Params.viewer.abrStrategy
             };
-            if (viewConnection_state.Params.viewer.abrMetadata) {
+            if (viewConnection_state.Params.viewer.abrBandwidth) {
               connectOptions.abrConfiguration.metadata = {
-                bitrate: viewConnection_state.Params.viewer.abrMetadata
+                bitrate: viewConnection_state.Params.viewer.abrBandwidth
               };
             }
           }
@@ -19099,46 +19099,45 @@ var css_element_queries = __webpack_require__("87d4");
   },
   methods: _extends(_extends({}, mapMutations('Controls', ['setMobile'])), {}, {
     updateParams: function updateParams() {
-      var _this$paramsOptions22;
+      var _this$paramsOptions21;
       if (this.paramsOptions) {
-        var _this$paramsOptions$e, _this$paramsOptions, _this$paramsOptions2, _this$paramsOptions3, _this$paramsOptions$a, _this$paramsOptions4, _this$paramsOptions$v, _this$paramsOptions5, _this$paramsOptions6, _this$paramsOptions7, _this$paramsOptions8, _this$paramsOptions$h, _this$paramsOptions$a2, _this$paramsOptions$m, _this$paramsOptions$n, _this$paramsOptions9, _this$paramsOptions$m2, _this$paramsOptions0, _this$paramsOptions$a3, _this$paramsOptions1, _this$paramsOptions$l, _this$paramsOptions10, _this$paramsOptions$s, _this$paramsOptions11, _this$paramsOptions12, _this$paramsOptions13, _this$paramsOptions$m3, _this$paramsOptions14, _this$paramsOptions$d, _this$paramsOptions15, _this$paramsOptions16, _this$paramsOptions17, _this$paramsOptions18, _this$paramsOptions19, _this$paramsOptions20, _this$paramsOptions21;
-        var NODE_ENV = (_this$paramsOptions$e = (_this$paramsOptions = this.paramsOptions) === null || _this$paramsOptions === void 0 || (_this$paramsOptions = _this$paramsOptions.environment) === null || _this$paramsOptions === void 0 ? void 0 : _this$paramsOptions.NODE_ENV) !== null && _this$paramsOptions$e !== void 0 ? _this$paramsOptions$e : "production";
+        var _this$paramsOptions, _this$paramsOptions2, _this$paramsOptions$a, _this$paramsOptions3, _this$paramsOptions$v, _this$paramsOptions4, _this$paramsOptions5, _this$paramsOptions6, _this$paramsOptions7, _this$paramsOptions$h, _this$paramsOptions$a2, _this$paramsOptions$m, _this$paramsOptions$n, _this$paramsOptions8, _this$paramsOptions$m2, _this$paramsOptions9, _this$paramsOptions$a3, _this$paramsOptions0, _this$paramsOptions$l, _this$paramsOptions1, _this$paramsOptions$s, _this$paramsOptions10, _this$paramsOptions11, _this$paramsOptions12, _this$paramsOptions$m3, _this$paramsOptions13, _this$paramsOptions$d, _this$paramsOptions14, _this$paramsOptions15, _this$paramsOptions16, _this$paramsOptions17, _this$paramsOptions18, _this$paramsOptions19, _this$paramsOptions20;
         processViewerOptions({
-          streamId: ((_this$paramsOptions2 = this.paramsOptions) === null || _this$paramsOptions2 === void 0 ? void 0 : _this$paramsOptions2.accountId) + '/' + ((_this$paramsOptions3 = this.paramsOptions) === null || _this$paramsOptions3 === void 0 ? void 0 : _this$paramsOptions3.streamName),
-          audioOnly: (_this$paramsOptions$a = (_this$paramsOptions4 = this.paramsOptions) === null || _this$paramsOptions4 === void 0 ? void 0 : _this$paramsOptions4.audioOnly) !== null && _this$paramsOptions$a !== void 0 ? _this$paramsOptions$a : false,
-          videoOnly: (_this$paramsOptions$v = (_this$paramsOptions5 = this.paramsOptions) === null || _this$paramsOptions5 === void 0 ? void 0 : _this$paramsOptions5.videoOnly) !== null && _this$paramsOptions$v !== void 0 ? _this$paramsOptions$v : false,
-          token: (_this$paramsOptions6 = this.paramsOptions) === null || _this$paramsOptions6 === void 0 ? void 0 : _this$paramsOptions6.token,
-          image: (_this$paramsOptions7 = this.paramsOptions) === null || _this$paramsOptions7 === void 0 ? void 0 : _this$paramsOptions7.image,
-          directorUrl: (_this$paramsOptions8 = this.paramsOptions) === null || _this$paramsOptions8 === void 0 ? void 0 : _this$paramsOptions8.directorUrl,
+          streamId: ((_this$paramsOptions = this.paramsOptions) === null || _this$paramsOptions === void 0 ? void 0 : _this$paramsOptions.accountId) + '/' + ((_this$paramsOptions2 = this.paramsOptions) === null || _this$paramsOptions2 === void 0 ? void 0 : _this$paramsOptions2.streamName),
+          audioOnly: (_this$paramsOptions$a = (_this$paramsOptions3 = this.paramsOptions) === null || _this$paramsOptions3 === void 0 ? void 0 : _this$paramsOptions3.audioOnly) !== null && _this$paramsOptions$a !== void 0 ? _this$paramsOptions$a : false,
+          videoOnly: (_this$paramsOptions$v = (_this$paramsOptions4 = this.paramsOptions) === null || _this$paramsOptions4 === void 0 ? void 0 : _this$paramsOptions4.videoOnly) !== null && _this$paramsOptions$v !== void 0 ? _this$paramsOptions$v : false,
+          token: (_this$paramsOptions5 = this.paramsOptions) === null || _this$paramsOptions5 === void 0 ? void 0 : _this$paramsOptions5.token,
+          image: (_this$paramsOptions6 = this.paramsOptions) === null || _this$paramsOptions6 === void 0 ? void 0 : _this$paramsOptions6.image,
+          directorUrl: (_this$paramsOptions7 = this.paramsOptions) === null || _this$paramsOptions7 === void 0 ? void 0 : _this$paramsOptions7.directorUrl,
           hideButtons: this.paramsOptions.controls === false ? availableControls : (_this$paramsOptions$h = this.paramsOptions.hideButtons) !== null && _this$paramsOptions$h !== void 0 ? _this$paramsOptions$h : [],
           autoplay: (_this$paramsOptions$a2 = this.paramsOptions.autoplay) !== null && _this$paramsOptions$a2 !== void 0 ? _this$paramsOptions$a2 : true,
           muted: (_this$paramsOptions$m = this.paramsOptions.muted) !== null && _this$paramsOptions$m !== void 0 ? _this$paramsOptions$m : false,
-          noDelay: (_this$paramsOptions$n = (_this$paramsOptions9 = this.paramsOptions) === null || _this$paramsOptions9 === void 0 ? void 0 : _this$paramsOptions9.noDelay) !== null && _this$paramsOptions$n !== void 0 ? _this$paramsOptions$n : false,
-          multisource: (_this$paramsOptions$m2 = (_this$paramsOptions0 = this.paramsOptions) === null || _this$paramsOptions0 === void 0 ? void 0 : _this$paramsOptions0.multisource) !== null && _this$paramsOptions$m2 !== void 0 ? _this$paramsOptions$m2 : false,
-          audioFollowsVideo: (_this$paramsOptions$a3 = (_this$paramsOptions1 = this.paramsOptions) === null || _this$paramsOptions1 === void 0 ? void 0 : _this$paramsOptions1.audioFollowsVideo) !== null && _this$paramsOptions$a3 !== void 0 ? _this$paramsOptions$a3 : false,
-          layout: (_this$paramsOptions$l = (_this$paramsOptions10 = this.paramsOptions) === null || _this$paramsOptions10 === void 0 ? void 0 : _this$paramsOptions10.layout) !== null && _this$paramsOptions$l !== void 0 ? _this$paramsOptions$l : null,
-          showLabels: (_this$paramsOptions$s = (_this$paramsOptions11 = this.paramsOptions) === null || _this$paramsOptions11 === void 0 ? void 0 : _this$paramsOptions11.showLabels) !== null && _this$paramsOptions$s !== void 0 ? _this$paramsOptions$s : true,
-          startingQuality: (_this$paramsOptions12 = this.paramsOptions) === null || _this$paramsOptions12 === void 0 ? void 0 : _this$paramsOptions12.startingQuality,
-          hideToast: (_this$paramsOptions13 = this.paramsOptions) === null || _this$paramsOptions13 === void 0 ? void 0 : _this$paramsOptions13.hideToast,
-          mainLabel: (_this$paramsOptions$m3 = (_this$paramsOptions14 = this.paramsOptions) === null || _this$paramsOptions14 === void 0 ? void 0 : _this$paramsOptions14.mainLabel) !== null && _this$paramsOptions$m3 !== void 0 ? _this$paramsOptions$m3 : 'Main',
+          noDelay: (_this$paramsOptions$n = (_this$paramsOptions8 = this.paramsOptions) === null || _this$paramsOptions8 === void 0 ? void 0 : _this$paramsOptions8.noDelay) !== null && _this$paramsOptions$n !== void 0 ? _this$paramsOptions$n : false,
+          multisource: (_this$paramsOptions$m2 = (_this$paramsOptions9 = this.paramsOptions) === null || _this$paramsOptions9 === void 0 ? void 0 : _this$paramsOptions9.multisource) !== null && _this$paramsOptions$m2 !== void 0 ? _this$paramsOptions$m2 : false,
+          audioFollowsVideo: (_this$paramsOptions$a3 = (_this$paramsOptions0 = this.paramsOptions) === null || _this$paramsOptions0 === void 0 ? void 0 : _this$paramsOptions0.audioFollowsVideo) !== null && _this$paramsOptions$a3 !== void 0 ? _this$paramsOptions$a3 : false,
+          layout: (_this$paramsOptions$l = (_this$paramsOptions1 = this.paramsOptions) === null || _this$paramsOptions1 === void 0 ? void 0 : _this$paramsOptions1.layout) !== null && _this$paramsOptions$l !== void 0 ? _this$paramsOptions$l : null,
+          showLabels: (_this$paramsOptions$s = (_this$paramsOptions10 = this.paramsOptions) === null || _this$paramsOptions10 === void 0 ? void 0 : _this$paramsOptions10.showLabels) !== null && _this$paramsOptions$s !== void 0 ? _this$paramsOptions$s : true,
+          startingQuality: (_this$paramsOptions11 = this.paramsOptions) === null || _this$paramsOptions11 === void 0 ? void 0 : _this$paramsOptions11.startingQuality,
+          hideToast: (_this$paramsOptions12 = this.paramsOptions) === null || _this$paramsOptions12 === void 0 ? void 0 : _this$paramsOptions12.hideToast,
+          mainLabel: (_this$paramsOptions$m3 = (_this$paramsOptions13 = this.paramsOptions) === null || _this$paramsOptions13 === void 0 ? void 0 : _this$paramsOptions13.mainLabel) !== null && _this$paramsOptions$m3 !== void 0 ? _this$paramsOptions$m3 : 'Main',
           drm: (_this$paramsOptions$d = this.paramsOptions.drm) !== null && _this$paramsOptions$d !== void 0 ? _this$paramsOptions$d : false,
-          forcePlayoutDelayMin: (_this$paramsOptions15 = this.paramsOptions) === null || _this$paramsOptions15 === void 0 ? void 0 : _this$paramsOptions15.forcePlayoutDelayMin,
-          forcePlayoutDelayMax: (_this$paramsOptions16 = this.paramsOptions) === null || _this$paramsOptions16 === void 0 ? void 0 : _this$paramsOptions16.forcePlayoutDelayMax,
-          metadata: (_this$paramsOptions17 = this.paramsOptions) === null || _this$paramsOptions17 === void 0 ? void 0 : _this$paramsOptions17.metadata,
-          mediaBufferMs: (_this$paramsOptions18 = this.paramsOptions) === null || _this$paramsOptions18 === void 0 ? void 0 : _this$paramsOptions18.mediaBufferMs,
-          showTimer: (_this$paramsOptions19 = this.paramsOptions) === null || _this$paramsOptions19 === void 0 ? void 0 : _this$paramsOptions19.showTimer,
-          abrStrategy: (_this$paramsOptions20 = this.paramsOptions) === null || _this$paramsOptions20 === void 0 ? void 0 : _this$paramsOptions20.abrStrategy,
-          abrBandwidth: (_this$paramsOptions21 = this.paramsOptions) === null || _this$paramsOptions21 === void 0 ? void 0 : _this$paramsOptions21.abrBandwidth
+          forcePlayoutDelayMin: (_this$paramsOptions14 = this.paramsOptions) === null || _this$paramsOptions14 === void 0 ? void 0 : _this$paramsOptions14.forcePlayoutDelayMin,
+          forcePlayoutDelayMax: (_this$paramsOptions15 = this.paramsOptions) === null || _this$paramsOptions15 === void 0 ? void 0 : _this$paramsOptions15.forcePlayoutDelayMax,
+          metadata: (_this$paramsOptions16 = this.paramsOptions) === null || _this$paramsOptions16 === void 0 ? void 0 : _this$paramsOptions16.metadata,
+          mediaBufferMs: (_this$paramsOptions17 = this.paramsOptions) === null || _this$paramsOptions17 === void 0 ? void 0 : _this$paramsOptions17.mediaBufferMs,
+          showTimer: (_this$paramsOptions18 = this.paramsOptions) === null || _this$paramsOptions18 === void 0 ? void 0 : _this$paramsOptions18.showTimer,
+          abrStrategy: (_this$paramsOptions19 = this.paramsOptions) === null || _this$paramsOptions19 === void 0 ? void 0 : _this$paramsOptions19.abrStrategy,
+          abrBandwidth: (_this$paramsOptions20 = this.paramsOptions) === null || _this$paramsOptions20 === void 0 ? void 0 : _this$paramsOptions20.abrBandwidth
         });
       }
-      processEnvironmentOptions((_this$paramsOptions22 = this.paramsOptions) === null || _this$paramsOptions22 === void 0 ? void 0 : _this$paramsOptions22.environment);
+      processEnvironmentOptions((_this$paramsOptions21 = this.paramsOptions) === null || _this$paramsOptions21 === void 0 ? void 0 : _this$paramsOptions21.environment);
       console.log("Parsed options", this.paramsOptions);
     }
   }),
   mounted: function mounted() {
     var _this = this;
     return _asyncToGenerator(/*#__PURE__*/_regenerator().m(function _callee() {
-      var _this$paramsOptions23;
+      var _this$paramsOptions22;
       var myContainer, toast, plugin;
       return _regenerator().w(function (_context) {
         while (1) switch (_context.n) {
@@ -19155,7 +19154,7 @@ var css_element_queries = __webpack_require__("87d4");
             _this.updateParams();
 
             // Starting quality toast
-            if ((_this$paramsOptions23 = _this.paramsOptions) !== null && _this$paramsOptions23 !== void 0 && _this$paramsOptions23.startingQuality) {
+            if ((_this$paramsOptions22 = _this.paramsOptions) !== null && _this$paramsOptions22 !== void 0 && _this$paramsOptions22.startingQuality) {
               toast.showToast('info', 'Fetching starting quality layer', {
                 timeout: 1500
               });
@@ -19187,8 +19186,8 @@ var css_element_queries = __webpack_require__("87d4");
 });
 // CONCATENATED MODULE: ./src/App.vue?vue&type=script&lang=js
  
-// EXTERNAL MODULE: ./src/App.vue?vue&type=style&index=0&id=432228b7&scoped=true&lang=css
-var Appvue_type_style_index_0_id_432228b7_scoped_true_lang_css = __webpack_require__("ea94");
+// EXTERNAL MODULE: ./src/App.vue?vue&type=style&index=0&id=681a40a4&scoped=true&lang=css
+var Appvue_type_style_index_0_id_681a40a4_scoped_true_lang_css = __webpack_require__("7d09");
 
 // CONCATENATED MODULE: ./src/App.vue
 
@@ -19198,7 +19197,7 @@ var Appvue_type_style_index_0_id_432228b7_scoped_true_lang_css = __webpack_requi
 
 
 
-const App_exports_ = /*#__PURE__*/exportHelper_default()(Appvue_type_script_lang_js, [['render',render],['__scopeId',"data-v-432228b7"]])
+const App_exports_ = /*#__PURE__*/exportHelper_default()(Appvue_type_script_lang_js, [['render',render],['__scopeId',"data-v-681a40a4"]])
 
 /* harmony default export */ var App = (App_exports_);
 // CONCATENATED MODULE: ./node_modules/cache-loader/dist/cjs.js??ref--13-0!./node_modules/thread-loader/dist/cjs.js!./node_modules/babel-loader/lib!./node_modules/vue-loader-v16/dist/templateLoader.js??ref--6!./node_modules/cache-loader/dist/cjs.js??ref--1-0!./node_modules/vue-loader-v16/dist??ref--1-1!./src/components/UI/BaseModal.vue?vue&type=template&id=742b9a28&scoped=true

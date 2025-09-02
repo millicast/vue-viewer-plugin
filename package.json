@@ -20,7 +20,7 @@
     "README.md"
   ],
   "dependencies": {
-    "@millicast/sdk": "github:millicast/millicast-sdk/#feature/abr-configuration",
+    "@millicast/sdk": "next",
     "bootstrap": "github:millicast/bootstrap#ml-viewer",
     "bootstrap-icons": "github:millicast/icons#ml-viewer",
     "can-autoplay": "^3.0.0",
