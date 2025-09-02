@@ -34,6 +34,8 @@ export const defaultViewerOptions = {
   metadata: false,
   mediaBufferMs: 0,
   showTimer: false,
+  abrStrategy: null,
+  abrBandwidth: null,
 }
 
 export default function processViewerOptions({
@@ -60,6 +62,8 @@ export default function processViewerOptions({
   metadata,
   mediaBufferMs,
   showTimer,
+  abrStrategy,
+  abrBandwidth,
 }) {
   const options = {}
 
@@ -116,6 +120,14 @@ export default function processViewerOptions({
     options.mediaBufferMs = parseInt(mediaBufferMs)
   }
   options.showTimer = showTimer ?? false
+  const abrStrategies = ['quality', 'bandwidth', 'performance']
+  if (abrStrategies.some((x) => x === abrStrategy.toLowerCase())) {
+    options.abrStrategy = abrStrategy
+  }
+  
+  if (parseInt(abrBandwidth)) {
+    options.abrBandwidth = abrBandwidth
+  }
 
   store.commit('Params/setViewerOptions', {
     ...defaultViewerOptions,

@@ -59,9 +59,12 @@ export default {
           metadata: this.paramsOptions?.metadata,
           mediaBufferMs: this.paramsOptions?.mediaBufferMs,
           showTimer: this.paramsOptions?.showTimer,
+          abrStrategy: this.paramsOptions?.abrStrategy,
+          abrBandwidth: this.paramsOptions?.abrBandwidth
         })
       }
       processEnvironmentOptions(this.paramsOptions?.environment)
+      console.log("Parsed options", this.paramsOptions)
     },
   },
   async mounted() {

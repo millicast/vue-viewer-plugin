@@ -88,6 +88,17 @@ export const handleConnectToStream = async () => {
     if (state.Params.viewer.videoOnly) {connectOptions.disableAudio = true}
     if (state.Params.viewer.forcePlayoutDelay) {connectOptions.forcePlayoutDelay = state.Params.viewer.forcePlayoutDelay}
     if (state.Params.viewer.metadata) {connectOptions.metadata = state.Params.viewer.metadata}
+    if (state.Params.viewer.abrStrategy) {
+      connectOptions.abrConfiguration = {
+        strategy: state.Params.viewer.abrStrategy
+      }
+      if(state.Params.viewer.abrMetadata) {
+        connectOptions.abrConfiguration.metadata = {
+          bitrate: state.Params.viewer.abrMetadata
+        }
+      }
+    }
+
     await millicastView.connect(connectOptions)
     addSignalingMigrateListener()
   } catch (e) {
