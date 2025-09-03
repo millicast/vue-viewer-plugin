@@ -121,7 +121,7 @@ export default function processViewerOptions({
   }
   options.showTimer = showTimer ?? false
   const abrStrategies = ['quality', 'bandwidth', 'performance']
-  if (abrStrategies.some((x) => x === abrStrategy?.toLowerCase())) {
+  if (abrStrategy && abrStrategies.some((x) => x === abrStrategy.toLowerCase())) {
     options.abrStrategy = abrStrategy
   }
 
