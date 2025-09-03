@@ -12969,7 +12969,7 @@ function processViewerOptions(_ref) {
   }
   options.showTimer = showTimer !== null && showTimer !== void 0 ? showTimer : false;
   var abrStrategies = ['quality', 'bandwidth', 'performance'];
-  if (abrStrategies.some(function (x) {
+  if (abrStrategy && abrStrategies.some(function (x) {
     return x === abrStrategy.toLowerCase();
   })) {
     options.abrStrategy = abrStrategy;
