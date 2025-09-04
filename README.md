@@ -14,7 +14,7 @@ npm install @millicast/vue-viewer-plugin
 
 or if you use [Yarn](https://yarnpkg.com)
 
-``` bash
+```bash
 yarn add @millicast/vue-viewer-plugin
 ```
 
@@ -26,9 +26,9 @@ To import the plugin into your Vue application, have the following structure in 
 import { createApp } from 'vue'
 import App from './App.vue'
 // import the plugin
-import VideoPlayer from "@millicast/vue-viewer-plugin"
+import VideoPlayer from '@millicast/vue-viewer-plugin'
 
-const  Vue = createApp(App)
+const Vue = createApp(App)
 
 // install within your app
 Vue.use(VideoPlayer, {})
@@ -40,42 +40,44 @@ You can either include the following dependecy at the **end** of your `App.vue` 
 
 ```html
 <style>
-    @import "@millicast/vue-viewer-plugin/dist/millicast-vue-viewer-plugin.css";
+  @import '@millicast/vue-viewer-plugin/dist/millicast-vue-viewer-plugin.css';
 </style>
 ```
 
 Or add the following dependecy at the beginning of your `main.js` file:
 
 ```javascript
-import "@millicast/vue-viewer-plugin/dist/millicast-vue-viewer-plugin.css"
+import '@millicast/vue-viewer-plugin/dist/millicast-vue-viewer-plugin.css'
 ```
 
 You can now use the plugin in any Vue file of your project as a component.
 
 ### Configuration Parameters
 
-| Name           | Type             | Attribute | Default             | Description                                                                                          |
-| -------------- | ---------------- | --------- | ------------------- | ---------------------------------------------------------------------------------------------------- |
-| `accountId`    | `String`         | Mandatory |                     | Millicast existing *Account ID* where you want to get the stream.                                    |
-| `streamName`   | `String`         | Mandatory |                     | Millicast existing *Stream Name* where you want to get the stream.                                   |
-| `image`        | `String`         | Optional  |                     | Placeholder image while stream is offline. By default it is a solid black.                           |
-| `muted`        | `Boolean`        | Optional  | `false`             | The streaming will start muted.                                                                      |
-| `autoplay`     | `Boolean`        | Optional  | `true`              | The streaming will autoplay when connected.                                                          |
-| `hideButtons`  | `Array.<String>` | Optional  | `[]`                | Specify a list of buttons to hide. See the [hide buttons](#hidebuttons-options) section for details. |
-| `reportUrl`    | `String`         | Optional  | `null`              | Configure the URL to which reports should be sent to.                                                |
-| `chromecastId` | `String`         | Optional  | `null`              | The Chromecast ID of your application.                                                               |
-| `multisource`  | `Boolean`        | Optional  | `false`             | Configure your stream to show multiple streams.                                                      |
-| `noDelay`      | `Boolean`        | Optional  | `false`             | Sets the minimum and maximum delay (sets `forcePlayoutDelayMin` and `forcePlayoutDelayMax` to 0).    |
-| `showLabels`   | `Boolean`        | Optional  | `true`              | Show stream label in multiview mode.                                                                 |
-| `environment`  | `Object`         | Optional  | `.env file content` | Plugin environment. See [Environment options](#environment-options) on how to configure.             |
-| `mainLabel`    | `String`         | Optional  |                     | Allows to change the label of the main video.                                                        |
-| `metadata`     | `Boolean`        | Optional  | `false`             | Set to start listening to metadata events emitted by the SDK. |
-| `startingQuality` | `String` | Optional | `null`| Allows to start the stream at a specific resolution when available. Possible values: 'High', 'Medium', 'Low', <Number> specifying the desired frame height (i.e. 360). |
-| `hideToast`   | `String`          | Optional |  `null`              | Allows to hide a specific type of toast notification. To hide multiple toast types, separate them using `,`. Possible values: `success`, `error`, `warning`, `info`. |
-| `audioFollowsVideo`| `Boolean`    | Optional  | `false`             | Allows automatically switching the audio to the one associated with the selected video source.       |
-| `forcePlayoutDelayMin`| `Number`    | Optional  | `null`            | Sets a minimum value for a custom delay to playback the stream. It needs to be set with its maximum value, forcePlayoutDelayMax. |
-| `forcePlayoutDelayMax`| `Number`    | Optional  | `null`            | Sets a maximum value for a custom delay to playback the stream. It needs to be set with its minimum value, forcePlayoutDelayMin. |
-| `showTimer`| `Boolean`    | Optional  | `false`            | The current playing time will be displayed next to the volume icon. |
+| Name                   | Type             | Attribute | Default             | Description                                                                                                                                                            |
+| ---------------------- | ---------------- | --------- | ------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `accountId`            | `String`         | Mandatory |                     | Millicast existing _Account ID_ where you want to get the stream.                                                                                                      |
+| `streamName`           | `String`         | Mandatory |                     | Millicast existing _Stream Name_ where you want to get the stream.                                                                                                     |
+| `image`                | `String`         | Optional  |                     | Placeholder image while stream is offline. By default it is a solid black.                                                                                             |
+| `muted`                | `Boolean`        | Optional  | `false`             | The streaming will start muted.                                                                                                                                        |
+| `autoplay`             | `Boolean`        | Optional  | `true`              | The streaming will autoplay when connected.                                                                                                                            |
+| `hideButtons`          | `Array.<String>` | Optional  | `[]`                | Specify a list of buttons to hide. See the [hide buttons](#hidebuttons-options) section for details.                                                                   |
+| `reportUrl`            | `String`         | Optional  | `null`              | Configure the URL to which reports should be sent to.                                                                                                                  |
+| `chromecastId`         | `String`         | Optional  | `null`              | The Chromecast ID of your application.                                                                                                                                 |
+| `multisource`          | `Boolean`        | Optional  | `false`             | Configure your stream to show multiple streams.                                                                                                                        |
+| `noDelay`              | `Boolean`        | Optional  | `false`             | Sets the minimum and maximum delay (sets `forcePlayoutDelayMin` and `forcePlayoutDelayMax` to 0).                                                                      |
+| `showLabels`           | `Boolean`        | Optional  | `true`              | Show stream label in multiview mode.                                                                                                                                   |
+| `environment`          | `Object`         | Optional  | `.env file content` | Plugin environment. See [Environment options](#environment-options) on how to configure.                                                                               |
+| `mainLabel`            | `String`         | Optional  |                     | Allows to change the label of the main video.                                                                                                                          |
+| `metadata`             | `Boolean`        | Optional  | `false`             | Set to start listening to metadata events emitted by the SDK.                                                                                                          |
+| `startingQuality`      | `String`         | Optional  | `null`              | Allows to start the stream at a specific resolution when available. Possible values: 'High', 'Medium', 'Low', <Number> specifying the desired frame height (i.e. 360). |
+| `hideToast`            | `String`         | Optional  | `null`              | Allows to hide a specific type of toast notification. To hide multiple toast types, separate them using `,`. Possible values: `success`, `error`, `warning`, `info`.   |
+| `audioFollowsVideo`    | `Boolean`        | Optional  | `false`             | Allows automatically switching the audio to the one associated with the selected video source.                                                                         |
+| `forcePlayoutDelayMin` | `Number`         | Optional  | `null`              | Sets a minimum value for a custom delay to playback the stream. It needs to be set with its maximum value, forcePlayoutDelayMax.                                       |
+| `forcePlayoutDelayMax` | `Number`         | Optional  | `null`              | Sets a maximum value for a custom delay to playback the stream. It needs to be set with its minimum value, forcePlayoutDelayMin.                                       |
+| `showTimer`            | `Boolean`        | Optional  | `false`             | The current playing time will be displayed next to the volume icon.                                                                                                    |
+| `abrStrategy`          | `string`         | Optional  | `null`              | The ABR strategy to be utilized for initial playback. Possible values inlude `bandwidth`, `quality` and `performance`.                                                                                                    |
+| `abrBandwidth`         | `number`         | Optional  | `null`              | The initial bitrate, in bits per second, to be used in conjunction with the ABR strategy.                                                                                                    |
 
 To be able to use the viewer, just reference the `VideoPlayer` component, and pass the parameters of your choice as an object in the parameter `paramsOptions`. Refer to the [example usage](#example-apps).
 
@@ -85,13 +87,13 @@ You can choose to show or hide certain buttons in the player in order to customi
 
 | Option       | Description                                                                                               |
 | ------------ | --------------------------------------------------------------------------------------------------------- |
-| `play`       | Hides the *play* button.                                                                                  |
-| `volume`     | Hides the *volume* button.                                                                                |
+| `play`       | Hides the _play_ button.                                                                                  |
+| `volume`     | Hides the _volume_ button.                                                                                |
 | `pip`        | Hides the button that allows the small reproduction (picture-in-picture mode), in a corner of the window. |
-| `fullscreen` | Hides the *fullscreen* button.                                                                            |
+| `fullscreen` | Hides the _fullscreen_ button.                                                                            |
 | `liveBadge`  | Hides the message that indicates whether the stream is live or not.                                       |
 | `userCount`  | Hides the number of concurrent viewers of the stream.                                                     |
-| `settings`   | Hides the *settings* button.                                                                              |
+| `settings`   | Hides the _settings_ button.                                                                              |
 
 In case you want to disable all buttons at once, you can simply pass the `controls: false` paremeter, instead of using `hideButtons`.
 
@@ -114,7 +116,9 @@ In case these parameters are not sent as a property, the plugin will use the def
 ### Example of Use
 
 ```html
-<VideoPlayer :paramsOptions="{accountId: '...', streamName: '...', autoplay: false, hideButtons: ['liveBadge'] }" />
+<VideoPlayer
+  :paramsOptions="{accountId: '...', streamName: '...', autoplay: false, hideButtons: ['liveBadge'] }"
+/>
 ```
 
 - Remember that `accountId` and `streamName` are the only requeried parameters.
