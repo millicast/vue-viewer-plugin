@@ -37,7 +37,7 @@ export default {
       reportUrl(state) {
         this.showReportButton = !!state.environment.VUE_APP_REPORT_URL
         return state.environment.VUE_APP_REPORT_URL
-      }
+      },
     }),
   },
   watch: {

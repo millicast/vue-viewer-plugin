@@ -1,3 +1,5 @@
+const path = require('path')
+
 module.exports = {
   chainWebpack: (config) => {
     config.module
@@ -10,5 +12,9 @@ module.exports = {
         }
         return options
       })
+    config.resolve.alias.set(
+      '@millicast/sdk',
+      path.resolve(__dirname, 'node_modules/@millicast/sdk')
+    )
   },
 }

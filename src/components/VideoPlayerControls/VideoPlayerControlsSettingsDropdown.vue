@@ -20,7 +20,10 @@
             class="item-name"
             :class="[item?.sourceId === null ? 'main' : '']"
           >
-            <div v-if="item?.name && unsupportedFlagEmoji(item?.name)" v-html="sourceFlagEmojiToPng(item?.name)"></div>
+            <div
+              v-if="item?.name && unsupportedFlagEmoji(item?.name)"
+              v-html="sourceFlagEmojiToPng(item?.name)"
+            ></div>
             <div v-else>{{ item?.name }}</div>
           </div>
         </div>

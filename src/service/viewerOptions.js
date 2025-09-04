@@ -34,6 +34,8 @@ export const defaultViewerOptions = {
   metadata: false,
   mediaBufferMs: 0,
   showTimer: false,
+  abrStrategy: null,
+  abrBandwidth: null,
 }
 
 export default function processViewerOptions({
@@ -60,6 +62,8 @@ export default function processViewerOptions({
   metadata,
   mediaBufferMs,
   showTimer,
+  abrStrategy,
+  abrBandwidth,
 }) {
   const options = {}
 
@@ -92,7 +96,7 @@ export default function processViewerOptions({
   if (options.layout && options.layout === 'grid') {
     store.commit('Controls/setIsGrid', true)
   }
-  if (startingQuality !== null) {
+  if (startingQuality) {
     options.startingQuality = startingQuality
     store.commit('Controls/setIsSelectingLayer', true)
   }
@@ -116,6 +120,17 @@ export default function processViewerOptions({
     options.mediaBufferMs = parseInt(mediaBufferMs)
   }
   options.showTimer = showTimer ?? false
+  const abrStrategies = ['quality', 'bandwidth', 'performance']
+  if (
+    abrStrategy &&
+    abrStrategies.some((x) => x === abrStrategy.toLowerCase())
+  ) {
+    options.abrStrategy = abrStrategy
+  }
+
+  if (!isNaN(abrBandwidth)) {
+    options.abrBandwidth = parseInt(abrBandwidth)
+  }
 
   store.commit('Params/setViewerOptions', {
     ...defaultViewerOptions,

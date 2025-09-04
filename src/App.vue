@@ -26,9 +26,6 @@ export default {
     ...mapMutations('Controls', ['setMobile']),
     updateParams() {
       if (this.paramsOptions) {
-        let NODE_ENV =
-          this.paramsOptions?.environment?.NODE_ENV ?? process.env.NODE_ENV
-
         processViewerOptions({
           streamId:
             this.paramsOptions?.accountId +
@@ -59,6 +56,8 @@ export default {
           metadata: this.paramsOptions?.metadata,
           mediaBufferMs: this.paramsOptions?.mediaBufferMs,
           showTimer: this.paramsOptions?.showTimer,
+          abrStrategy: this.paramsOptions?.abrStrategy,
+          abrBandwidth: this.paramsOptions?.abrBandwidth,
         })
       }
       processEnvironmentOptions(this.paramsOptions?.environment)

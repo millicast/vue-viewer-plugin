@@ -13,7 +13,7 @@ const defaulState = {
   sourceRemoteTracks: [],
   mainLabel: 'Main',
   transceiverSourceState: {},
-  trackIdMidMap: {}
+  trackIdMidMap: {},
 }
 
 export default {
@@ -38,19 +38,23 @@ export default {
         state.audioSources = sources
       }
     },
-    removeSource(state, {kind, sourceId}) {
+    removeSource(state, { kind, sourceId }) {
       if (kind === 'video') {
-        const sourceIndex = state.videoSources.findIndex(source => source.sourceId === sourceId)
+        const sourceIndex = state.videoSources.findIndex(
+          (source) => source.sourceId === sourceId
+        )
         if (sourceIndex !== -1) {
           state.videoSources.splice(sourceIndex, 1)
         }
-      } else if (kind === 'audio') { 
-        const sourceIndex = state.audioSources.findIndex(source => source.sourceId === sourceId)
+      } else if (kind === 'audio') {
+        const sourceIndex = state.audioSources.findIndex(
+          (source) => source.sourceId === sourceId
+        )
         if (sourceIndex !== -1) {
           state.audioSources.splice(sourceIndex, 1)
         }
       }
-    }, 
+    },
     setStream(state, stream) {
       state.stream = stream
     },
@@ -70,7 +74,7 @@ export default {
         (v) => v.sourceId === sourceRemoteTrack.sourceId
       )
       if (sid !== -1) {
-        const  midTrack = sourceRemoteTrack.transceiver.mid
+        const midTrack = sourceRemoteTrack.transceiver.mid
         state.videoSources[sid].mid = midTrack
         state.transceiverSourceState[midTrack] = state.videoSources[sid]
       }
@@ -83,7 +87,8 @@ export default {
       )
       if (sid !== -1) {
         state.videoSources[sid].mid = sourceRemoteTrack.transceiver.mid
-        state.transceiverSourceState[sourceRemoteTrack.transceiver.mid] = state.videoSources[sid]
+        state.transceiverSourceState[sourceRemoteTrack.transceiver.mid] =
+          state.videoSources[sid]
       }
     },
     removeSourceRemoteTrack(state, sourceId) {
@@ -95,28 +100,50 @@ export default {
       }
     },
     removeTransceiverSourceState(state, sourceId) {
-      const sourceCurrentMid = Object.keys(state.transceiverSourceState).find(key => state.transceiverSourceState[key].sourceId === sourceId)
-      const mainMidKey = Object.keys(state.transceiverSourceState).find(key => state.transceiverSourceState[key].sourceId === null)
+      const sourceCurrentMid = Object.keys(state.transceiverSourceState).find(
+        (key) => state.transceiverSourceState[key].sourceId === sourceId
+      )
+      const mainMidKey = Object.keys(state.transceiverSourceState).find(
+        (key) => state.transceiverSourceState[key].sourceId === null
+      )
       if (sourceCurrentMid !== -1 && sourceId !== null) {
-        let sourceInitialMid = Object.values(state.sourceRemoteTracks).find(value => value.sourceId === sourceId).transceiver.mid
-        if (state.transceiverSourceState[sourceCurrentMid].mid  === '0') {
-          if(sourceInitialMid !== mainMidKey) {
-            let sourceAtInitialMid = state.transceiverSourceState[sourceInitialMid]
-            state.transceiverSourceState[sourceCurrentMid] = { ...state.transceiverSourceState[mainMidKey] , mid: sourceCurrentMid }
-            state.transceiverSourceState[mainMidKey] = { ...sourceAtInitialMid, mid: mainMidKey }
+        let sourceInitialMid = Object.values(state.sourceRemoteTracks).find(
+          (value) => value.sourceId === sourceId
+        ).transceiver.mid
+        if (state.transceiverSourceState[sourceCurrentMid].mid === '0') {
+          if (sourceInitialMid !== mainMidKey) {
+            let sourceAtInitialMid =
+              state.transceiverSourceState[sourceInitialMid]
+            state.transceiverSourceState[sourceCurrentMid] = {
+              ...state.transceiverSourceState[mainMidKey],
+              mid: sourceCurrentMid,
+            }
+            state.transceiverSourceState[mainMidKey] = {
+              ...sourceAtInitialMid,
+              mid: mainMidKey,
+            }
             delete state.transceiverSourceState[sourceInitialMid]
           } else {
-            sourceInitialMid = state.videoSources.find(source => source.sourceId === sourceId).mid
+            sourceInitialMid = state.videoSources.find(
+              (source) => source.sourceId === sourceId
+            ).mid
             delete state.transceiverSourceState[sourceInitialMid]
-            state.transceiverSourceState[sourceCurrentMid] = state.videoSources[sourceCurrentMid]
+            state.transceiverSourceState[sourceCurrentMid] =
+              state.videoSources[sourceCurrentMid]
           }
         } else {
-          state.transceiverSourceState[sourceCurrentMid] = { ...state.transceiverSourceState[sourceInitialMid] , mid: `${sourceCurrentMid}` }
+          state.transceiverSourceState[sourceCurrentMid] = {
+            ...state.transceiverSourceState[sourceInitialMid],
+            mid: `${sourceCurrentMid}`,
+          }
           delete state.transceiverSourceState[sourceInitialMid]
         }
       } else if (sourceCurrentMid !== -1) {
         if (state.transceiverSourceState[sourceCurrentMid].mid !== '0') {
-          state.transceiverSourceState[sourceCurrentMid] = { ...state.transceiverSourceState[0] , mid: `${sourceCurrentMid}` }
+          state.transceiverSourceState[sourceCurrentMid] = {
+            ...state.transceiverSourceState[0],
+            mid: `${sourceCurrentMid}`,
+          }
           delete state.transceiverSourceState[0]
         }
       }
@@ -125,14 +152,20 @@ export default {
       state.mainLabel = label
     },
     updateTransceiverSourceState(state, { source }) {
-      const currentSource = state.transceiverSourceState[state.videoSources[0].mid]
-      const targetKey = Object.keys(state.transceiverSourceState)
-        .find(
-          key => state.transceiverSourceState[key].mid === source.mid
-        )
+      const currentSource =
+        state.transceiverSourceState[state.videoSources[0].mid]
+      const targetKey = Object.keys(state.transceiverSourceState).find(
+        (key) => state.transceiverSourceState[key].mid === source.mid
+      )
       const targetSource = state.transceiverSourceState[targetKey]
-      state.transceiverSourceState[state.videoSources[0].mid] = { ...targetSource, mid: state.videoSources[0].mid }
-      state.transceiverSourceState[targetKey] = { ...currentSource, mid: targetKey }
+      state.transceiverSourceState[state.videoSources[0].mid] = {
+        ...targetSource,
+        mid: state.videoSources[0].mid,
+      }
+      state.transceiverSourceState[targetKey] = {
+        ...currentSource,
+        mid: targetKey,
+      }
     },
   },
   getters: {
@@ -162,6 +195,6 @@ export default {
     },
     getTrackIdMidMap(state) {
       return state.trackIdMidMap
-    }
+    },
   },
 }
