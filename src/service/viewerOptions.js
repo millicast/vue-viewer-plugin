@@ -96,7 +96,7 @@ export default function processViewerOptions({
   if (options.layout && options.layout === 'grid') {
     store.commit('Controls/setIsGrid', true)
   }
-  if (startingQuality !== null) {
+  if (startingQuality) {
     options.startingQuality = startingQuality
     store.commit('Controls/setIsSelectingLayer', true)
   }
