@@ -1,18 +1,29 @@
 <template>
-  <b-modal size="lg" v-model="modalShow" v-if="!pubnubSettled || !millicastSettled" ref="my-modal" title="Warning" ok-only>
+  <b-modal
+    size="lg"
+    v-model="modalShow"
+    v-if="!pubnubSettled || !millicastSettled"
+    ref="my-modal"
+    title="Warning"
+    ok-only
+  >
     <ul>
-      <li v-if="!pubnubSettled">You have not settled your PubNub credentials in the .ENV file.</li>
-      <li v-if="!millicastSettled">You have not settled your Millicast credentials in the .ENV file.</li>
+      <li v-if="!pubnubSettled">
+        You have not settled your PubNub credentials in the .ENV file.
+      </li>
+      <li v-if="!millicastSettled">
+        You have not settled your Millicast credentials in the .ENV file.
+      </li>
     </ul>
   </b-modal>
 
   <div id="container" class="row">
     <div id="video-player" class="col d-flex align-items-center py-3">
       <template v-if="millicastSettled">
-        <VideoPlayer 
+        <VideoPlayer
           :paramsOptions="{
             accountId: accountId,
-            streamName: streamName
+            streamName: streamName,
           }"
         />
       </template>
@@ -28,8 +39,13 @@
 
 <script>
 import LiveChat from './components/LiveChat.vue'
-const PubNubCredentials = process.env.VUE_APP_PUBNUB_PUBLISH_KEY && process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY && process.env.VUE_APP_PUBNUB_UUID
-const MillicastCredentials = process.env.VUE_APP_MILLICAST_ACCOUNT_ID && process.env.VUE_APP_MILLICAST_STREAM_NAME
+const PubNubCredentials =
+  process.env.VUE_APP_PUBNUB_PUBLISH_KEY &&
+  process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY &&
+  process.env.VUE_APP_PUBNUB_UUID
+const MillicastCredentials =
+  process.env.VUE_APP_MILLICAST_ACCOUNT_ID &&
+  process.env.VUE_APP_MILLICAST_STREAM_NAME
 export default {
   name: 'App',
   components: {
@@ -41,7 +57,7 @@ export default {
       streamName: process.env.VUE_APP_MILLICAST_STREAM_NAME,
       pubnubSettled: PubNubCredentials,
       millicastSettled: MillicastCredentials,
-      modalShow: true
+      modalShow: true,
     }
   },
 }
@@ -57,9 +73,8 @@ export default {
     height: 50vh;
   }
 }
-
 </style>
 
 <style>
-  @import '@millicast/vue-viewer-plugin/dist/millicast-vue-viewer-plugin.css';
+@import '@millicast/vue-viewer-plugin/dist/millicast-vue-viewer-plugin.css';
 </style>

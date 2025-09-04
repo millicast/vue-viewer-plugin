@@ -2,14 +2,14 @@ const defaulState = {
   medias: {
     active: [],
     inactive: [],
-    layers: []
+    layers: [],
   },
-  selectedQuality: {name: 'Auto'},
+  selectedQuality: { name: 'Auto' },
   mainTransceiverMedias: {
     active: [],
     inactive: [],
-    layers: []
-  }
+    layers: [],
+  },
 }
 
 export default {
@@ -33,7 +33,7 @@ export default {
     getActiveMedias(state) {
       return state.medias
     },
-    getActiveMainTransceiverMedias(state){
+    getActiveMainTransceiverMedias(state) {
       return state.mainTransceiverMedias.active
     },
   },

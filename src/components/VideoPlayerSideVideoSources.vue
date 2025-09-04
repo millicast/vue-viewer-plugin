@@ -1,29 +1,29 @@
 <template>
-  <div 
-    :class="isGrid ? 'sources' : 'list-side'" 
-  >
+  <div :class="isGrid ? 'sources' : 'list-side'">
     <div
       :class="isGrid ? 'grid-item' : 'list-item'"
       :style="'scroll-snap-align: end'"
       v-for="(source, index) in sourceRemoteTracks"
       :key="'p' + index"
     >
-      <div class="videoText" :class="isGrid ? 'videoGrid' : '' ">
+      <div class="videoText" :class="isGrid ? 'videoGrid' : ''">
         <video
-          v-on:click="() => enableClick && switchProjection(source.transceiver?.mid)"
+          v-on:click="
+            () => enableClick && switchProjection(source.transceiver?.mid)
+          "
           :id="`sidePlayer${source.transceiver?.mid}`"
           :ref="`sidePlayer${source.transceiver?.mid}`"
-          :class="!isGrid && isSplittedView ? 'hires-class': ''"
+          :class="!isGrid && isSplittedView ? 'hires-class' : ''"
           autoplay
           muted
           playsinline
         ></video>
-        <span 
+        <span
           v-if="viewer.showLabels"
           :id="`sideLabel${source.transceiver?.mid}`"
           :ref="`sideLabel${source.transceiver?.mid}`"
         >
-          {{source.sourceId}}
+          {{ source.sourceId }}
         </span>
       </div>
     </div>
@@ -49,7 +49,7 @@ export default {
       indexMainMediaSource: 0,
       playerRef: null,
       enableClick: true,
-      toast: new CustomToast()
+      toast: new CustomToast(),
     }
   },
   computed: {
@@ -61,10 +61,10 @@ export default {
       'audioFollowsVideo',
     ]),
     ...mapState('Controls', {
-        fullscreen: state => state.fullscreen, 
-        isGrid: state => state.isGrid,
-        isSplittedView: state => state.isSplittedView, 
-        currentElementRef: state => state.currentElementRef,
+      fullscreen: (state) => state.fullscreen,
+      isGrid: (state) => state.isGrid,
+      isSplittedView: (state) => state.isSplittedView,
+      currentElementRef: (state) => state.currentElementRef,
     }),
     ...mapGetters('Sources', ['getVideoHasMain', 'getSelectedVideoSource']),
     ...mapState('ViewConnection', {
@@ -77,14 +77,14 @@ export default {
   async mounted() {
     selectSource({ kind: 'video', source: this.videoSources[0] })
     this.setMainLabel(this.videoSources[0].name)
-    this.sourceRemoteTracks.forEach(async (remoteTrack) =>
-      await projectRemoteTracks(remoteTrack)
+    this.sourceRemoteTracks.forEach(
+      async (remoteTrack) => await projectRemoteTracks(remoteTrack)
     )
 
     this.playerRef = document.getElementById('player')
   },
   async unmounted() {
-    this.videoSources.forEach(source => {
+    this.videoSources.forEach((source) => {
       this.transceiverSourceState[source.mid] = source
     })
     unprojectMultiview()
@@ -96,17 +96,24 @@ export default {
           const lastIndex = newLenght - 1
           await projectRemoteTracks(this.sourceRemoteTracks[lastIndex])
         } else {
-          this.sourceRemoteTracks.forEach(async (remoteTrack) =>
-            await projectRemoteTracks(remoteTrack)
+          this.sourceRemoteTracks.forEach(
+            async (remoteTrack) => await projectRemoteTracks(remoteTrack)
           )
         }
       },
-    }
+    },
   },
   methods: {
     ...mapMutations('Controls', ['toggleFullscreen', 'setIsSplittedView']),
-    ...mapMutations('Sources', ['setMainLabel','setPreviousMainLabel', 'updateTransceiverSourceState']),
-    ...mapGetters('Layers', ['getActiveMedias','getActiveMainTransceiverMedias']),
+    ...mapMutations('Sources', [
+      'setMainLabel',
+      'setPreviousMainLabel',
+      'updateTransceiverSourceState',
+    ]),
+    ...mapGetters('Layers', [
+      'getActiveMedias',
+      'getActiveMainTransceiverMedias',
+    ]),
     async switchProjection(videoMid) {
       await nextTick()
       this.enableClick = false
@@ -116,24 +123,29 @@ export default {
       let source = this.transceiverSourceState[videoMid]
       let lowQualityLayer
       let midProjectedInMain = this.videoSources[0].mid
-      const sourceName =  source.name
-      const audioSource = this.audioSources.find(currentSoruce => currentSoruce.name === sourceName)
+      const sourceName = source.name
+      const audioSource = this.audioSources.find(
+        (currentSoruce) => currentSoruce.name === sourceName
+      )
 
       if (this.getVideoHasMain) {
         if (this.viewer.showLabels) {
-          this.$refs[`sideLabel${videoMid}`][0].textContent = this.transceiverSourceState[midProjectedInMain].name        
+          this.$refs[`sideLabel${videoMid}`][0].textContent =
+            this.transceiverSourceState[midProjectedInMain].name
         }
 
-        const sourceIdProjectedInMain = this.transceiverSourceState[midProjectedInMain].sourceId
+        const sourceIdProjectedInMain =
+          this.transceiverSourceState[midProjectedInMain].sourceId
         midProjectedInMain = this.transceiverSourceState[midProjectedInMain].mid
-        
+
         if (midProjectedInMain in this.getActiveMedias()) {
-          lowQualityLayer = this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
+          lowQualityLayer =
+            this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
         }
         projectVideo(
-          sourceIdProjectedInMain, 
-          videoMid, 
-          this.transceiverSourceState[midProjectedInMain].trackId, 
+          sourceIdProjectedInMain,
+          videoMid,
+          this.transceiverSourceState[midProjectedInMain].trackId,
           lowQualityLayer
         )
         this.updateTransceiverSourceState({ source })
@@ -146,11 +158,15 @@ export default {
         this.setIsSplittedView(false)
       }
 
-      if ( audioSource && this.audioFollowsVideo ) {
+      if (audioSource && this.audioFollowsVideo) {
         try {
           await selectSource({ kind: 'audio', source: audioSource })
         } catch (error) {
-          this.toast.showToast('error', 'There was an error selecting the desired source, try again', { timeout: 5000 })
+          this.toast.showToast(
+            'error',
+            'There was an error selecting the desired source, try again',
+            { timeout: 5000 }
+          )
         }
       }
       this.enableClick = true
@@ -218,11 +234,11 @@ li {
 }
 
 .list-item {
-    line-height: 0;
-    padding-bottom: 10px;
+  line-height: 0;
+  padding-bottom: 10px;
 }
 
 .list-item:last-child {
-    padding-bottom: 0px;
+  padding-bottom: 0px;
 }
 </style>

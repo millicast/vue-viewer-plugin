@@ -36,13 +36,24 @@
         :class="{ 'display: none;': currentElementRef === 'player' }"
         :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
       ></video>
-      <audio v-if="viewer.drm" id="drm-audio-player2" playsinline autoplay muted></audio>
+      <audio
+        v-if="viewer.drm"
+        id="drm-audio-player2"
+        playsinline
+        autoplay
+        muted
+      ></audio>
     </template>
   </template>
   <span
-    v-if="videoSources.length > 1 && isSplittedView && !fullscreen && viewer.showLabels"
+    v-if="
+      videoSources.length > 1 &&
+      isSplittedView &&
+      !fullscreen &&
+      viewer.showLabels
+    "
   >
-    {{this.mainLabel}}
+    {{ this.mainLabel }}
   </span>
 </template>
 
@@ -84,7 +95,7 @@ export default {
       volume: 1,
       muted: this.viewer.muted,
       autoplay: this.viewer.autoplay,
-      drmAudio: drmAudio
+      drmAudio: drmAudio,
     })
   },
   computed: {
@@ -115,8 +126,8 @@ export default {
       currentElementRef: (state) => state.currentElementRef,
       isMigrating: (state) => state.isMigrating,
       isSplittedView: (state) => state.isSplittedView,
-      previousSplitState: state => state.previousSplitState,
-      isGrid: state => state.isGrid,
+      previousSplitState: (state) => state.previousSplitState,
+      isGrid: (state) => state.isGrid,
       fullscreen: (state) => state.fullscreen,
       playing: (state) => state.playing,
     }),
@@ -127,7 +138,9 @@ export default {
     displayAudioOnly() {
       return (
         (this.isAudioOnly && this.isLive && !this.viewer.drm) ||
-        (this.viewer.placeholderImg === null && !this.isLive && !this.viewer.drm)
+        (this.viewer.placeholderImg === null &&
+          !this.isLive &&
+          !this.viewer.drm)
       )
     },
   },
@@ -160,7 +173,7 @@ export default {
   },
   watch: {
     reconnectionStatus: function (isReconnecting) {
-      let toastOptions;
+      let toastOptions
       this.toast = new CustomToast()
       this.toast.clear()
       if (isReconnecting) {
@@ -169,12 +182,15 @@ export default {
         if (this.reconnection?.timeout) {
           toastOptions = { timeout: this.reconnection?.timeout }
         }
-        this.toast.showToast('warning',message, toastOptions)
+        this.toast.showToast('warning', message, toastOptions)
       } else {
         const setSplitView = (state) => {
           if (['connected'].includes(state)) {
             this.setIsSplittedView(this.previousSplitState)
-            this.millicastView.removeListener('connectionStateChange', setSplitView)
+            this.millicastView.removeListener(
+              'connectionStateChange',
+              setSplitView
+            )
             this.toast.clear()
           }
         }
@@ -192,9 +208,11 @@ export default {
       await nextTick()
       //Set new tag params
       const player = document.getElementById(this.currentElementRef)
-      let drmAudio;
+      let drmAudio
       if (this.viewer.drm) {
-        drmAudio = document.getElementById('drm-audio-' + this.currentElementRef)
+        drmAudio = document.getElementById(
+          'drm-audio-' + this.currentElementRef
+        )
       }
 
       setVideoPlayer({
@@ -222,10 +240,15 @@ export default {
     },
     playerMuted: function () {
       // You cannot autoplay muted audio elements so we have to wait for user interaction to call play on the audio element
-      if (!this.playerMuted && this.drmAudio && this.drmAudio.paused && this.playing) {
+      if (
+        !this.playerMuted &&
+        this.drmAudio &&
+        this.drmAudio.paused &&
+        this.playing
+      ) {
         this.drmAudio.play()
       }
-    }
+    },
   },
 }
 </script>
@@ -255,8 +278,9 @@ video {
   overflow: hidden;
 }
 
-.test-player video, .test-player-2 video {
-  border-radius: .25rem;
+.test-player video,
+.test-player-2 video {
+  border-radius: 0.25rem;
 }
 .grid-player {
   width: 100%;

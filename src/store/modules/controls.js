@@ -28,7 +28,7 @@ const defaulState = {
   isGrid: false,
   isSelectingLayer: false,
   hideToast: false,
-  selectingLayerTimeouts: null
+  selectingLayerTimeouts: null,
 }
 
 export default {
@@ -165,7 +165,7 @@ export default {
     },
     setSelectingLayerTimeout(state, selectingLayerTimeout) {
       state.selectingLayerTimeouts = selectingLayerTimeout
-    }
+    },
   },
   getters: {},
 }

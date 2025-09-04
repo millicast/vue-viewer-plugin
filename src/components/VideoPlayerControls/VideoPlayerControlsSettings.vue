@@ -23,8 +23,12 @@
           {{ viewerVersion }}
         </div>
       </div>
-      <VideoPlayerControlsSettingsQuality v-if="getActiveMainTransceiverMedias.length > 1" />
-      <VideoPlayerControlsSettingsLayout v-if="getVideoSources.length > 1 && isSplittedView"/>
+      <VideoPlayerControlsSettingsQuality
+        v-if="getActiveMainTransceiverMedias.length > 1"
+      />
+      <VideoPlayerControlsSettingsLayout
+        v-if="getVideoSources.length > 1 && isSplittedView"
+      />
       <VideoPlayerControlsSettingsSplitView v-if="getVideoSources.length > 1" />
       <VideoPlayerControlsSettingsVideoTrack
         v-if="
@@ -90,7 +94,7 @@ export default {
     VideoPlayerControlsSettingsReportIssue,
     VideoPlayerControlsSettingsDropdown,
     VideoPlayerControlsSettingsSplitView,
-    VideoPlayerControlsSettingsLayout
+    VideoPlayerControlsSettingsLayout,
   },
   props: {
     streamId: String,
@@ -133,20 +137,17 @@ export default {
     ...mapState('Controls', {
       dropup: (state) => state.dropup,
       trackWarning: (state) => state.trackWarning,
-      isSplittedView: (state) => state.isSplittedView
+      isSplittedView: (state) => state.isSplittedView,
     }),
   },
   methods: {
-    ...mapMutations('Controls', [
-      'setDropup', 
-      'toggleFullscreen'
-    ]),
-    ...mapMutations('Sources', [
-      'setMainLabel',
-      'setAudioFollowsVideo',
-    ]),
+    ...mapMutations('Controls', ['setDropup', 'toggleFullscreen']),
+    ...mapMutations('Sources', ['setMainLabel', 'setAudioFollowsVideo']),
     compareItems(entry, current) {
-      return entry?.name === current?.name && (entry?.id === current?.id || current?.name === 'Auto')
+      return (
+        entry?.name === current?.name &&
+        (entry?.id === current?.id || current?.name === 'Auto')
+      )
     },
     compareSources(entry, current) {
       return entry?.sourceId === current?.sourceId
@@ -214,7 +215,11 @@ export default {
                 await selectSource({ kind: 'video', source })
                 await this.setMainLabel(source.name)
               } catch (error) {
-                this.toast.showToast('error','There was an error selecting the desired source, try again', { timeout: 5000 })
+                this.toast.showToast(
+                  'error',
+                  'There was an error selecting the desired source, try again',
+                  { timeout: 5000 }
+                )
               }
             }
             this.setDropupSettings(
@@ -228,14 +233,18 @@ export default {
           }
           case 'audioTracks': {
             const audioTrackChange = async (source) => {
-              if(source.name === 'AudioFollowVideo') {
+              if (source.name === 'AudioFollowVideo') {
                 this.setAudioFollowsVideo(true)
               } else {
                 this.setAudioFollowsVideo(false)
                 try {
                   await selectSource({ kind: 'audio', source })
                 } catch (error) {
-                  this.toast.showToast('error','There was an error selecting the desired source, try again',  { timeout: 5000 })
+                  this.toast.showToast(
+                    'error',
+                    'There was an error selecting the desired source, try again',
+                    { timeout: 5000 }
+                  )
                 }
               }
             }
