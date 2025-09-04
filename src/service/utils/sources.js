@@ -71,7 +71,7 @@ const addSource = (kind, sourceId, trackId) => {
     name: sourceId === null ? state.Params.viewer.mainLabel : sourceId,
     sourceId,
     trackId,
-    mid: sourceId === null ? (kind === 'video' ? "0" : "1") : null
+    mid: sourceId === null ? (kind === 'video' ? '0' : '1') : null,
   }
   const sourceToUse =
     kind === 'video' ? state.Sources.videoSources : state.Sources.audioSources
@@ -110,7 +110,7 @@ const processTrackWarning = () => {
 export const handleDeleteSource = (sourceId) => {
   if (state.Layers.mainTransceiverMedias.active.length) {
     // If stream has simulcast enabled, set the source quality to auto before droping the source
-    layers.handleSelectQuality({name: 'Auto'})
+    layers.handleSelectQuality({ name: 'Auto' })
   }
   const videoIndex = state.Sources.videoSources.findIndex(
     (source) => source.sourceId === sourceId
@@ -153,28 +153,64 @@ const deleteSource = (kind, sourceId) => {
   }
 
   if (kind === 'video') {
-    sourceCurrentMid = Object.keys(state.Sources.transceiverSourceState).find(key => state.Sources.transceiverSourceState[key].sourceId === sourceId)
+    sourceCurrentMid = Object.keys(state.Sources.transceiverSourceState).find(
+      (key) => state.Sources.transceiverSourceState[key].sourceId === sourceId
+    )
     if (sourceId !== null) {
-      sourceInitialMid = Object.values(state.Sources.sourceRemoteTracks).find(value => value.sourceId === sourceId).transceiver.mid
+      sourceInitialMid = Object.values(state.Sources.sourceRemoteTracks).find(
+        (value) => value.sourceId === sourceId
+      ).transceiver.mid
     }
 
     if (state.Controls.isSplittedView) {
-      if (state.Sources.selectedVideoSource.sourceId !== null && sourceId === null) {
-        handleProjectVideo(state.Sources.selectedVideoSource.sourceId, `${sourceCurrentMid}`, state.Sources.selectedVideoSource.trackId)
+      if (
+        state.Sources.selectedVideoSource.sourceId !== null &&
+        sourceId === null
+      ) {
+        handleProjectVideo(
+          state.Sources.selectedVideoSource.sourceId,
+          `${sourceCurrentMid}`,
+          state.Sources.selectedVideoSource.trackId
+        )
         if (state.Params.viewer.showLabels) {
-          document.getElementById(`sideLabel${state.Sources.selectedVideoSource.mid}`).textContent = state.Sources.selectedVideoSource.sourceId
+          document.getElementById(
+            `sideLabel${state.Sources.selectedVideoSource.mid}`
+          ).textContent = state.Sources.selectedVideoSource.sourceId
         }
-      } else if (state.Sources.selectedVideoSource.sourceId === null && sourceId !== null) {
+      } else if (
+        state.Sources.selectedVideoSource.sourceId === null &&
+        sourceId !== null
+      ) {
         if (sourceCurrentMid !== sourceInitialMid) {
-          handleProjectVideo(state.Sources.transceiverSourceState[sourceInitialMid].sourceId, state.Sources.transceiverSourceState[sourceCurrentMid].mid)
+          handleProjectVideo(
+            state.Sources.transceiverSourceState[sourceInitialMid].sourceId,
+            state.Sources.transceiverSourceState[sourceCurrentMid].mid
+          )
           if (state.Params.viewer.showLabels) {
-            document.getElementById(`sideLabel${state.Sources.transceiverSourceState[sourceCurrentMid].mid}`).textContent = state.Sources.transceiverSourceState[sourceInitialMid].sourceId
+            document.getElementById(
+              `sideLabel${state.Sources.transceiverSourceState[sourceCurrentMid].mid}`
+            ).textContent =
+              state.Sources.transceiverSourceState[sourceInitialMid].sourceId
           }
         }
-      } else if (state.Sources.selectedVideoSource.sourceId !== null && sourceId !== null && sourceCurrentMid !== sourceInitialMid) {
-        handleProjectVideo(state.Sources.transceiverSourceState[sourceInitialMid].sourceId, state.Sources.selectedVideoSource.mid)
+      } else if (
+        state.Sources.selectedVideoSource.sourceId !== null &&
+        sourceId !== null &&
+        sourceCurrentMid !== sourceInitialMid
+      ) {
+        handleProjectVideo(
+          state.Sources.transceiverSourceState[sourceInitialMid].sourceId,
+          state.Sources.selectedVideoSource.mid
+        )
         if (state.Params.viewer.showLabels) {
-          document.getElementById(`sideLabel${state.Sources.transceiverSourceState[state.Sources.selectedVideoSource.mid].mid}`).textContent = state.Sources.transceiverSourceState[sourceInitialMid].sourceId
+          document.getElementById(
+            `sideLabel${
+              state.Sources.transceiverSourceState[
+                state.Sources.selectedVideoSource.mid
+              ].mid
+            }`
+          ).textContent =
+            state.Sources.transceiverSourceState[sourceInitialMid].sourceId
         }
       }
     }
@@ -231,7 +267,7 @@ const project = async ({ kind, source }) => {
         trackId: source.trackId,
         mediaId,
         ...(kind === 'video' && { promote: true }),
-        media: kind
+        media: kind,
       },
     ])
   }
@@ -243,7 +279,7 @@ export const handleProjectVideo = async (what, where, trackId, layer) => {
       trackId,
       mediaId: where,
       media: 'video',
-      layer
+      layer,
     },
   ])
 }
@@ -254,8 +290,8 @@ export const handleProjectRemoteTracks = async (remoteTrack) => {
   const sidePlayerVideo = document.getElementById(sidePlayerId)
   sidePlayerVideo.srcObject = remoteTrack.mediaStream
   handleProjectVideo(
-    remoteTrack.sourceId, 
-    remoteTrack.transceiver?.mid ?? null, 
+    remoteTrack.sourceId,
+    remoteTrack.transceiver?.mid ?? null,
     state.Sources.transceiverSourceState[remoteTrack.transceiver?.mid].trackId
   )
   sidePlayerVideo.muted = true
@@ -265,7 +301,11 @@ export const handleProjectRemoteTracks = async (remoteTrack) => {
 }
 
 export const handleUnprojectMultiview = async () => {
-  const mids = state.ViewConnection.millicastView.webRTCPeer.peer.getTransceivers()
-    .splice(2).map((vt) => { return vt.mid })
+  const mids = state.ViewConnection.millicastView.webRTCPeer.peer
+    .getTransceivers()
+    .splice(2)
+    .map((vt) => {
+      return vt.mid
+    })
   state.ViewConnection.millicastView.unproject(mids)
 }

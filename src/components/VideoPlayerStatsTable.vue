@@ -57,8 +57,9 @@
           {{ millicastView.signaling.streamViewId }}
         </td>
         <td class="col-1">
-          <i class="ml-viewer-bi-copy"
-            @click="copyText(millicastView.signaling.streamViewId)" 
+          <i
+            class="ml-viewer-bi-copy"
+            @click="copyText(millicastView.signaling.streamViewId)"
           ></i>
         </td>
       </tr>
@@ -167,7 +168,7 @@ export default {
       statsIndex: 0,
       selectedSourceMid: null,
       trackIdToStatsIndexMap: {},
-      trackIdMidMap: {}
+      trackIdMidMap: {},
     }
   },
   mounted() {
@@ -187,8 +188,9 @@ export default {
       })
       this.stats = { ...this.stats, ...peerStats }
     })
-    this.selectedSourceMid = this.getTransceiverSourceState[0]?.mid 
-      ?? Object.values(this.getTransceiverSourceState)[0]?.mid
+    this.selectedSourceMid =
+      this.getTransceiverSourceState[0]?.mid ??
+      Object.values(this.getTransceiverSourceState)[0]?.mid
   },
   beforeUnmount() {
     this.millicastView.webRTCPeer.stopStats()
@@ -216,29 +218,21 @@ export default {
       this.statsIndex = this.trackIdToStatsIndexMap[trackId]
     },
     selectMidZero() {
-      this.selectedSourceMid = this.getTransceiverSourceState[0]?.mid 
-        ?? Object.values(this.getTransceiverSourceState)[0]?.mid
+      this.selectedSourceMid =
+        this.getTransceiverSourceState[0]?.mid ??
+        Object.values(this.getTransceiverSourceState)[0]?.mid
     },
   },
   computed: {
     ...mapState('Params', {
       streamId: (state) => state.viewer.streamId,
     }),
-    ...mapState('Controls', [
-      'isMobile',
-      'isSplittedView'
-    ]),
+    ...mapState('Controls', ['isMobile', 'isSplittedView']),
     ...mapState('ViewConnection', {
       millicastView: (state) => state.millicastView,
     }),
-    ...mapState('Sources', [
-      'sourceRemoteTracks', 
-      'videoSources'
-    ]),
-    ...mapGetters('Sources', [
-      'getTransceiverSourceState',
-      'getTrackIdMidMap'
-    ]),
+    ...mapState('Sources', ['sourceRemoteTracks', 'videoSources']),
+    ...mapGetters('Sources', ['getTransceiverSourceState', 'getTrackIdMidMap']),
     hasStats() {
       return Object.keys(this.stats).length > 0
     },
@@ -312,11 +306,10 @@ export default {
       return this.millicastView?.signaling?.clusterId
     },
     multiviewStatsAvailable() {
-      const multiviewIsOn = (
-        this.videoSources.length > 1 && 
-        this.isSplittedView && 
+      const multiviewIsOn =
+        this.videoSources.length > 1 &&
+        this.isSplittedView &&
         Object.keys(this.trackIdToStatsIndexMap).length
-      )
       if (!multiviewIsOn) {
         this.selectMidZero()
       }

@@ -1,20 +1,14 @@
 <template>
-  <div
-    class="container-fluid align-container"
-    @mousemove="showControls"
-  >
+  <div class="container-fluid align-container" @mousemove="showControls">
     <!-- SPINNER -->
-    <div
-      class="overlay spinner-container"
-      v-if="isLoading"
-    >
+    <div class="overlay spinner-container" v-if="isLoading">
       <div class="spinner-border text-light" role="status">
         <span class="sr-only">Loading...</span>
       </div>
     </div>
     <!-- TAP TO UNMUTE OVERLAY -->
     <div
-      v-if="(autoPlayMuted && isLive && !this.viewer.muted)"
+      v-if="autoPlayMuted && isLive && !this.viewer.muted"
       @click="tapUnmute"
       class="overlay tap-unmute d-flex align-items-center justify-content-center"
     >
@@ -26,11 +20,17 @@
       </div>
     </div>
     <!-- SOURCES -->
-    <div 
+    <div
       class="mx-0"
-      :id="videoSources.length > 1 && !isGrid && isSplittedView ? 'lcontainer' : ''"
-      :class="videoSources.length > 1 && isGrid && isSplittedView ? 'grid-container': 'list-container'"
-      >
+      :id="
+        videoSources.length > 1 && !isGrid && isSplittedView ? 'lcontainer' : ''
+      "
+      :class="
+        videoSources.length > 1 && isGrid && isSplittedView
+          ? 'grid-container'
+          : 'list-container'
+      "
+    >
       <!-- MAIN SOURCE -->
       <div
         id="vplayer"
@@ -39,10 +39,10 @@
         :class="{
           show: show,
           'limit-screen': videoSources.length > 1 && isSplittedView && !isGrid,
-          'grid-player': videoSources.length > 1 && isSplittedView && isGrid
+          'grid-player': videoSources.length > 1 && isSplittedView && isGrid,
         }"
         :style="{
-        cursor: isGrid? 'pointer' : '',
+          cursor: isGrid ? 'pointer' : '',
         }"
         @dblclick="toggleFullscreen"
       >
@@ -51,19 +51,15 @@
           id="main-source"
           @click="handleWholeScreen"
           :style="{
-            height: !isSplittedView ? '100%' : ''
+            height: !isSplittedView ? '100%' : '',
           }"
         >
           <VideoPlayerMedia ref="element" />
         </div>
         <!-- CONTROLS -->
-        <div 
-          id="controls" 
-          class="controls" 
-          v-if="viewer.controls"
-        > 
+        <div id="controls" class="controls" v-if="viewer.controls">
           <!-- TOP CONTROLS -->
-          <div 
+          <div
             class="gradient-top controls-top container-fluid pt-3"
             :class="{ hide: !show }"
           >
@@ -78,7 +74,7 @@
           </div>
           <!-- BOTTOM CONTROLS -->
           <div
-            :class="{ hide: !show }" 
+            :class="{ hide: !show }"
             class="gradient-bottom controls-bottom container-fluid pb-3"
           >
             <VideoPlayerControlsContainer
@@ -103,11 +99,11 @@
       <!-- SIDE SOURCES -->
       <div
         v-if="videoSources.length > 1 && isSplittedView"
-        :class="!isGrid ? 'side-panel overflow-auto sc1': ''"
-        :style="!isGrid ? 'scroll-snap-type: y mandatory': 'display: contents'"
+        :class="!isGrid ? 'side-panel overflow-auto sc1' : ''"
+        :style="!isGrid ? 'scroll-snap-type: y mandatory' : 'display: contents'"
         @mousemove="showControls"
       >
-        <VideoPlayerSideVideoSources :class="isGrid ? 'side-sources' : ''"/>
+        <VideoPlayerSideVideoSources :class="isGrid ? 'side-sources' : ''" />
       </div>
     </div>
   </div>
@@ -199,7 +195,7 @@ export default {
       isLive: (state) => state.isLive,
       isSplittedView: (state) => state.isSplittedView,
       hideToast: (state) => state.hideToast,
-      isGrid: (state) => state.isGrid
+      isGrid: (state) => state.isGrid,
     }),
     currentTime: function () {
       let seconds = this.secondsElapsed
@@ -226,7 +222,7 @@ export default {
       'setCastOptions',
       'setAutoPlayMuted',
       'toggleFullscreen',
-      'setIsSplittedView'
+      'setIsSplittedView',
     ]),
     showControls() {
       if (this.controlsTimeout) {
@@ -244,19 +240,24 @@ export default {
     showButton(button) {
       let showButton = !this.viewer.hideButtons.includes(button)
       if (showButton && button === 'fullscreen') {
-        let player = document.getElementById('player') ?? document.getElementById('player2')
+        let player =
+          document.getElementById('player') ??
+          document.getElementById('player2')
         if (!player) {
           // Temporarly create a video element to check if the browser supports fullscreen (iPhone fallback)
           player = document.createElement('video')
         }
-        showButton &&= (document.fullscreenEnabled || 
-        document.webkitFullscreenEnabled || 
-        document.mozFullScreenEnabled ||
-        document.msFullscreenEnabled ||
-        player?.requestFullscreen ||
-        player?.webkitEnterFullscreen)
-        if(!showButton) {
-          console.warn('Fullscreen disabled due to incompatibility with the browser.')
+        showButton &&=
+          document.fullscreenEnabled ||
+          document.webkitFullscreenEnabled ||
+          document.mozFullScreenEnabled ||
+          document.msFullscreenEnabled ||
+          player?.requestFullscreen ||
+          player?.webkitEnterFullscreen
+        if (!showButton) {
+          console.warn(
+            'Fullscreen disabled due to incompatibility with the browser.'
+          )
         }
       }
       return showButton
@@ -277,12 +278,13 @@ export default {
     goFullScreen() {
       const playerDiv = document.getElementById('vplayer')
       //Fallback for when requestFullScreen is not avaiable in a div but it is for a video tag
-      const videoPlayer = document.getElementById('player') ?? document.getElementById('player2')
+      const videoPlayer =
+        document.getElementById('player') ?? document.getElementById('player2')
       playerDiv?.requestFullscreen?.() ??
         playerDiv?.webkitRequestFullscreen?.() ??
         playerDiv?.mozRequestFullScreen?.() ??
         playerDiv?.msRequestFullscreen?.() ??
-        videoPlayer?.webkitEnterFullscreen?.();
+        videoPlayer?.webkitEnterFullscreen?.()
     },
     leaveFullScreen() {
       document.exitFullscreen?.() ??
@@ -297,8 +299,10 @@ export default {
     handleWholeScreen() {
       if (this.isGrid) {
         this.setIsSplittedView(!this.isSplittedView)
-        selectSource({kind:'video', source: this.videoSources[0]})
-        this.setMainLabel(this.videoSources[0].sourceId ?? this.videoSources[0].name)
+        selectSource({ kind: 'video', source: this.videoSources[0] })
+        this.setMainLabel(
+          this.videoSources[0].sourceId ?? this.videoSources[0].name
+        )
       }
     },
   },
@@ -401,7 +405,7 @@ const getFullscreenElement = () => {
 }
 
 .align-container {
-  align-self: center
+  align-self: center;
 }
 
 .side-sources {
@@ -500,7 +504,7 @@ const getFullscreenElement = () => {
   padding-right: 0;
   height: 100%;
   width: 100%;
-  align-self: center
+  align-self: center;
 }
 
 .sc1::-webkit-scrollbar {
@@ -530,7 +534,7 @@ const getFullscreenElement = () => {
 .ml-viewer {
   text-align: -webkit-center;
   height: 100%;
-  
+
   padding: 0;
 }
 
@@ -546,15 +550,15 @@ const getFullscreenElement = () => {
   gap: 10px;
 }
 
-#vplayer[max-width~='991.98px'] :deep(.side-panel){
+#vplayer[max-width~='991.98px'] :deep(.side-panel) {
   align-self: center;
 }
 
-#vplayer[max-width~='429.98px'] :deep(.align-container){
+#vplayer[max-width~='429.98px'] :deep(.align-container) {
   height: 100%;
 }
 
-#vplayer[max-width~='429.98px'] :deep(.side-panel){
+#vplayer[max-width~='429.98px'] :deep(.side-panel) {
   scroll-snap-type: y mandatory;
   display: flex;
 }

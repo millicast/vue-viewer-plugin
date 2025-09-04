@@ -31,10 +31,14 @@
             <p>{{ userName }}</p>
           </div>
         </div>
-        <span id="action-menu-btn" @click="toggleActionMenu"><i class="bi bi-gear"></i></span>
+        <span id="action-menu-btn" @click="toggleActionMenu"
+          ><i class="bi bi-gear"></i
+        ></span>
         <div v-if="showActionMenu" class="action-menu">
           <ul>
-            <li @click="changeUsername"><i class="bi bi-pen"></i> Change username</li>
+            <li @click="changeUsername">
+              <i class="bi bi-pen"></i> Change username
+            </li>
           </ul>
         </div>
       </div>
@@ -42,7 +46,7 @@
         <div
           v-for="message in messages"
           :key="message.id"
-          :id="'m'+message.id"
+          :id="'m' + message.id"
           class="d-flex mb-4"
           :class="messageAligne(message.userName)"
         >
@@ -107,12 +111,17 @@
 <script>
 import faker from '@faker-js/faker'
 const PubNub = require('pubnub')
-const PubNubCredentials = process.env.VUE_APP_PUBNUB_PUBLISH_KEY && process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY && process.env.VUE_APP_PUBNUB_UUID
-const pubnub = PubNubCredentials ? new PubNub({
-  publishKey: process.env.VUE_APP_PUBNUB_PUBLISH_KEY,
-  subscribeKey: process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY,
-  uuid: process.env.VUE_APP_PUBNUB_UUID,
-}) : null
+const PubNubCredentials =
+  process.env.VUE_APP_PUBNUB_PUBLISH_KEY &&
+  process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY &&
+  process.env.VUE_APP_PUBNUB_UUID
+const pubnub = PubNubCredentials
+  ? new PubNub({
+      publishKey: process.env.VUE_APP_PUBNUB_PUBLISH_KEY,
+      subscribeKey: process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY,
+      uuid: process.env.VUE_APP_PUBNUB_UUID,
+    })
+  : null
 export default {
   data() {
     return {
@@ -125,7 +134,7 @@ export default {
         '/' +
         process.env.VUE_APP_MILLICAST_STREAM_NAME,
       pubnubSettled: PubNubCredentials,
-      modalShow: false
+      modalShow: false,
     }
   },
   methods: {
@@ -158,8 +167,8 @@ export default {
             time: messageEvent.message.time,
           })
           //I have to use waitForElm because await nextTick doesn't work
-          this.waitForElm('#m'+this.messages.length).then((elem) => {
-            elem.scrollIntoView({behaviour: 'smooth'})
+          this.waitForElm('#m' + this.messages.length).then((elem) => {
+            elem.scrollIntoView({ behaviour: 'smooth' })
           })
         },
       })
@@ -180,23 +189,23 @@ export default {
       return name.charAt(0)
     },
     waitForElm(selector) {
-      return new Promise(resolve => {
+      return new Promise((resolve) => {
         if (document.querySelector(selector)) {
-          return resolve(document.querySelector(selector));
+          return resolve(document.querySelector(selector))
         }
 
         const observer = new MutationObserver(() => {
           if (document.querySelector(selector)) {
-            resolve(document.querySelector(selector));
-            observer.disconnect();
+            resolve(document.querySelector(selector))
+            observer.disconnect()
           }
-        });
+        })
 
         observer.observe(document.body, {
           childList: true,
-          subtree: true
-        });
-      });
+          subtree: true,
+        })
+      })
     },
     formatTime() {
       var date = new Date()
@@ -215,7 +224,7 @@ export default {
     changeUsername() {
       this.modalShow = !this.modalShow
       this.toggleActionMenu()
-    }
+    },
   },
   mounted() {
     if (this.pubnubSettled) {

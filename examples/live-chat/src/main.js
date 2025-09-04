@@ -13,6 +13,6 @@ Vue.mount('#app')
 
 // disable specific warnings
 Vue.config.warnHandler = (msg, trace) =>
-    ![
-        'Failed to resolve component: google-cast-launcher',
-    ].some((warning) => msg.includes(warning)) && console.warn('[Vue warn]: '.concat(msg).concat(trace))
+  !['Failed to resolve component: google-cast-launcher'].some((warning) =>
+    msg.includes(warning)
+  ) && console.warn('[Vue warn]: '.concat(msg).concat(trace))

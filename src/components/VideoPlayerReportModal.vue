@@ -100,13 +100,15 @@ export default {
           headers,
           body: JSON.stringify(this.report),
         })
-        this.toast.showToast('success','Report sent successfully', { timeout: 3000 })
+        this.toast.showToast('success', 'Report sent successfully', {
+          timeout: 3000,
+        })
       } catch (err) {
         let message = "Error: couldn't send report"
         if (err.response?.data) {
           message += ', ' + err.response.data
         }
-        this.toast.showToast('error',message, { timeout: 3000 })
+        this.toast.showToast('error', message, { timeout: 3000 })
       } finally {
         this.isLoading = false
         this.close()

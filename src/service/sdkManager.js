@@ -1,4 +1,4 @@
-import {Logger} from '@millicast/sdk'
+import { Logger } from '@millicast/sdk'
 import * as params from './utils/params'
 import * as viewConnection from './utils/viewConnection'
 import * as sources from './utils/sources'

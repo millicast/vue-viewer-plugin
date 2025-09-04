@@ -36,8 +36,8 @@ export default {
       video: (state) => state.video,
     }),
     ...mapState('Params', {
-      viewer: (state) => state.viewer
-    })
+      viewer: (state) => state.viewer,
+    }),
   },
   methods: {
     togglePip() {

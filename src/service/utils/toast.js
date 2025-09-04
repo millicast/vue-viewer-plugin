@@ -2,10 +2,10 @@ import { useToast } from 'vue-toastification'
 import store from '../../../src/store'
 
 const TYPE = {
-  SUCCESS: "success",
-  ERROR: "error",
-  WARNING: "warning",
-  INFO: "info"
+  SUCCESS: 'success',
+  ERROR: 'error',
+  WARNING: 'warning',
+  INFO: 'info',
 }
 
 class CustomToast {
@@ -25,16 +25,16 @@ class CustomToast {
   showToaster(type, message, options) {
     switch (type) {
       case TYPE.ERROR:
-        this.toast.error(message,options)
+        this.toast.error(message, options)
         break
       case TYPE.WARNING:
-        this.toast.warning(message,options)
+        this.toast.warning(message, options)
         break
       case TYPE.INFO:
-        this.toast.info(message,options)
+        this.toast.info(message, options)
         break
       case TYPE.SUCCESS:
-        this.toast.success(message,options)
+        this.toast.success(message, options)
         break
       default:
         break

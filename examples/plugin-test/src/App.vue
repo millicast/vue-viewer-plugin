@@ -1,15 +1,13 @@
 <template>
   <vue-resizable class="resizable">
-    <VideoPlayer
-      :paramsOptions="viewerPluginParams"
-    />
+    <VideoPlayer :paramsOptions="viewerPluginParams" />
   </vue-resizable>
 </template>
 
 <script>
-import VueResizable from "vue-resizable";
+import VueResizable from 'vue-resizable'
 export default {
-  name: "App",
+  name: 'App',
   components: {
     VueResizable,
   },
@@ -20,10 +18,10 @@ export default {
         streamName: process.env.VUE_APP_DOLBY_RTS_STREAM_NAME,
         autoplay: false,
         hideButtons: [],
-      }
+      },
     }
   },
-};
+}
 </script>
 
 <style>

@@ -3,7 +3,7 @@ import { defaultEnvOptions } from '../../service/environmentOptions'
 
 const defaulState = {
   viewer: defaultViewerOptions,
-  environment: defaultEnvOptions
+  environment: defaultEnvOptions,
 }
 
 export default {
