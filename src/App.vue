@@ -61,7 +61,6 @@ export default {
         })
       }
       processEnvironmentOptions(this.paramsOptions?.environment)
-      console.log('Parsed options', this.paramsOptions)
     },
   },
   async mounted() {
