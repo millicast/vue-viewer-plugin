@@ -20,7 +20,7 @@
     "README.md"
   ],
   "dependencies": {
-    "@millicast/sdk": "next",
+    "@millicast/sdk": "latest",
     "bootstrap": "github:millicast/bootstrap#ml-viewer",
     "bootstrap-icons": "github:millicast/icons#ml-viewer",
     "can-autoplay": "^3.0.0",
