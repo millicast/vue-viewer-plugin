@@ -36,6 +36,7 @@ export const defaultViewerOptions = {
   showTimer: false,
   abrStrategy: null,
   abrBandwidth: null,
+  customKeys: null,
 }
 
 export default function processViewerOptions({
@@ -64,8 +65,9 @@ export default function processViewerOptions({
   showTimer,
   abrStrategy,
   abrBandwidth,
+  ...customKeys
 }) {
-  const options = {}
+  let options = {}
 
   options.streamId = streamId
   options.videoOnly = videoOnly ?? false
@@ -130,6 +132,10 @@ export default function processViewerOptions({
 
   if (!isNaN(abrBandwidth)) {
     options.abrBandwidth = parseInt(abrBandwidth)
+  }
+
+  if (customKeys) {
+    options = { ...options, ...customKeys }
   }
 
   store.commit('Params/setViewerOptions', {

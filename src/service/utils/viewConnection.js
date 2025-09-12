@@ -102,16 +102,22 @@ export const handleConnectToStream = async () => {
       connectOptions.abrConfiguration = {
         strategy: state.Params.viewer.abrStrategy,
       }
-      if (state.Params.viewer.abrBandwidth) {
-        connectOptions.abrConfiguration = {
-          ...connectOptions.abrConfiguration,
-          metadata: {
-            bitrate: state.Params.viewer.abrBandwidth,
-          },
-        }
+
+    }
+    if (state.Params.viewer.abrBandwidth) {
+      connectOptions.abrConfiguration={
+        ...connectOptions.abrConfiguration,
+        metadata: {
+          bitrate: state.Params.viewer.abrBandwidth,
+        },
       }
     }
 
+    console.log("state.params", state.Params)
+    if (state.Params.viewer.customKeys) {
+      connectOptions.customKeys = {...state.Params.viewer.customKeys}
+    }
+    console.log("ConnectOptions ->", connectOptions)
     await millicastView.connect(connectOptions)
     addSignalingMigrateListener()
   } catch (e) {
