@@ -113,11 +113,11 @@ export const handleConnectToStream = async () => {
       }
     }
 
-    console.log("state.params", state.Params)
+    
     if (state.Params.viewer.customKeys) {
       connectOptions.customKeys = {...state.Params.viewer.customKeys}
     }
-    console.log("ConnectOptions ->", connectOptions)
+    
     await millicastView.connect(connectOptions)
     addSignalingMigrateListener()
   } catch (e) {
