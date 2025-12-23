@@ -160,16 +160,17 @@ export default {
       this.compare = compare
     },
     unsupportedFlagEmoji(sourceId) {
-      let nAgt = navigator.userAgent
+      
+      
+      let nAgt = window?.navigator?.userAgent || null;
+      if(!nAgt) return false;
+
       let isChrome = nAgt.indexOf('Chrome') !== -1
-      let isFlagEmoji =
-        sourceId.match(/[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]/g) !==
-        null
-      let isWindows
+      let isFlagEmoji = sourceId && sourceId.match(/[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]/g) !== null
 
       // navigator.userAgentData is not supported for Firefox/Safari
       if (isChrome) {
-        isWindows = navigator.userAgentData.platform == 'Windows'
+        const isWindows = navigator?.userAgentData?.platform == 'Windows' ?? false
         return isFlagEmoji && isWindows
       } else {
         return false

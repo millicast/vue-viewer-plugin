@@ -66,7 +66,7 @@ export const handleInitViewConnection = (accountId, streamName) => {
     return subscriber
   }
 
-  const millicastView = new View(streamName, tokenGenerator)
+  const millicastView = new View(undefined, tokenGenerator)
   window.millicastView = millicastView
   window.__defineGetter__('peer', () => {
     return millicastView.getRTCPeerConnection()
