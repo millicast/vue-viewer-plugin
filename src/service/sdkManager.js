@@ -9,6 +9,7 @@ import * as cast from './utils/cast'
 import store from '../store'
 const { commit, state } = store
 let selectingLayerTimeout = null
+let pausedMediaStream=null
 
 // VIDEO PLAYER
 
@@ -38,21 +39,60 @@ export const setVideoPlayer = ({
 }
 
 export const addVideoEventListeners = (video) => {
-  video.onplay = () => commit('Controls/setPlaying', true)
-  video.addEventListener('emptied', pauseControlListener)
+  video.onplay = () => {
+    if (pausedMediaStream) { 
+      reattachStream();
+    }
+    commit('Controls/setPlaying', true)
+  }
+  video.addEventListener('emptied', emptiedControlListener)
   video.addEventListener('pause', pauseControlListener)
   video.onenterpictureinpicture = () => commit('Controls/setPip', true)
   video.onleavepictureinpicture = () => commit('Controls/setPip', false)
 }
 
 export const removeVideoPauseListeners = () => {
-  state.Controls.video.removeEventListener('emptied', pauseControlListener)
+  state.Controls.video.removeEventListener('emptied', emptiedControlListener)
   state.Controls.video.removeEventListener('pause', pauseControlListener)
 }
 
-const pauseControlListener = () => {
+const pauseControlListener=() => {
+  // Store stream reference when pausing
+  if (state.Controls.video && state.Controls.video.srcObject) {
+    pausedMediaStream = state.Controls.video.srcObject
+    console.log('Stored stream reference on pause')
+  }
   commit('Controls/setPlaying', false)
 }
+
+const emptiedControlListener=() => {
+  pausedMediaStream = null
+  console.log('Video element emptied - cleared stream reference')
+  commit('Controls/setPlaying', false)
+}
+
+const reattachStream=() => {
+  const video=state.Controls.video
+  const currentStream=pausedMediaStream
+
+  if (video && currentStream) {
+    console.log('Re-attaching stream for Android Chrome after pause/resume')
+
+    // Remove current srcObject
+    video.srcObject=null
+
+    // Re-attach after a brief delay
+    setTimeout(() => {
+      video.srcObject=currentStream
+      video.play().catch(err => {
+        console.error('Error resuming video:', err)
+      })
+      // Clear the stored stream after successful re-attachment
+      pausedMediaStream=null
+    }, 100)
+  }
+}
+
 // SDK VIEW MODULE INITIALIZATION
 
 export const initViewModule = () => {
