@@ -1,4 +1,4 @@
-import { Director, View, PeerConnection } from '@millicast/sdk'
+import { Director, View } from '@millicast/sdk'
 import {
   setVideoPlayer,
   addVideoEventListeners,
