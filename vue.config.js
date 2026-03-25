@@ -2,6 +2,16 @@ const path = require('path')
 
 module.exports = {
   chainWebpack: (config) => {
+    config.plugin('define').tap((args) => {
+      const packageJson = require('./package.json')
+      let _base = args[0]['process.env']
+      args[0]['process.env'] = {
+        ..._base,
+        PACKAGE_VERSION: JSON.stringify(packageJson.version),
+      }
+      return args
+    })
+
     config.module
       .rule('vue')
       .use('vue-loader')

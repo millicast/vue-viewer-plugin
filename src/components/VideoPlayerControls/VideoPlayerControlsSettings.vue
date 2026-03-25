@@ -82,7 +82,6 @@ import VideoPlayerControlsSettingsLayout from './VideoPlayerControlsSettingsLayo
 
 import { mapGetters, mapState, mapMutations } from 'vuex'
 import CustomToast from '../../service/utils/toast'
-import { version } from '../../../package.json'
 
 export default {
   name: 'VideoPlayerControlsSettings',
@@ -197,6 +196,7 @@ export default {
     },
   },
   mounted() {
+    const version = process.env.PACKAGE_VERSION
     this.viewerVersion = version ? 'v' + version : ''
     this.toast = new CustomToast()
   },
