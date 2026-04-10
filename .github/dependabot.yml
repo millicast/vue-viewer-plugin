@@ -38,3 +38,6 @@ updates:
       - dependency-name: "eslint"
         update-types:
           - "version-update:semver-major"
+
+    reviewers:
+      - "millicast/reviewers"
