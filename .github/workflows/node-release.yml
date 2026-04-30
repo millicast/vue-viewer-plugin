@@ -1,0 +1,48 @@
+name: 'RELEASE: Bump version, create tag/release, and npm publish'
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_version:
+        type: choice
+        required: true
+        description: Which part of version to bump
+        options:
+          - patch
+          - minor
+          - major
+          - prerelease
+      prerelease_id:
+        type: string
+        required: false
+        description: Prerelease identifier
+        default: 'alpha'
+      skip_publish:
+        type: boolean
+        required: false
+        description: Skip npm publish
+        default: false
+
+jobs:
+  next-version:
+    uses: millicast/github-actions/.github/workflows/npm-version-release.yml@v1.0.1
+    # should ONLY be used from main
+    if: github.ref_name == 'main'
+    permissions:
+      contents: write
+    with:
+      bump_version: ${{ inputs.bump_version }}
+      prerelease_id: ${{ inputs.prerelease_id }}
+      use_workflow_token: true
+
+  build-publish:
+    uses: ./.github/workflows/npm-build-publish.yml
+    needs: [next-version]
+    if: success() && inputs.skip_publish != true
+    permissions:
+      contents: read
+      id-token: write
+    with:
+      ref: "v${{ needs.next-version.outputs.semVer }}"
+      npm_tag: ${{ inputs.bump_version == 'prerelease' && inputs.prerelease_id || '' }}
+
