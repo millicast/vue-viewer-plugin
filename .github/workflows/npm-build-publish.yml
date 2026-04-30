@@ -36,6 +36,7 @@ jobs:
       - name: "npm run build && npm publish"
         env:
           npm_tag: ${{ inputs.npm_tag }}
+        shell: 'ash -e -o pipefail {0}'
         run: |
           set --
           if [ -n "${npm_tag}" ]; then
