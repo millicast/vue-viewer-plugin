@@ -43,5 +43,5 @@ jobs:
       contents: read
       id-token: write
     with:
-      ref: ${{ needs.next-version.outputs.semVer }}
+      ref: "v${{ needs.next-version.outputs.semVer }}"
       npm_tag: ${{ inputs.bump_version == 'prerelease' && inputs.prerelease_id || '' }}
