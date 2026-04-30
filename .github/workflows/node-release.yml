@@ -24,7 +24,7 @@ jobs:
 #      bump_version: ${{ inputs.bump_version }}
 
   build:
-    uses: .github/workflows/_build.yml
+    uses: ./.github/workflows/_build.yml
     #needs: [next-version]
     secrets: inherit
     with:
