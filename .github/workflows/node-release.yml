@@ -45,3 +45,4 @@ jobs:
     with:
       ref: "v${{ needs.next-version.outputs.semVer }}"
       npm_tag: ${{ inputs.bump_version == 'prerelease' && inputs.prerelease_id || '' }}
+
