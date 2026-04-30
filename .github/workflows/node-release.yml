@@ -27,7 +27,7 @@ jobs:
   next-version:
     uses: millicast/github-actions/.github/workflows/npm-version-release.yml@feature/node-release_workflow
     # should ONLY be used from main
-    #if: github.ref_name == 'main'
+    if: github.ref_name == 'main'
     permissions:
       contents: write
     with:
