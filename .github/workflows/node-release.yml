@@ -38,7 +38,7 @@ jobs:
   build-publish:
     uses: ./.github/workflows/npm-build-publish.yml
     needs: [next-version]
-    if: inputs.skip_publish != true
+    if: success() && inputs.skip_publish != true
     permissions:
       contents: read
       id-token: write
