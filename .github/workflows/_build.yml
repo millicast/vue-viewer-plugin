@@ -1,0 +1,26 @@
+name: build
+
+on:
+  workflow_call:
+    inputs:
+      ref:
+        required: true
+        type: string
+
+jobs:
+  build:
+    name: "build ${{ inputs.ref }}"
+    runs-on: ubuntu-latest
+    container: node:24-alpine
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          ref: ${{ inputs.ref }}
+
+      - name: "npm run build"
+        run: |
+          npm ci
+          npm run build
+          pwd
+          ls -alh
+          ls -alh dist/

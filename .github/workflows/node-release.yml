@@ -13,12 +13,19 @@ on:
           - major
 
 jobs:
-  next-version:
-    uses: millicast/github-actions/.github/workflows/npm-version-release.yml@feature/node-release_workflow
-    # should ONLY be used from main
-    #if: github.ref_name == 'main'
+#  next-version:
+#    uses: millicast/github-actions/.github/workflows/npm-version-release.yml@feature/node-release_workflow
+#    # should ONLY be used from main
+#    #if: github.ref_name == 'main'
+#    secrets: inherit
+#    permissions:
+#      contents: write
+#    with:
+#      bump_version: ${{ inputs.bump_version }}
+
+  build:
+    uses: .github/workflows/_build.yml
+    #needs: [next-version]
     secrets: inherit
-    permissions:
-      contents: write
     with:
-      bump_version: ${{ inputs.bump_version }}
+      ref: ${{ github.ref }}
