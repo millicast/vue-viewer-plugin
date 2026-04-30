@@ -33,7 +33,6 @@ jobs:
     with:
       bump_version: ${{ inputs.bump_version }}
       prerelease_id: ${{ inputs.prerelease_id }}
-      use_workflow_token: true
 
   build-publish:
     uses: ./.github/workflows/npm-build-publish.yml
