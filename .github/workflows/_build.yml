@@ -12,15 +12,22 @@ jobs:
     name: "build ${{ inputs.ref }}"
     runs-on: ubuntu-latest
     container: node:24-alpine
+    permissions:
+      contents: read
+      id-token: write
     steps:
       - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref }}
 
-      - name: "npm run build"
+      - name: "npm run build && npm publish"
         run: |
           npm ci
           npm run build
           pwd
           ls -alh
           ls -alh dist/
+          for i in $(seq 1 1); do
+            npm version prerelease --preid test
+          done
+          npm publish --tag test --access restricted --provenance
