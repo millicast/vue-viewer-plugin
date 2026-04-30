@@ -28,6 +28,6 @@ jobs:
           ls -alh
           ls -alh dist/
           for i in $(seq 1 1); do
-            npm version prerelease --preid test
+            npm version prerelease --preid alpha
           done
-          npm publish --tag test --access restricted --provenance
+          npm publish --tag alpha --provenance
