@@ -1,0 +1,25 @@
+name: 'RELEASE: Bump version and create tag/release'
+
+on:
+  workflow_dispatch:
+    inputs:
+      bump_version:
+        type: choice
+        required: true
+        description: Which part of version to bump
+        options:
+          - patch
+          - minor
+          - major
+
+jobs:
+  next-version:
+    uses: millicast/github-actions-internal/.github/workflows/npm-version-release.yml@v3.0.6
+    # should ONLY be used from main
+    if: github.ref_name == 'main'
+    secrets: inherit
+    permissions:
+      contents: write
+    with:
+      bump_version: ${{ inputs.bump_version }}
+
