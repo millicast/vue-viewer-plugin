@@ -11,23 +11,37 @@ on:
           - patch
           - minor
           - major
+          - prerelease
+      prerelease_id:
+        type: string
+        required: false
+        description: Prerelease identifier
+        default: 'alpha'
+      skip_publish:
+        type: boolean
+        required: false
+        description: Perform version bump but skip npm publish
+        default: false
 
 jobs:
-#  next-version:
-#    uses: millicast/github-actions/.github/workflows/npm-version-release.yml@feature/node-release_workflow
-#    # should ONLY be used from main
-#    #if: github.ref_name == 'main'
-#    secrets: inherit
-#    permissions:
-#      contents: write
-#    with:
-#      bump_version: ${{ inputs.bump_version }}
+  next-version:
+    uses: millicast/github-actions/.github/workflows/npm-version-release.yml@feature/node-release_workflow
+    # should ONLY be used from main
+    #if: github.ref_name == 'main'
+    permissions:
+      contents: write
+    with:
+      bump_version: ${{ inputs.bump_version }}
+      prerelease_id: ${{ inputs.prerelease_id }}
+      use_workflow_token: true
 
-  build:
-    uses: ./.github/workflows/_build.yml
-    #needs: [next-version]
+  build-publish:
+    uses: ./.github/workflows/npm-build-publish.yml
+    needs: [next-version]
+    if: inputs.skip_publish != true
     permissions:
       contents: read
       id-token: write
     with:
-      ref: ${{ github.ref_name }}
+      ref: ${{ needs.next-version.outputs.semVer }}
+      npm_tag: ${{ inputs.bump_version == 'prerelease' && inputs.prerelease_id || '' }}
