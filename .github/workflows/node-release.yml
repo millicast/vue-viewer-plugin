@@ -25,7 +25,7 @@ on:
 
 jobs:
   next-version:
-    uses: millicast/github-actions/.github/workflows/npm-version-release.yml@feature/node-release_workflow
+    uses: millicast/github-actions/.github/workflows/npm-version-release.yml@v1.0.1
     # should ONLY be used from main
     if: github.ref_name == 'main'
     permissions:
