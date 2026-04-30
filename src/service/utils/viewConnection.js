@@ -1,4 +1,4 @@
-import { Director, View, PeerConnection } from '@millicast/sdk'
+import { Director, View } from '@millicast/sdk'
 import {
   setVideoPlayer,
   addVideoEventListeners,
@@ -12,8 +12,6 @@ import canAutoPlay from 'can-autoplay'
 
 const setEnvironment = () => {
   setDirectorEndpoint()
-  setLiveDomain()
-  setPeerConnection()
 }
 
 const setDirectorEndpoint = () => {
@@ -24,20 +22,6 @@ const setDirectorEndpoint = () => {
     Director.setEndpoint(
       state.Params.viewer.directorUrl ??
         state.Params.environment.VUE_APP_DIRECTOR_ENDPOINT
-    )
-  }
-}
-
-const setLiveDomain = () => {
-  if (state.Params.environment.VUE_APP_LIVEWS_ENDPOINT) {
-    Director.setLiveDomain(state.Params.environment.VUE_APP_LIVEWS_ENDPOINT)
-  }
-}
-
-const setPeerConnection = () => {
-  if (state.Params.environment.VUE_APP_TURN_ENDPOINT) {
-    PeerConnection.setTurnServerLocation(
-      state.Params.environment.VUE_APP_TURN_ENDPOINT
     )
   }
 }

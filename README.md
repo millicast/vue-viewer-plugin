@@ -104,8 +104,6 @@ You are able to set up the following environment settings. You can refer to [`.e
 | Option                      | type                        | Description                                                          |
 | --------------------------- | --------------------------- | -------------------------------------------------------------------- |
 | `NODE_ENV`                  | `production \| development` | Determines if the main app is a `production` or `development` build. |
-| `VUE_APP_TURN_ENDPOINT`     | `url: string`               | Sets the turn endpoint.                                              |
-| `VUE_APP_LIVEWS_ENDPOINT`   | `url: string`               | Sets the live views endpoint.                                        |
 | `VUE_APP_DIRECTOR_ENDPOINT` | `url: string`               | Sets the director endpoint.                                          |
 | `VUE_APP_PUBLIC_PATH`       | `url: string`               | Sets the public path endpoint.                                       |
 | `VUE_APP_REPORT_URL`        | `url: string`               | The report playback URL.                                             |
