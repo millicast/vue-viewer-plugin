@@ -20,7 +20,7 @@ on:
       skip_publish:
         type: boolean
         required: false
-        description: Perform version bump but skip npm publish
+        description: Skip npm publish
         default: false
 
 jobs:
