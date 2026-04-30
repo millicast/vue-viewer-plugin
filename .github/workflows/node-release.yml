@@ -30,6 +30,7 @@ jobs:
     if: github.ref_name == 'main'
     permissions:
       contents: write
+    secrets: inherit
     with:
       bump_version: ${{ inputs.bump_version }}
       prerelease_id: ${{ inputs.prerelease_id }}
