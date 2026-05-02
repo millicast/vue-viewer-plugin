@@ -48,4 +48,4 @@ jobs:
 
           printf '\nNODE: %s\nNPM: %s\n\n' "$(node --version)" "$(npm --version)"
 
-          #npm publish --provenance "$@"
+          npm publish --provenance "$@"
