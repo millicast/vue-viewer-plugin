@@ -45,4 +45,7 @@ jobs:
 
           npm ci
           npm run build
+
+          printf '\nNODE: %s\nNPM: %s\n\n' "$(node --version)" "$(npm --version)"
+
           npm publish --provenance "$@"
