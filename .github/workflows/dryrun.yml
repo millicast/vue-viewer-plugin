@@ -9,8 +9,11 @@ on:
       - '**'
 
 jobs:
-  build_deploy:
-    uses: ./.github/workflows/npm-build-publish.yml
-    with:
-      ref: ${{ github.ref }}
-      dryrun: true
+  dryrun:
+    name: "build ${{ github.ref_name }}"
+    runs-on: ubuntu-latest
+    container: node:24-alpine
+    permissions:
+      contents: read
+    steps:
+      - uses: ./.github/actions/npm-build

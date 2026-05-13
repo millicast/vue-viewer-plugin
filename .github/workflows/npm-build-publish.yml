@@ -11,11 +11,6 @@ on:
         description: 'npm tag to publish package to'
         required: false
         type: string
-      dryrun:
-        description: 'skip npm publish'
-        required: false
-        type: boolean
-        default: false
   workflow_call:
     inputs:
       ref:
@@ -38,28 +33,18 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: actions/checkout@v6
+      - uses: ./.github/actions/npm-build
         with:
           ref: ${{ inputs.ref }}
 
-      - name: "npm run build && npm publish"
+      - name: "npm publish"
         env:
           npm_tag: ${{ inputs.npm_tag }}
-          dryrun: ${{ inputs.dryrun }}
         shell: 'ash -e -o pipefail {0}'
         run: |
           set --
           if [ -n "${npm_tag}" ]; then
             set -- "$@" --tag "${npm_tag}"
-          fi
-
-          npm ci
-          npm run build
-
-          printf '\nNODE: %s\nNPM: %s\n\n' "$(node --version)" "$(npm --version)"
-
-          if [ "${dryrun}" = 'true' ]; then
-            return
           fi
 
           npm publish --provenance "$@"
