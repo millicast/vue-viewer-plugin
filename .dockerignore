@@ -1,0 +1,20 @@
+.dockerignore
+.git*
+.idea
+.editorconfig
+Dockerfile
+eslint.config.js
+README.md
+
+# when building locally, ignore local node_modules and config
+node_modules
+config/local*
+config/development*
+config/staging*
+config/production*
+
+dist
+examples
+.env.sample
+.prettier*
+developer-info.md

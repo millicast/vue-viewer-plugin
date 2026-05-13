@@ -1,0 +1,13 @@
+name: npm run build
+description: Shared npm build step
+
+runs:
+  using: composite
+  steps:
+    - name: 'npm run build'
+      shell: 'sh -e -o pipefail {0}'
+      run: |
+        npm ci
+        npm run build
+
+        printf '\nNODE: %s\nNPM: %s\n\n' "$(node --version)" "$(npm --version)"

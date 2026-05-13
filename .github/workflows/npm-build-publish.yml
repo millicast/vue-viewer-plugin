@@ -33,7 +33,9 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
-      - name: "npm run build && npm publish"
+      - uses: ./.github/actions/npm-build
+
+      - name: "npm publish"
         env:
           npm_tag: ${{ inputs.npm_tag }}
         shell: 'ash -e -o pipefail {0}'
@@ -42,10 +44,5 @@ jobs:
           if [ -n "${npm_tag}" ]; then
             set -- "$@" --tag "${npm_tag}"
           fi
-
-          npm ci
-          npm run build
-
-          printf '\nNODE: %s\nNPM: %s\n\n' "$(node --version)" "$(npm --version)"
 
           npm publish --provenance "$@"

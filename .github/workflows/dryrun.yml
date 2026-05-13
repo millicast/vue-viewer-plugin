@@ -1,0 +1,21 @@
+name: 'Build dryrun'
+
+on:
+  workflow_dispatch:
+  push:
+    tags:
+      - '**'
+    branches:
+      - '**'
+
+jobs:
+  dryrun:
+    name: "build ${{ github.ref_name }}"
+    runs-on: ubuntu-latest
+    container: node:24-alpine
+    permissions:
+      contents: read
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: ./.github/actions/npm-build
