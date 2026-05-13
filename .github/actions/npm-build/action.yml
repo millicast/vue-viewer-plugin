@@ -6,7 +6,7 @@ runs:
   steps:
     - name: 'npm run build'
       shell: 'sh -e -o pipefail {0}'
-      run: |        
+      run: |
         npm ci
         npm run build
 
