@@ -19,10 +19,6 @@ on:
       npm_tag:
         required: false
         type: string
-      dryrun:
-        required: false
-        type: boolean
-        default: false
 
 jobs:
   build-publish:
