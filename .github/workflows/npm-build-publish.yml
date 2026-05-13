@@ -33,9 +33,11 @@ jobs:
       contents: read
       id-token: write
     steps:
-      - uses: ./.github/actions/npm-build
+      - uses: actions/checkout@v6
         with:
           ref: ${{ inputs.ref }}
+
+      - uses: ./.github/actions/npm-build
 
       - name: "npm publish"
         env:
