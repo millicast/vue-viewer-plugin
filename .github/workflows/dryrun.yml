@@ -10,14 +10,7 @@ on:
 
 jobs:
   build_deploy:
-    uses: millicast/github-actions-internal/.github/workflows/build_deploy.yml@v3.0.6
+    uses: ./.github/workflows/npm-build-publish.yml
     with:
-      ecr_repo_url: ${{ vars.ECR_REPO_URL }}
-      cache_layers: true
-      cache_layer_repo: "${{ vars.ECR_REPO_URL }}/cache"
-      override_project: ''
-      build_target: ''
-      push_docker_image: false
-      push_to_helm: false
-      deploy: false
-    secrets: inherit
+      ref: ${{ github.ref }}
+      dryrun: true
