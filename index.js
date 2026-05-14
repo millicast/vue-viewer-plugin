@@ -20,8 +20,6 @@ const filterBeforeCreate = (toast, toasts) => {
   return toast
 }
 
-break build
-
 export default {
   install(vue, options) {
     if (!options.store) {
