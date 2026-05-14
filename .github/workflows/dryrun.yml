@@ -10,7 +10,7 @@ on:
 
 jobs:
   dryrun:
-    name: "build ${{ github.ref_name }}"
+    name: "Build dryrun"
     runs-on: ubuntu-latest
     container: node:24-alpine
     permissions:
