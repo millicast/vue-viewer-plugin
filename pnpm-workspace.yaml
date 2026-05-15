@@ -7,4 +7,5 @@ engineStrict: true
 
 allowBuilds:
   '@parcel/watcher': true
+  core-js: true
   yorkie: true
