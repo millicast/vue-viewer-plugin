@@ -45,4 +45,4 @@ jobs:
             set -- "$@" --tag "${npm_tag}"
           fi
 
-          pnpm publish --provenance --no-git-checks "$@"
+          pnpm publish --provenance "$@"

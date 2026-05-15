@@ -9,6 +9,18 @@ A Vue.js plugin to embed a Millicast player into your app. This plugin allows de
 To add this library to your project, from the command line execute the following instruction:
 
 ```bash
+npm install @millicast/vue-viewer-plugin
+```
+
+or if you use [Yarn](https://yarnpkg.com)
+
+```bash
+yarn add @millicast/vue-viewer-plugin
+```
+
+or if you use [pnpm](https://pnpm.io)
+
+```bash
 pnpm add @millicast/vue-viewer-plugin
 ```
 
