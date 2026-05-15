@@ -1,16 +1,15 @@
-FROM node:24-alpine
+FROM node:24-alpine AS builder
 
 WORKDIR /usr/app
 
 # install dependencies
-COPY ./package.json ./package-lock.json ./
+COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
 
-RUN NODE_DISABLE_COMPILE_CACHE=1 npm ci \
-      --cache /tmp/npm-cache && \
-    rm -rf /tmp/npm-cache
+RUN corepack enable && \
+    pnpm ci
 
 # install app itself
 COPY . .
 
 # perform build script
-RUN npm run build
+RUN pnpm run build

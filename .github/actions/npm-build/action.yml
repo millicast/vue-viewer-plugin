@@ -1,13 +1,14 @@
-name: npm run build
-description: Shared npm build step
+name: pnpm run build
+description: Shared pnpm build step
 
 runs:
   using: composite
   steps:
-    - name: 'npm run build'
+    - name: 'pnpm run build'
       shell: 'sh -e -o pipefail {0}'
       run: |
-        npm ci
-        npm run build
+        corepack enable
+        pnpm ci
+        pnpm run build
 
-        printf '\nNODE: %s\nNPM: %s\n\n' "$(node --version)" "$(npm --version)"
+        printf '\nNODE: %s\nPNPM: %s\n\n' "$(node --version)" "$(pnpm --version)"

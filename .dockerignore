@@ -14,6 +14,7 @@ config/staging*
 config/production*
 
 dist
+pnpm_out
 examples
 .env.sample
 .prettier*

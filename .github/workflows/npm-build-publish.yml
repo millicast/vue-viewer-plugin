@@ -35,7 +35,7 @@ jobs:
 
       - uses: ./.github/actions/npm-build
 
-      - name: "npm publish"
+      - name: "pnpm publish"
         env:
           npm_tag: ${{ inputs.npm_tag }}
         shell: 'ash -e -o pipefail {0}'
@@ -45,4 +45,4 @@ jobs:
             set -- "$@" --tag "${npm_tag}"
           fi
 
-          npm publish --provenance "$@"
+          pnpm publish --provenance --no-git-checks "$@"
