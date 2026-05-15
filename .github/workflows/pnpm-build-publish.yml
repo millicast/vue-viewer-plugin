@@ -1,4 +1,4 @@
-name: npm-build-publish
+name: pnpm-build-publish
 
 on:
   workflow_dispatch:
@@ -7,8 +7,8 @@ on:
         description: 'git reference to checkout'
         required: true
         type: string
-      npm_tag:
-        description: 'npm tag to publish package to'
+      dist_tag:
+        description: 'Distribution tag to publish package with'
         required: false
         type: string
   workflow_call:
@@ -16,7 +16,7 @@ on:
       ref:
         required: true
         type: string
-      npm_tag:
+      dist_tag:
         required: false
         type: string
 
@@ -33,16 +33,16 @@ jobs:
         with:
           ref: ${{ inputs.ref }}
 
-      - uses: ./.github/actions/npm-build
+      - uses: ./.github/actions/pnpm-build
 
-      - name: "npm publish"
+      - name: "pnpm publish"
         env:
-          npm_tag: ${{ inputs.npm_tag }}
+          dist_tag: ${{ inputs.dist_tag }}
         shell: 'ash -e -o pipefail {0}'
         run: |
           set --
-          if [ -n "${npm_tag}" ]; then
-            set -- "$@" --tag "${npm_tag}"
+          if [ -n "${dist_tag}" ]; then
+            set -- "$@" --tag "${dist_tag}"
           fi
 
-          npm publish --provenance "$@"
+          pnpm publish --provenance "$@"

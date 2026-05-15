@@ -18,6 +18,12 @@ or if you use [Yarn](https://yarnpkg.com)
 yarn add @millicast/vue-viewer-plugin
 ```
 
+or if you use [pnpm](https://pnpm.io)
+
+```bash
+pnpm add @millicast/vue-viewer-plugin
+```
+
 ## Basic Usage
 
 To import the plugin into your Vue application, have the following structure in your `main.js` file:

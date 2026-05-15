@@ -1,0 +1,11 @@
+injectWorkspacePackages: true
+
+minimumReleaseAge: 10080
+minimumReleaseAgeIgnoreMissingTime: false
+trustPolicy: no-downgrade
+engineStrict: true
+
+allowBuilds:
+  '@parcel/watcher': true
+  core-js: true
+  yorkie: true

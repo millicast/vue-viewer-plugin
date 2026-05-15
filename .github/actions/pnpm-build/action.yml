@@ -1,0 +1,14 @@
+name: pnpm run build
+description: Shared pnpm build step
+
+runs:
+  using: composite
+  steps:
+    - name: 'pnpm run build'
+      shell: 'sh -e -o pipefail {0}'
+      run: |
+        corepack enable
+        pnpm ci
+        pnpm run build
+
+        printf '\nNODE: %s\nPNPM: %s\n\n' "$(node --version)" "$(pnpm --version)"

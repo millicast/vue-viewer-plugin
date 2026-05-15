@@ -2,15 +2,15 @@ FROM node:24-alpine
 
 WORKDIR /usr/app
 
-# install dependencies
-COPY ./package.json ./package-lock.json ./
+RUN corepack enable
 
-RUN NODE_DISABLE_COMPILE_CACHE=1 npm ci \
-      --cache /tmp/npm-cache && \
-    rm -rf /tmp/npm-cache
+# install dependencies
+COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
+
+RUN pnpm ci
 
 # install app itself
 COPY . .
 
 # perform build script
-RUN npm run build
+RUN pnpm run build
