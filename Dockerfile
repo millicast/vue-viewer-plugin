@@ -2,11 +2,12 @@ FROM node:24-alpine
 
 WORKDIR /usr/app
 
+RUN corepack enable
+
 # install dependencies
 COPY ./package.json ./pnpm-lock.yaml ./pnpm-workspace.yaml ./
 
-RUN corepack enable && \
-    pnpm ci
+RUN pnpm ci
 
 # install app itself
 COPY . .
