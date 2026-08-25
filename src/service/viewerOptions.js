@@ -26,6 +26,7 @@ export const defaultViewerOptions = {
   multisource: false,
   audioFollowsVideo: false,
   layout: null,
+  pinSideSources: true,
   showLabels: true,
   startingQuality: null,
   hideToast: null,
@@ -53,6 +54,7 @@ export default function processViewerOptions({
   multisource,
   audioFollowsVideo,
   layout,
+  pinSideSources,
   showLabels,
   startingQuality,
   hideToast,
@@ -98,6 +100,9 @@ export default function processViewerOptions({
   if (options.layout && options.layout === 'grid') {
     store.commit('Controls/setIsGrid', true)
   }
+  options.pinSideSources =
+    pinSideSources !== false && pinSideSources !== 'false'
+  store.commit('Controls/setPinSideSources', options.pinSideSources)
   if (startingQuality) {
     options.startingQuality = startingQuality
     store.commit('Controls/setIsSelectingLayer', true)
