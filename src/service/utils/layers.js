@@ -133,8 +133,91 @@ export const formatBitsRecursive = (value, unitsStoragePosition = 0) => {
   }
 }
 
+const encodingBitrate = (encoding) =>
+  encoding?.bitrate > 0
+    ? encoding.bitrate
+    : encoding?.targetBitrate > 0
+    ? encoding.targetBitrate
+    : null
+
+const encodingHeight = (encoding) =>
+  encoding?.height > 0
+    ? encoding.height
+    : encoding?.targetHeight > 0
+    ? encoding.targetHeight
+    : null
+
+const encodingSimulcastIdx = (encoding) =>
+  encoding?.simulcastIdx >= 0 ? encoding.simulcastIdx : null
+
+const lowestBy = (candidates, valueFns) =>
+  candidates.reduce((lowest, encoding) => {
+    for (const valueOf of valueFns) {
+      const value = valueOf(encoding) ?? Infinity
+      const lowestValue = valueOf(lowest) ?? Infinity
+      if (value !== lowestValue) return value < lowestValue ? encoding : lowest
+    }
+    return lowest
+  })
+
+// Pick the encoding to pin on a small side tile: the lowest-bitrate active
+// encoding, using resolution and simulcastIdx as tie-breakers and fallbacks
+// when bitrate metadata is missing or zero.
+export const selectEncodingToPin = (encodings) => {
+  let candidates = encodings.filter(
+    (encoding) => encodingBitrate(encoding) !== null
+  )
+  if (candidates.length > 0) {
+    const encoding = lowestBy(candidates, [
+      encodingBitrate,
+      encodingHeight,
+      encodingSimulcastIdx,
+    ])
+    return {
+      encoding,
+      reason: `lowest bitrate (${encodingBitrate(encoding)} bps)`,
+    }
+  }
+
+  candidates = encodings.filter((encoding) => encodingHeight(encoding) !== null)
+  if (candidates.length > 0) {
+    const encoding = lowestBy(candidates, [
+      encodingHeight,
+      encodingSimulcastIdx,
+    ])
+    return {
+      encoding,
+      reason: `no bitrate metadata, smallest height (${encodingHeight(
+        encoding
+      )}p)`,
+    }
+  }
+
+  candidates = encodings.filter(
+    (encoding) => encodingSimulcastIdx(encoding) !== null
+  )
+  if (candidates.length > 0) {
+    const encoding = lowestBy(candidates, [encodingSimulcastIdx])
+    return {
+      encoding,
+      reason: `no bitrate/resolution metadata, lowest simulcastIdx (${encodingSimulcastIdx(
+        encoding
+      )})`,
+    }
+  }
+
+  const sorted = [...encodings].sort(
+    (encoding, nextEncoding) => nextEncoding.id - encoding.id
+  )
+  return {
+    encoding: sorted[sorted.length - 1],
+    reason:
+      'no bitrate/resolution/simulcastIdx metadata, fell back to encoding id order',
+  }
+}
+
 const setSideSourcesQualityLow = (newLayers) => {
-  const { isSplittedView, isGrid } = state.Controls
+  const { isSplittedView, isGrid, pinSideSources } = state.Controls
 
   if (isSplittedView && !isGrid) {
     const layersMids = Object.keys(previousSideLayers)
@@ -152,6 +235,14 @@ const setSideSourcesQualityLow = (newLayers) => {
 
     if (keys.length === 0) return
 
+    if (!pinSideSources) {
+      console.info(
+        '[viewer] Side-source layer pinning disabled (pinSideSources=false), leaving tile layer selection to server-side ABR'
+      )
+      previousSideLayers = newLayers
+      return
+    }
+
     const transceiverSourceState = state.Sources.transceiverSourceState
 
     const videoSourceKeys = keys.reduce((videoSourceKeys, key) => {
@@ -162,13 +253,16 @@ const setSideSourcesQualityLow = (newLayers) => {
     // Set low quality for side video source streams
     videoSourceKeys.forEach((source) => {
       if (source.sourceId !== null && source.mid in diffActiveLayers) {
-        diffActiveLayers[source.mid].sort(
-          (layer, nextLayer) => nextLayer.id - layer.id
+        const { encoding, reason } = selectEncodingToPin(
+          diffActiveLayers[source.mid]
+        )
+        console.info(
+          `[viewer] Pinning side source "${source.name}" (mid ${source.mid}) to encodingId "${encoding.id}": ${reason}`
         )
         state.ViewConnection.millicastView?.project(source.name, [
           {
             mediaId: source.mid,
-            layer: { encodingId: diffActiveLayers[source.mid].pop().id },
+            layer: { encodingId: encoding.id },
             trackId: source.trackId,
             media: 'video',
           },

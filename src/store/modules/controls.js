@@ -26,6 +26,7 @@ const defaulState = {
   isSplittedView: false,
   previousSplitState: false,
   isGrid: false,
+  pinSideSources: true,
   isSelectingLayer: false,
   hideToast: false,
   selectingLayerTimeouts: null,
@@ -156,6 +157,9 @@ export default {
     },
     setIsGrid(state, isGrid) {
       state.isGrid = isGrid
+    },
+    setPinSideSources(state, pinSideSources) {
+      state.pinSideSources = pinSideSources
     },
     setIsSelectingLayer(state, isSelectingLayer) {
       state.isSelectingLayer = isSelectingLayer
