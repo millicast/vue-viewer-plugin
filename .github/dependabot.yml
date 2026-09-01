@@ -10,6 +10,10 @@ updates:
       time: "06:00"
       timezone: "Australia/Sydney"
 
+    # Must stay >= pnpm-workspace.yaml minimumReleaseAge (10080 minutes = 7 days)
+    cooldown:
+      default-days: 8
+
     versioning-strategy: increase-if-necessary
     open-pull-requests-limit: 10
     rebase-strategy: "auto"
