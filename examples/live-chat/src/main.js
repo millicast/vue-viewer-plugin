@@ -12,15 +12,15 @@ Vue.use(BootstrapVue3)
 Vue.mount('#app')
 
 // disable specific warnings
-const IGNORED_WARNINGS=[
-  'Failed to resolve component: google-cast-launcher',
-];
+const IGNORED_WARNINGS = ['Failed to resolve component: google-cast-launcher']
 
-app.config.warnHandler=(msg, trace) => {
-  const shouldIgnoreWarning=IGNORED_WARNINGS.some(warning => msg.includes(warning));
+app.config.warnHandler = (msg, trace) => {
+  const shouldIgnoreWarning = IGNORED_WARNINGS.some((warning) =>
+    msg.includes(warning)
+  )
 
   if (!shouldIgnoreWarning) {
-    console.warn(`[Vue warn]: ${msg}`);
-    if(trace) console.warn(`[Vue warn]: ${trace}`);
+    console.warn(`[Vue warn]: ${msg}`)
+    if (trace) console.warn(`[Vue warn]: ${trace}`)
   }
-};
+}
