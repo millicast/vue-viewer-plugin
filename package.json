@@ -42,13 +42,6 @@
   "peerDependencies": {
     "vue": ">= 3.0.0"
   },
-  "browserslist": [
-    "safari >= 7",
-    "ios_saf >= 9",
-    "> 1%",
-    "last 2 versions",
-    "not dead"
-  ],
   "homepage": "https://github.com/millicast/vue-viewer-plugin#readme",
   "keywords": [
     "sdk",
