@@ -5,7 +5,7 @@
 </template>
 
 <script>
-import VueResizable from 'vue-resizable'
+import VueResizable from 'vue-resizable';
 export default {
   name: 'App',
   components: {
@@ -19,9 +19,9 @@ export default {
         autoplay: false,
         hideButtons: [],
       },
-    }
+    };
   },
-}
+};
 </script>
 
 <style>

@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex';
 
 export default {
   name: 'VideoPlayerControlsSettingsQuality',
@@ -49,7 +49,7 @@ export default {
   methods: {
     ...mapMutations('Controls', ['setDropup']),
   },
-}
+};
 </script>
 
 <style scoped>

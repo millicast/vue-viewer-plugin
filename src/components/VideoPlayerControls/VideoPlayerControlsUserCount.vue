@@ -8,16 +8,16 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 export default {
   name: 'VideoPlayerControlsUserCount',
   computed: {
     ...mapState('Controls', ['viewerCount']),
     count() {
-      return this.viewerCount?.toLocaleString('en')
+      return this.viewerCount?.toLocaleString('en');
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

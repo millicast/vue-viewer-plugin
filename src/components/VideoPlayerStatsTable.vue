@@ -152,10 +152,10 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex'
-import { formatBitsRecursive } from '../service/utils/layers'
+import { mapGetters, mapState } from 'vuex';
+import { formatBitsRecursive } from '../service/utils/layers';
 
-const bytesUnitsStorage = ['B', 'KB', 'MB', 'GB', 'TB']
+const bytesUnitsStorage = ['B', 'KB', 'MB', 'GB', 'TB'];
 
 export default {
   name: 'VideoPlayerStatsTable',
@@ -169,58 +169,58 @@ export default {
       selectedSourceMid: null,
       trackIdToStatsIndexMap: {},
       trackIdMidMap: {},
-    }
+    };
   },
   mounted() {
-    this.millicastView.webRTCPeer.initStats()
+    this.millicastView.webRTCPeer.initStats();
     this.millicastView.webRTCPeer.on('stats', (peerStats) => {
-      this.trackIdMidMap = this.getTrackIdMidMap
+      this.trackIdMidMap = this.getTrackIdMidMap;
       peerStats.video?.inbounds?.forEach((stat, index) => {
         if (stat.trackIdentifier) {
-          this.trackIdToStatsIndexMap[stat.trackIdentifier] = index
+          this.trackIdToStatsIndexMap[stat.trackIdentifier] = index;
         }
-      })
+      });
       window.peer?.getReceivers?.().forEach?.((receiver) => {
         this.stats.videoSynchronizationSources =
           receiver.track.kind === 'video'
             ? receiver.getSynchronizationSources()
-            : this.stats.videoSynchronizationSources
-      })
-      this.stats = { ...this.stats, ...peerStats }
-    })
+            : this.stats.videoSynchronizationSources;
+      });
+      this.stats = { ...this.stats, ...peerStats };
+    });
     this.selectedSourceMid =
       this.getTransceiverSourceState[0]?.mid ??
-      Object.values(this.getTransceiverSourceState)[0]?.mid
+      Object.values(this.getTransceiverSourceState)[0]?.mid;
   },
   beforeUnmount() {
-    this.millicastView.webRTCPeer.stopStats()
-    this.millicastView.webRTCPeer.removeAllListeners('stats')
+    this.millicastView.webRTCPeer.stopStats();
+    this.millicastView.webRTCPeer.removeAllListeners('stats');
   },
   methods: {
     closeTable() {
-      this.close()
+      this.close();
     },
     copyText(text) {
-      navigator.clipboard.writeText(text)
+      navigator.clipboard.writeText(text);
     },
     formatTotalBytes(value) {
-      return formatBytesRecursive(value)
+      return formatBytesRecursive(value);
     },
     formatBitrate(value) {
-      return formatBitsRecursive(value)
+      return formatBitsRecursive(value);
     },
     formatMilliseconds(value) {
-      return `${+((value || 0) * 1000).toFixed(2)} ms`
+      return `${+((value || 0) * 1000).toFixed(2)} ms`;
     },
     handleSourceChange() {
-      const mid = this.selectedSourceMid ?? 0
-      const trackId = this.trackIdMidMap[mid]
-      this.statsIndex = this.trackIdToStatsIndexMap[trackId]
+      const mid = this.selectedSourceMid ?? 0;
+      const trackId = this.trackIdMidMap[mid];
+      this.statsIndex = this.trackIdToStatsIndexMap[trackId];
     },
     selectMidZero() {
       this.selectedSourceMid =
         this.getTransceiverSourceState[0]?.mid ??
-        Object.values(this.getTransceiverSourceState)[0]?.mid
+        Object.values(this.getTransceiverSourceState)[0]?.mid;
     },
   },
   computed: {
@@ -234,107 +234,107 @@ export default {
     ...mapState('Sources', ['sourceRemoteTracks', 'videoSources']),
     ...mapGetters('Sources', ['getTransceiverSourceState', 'getTrackIdMidMap']),
     hasStats() {
-      return Object.keys(this.stats).length > 0
+      return Object.keys(this.stats).length > 0;
     },
     audio() {
-      const audio = this.stats.audio?.inbounds
+      const audio = this.stats.audio?.inbounds;
       if (audio?.length > 0) {
-        return audio[0]
+        return audio[0];
       }
-      return null
+      return null;
     },
     video() {
-      const video = this.stats.video?.inbounds
-      const videoLength = video?.length
+      const video = this.stats.video?.inbounds;
+      const videoLength = video?.length;
       if (videoLength) {
         // If no video is present, selected source mid is undefined
         if (!this.selectedSourceMid) {
-          return video[0]
+          return video[0];
         }
-        const trackId = this.trackIdMidMap[this.selectedSourceMid]
-        const statsIndex = this.trackIdToStatsIndexMap[trackId]
-        return video[statsIndex]
+        const trackId = this.trackIdMidMap[this.selectedSourceMid];
+        const statsIndex = this.trackIdToStatsIndexMap[trackId];
+        return video[statsIndex];
       }
-      return null
+      return null;
     },
     codecs() {
-      const codecs = []
+      const codecs = [];
       if (this.video?.mimeType) {
-        codecs.push(this.video.mimeType)
+        codecs.push(this.video.mimeType);
       }
       if (this.audio?.mimeType) {
-        codecs.push(this.audio.mimeType)
+        codecs.push(this.audio.mimeType);
       }
-      return codecs.join()
+      return codecs.join();
     },
     timestamp() {
-      let timestamp = this.video?.timestamp ?? this.audio?.timestamp
-      return timestamp ? new Date(timestamp).toISOString() : null
+      let timestamp = this.video?.timestamp ?? this.audio?.timestamp;
+      return timestamp ? new Date(timestamp).toISOString() : null;
     },
     videoCaptureTimestamp() {
-      let timestamp
+      let timestamp;
       if (
         this.stats.videoSynchronizationSources?.[0]?.captureTimestamp &&
         this.stats.videoSynchronizationSources?.[0]?.timestamp
       ) {
         const captureTime = formatNtpToEpoch(
           this.stats.videoSynchronizationSources[0].captureTimestamp
-        )
-        timestamp = new Date(captureTime).toISOString()
+        );
+        timestamp = new Date(captureTime).toISOString();
       }
-      return timestamp
+      return timestamp;
     },
     videoCaptureDelta() {
-      let delta
+      let delta;
       if (
         this.stats.videoSynchronizationSources?.[0]?.captureTimestamp &&
         this.stats.videoSynchronizationSources?.[0]?.timestamp
       ) {
         const captureTime = formatNtpToEpoch(
           this.stats.videoSynchronizationSources[0].captureTimestamp
-        )
+        );
         delta =
-          this.stats.videoSynchronizationSources?.[0].timestamp - captureTime
-        delta = `${delta} ms`
+          this.stats.videoSynchronizationSources?.[0].timestamp - captureTime;
+        delta = `${delta} ms`;
       }
-      return delta
+      return delta;
     },
     serverId() {
-      return this.millicastView?.signaling?.serverId
+      return this.millicastView?.signaling?.serverId;
     },
     clusterId() {
-      return this.millicastView?.signaling?.clusterId
+      return this.millicastView?.signaling?.clusterId;
     },
     multiviewStatsAvailable() {
       const multiviewIsOn =
         this.videoSources.length > 1 &&
         this.isSplittedView &&
-        Object.keys(this.trackIdToStatsIndexMap).length
+        Object.keys(this.trackIdToStatsIndexMap).length;
       if (!multiviewIsOn) {
-        this.selectMidZero()
+        this.selectMidZero();
       }
-      return multiviewIsOn
+      return multiviewIsOn;
     },
   },
-}
+};
 
 const formatBytesRecursive = (value, unitsStoragePosition = 0) => {
-  const newValue = value / 1024
+  const newValue = value / 1024;
   if (
     newValue < 1 ||
     (newValue > 1 && unitsStoragePosition + 1 > bytesUnitsStorage.length)
   ) {
     return `${Math.round(value * 100) / 100} ${
       bytesUnitsStorage[unitsStoragePosition]
-    }`
+    }`;
   } else if (newValue > 1) {
-    return formatBytesRecursive(newValue, unitsStoragePosition + 1)
+    return formatBytesRecursive(newValue, unitsStoragePosition + 1);
   }
-}
+};
 
 const formatNtpToEpoch = (value) => {
-  return value - 2208988800000
-}
+  return value - 2208988800000;
+};
 </script>
 
 <style lang="scss" scoped>

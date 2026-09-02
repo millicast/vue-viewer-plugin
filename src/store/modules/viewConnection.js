@@ -15,14 +15,14 @@ const defaultState = {
       transceiver: [null],
     },
   },
-}
+};
 
 export default {
   namespaced: true,
   state: defaultState,
   mutations: {
     setMillicastView(state, millicastView) {
-      state.millicastView = millicastView
+      state.millicastView = millicastView;
     },
   },
-}
+};

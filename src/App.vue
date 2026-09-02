@@ -3,16 +3,16 @@
 </template>
 
 <script>
-import VideoPlayerContainer from './components/VideoPlayerContainer.vue'
-import CustomToast from './service/utils/toast'
-import processViewerOptions from './service/viewerOptions'
-import { availableControls } from './service/viewerOptions'
-import processEnvironmentOptions from './service/environmentOptions'
-import '@millicast/bootstrap-icons-ml/font/bootstrap-icons.css'
-import '@millicast/bootstrap-ml/dist/css/bootstrap.min.css'
-import 'vue-toastification/dist/index.css'
-import { ElementQueries, ResizeSensor } from 'css-element-queries'
-import { mapMutations } from 'vuex'
+import VideoPlayerContainer from './components/VideoPlayerContainer.vue';
+import CustomToast from './service/utils/toast';
+import processViewerOptions from './service/viewerOptions';
+import { availableControls } from './service/viewerOptions';
+import processEnvironmentOptions from './service/environmentOptions';
+import '@millicast/bootstrap-icons-ml/font/bootstrap-icons.css';
+import '@millicast/bootstrap-ml/dist/css/bootstrap.min.css';
+import 'vue-toastification/dist/index.css';
+import { ElementQueries, ResizeSensor } from 'css-element-queries';
+import { mapMutations } from 'vuex';
 
 export default {
   name: 'App',
@@ -55,9 +55,9 @@ export default {
           abrStrategy,
           abrBandwidth,
           customKeys,
-        } = this.paramsOptions
+        } = this.paramsOptions;
         const shouldHideButtons =
-          controls === false ? availableControls : (hideButtons ?? [])
+          controls === false ? availableControls : (hideButtons ?? []);
 
         processViewerOptions({
           streamId: `${accountId}/${streamName}`,
@@ -86,50 +86,50 @@ export default {
           abrStrategy: abrStrategy,
           abrBandwidth: abrBandwidth,
           customKeys,
-        })
+        });
       }
-      processEnvironmentOptions(this.paramsOptions?.environment)
+      processEnvironmentOptions(this.paramsOptions?.environment);
     },
   },
   async mounted() {
-    const myContainer = document.getElementById('viewer-container')
-    const toast = await new CustomToast()
+    const myContainer = document.getElementById('viewer-container');
+    const toast = await new CustomToast();
     toast.updateDefaults({
       container: myContainer,
       containerClassName: 'toast-custom',
-    })
-    this.updateParams()
+    });
+    this.updateParams();
 
     // Starting quality toast
     if (this.paramsOptions?.startingQuality) {
       toast.showToast('info', 'Fetching starting quality layer', {
         timeout: 1500,
-      })
+      });
     }
 
-    ElementQueries.listen()
-    ElementQueries.init()
+    ElementQueries.listen();
+    ElementQueries.init();
     window.addEventListener('load', () => {
       new ResizeSensor(myContainer, () => {
-        this.setMobile(myContainer.clientWidth <= 575)
-      })
-    })
+        this.setMobile(myContainer.clientWidth <= 575);
+      });
+    });
 
     // API for Chromecast
-    const plugin = document.createElement('script')
+    const plugin = document.createElement('script');
     plugin.setAttribute(
       'src',
       '//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1'
-    )
-    plugin.async = true
-    document.head.appendChild(plugin)
+    );
+    plugin.async = true;
+    document.head.appendChild(plugin);
   },
   watch: {
     paramsOptions() {
-      this.updateParams()
+      this.updateParams();
     },
   },
-}
+};
 </script>
 
 <style scoped>

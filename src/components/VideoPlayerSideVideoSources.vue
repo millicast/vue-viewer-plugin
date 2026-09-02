@@ -31,15 +31,15 @@
 </template>
 
 <script>
-import { nextTick } from 'vue'
-import { mapState, mapGetters, mapMutations } from 'vuex'
+import { nextTick } from 'vue';
+import { mapState, mapGetters, mapMutations } from 'vuex';
 import {
   selectSource,
   projectRemoteTracks,
   projectVideo,
   unprojectMultiview,
-} from '../service/sdkManager'
-import CustomToast from '../service/utils/toast'
+} from '../service/sdkManager';
+import CustomToast from '../service/utils/toast';
 
 export default {
   name: 'VideoPlayerSideVideoSources',
@@ -50,7 +50,7 @@ export default {
       playerRef: null,
       enableClick: true,
       toast: new CustomToast(),
-    }
+    };
   },
   computed: {
     ...mapState('Sources', [
@@ -75,30 +75,30 @@ export default {
     }),
   },
   async mounted() {
-    selectSource({ kind: 'video', source: this.videoSources[0] })
-    this.setMainLabel(this.videoSources[0].name)
+    selectSource({ kind: 'video', source: this.videoSources[0] });
+    this.setMainLabel(this.videoSources[0].name);
     this.sourceRemoteTracks.forEach(
       async (remoteTrack) => await projectRemoteTracks(remoteTrack)
-    )
+    );
 
-    this.playerRef = document.getElementById('player')
+    this.playerRef = document.getElementById('player');
   },
   async unmounted() {
     this.videoSources.forEach((source) => {
-      this.transceiverSourceState[source.mid] = source
-    })
-    unprojectMultiview()
+      this.transceiverSourceState[source.mid] = source;
+    });
+    unprojectMultiview();
   },
   watch: {
     'sourceRemoteTracks.length': {
       handler: async function (newLenght, currentLenght) {
         if (newLenght > currentLenght) {
-          const lastIndex = newLenght - 1
-          await projectRemoteTracks(this.sourceRemoteTracks[lastIndex])
+          const lastIndex = newLenght - 1;
+          await projectRemoteTracks(this.sourceRemoteTracks[lastIndex]);
         } else {
           this.sourceRemoteTracks.forEach(
             async (remoteTrack) => await projectRemoteTracks(remoteTrack)
-          )
+          );
         }
       },
     },
@@ -115,64 +115,65 @@ export default {
       'getActiveMainTransceiverMedias',
     ]),
     async switchProjection(videoMid) {
-      await nextTick()
-      this.enableClick = false
-      this.playerRef = document.getElementById(this.currentElementRef)
+      await nextTick();
+      this.enableClick = false;
+      this.playerRef = document.getElementById(this.currentElementRef);
 
       // Select the source from the transceiver state and project it in the main video
-      let source = this.transceiverSourceState[videoMid]
-      let lowQualityLayer
-      let midProjectedInMain = this.videoSources[0].mid
-      const sourceName = source.name
+      let source = this.transceiverSourceState[videoMid];
+      let lowQualityLayer;
+      let midProjectedInMain = this.videoSources[0].mid;
+      const sourceName = source.name;
       const audioSource = this.audioSources.find(
         (currentSoruce) => currentSoruce.name === sourceName
-      )
+      );
 
       if (this.getVideoHasMain) {
         if (this.viewer.showLabels) {
           this.$refs[`sideLabel${videoMid}`][0].textContent =
-            this.transceiverSourceState[midProjectedInMain].name
+            this.transceiverSourceState[midProjectedInMain].name;
         }
 
         const sourceIdProjectedInMain =
-          this.transceiverSourceState[midProjectedInMain].sourceId
-        midProjectedInMain = this.transceiverSourceState[midProjectedInMain].mid
+          this.transceiverSourceState[midProjectedInMain].sourceId;
+        midProjectedInMain =
+          this.transceiverSourceState[midProjectedInMain].mid;
 
         if (midProjectedInMain in this.getActiveMedias()) {
           lowQualityLayer =
-            this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0]
+            this.getActiveMedias()[midProjectedInMain].layers.slice(-1)[0];
         }
         projectVideo(
           sourceIdProjectedInMain,
           videoMid,
           this.transceiverSourceState[midProjectedInMain].trackId,
           lowQualityLayer
-        )
-        this.updateTransceiverSourceState({ source })
+        );
+        this.updateTransceiverSourceState({ source });
       }
 
-      this.setMainLabel(source.sourceId ?? source.name)
-      await selectSource({ kind: 'video', source })
+      this.setMainLabel(source.sourceId ?? source.name);
+      await selectSource({ kind: 'video', source });
 
       if (this.isGrid) {
-        this.setIsSplittedView(false)
+        this.setIsSplittedView(false);
       }
 
       if (audioSource && this.audioFollowsVideo) {
         try {
-          await selectSource({ kind: 'audio', source: audioSource })
+          await selectSource({ kind: 'audio', source: audioSource });
         } catch {
           this.toast.showToast(
             'error',
             'There was an error selecting the desired source, try again',
             { timeout: 5000 }
-          )
+          );
         }
       }
-      this.enableClick = true
+      this.enableClick = true;
     },
   },
-}
+};
 </script>
 
 <style scoped>

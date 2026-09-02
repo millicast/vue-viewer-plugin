@@ -110,16 +110,16 @@
 </template>
 
 <script>
-import VideoPlayerMedia from './VideoPlayerMedia.vue'
-import VideoPlayerSideVideoSources from './VideoPlayerSideVideoSources.vue'
-import { mapMutations, mapState } from 'vuex'
+import VideoPlayerMedia from './VideoPlayerMedia.vue';
+import VideoPlayerSideVideoSources from './VideoPlayerSideVideoSources.vue';
+import { mapMutations, mapState } from 'vuex';
 import {
   VideoPlayerControlsBadge,
   VideoPlayerControlsUserCount,
   VideoPlayerControlsContainer,
-} from './VideoPlayerControls'
-import { selectSource } from '../service/sdkManager'
-import CustomToast from '../service/utils/toast'
+} from './VideoPlayerControls';
+import { selectSource } from '../service/sdkManager';
+import CustomToast from '../service/utils/toast';
 
 export default {
   name: 'VideoPlayerContainer',
@@ -139,29 +139,32 @@ export default {
       controlsTimeout: 0,
       mobileFullscreen: false,
       toast: new CustomToast(),
-    }
+    };
   },
   mounted() {
-    screen.orientation?.addEventListener('change', this.handleOrientationChange)
+    screen.orientation?.addEventListener(
+      'change',
+      this.handleOrientationChange
+    );
 
     this.controlsTimeout = setTimeout(() => {
-      this.show = false
-    }, 4000)
+      this.show = false;
+    }, 4000);
 
     this.timeInterval = setInterval(() => {
       if (this.playing) {
-        this.secondsElapsed++
+        this.secondsElapsed++;
       }
-    }, 1000)
+    }, 1000);
 
     this.setCastOptions({
       streamId: this.viewer.streamId,
       token: this.viewer.token,
       loading: this.isLoading,
-    })
+    });
   },
   beforeUnmount() {
-    clearInterval(this.timeInterval)
+    clearInterval(this.timeInterval);
   },
   computed: {
     ...mapState('Params', {
@@ -198,12 +201,12 @@ export default {
       isGrid: (state) => state.isGrid,
     }),
     currentTime: function () {
-      let seconds = this.secondsElapsed
-      let minutes = Math.floor(seconds / 60)
-      minutes = minutes >= 10 ? minutes : '0' + minutes
-      seconds = Math.floor(seconds % 60)
-      seconds = seconds >= 10 ? seconds : '0' + seconds
-      return minutes + ':' + seconds
+      let seconds = this.secondsElapsed;
+      let minutes = Math.floor(seconds / 60);
+      minutes = minutes >= 10 ? minutes : '0' + minutes;
+      seconds = Math.floor(seconds % 60);
+      seconds = seconds >= 10 ? seconds : '0' + seconds;
+      return minutes + ':' + seconds;
     },
   },
   methods: {
@@ -226,26 +229,26 @@ export default {
     ]),
     showControls() {
       if (this.controlsTimeout) {
-        clearTimeout(this.controlsTimeout)
+        clearTimeout(this.controlsTimeout);
       }
-      this.show = true
-      this.hideControls()
+      this.show = true;
+      this.hideControls();
     },
     hideControls() {
-      if (!this.playing || this.dropup !== '') return
+      if (!this.playing || this.dropup !== '') return;
       this.controlsTimeout = setTimeout(() => {
-        this.show = false
-      }, 4000)
+        this.show = false;
+      }, 4000);
     },
     showButton(button) {
-      let showButton = !this.viewer.hideButtons.includes(button)
+      let showButton = !this.viewer.hideButtons.includes(button);
       if (showButton && button === 'fullscreen') {
         let player =
           document.getElementById('player') ??
-          document.getElementById('player2')
+          document.getElementById('player2');
         if (!player) {
           // Temporarly create a video element to check if the browser supports fullscreen (iPhone fallback)
-          player = document.createElement('video')
+          player = document.createElement('video');
         }
         showButton &&=
           document.fullscreenEnabled ||
@@ -253,98 +256,98 @@ export default {
           document.mozFullScreenEnabled ||
           document.msFullscreenEnabled ||
           player?.requestFullscreen ||
-          player?.webkitEnterFullscreen
+          player?.webkitEnterFullscreen;
         if (!showButton) {
           console.warn(
             'Fullscreen disabled due to incompatibility with the browser.'
-          )
+          );
         }
       }
-      return showButton
+      return showButton;
     },
     handleOrientationChange() {
-      const orientation = screen.orientation.type
+      const orientation = screen.orientation.type;
       if (
         orientation === 'portrait-primary' &&
         getFullscreenElement() &&
         !this.mobileFullscreen
       ) {
-        this.leaveFullScreen()
+        this.leaveFullScreen();
         // portrait mode
       } else if (orientation === 'landscape-primary') {
-        this.goFullScreen()
+        this.goFullScreen();
       }
     },
     goFullScreen() {
-      const playerDiv = document.getElementById('vplayer')
+      const playerDiv = document.getElementById('vplayer');
       //Fallback for when requestFullScreen is not avaiable in a div but it is for a video tag
       const videoPlayer =
-        document.getElementById('player') ?? document.getElementById('player2')
+        document.getElementById('player') ?? document.getElementById('player2');
       playerDiv?.requestFullscreen?.() ??
         playerDiv?.webkitRequestFullscreen?.() ??
         playerDiv?.mozRequestFullScreen?.() ??
         playerDiv?.msRequestFullscreen?.() ??
-        videoPlayer?.webkitEnterFullscreen?.()
+        videoPlayer?.webkitEnterFullscreen?.();
     },
     leaveFullScreen() {
       document.exitFullscreen?.() ??
         document.webkitExitFullscreen?.() ??
         document.mozCancelFullScreen?.() ??
-        document.msExitFullscreen?.()
+        document.msExitFullscreen?.();
     },
     tapUnmute() {
-      this.setVideoMuted(false)
-      this.setAutoPlayMuted(false)
+      this.setVideoMuted(false);
+      this.setAutoPlayMuted(false);
     },
     handleWholeScreen() {
       if (this.isGrid) {
-        this.setIsSplittedView(!this.isSplittedView)
-        selectSource({ kind: 'video', source: this.videoSources[0] })
+        this.setIsSplittedView(!this.isSplittedView);
+        selectSource({ kind: 'video', source: this.videoSources[0] });
         this.setMainLabel(
           this.videoSources[0].sourceId ?? this.videoSources[0].name
-        )
+        );
       }
     },
   },
   watch: {
     playing: function (playing) {
       if (playing) {
-        this.hideControls()
+        this.hideControls();
       } else {
-        this.showControls()
+        this.showControls();
       }
     },
     fullscreen: function () {
       if (document.pictureInPictureElement) {
-        document.exitPictureInPicture()
+        document.exitPictureInPicture();
       }
       if (!getFullscreenElement()) {
-        this.mobileFullscreen = true
-        this.goFullScreen()
+        this.mobileFullscreen = true;
+        this.goFullScreen();
       } else {
-        this.mobileFullscreen = false
-        this.leaveFullScreen()
+        this.mobileFullscreen = false;
+        this.leaveFullScreen();
       }
     },
     dropup: function () {
-      this.showControls()
+      this.showControls();
     },
     token: function () {
       this.setCastOptions({
         streamId: this.viewer.streamId,
         token: this.viewer.token,
         loading: this.isLoading,
-      })
+      });
     },
     castIsConnected: function (isConnected) {
       if (isConnected) {
-        this.setPlaying(false)
-        this.setIsLoading(false)
-        const device = this.castDevice
-        this.cast = { isConnected, device }
-        this.showControls()
+        this.setPlaying(false);
+        this.setIsLoading(false);
+        const device = this.castDevice;
+        this.cast = { isConnected, device };
+        this.showControls();
       } else {
-        this.cast = { isConnected }
+        this.cast = { isConnected };
       }
     },
     viewer: function () {
@@ -352,21 +355,21 @@ export default {
         streamId: this.viewer.streamId,
         token: this.viewer.token,
         loading: this.isLoading,
-      })
+      });
     },
     showError: function (newVal) {
       if (newVal && this.type === 'SubscriberError') {
-        this.toast.showToast('error', this.message)
+        this.toast.showToast('error', this.message);
       } else {
-        this.setShowError(false)
+        this.setShowError(false);
       }
     },
   },
-}
+};
 
 const getFullscreenElement = () => {
-  return document.fullscreenElement || document.webkitFullscreenElement
-}
+  return document.fullscreenElement || document.webkitFullscreenElement;
+};
 </script>
 
 <style lang="scss" scoped>

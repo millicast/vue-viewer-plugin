@@ -69,19 +69,19 @@
 </template>
 
 <script>
-import { selectQuality, selectSource } from '../../service/sdkManager'
+import { selectQuality, selectSource } from '../../service/sdkManager';
 
-import VideoPlayerControlsSettingsVideoTrack from './VideoPlayerControlsSettingsVideoTrack.vue'
-import VideoPlayerControlsSettingsAudioTrack from './VideoPlayerControlsSettingsAudioTrack.vue'
-import VideoPlayerControlsSettingsQuality from './VideoPlayerControlsSettingsQuality.vue'
-import VideoPlayerControlsSettingsStats from './VideoPlayerControlsSettingsStats.vue'
-import VideoPlayerControlsSettingsReportIssue from './VideoPlayerControlsSettingsReportIssue.vue'
-import VideoPlayerControlsSettingsDropdown from './VideoPlayerControlsSettingsDropdown.vue'
-import VideoPlayerControlsSettingsSplitView from './VideoPlayerControlsSettingsSplitView.vue'
-import VideoPlayerControlsSettingsLayout from './VideoPlayerControlsSettingsLayout.vue'
+import VideoPlayerControlsSettingsVideoTrack from './VideoPlayerControlsSettingsVideoTrack.vue';
+import VideoPlayerControlsSettingsAudioTrack from './VideoPlayerControlsSettingsAudioTrack.vue';
+import VideoPlayerControlsSettingsQuality from './VideoPlayerControlsSettingsQuality.vue';
+import VideoPlayerControlsSettingsStats from './VideoPlayerControlsSettingsStats.vue';
+import VideoPlayerControlsSettingsReportIssue from './VideoPlayerControlsSettingsReportIssue.vue';
+import VideoPlayerControlsSettingsDropdown from './VideoPlayerControlsSettingsDropdown.vue';
+import VideoPlayerControlsSettingsSplitView from './VideoPlayerControlsSettingsSplitView.vue';
+import VideoPlayerControlsSettingsLayout from './VideoPlayerControlsSettingsLayout.vue';
 
-import { mapGetters, mapState, mapMutations } from 'vuex'
-import CustomToast from '../../service/utils/toast'
+import { mapGetters, mapState, mapMutations } from 'vuex';
+import CustomToast from '../../service/utils/toast';
 
 export default {
   name: 'VideoPlayerControlsSettings',
@@ -115,7 +115,7 @@ export default {
         trackId: null,
       },
       toast: null,
-    }
+    };
   },
   computed: {
     ...mapGetters('Layers', ['getActiveMainTransceiverMedias']),
@@ -146,59 +146,59 @@ export default {
       return (
         entry?.name === current?.name &&
         (entry?.id === current?.id || current?.name === 'Auto')
-      )
+      );
     },
     compareSources(entry, current) {
-      return entry?.sourceId === current?.sourceId
+      return entry?.sourceId === current?.sourceId;
     },
     setDropupSettings(selected, items, title, click, compare) {
-      this.selected = selected
-      this.items = items
-      this.dropupTitle = title
-      this.handleClick = click
-      this.compare = compare
+      this.selected = selected;
+      this.items = items;
+      this.dropupTitle = title;
+      this.handleClick = click;
+      this.compare = compare;
     },
     unsupportedFlagEmoji(sourceId) {
-      let nAgt = navigator.userAgent
-      let isChrome = nAgt.indexOf('Chrome') !== -1
+      let nAgt = navigator.userAgent;
+      let isChrome = nAgt.indexOf('Chrome') !== -1;
       let isFlagEmoji =
         sourceId.match(/[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]/g) !==
-        null
-      let isWindows
+        null;
+      let isWindows;
 
       // navigator.userAgentData is not supported for Firefox/Safari
       if (isChrome) {
-        isWindows = navigator.userAgentData.platform == 'Windows'
-        return isFlagEmoji && isWindows
+        isWindows = navigator.userAgentData.platform == 'Windows';
+        return isFlagEmoji && isWindows;
       } else {
-        return false
+        return false;
       }
     },
     sourceFlagEmojiToPng(sourceId) {
       let selectedSourceFlagEmojis = sourceId.match(
         /[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]/g
-      )
+      );
 
       // replace emojis  for img
       selectedSourceFlagEmojis.forEach((emoji) => {
         // get emoji flag code, example france=fr
         let flagCode = Array.from(emoji, (codeUnit) => codeUnit.codePointAt())
           .map((char) => String.fromCharCode(char - 127397).toLowerCase())
-          .join('')
+          .join('');
 
         sourceId = sourceId.replace(
           emoji,
           ` <img src='https://flagcdn.com/20x15/${flagCode}.png' alt="FlagEmoji"}>`
-        )
-      })
+        );
+      });
 
-      return sourceId
+      return sourceId;
     },
   },
   mounted() {
-    const version = import.meta.env.PACKAGE_VERSION
-    this.viewerVersion = version ? 'v' + version : ''
-    this.toast = new CustomToast()
+    const version = import.meta.env.PACKAGE_VERSION;
+    this.viewerVersion = version ? 'v' + version : '';
+    this.toast = new CustomToast();
   },
   watch: {
     dropup: function (dropup) {
@@ -207,101 +207,101 @@ export default {
         dropup === 'audioTracks' ||
         dropup === 'qualities'
       ) {
-        this.settingsWidth = this.$refs.settings.clientWidth + 'px'
+        this.settingsWidth = this.$refs.settings.clientWidth + 'px';
         switch (dropup) {
           case 'videoTracks': {
             const videoTrackChange = async (source) => {
               try {
-                await selectSource({ kind: 'video', source })
-                await this.setMainLabel(source.name)
+                await selectSource({ kind: 'video', source });
+                await this.setMainLabel(source.name);
               } catch {
                 this.toast.showToast(
                   'error',
                   'There was an error selecting the desired source, try again',
                   { timeout: 5000 }
-                )
+                );
               }
-            }
+            };
             this.setDropupSettings(
               this.selectedVideoSource,
               this.getVideoSources,
               'Video Source',
               videoTrackChange,
               this.compareSources
-            )
-            break
+            );
+            break;
           }
           case 'audioTracks': {
             const audioTrackChange = async (source) => {
               if (source.name === 'AudioFollowVideo') {
-                this.setAudioFollowsVideo(true)
+                this.setAudioFollowsVideo(true);
               } else {
-                this.setAudioFollowsVideo(false)
+                this.setAudioFollowsVideo(false);
                 try {
-                  await selectSource({ kind: 'audio', source })
+                  await selectSource({ kind: 'audio', source });
                 } catch {
                   this.toast.showToast(
                     'error',
                     'There was an error selecting the desired source, try again',
                     { timeout: 5000 }
-                  )
+                  );
                 }
               }
-            }
+            };
             const getAudioTracks = () => {
-              return [this.audioFollowVideoData, ...this.getAudioSources]
-            }
+              return [this.audioFollowVideoData, ...this.getAudioSources];
+            };
             const getAudioSourceSelected = () => {
               if (this.audioFollowsVideo) {
-                return this.audioFollowVideoData
+                return this.audioFollowVideoData;
               }
-              return this.selectedAudioSource
-            }
+              return this.selectedAudioSource;
+            };
             this.setDropupSettings(
               getAudioSourceSelected(),
               getAudioTracks(),
               'Audio Source',
               audioTrackChange,
               this.compareSources
-            )
-            break
+            );
+            break;
           }
           case 'qualities': {
             const qualityChange = (media) => {
-              selectQuality(media)
-            }
+              selectQuality(media);
+            };
             this.setDropupSettings(
               this.selectedQuality,
               this.getActiveMainTransceiverMedias,
               'Video Quality',
               qualityChange,
               this.compareItems
-            )
-            break
+            );
+            break;
           }
         }
-        this.showDropup = true
+        this.showDropup = true;
       } else {
-        this.showDropup = false
+        this.showDropup = false;
       }
     },
     getActiveMainTransceiverMedias() {
       if (this.dropup === 'qualities') {
-        this.items = this.getActiveMainTransceiverMedias
+        this.items = this.getActiveMainTransceiverMedias;
       }
     },
     getVideoSources() {
       if (this.dropup === 'videoTracks') {
-        this.items = this.getActiveMainTransceiverMedias
+        this.items = this.getActiveMainTransceiverMedias;
       }
     },
     getAudioSources() {
       if (this.dropup === 'audioTracks') {
-        this.items = this.getAudioSources
+        this.items = this.getAudioSources;
       }
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

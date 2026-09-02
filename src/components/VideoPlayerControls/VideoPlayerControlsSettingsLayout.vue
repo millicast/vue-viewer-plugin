@@ -9,7 +9,7 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
+import { mapMutations, mapState } from 'vuex';
 export default {
   name: 'VideoPlayerControlsSettingsLayout',
   computed: {
@@ -18,5 +18,5 @@ export default {
   methods: {
     ...mapMutations('Controls', ['setIsGrid']),
   },
-}
+};
 </script>

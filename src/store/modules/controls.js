@@ -29,143 +29,143 @@ const defaulState = {
   isSelectingLayer: false,
   hideToast: false,
   selectingLayerTimeouts: null,
-}
+};
 
 export default {
   namespaced: true,
   state: defaulState,
   mutations: {
     setVideo(state, video) {
-      state.video = video
+      state.video = video;
     },
     setDrmAudio(state, audio) {
-      state.drmAudio = audio
+      state.drmAudio = audio;
     },
     setPlaying(state, playing) {
-      if (!state.isMigrating) state.playing = playing
+      if (!state.isMigrating) state.playing = playing;
     },
     setPip(state, pip) {
-      state.pip = pip
+      state.pip = pip;
     },
     stopVideo(state) {
-      state.player.stop()
-      state.player.currentTime = null
+      state.player.stop();
+      state.player.currentTime = null;
     },
     setSrcObject(state, srcObject) {
-      state.srcObject = srcObject
+      state.srcObject = srcObject;
     },
     setStateSrcObject(state, srcObject) {
       if (srcObject !== null) {
-        state.srcObject = srcObject
+        state.srcObject = srcObject;
       }
     },
     setCurrentElementRef(state, currentElementRef) {
-      state.currentElementRef = currentElementRef
+      state.currentElementRef = currentElementRef;
     },
     setVideoVolume(state, volume) {
-      state.video.volume = volume
+      state.video.volume = volume;
       if (state.drmAudio) {
-        state.drmAudio.volume = volume
+        state.drmAudio.volume = volume;
       }
     },
     setVideoMuted(state, muted) {
-      state.video.muted = muted
-      state.muted = muted
+      state.video.muted = muted;
+      state.muted = muted;
       if (state.drmAudio) {
-        state.drmAudio.muted = muted
+        state.drmAudio.muted = muted;
       }
     },
     setVideoAutoplay(state, autoplay) {
-      state.video.autoplay = autoplay
+      state.video.autoplay = autoplay;
       if (state.drmAudio) {
-        state.drmAudio.autoplay = autoplay
+        state.drmAudio.autoplay = autoplay;
       }
     },
     setVideoSource(state, source) {
       if (!source) {
-        state.video.src = ''
+        state.video.src = '';
       }
-      state.video.srcObject = source
+      state.video.srcObject = source;
     },
     setAutoPlayMuted(state, autoPlayMuted) {
-      state.autoPlayMuted = autoPlayMuted
+      state.autoPlayMuted = autoPlayMuted;
     },
     setDropup(state, name) {
-      state.dropup = name != state.dropup ? name : ''
+      state.dropup = name != state.dropup ? name : '';
     },
     setMobile(state, status) {
-      state.isMobile = status
+      state.isMobile = status;
     },
     setIsLive(state, isLive) {
       if (!isLive && document.pictureInPictureElement) {
-        document.exitPictureInPicture()
+        document.exitPictureInPicture();
       }
-      state.isLive = isLive
+      state.isLive = isLive;
     },
     setIsLoading(state, isLoading) {
-      state.isLoading = isLoading
-      state.castOptions.loading = isLoading
+      state.isLoading = isLoading;
+      state.castOptions.loading = isLoading;
     },
     toggleFullscreen(state) {
-      state.fullscreen = !state.fullscreen
+      state.fullscreen = !state.fullscreen;
     },
     setTrackWarning(state, trackWarning) {
-      state.trackWarning = trackWarning
+      state.trackWarning = trackWarning;
     },
     setCastOptions(state, options) {
-      state.castOptions = options
+      state.castOptions = options;
     },
     setCastDevice(state, castDevice) {
-      state.castDevice = castDevice
+      state.castDevice = castDevice;
     },
     setCastAvailable(state, castAvailable) {
-      state.castAvailable = castAvailable
+      state.castAvailable = castAvailable;
     },
     setCastIsConnected(state, castIsConnected) {
-      state.castIsConnected = castIsConnected
+      state.castIsConnected = castIsConnected;
     },
     setViewerCount(state, viewerCount) {
-      state.viewerCount = viewerCount
+      state.viewerCount = viewerCount;
     },
     handleReconnection(state, { error, timeout }) {
-      state.reconnection.error = error
-      state.reconnection.timeout = timeout
-      state.reconnection.status = true
+      state.reconnection.error = error;
+      state.reconnection.timeout = timeout;
+      state.reconnection.status = true;
       setTimeout(() => {
-        state.reconnection.status = false
-        state.reconnection.error = null
-        state.reconnection.timeout = null
-      }, timeout)
+        state.reconnection.status = false;
+        state.reconnection.error = null;
+        state.reconnection.timeout = null;
+      }, timeout);
     },
     setIsMigrating(state, isMigrating) {
-      state.isMigrating = isMigrating
+      state.isMigrating = isMigrating;
     },
     setViewerMigratingEvent(state, viewerMigratingEvent) {
-      state.viewerMigratingEvent = viewerMigratingEvent
+      state.viewerMigratingEvent = viewerMigratingEvent;
     },
     setMigrateListenerIsSet(state, migrateListenerIsSet) {
-      state.migrateListenerIsSet = migrateListenerIsSet
+      state.migrateListenerIsSet = migrateListenerIsSet;
     },
     setIsSplittedView(state, isSplittedView) {
-      state.isSplittedView = isSplittedView
+      state.isSplittedView = isSplittedView;
     },
     setPreviousSplitState(state, previousSplitState) {
       if (!state.isMigrating) {
-        state.previousSplitState = previousSplitState
+        state.previousSplitState = previousSplitState;
       }
     },
     setIsGrid(state, isGrid) {
-      state.isGrid = isGrid
+      state.isGrid = isGrid;
     },
     setIsSelectingLayer(state, isSelectingLayer) {
-      state.isSelectingLayer = isSelectingLayer
+      state.isSelectingLayer = isSelectingLayer;
     },
     setHideToastError(state, hideToast) {
-      state.hideToast = hideToast
+      state.hideToast = hideToast;
     },
     setSelectingLayerTimeout(state, selectingLayerTimeout) {
-      state.selectingLayerTimeouts = selectingLayerTimeout
+      state.selectingLayerTimeouts = selectingLayerTimeout;
     },
   },
   getters: {},
-}
+};

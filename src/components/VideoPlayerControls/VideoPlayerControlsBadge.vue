@@ -10,7 +10,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 export default {
   name: 'VideoPlayerControlsBadge',
   computed: {
@@ -19,8 +19,8 @@ export default {
       isLoading: (state) => state.isLoading,
     }),
     text: function () {
-      return this.isLive ? 'LIVE' : 'NOT LIVE'
+      return this.isLive ? 'LIVE' : 'NOT LIVE';
     },
   },
-}
+};
 </script>

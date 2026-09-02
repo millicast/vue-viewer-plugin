@@ -58,15 +58,15 @@
 </template>
 
 <script>
-import { nextTick } from 'vue'
+import { nextTick } from 'vue';
 import {
   initViewModule,
   connectToStream,
   stopStream,
   setVideoPlayer,
-} from '../service/sdkManager'
-import { mapActions, mapGetters, mapMutations, mapState } from 'vuex'
-import CustomToast from '../service/utils/toast'
+} from '../service/sdkManager';
+import { mapActions, mapGetters, mapMutations, mapState } from 'vuex';
+import CustomToast from '../service/utils/toast';
 
 export default {
   name: 'VideoPlayerMedia',
@@ -80,13 +80,13 @@ export default {
         broadcastEvent: null,
         toast: null,
       },
-    }
+    };
   },
   async mounted() {
-    let drmAudio
-    const player = document.getElementById(this.currentElementRef)
+    let drmAudio;
+    const player = document.getElementById(this.currentElementRef);
     if (this.viewer.drm) {
-      drmAudio = document.getElementById(this.currentElementRef)
+      drmAudio = document.getElementById(this.currentElementRef);
     }
 
     setVideoPlayer({
@@ -96,7 +96,7 @@ export default {
       muted: this.viewer.muted,
       autoplay: this.viewer.autoplay,
       drmAudio: drmAudio,
-    })
+    });
   },
   computed: {
     ...mapState('ViewConnection', {
@@ -141,7 +141,7 @@ export default {
         (this.viewer.placeholderImg === null &&
           !this.isLive &&
           !this.viewer.drm)
-      )
+      );
     },
   },
   methods: {
@@ -163,56 +163,56 @@ export default {
     ...mapMutations('ViewConnection', ['setMillicastView']),
     ...mapActions('Sources', ['updateBroadcastState']),
     stop() {
-      this.millicastView?.stop()
-      this.stopCurrentVideo()
+      this.millicastView?.stop();
+      this.stopCurrentVideo();
     },
     stopCurrentVideo() {
-      this.eventListeners.stats = null
-      this.stopVideo()
+      this.eventListeners.stats = null;
+      this.stopVideo();
     },
   },
   watch: {
     reconnectionStatus: function (isReconnecting) {
-      let toastOptions
-      this.toast = new CustomToast()
-      this.toast.clear()
+      let toastOptions;
+      this.toast = new CustomToast();
+      this.toast.clear();
       if (isReconnecting) {
-        this.setIsSplittedView(false)
-        const message = 'Connection lost. Retrying...'
+        this.setIsSplittedView(false);
+        const message = 'Connection lost. Retrying...';
         if (this.reconnection?.timeout) {
-          toastOptions = { timeout: this.reconnection?.timeout }
+          toastOptions = { timeout: this.reconnection?.timeout };
         }
-        this.toast.showToast('warning', message, toastOptions)
+        this.toast.showToast('warning', message, toastOptions);
       } else {
         const setSplitView = (state) => {
           if (['connected'].includes(state)) {
-            this.setIsSplittedView(this.previousSplitState)
+            this.setIsSplittedView(this.previousSplitState);
             this.millicastView.removeListener(
               'connectionStateChange',
               setSplitView
-            )
-            this.toast.clear()
+            );
+            this.toast.clear();
           }
-        }
-        this.millicastView.on('connectionStateChange', setSplitView)
+        };
+        this.millicastView.on('connectionStateChange', setSplitView);
       }
     },
     displayAudioOnly: async function () {
       //If the flag changes we have to set the same events and src to the new tag
       //Get current params from previous video/audio tag
-      const srcObject = this.video.srcObject
-      const volume = this.video.volume
-      const muted = this.video.muted
-      const autoplay = this.video.autoplay
+      const srcObject = this.video.srcObject;
+      const volume = this.video.volume;
+      const muted = this.video.muted;
+      const autoplay = this.video.autoplay;
       //Render new tag
-      await nextTick()
+      await nextTick();
       //Set new tag params
-      const player = document.getElementById(this.currentElementRef)
-      let drmAudio
+      const player = document.getElementById(this.currentElementRef);
+      let drmAudio;
       if (this.viewer.drm) {
         drmAudio = document.getElementById(
           'drm-audio-' + this.currentElementRef
-        )
+        );
       }
 
       setVideoPlayer({
@@ -222,20 +222,20 @@ export default {
         muted,
         autoplay,
         drmAudio,
-      })
+      });
     },
     async viewer() {
-      await stopStream()
-      await nextTick()
+      await stopStream();
+      await nextTick();
 
-      initViewModule()
+      initViewModule();
       try {
-        await connectToStream()
+        await connectToStream();
         setTimeout(() => {
-          this.setAutoPlayMuted(false)
-        }, 6000)
+          this.setAutoPlayMuted(false);
+        }, 6000);
       } catch (e) {
-        this.toast.showToast('error', e.message)
+        this.toast.showToast('error', e.message);
       }
     },
     playerMuted: function () {
@@ -246,11 +246,11 @@ export default {
         this.drmAudio.paused &&
         this.playing
       ) {
-        this.drmAudio.play()
+        this.drmAudio.play();
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>
