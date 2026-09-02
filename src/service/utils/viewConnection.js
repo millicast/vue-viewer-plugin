@@ -111,7 +111,7 @@ export const handleConnectToStream = async () => {
     millicastView.reconnect()
     if (!message) return
     if (!message.toLowerCase().includes('stream not being published')) {
-      throw new Error(`${message.charAt(0).toUpperCase()}${message.slice(1)}`)
+      throw new Error(`${message.charAt(0).toUpperCase()}${message.slice(1)}`, { cause: e })
     }
   }
 }

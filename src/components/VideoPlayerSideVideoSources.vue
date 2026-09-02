@@ -161,7 +161,7 @@ export default {
       if (audioSource && this.audioFollowsVideo) {
         try {
           await selectSource({ kind: 'audio', source: audioSource })
-        } catch (error) {
+        } catch {
           this.toast.showToast(
             'error',
             'There was an error selecting the desired source, try again',

@@ -4,9 +4,8 @@
   "private": false,
   "author": "Millicast, Inc.",
   "scripts": {
-    "build": "vue-cli-service build --target lib --name millicast-vue-viewer-plugin index.js",
-    "build-legacy": "export NODE_OPTIONS=--openssl-legacy-provider && vue-cli-service build --target lib --name millicast-vue-viewer-plugin index.js",
-    "lint": "vue-cli-service lint",
+    "build": "vite build",
+    "lint": "eslint",
     "pretty": "prettier --write \"./**/*.{js,json,vue}\""
   },
   "main": "dist/millicast-vue-viewer-plugin.umd.js",
@@ -29,39 +28,19 @@
     "vuex": "^4.0.2"
   },
   "devDependencies": {
-    "@babel/plugin-proposal-object-rest-spread": "^7.16.7",
-    "@vue/cli-plugin-babel": "^5.0.9",
-    "@vue/cli-plugin-eslint": "~5.0.9",
-    "@vue/cli-service": "~5.0.9",
-    "@vue/compiler-sfc": "^3.0.0",
-    "babel-eslint": "^10.1.0",
-    "core-js": "^3.49.0",
-    "eslint": "^7.32.0",
-    "eslint-plugin-vue": "^7.0.0-0",
+    "@eslint/js": "^10.0.0",
+    "@vitejs/plugin-vue": "^5.2.4",
+    "eslint": "^10.0.0",
+    "eslint-plugin-vue": "^10.10.0",
+    "globals": "^17.0.0",
     "prettier": "^2.7.1",
     "sass": "^1.103.1",
-    "sass-loader": "^10",
+    "vite": "^6.4.2",
     "vue": "^3.0.0",
-    "vue-loader": "^17.0.0"
+    "vue-eslint-parser": "^10.3.0"
   },
   "peerDependencies": {
     "vue": ">= 3.0.0"
-  },
-  "eslintConfig": {
-    "root": true,
-    "env": {
-      "node": true
-    },
-    "extends": [
-      "plugin:vue/vue3-essential",
-      "eslint:recommended"
-    ],
-    "parserOptions": {
-      "parser": "babel-eslint"
-    },
-    "rules": {
-      "vue/no-multiple-template-root": "off"
-    }
   },
   "browserslist": [
     "safari >= 7",
