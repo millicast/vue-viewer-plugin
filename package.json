@@ -29,13 +29,13 @@
   },
   "devDependencies": {
     "@eslint/js": "^10.0.0",
-    "@vitejs/plugin-vue": "^5.2.4",
+    "@vitejs/plugin-vue": "^6.0.8",
     "eslint": "^10.0.0",
     "eslint-plugin-vue": "^10.10.0",
     "globals": "^17.0.0",
     "prettier": "^2.7.1",
     "sass": "^1.103.1",
-    "vite": "^6.4.2",
+    "vite": "^8.2.2",
     "vue": "^3.0.0",
     "vue-eslint-parser": "^10.3.0"
   },
