@@ -16,7 +16,7 @@ const IGNORED_WARNINGS = ['Failed to resolve component: google-cast-launcher']
 
 app.config.warnHandler = (msg, trace) => {
   const shouldIgnoreWarning = IGNORED_WARNINGS.some((warning) =>
-    msg.includes(warning),
+    msg.includes(warning)
   )
 
   if (!shouldIgnoreWarning) {

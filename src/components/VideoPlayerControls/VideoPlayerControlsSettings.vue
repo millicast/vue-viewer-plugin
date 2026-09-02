@@ -176,7 +176,7 @@ export default {
     },
     sourceFlagEmojiToPng(sourceId) {
       let selectedSourceFlagEmojis = sourceId.match(
-        /[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]/g,
+        /[\uD83C][\uDDE6-\uDDFF][\uD83C][\uDDE6-\uDDFF]/g
       )
 
       // replace emojis  for img
@@ -188,7 +188,7 @@ export default {
 
         sourceId = sourceId.replace(
           emoji,
-          ` <img src='https://flagcdn.com/20x15/${flagCode}.png' alt="FlagEmoji"}>`,
+          ` <img src='https://flagcdn.com/20x15/${flagCode}.png' alt="FlagEmoji"}>`
         )
       })
 
@@ -218,7 +218,7 @@ export default {
                 this.toast.showToast(
                   'error',
                   'There was an error selecting the desired source, try again',
-                  { timeout: 5000 },
+                  { timeout: 5000 }
                 )
               }
             }
@@ -227,7 +227,7 @@ export default {
               this.getVideoSources,
               'Video Source',
               videoTrackChange,
-              this.compareSources,
+              this.compareSources
             )
             break
           }
@@ -243,7 +243,7 @@ export default {
                   this.toast.showToast(
                     'error',
                     'There was an error selecting the desired source, try again',
-                    { timeout: 5000 },
+                    { timeout: 5000 }
                   )
                 }
               }
@@ -262,7 +262,7 @@ export default {
               getAudioTracks(),
               'Audio Source',
               audioTrackChange,
-              this.compareSources,
+              this.compareSources
             )
             break
           }
@@ -275,7 +275,7 @@ export default {
               this.getActiveMainTransceiverMedias,
               'Video Quality',
               qualityChange,
-              this.compareItems,
+              this.compareItems
             )
             break
           }

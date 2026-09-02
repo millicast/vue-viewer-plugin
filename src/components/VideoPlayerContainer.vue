@@ -256,7 +256,7 @@ export default {
           player?.webkitEnterFullscreen
         if (!showButton) {
           console.warn(
-            'Fullscreen disabled due to incompatibility with the browser.',
+            'Fullscreen disabled due to incompatibility with the browser.'
           )
         }
       }
@@ -301,7 +301,7 @@ export default {
         this.setIsSplittedView(!this.isSplittedView)
         selectSource({ kind: 'video', source: this.videoSources[0] })
         this.setMainLabel(
-          this.videoSources[0].sourceId ?? this.videoSources[0].name,
+          this.videoSources[0].sourceId ?? this.videoSources[0].name
         )
       }
     },

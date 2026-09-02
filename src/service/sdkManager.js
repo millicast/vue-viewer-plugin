@@ -131,7 +131,7 @@ const configureDrm = (event) => {
       mediaBufferMs: state.Params.viewer.mediaBufferMs,
     }
     const audioTrackMapping = tracksMapping.find(
-      (track) => track.media === 'audio',
+      (track) => track.media === 'audio'
     )
     if (audioTrackMapping) {
       drmOptions.audioMid = audioTrackMapping.mediaId
@@ -207,7 +207,7 @@ const updateLayersBroadcastState = (event) => {
   const medias = state.Layers.mainTransceiverMedias.active
   if (medias.length === 0) {
     console.warn(
-      'No active layers available, will wait for next event. Switching to Auto until then.',
+      'No active layers available, will wait for next event. Switching to Auto until then.'
     )
     if (selectingLayerTimeout != null) {
       clearTimeout(selectingLayerTimeout)
@@ -223,12 +223,12 @@ const updateLayersBroadcastState = (event) => {
     let selectedMedia = {}
     const startingQuality = state.Params.viewer.startingQuality
     const qualityIndex = ['auto', 'high', 'medium', 'low'].indexOf(
-      startingQuality.toLowerCase(),
+      startingQuality.toLowerCase()
     )
     if (/^\d{3,4}$/.test(startingQuality)) {
       // Select layer with specific height
       selectedMedia = medias.find(
-        (media) => media.height === parseInt(startingQuality),
+        (media) => media.height === parseInt(startingQuality)
       )
       console.log('Selected media, height:', selectedMedia?.id)
     } else if (qualityIndex >= 0) {

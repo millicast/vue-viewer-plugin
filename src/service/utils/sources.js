@@ -19,7 +19,7 @@ export const getTracks = (data) => {
       if (state.Sources.audioSources.length === 1) {
         commit(
           'Sources/setIsAudioOnly',
-          state.Sources.videoSources.length ? false : true,
+          state.Sources.videoSources.length ? false : true
         )
       }
     }
@@ -34,13 +34,13 @@ export const getTracks = (data) => {
 const addRemoteTracks = async (sourceId) => {
   if (!sourceId) return
   const remoteTrackIndex = state.Sources.sourceRemoteTracks.findIndex(
-    (t) => t.sourceId === sourceId,
+    (t) => t.sourceId === sourceId
   )
   const mediaStream = new MediaStream()
   setTimeout(async () => {
     const transceiver = await state.ViewConnection.millicastView.addRemoteTrack(
       'video',
-      [mediaStream],
+      [mediaStream]
     )
     const sourceRemoteTrack = {
       transceiver,
@@ -113,10 +113,10 @@ export const handleDeleteSource = (sourceId) => {
     layers.handleSelectQuality({ name: 'Auto' })
   }
   const videoIndex = state.Sources.videoSources.findIndex(
-    (source) => source.sourceId === sourceId,
+    (source) => source.sourceId === sourceId
   )
   const audioIndex = state.Sources.audioSources.findIndex(
-    (source) => source.sourceId === sourceId,
+    (source) => source.sourceId === sourceId
   )
   if (videoIndex !== -1) {
     deleteSource('video', sourceId)
@@ -154,11 +154,11 @@ const deleteSource = (kind, sourceId) => {
 
   if (kind === 'video') {
     sourceCurrentMid = Object.keys(state.Sources.transceiverSourceState).find(
-      (key) => state.Sources.transceiverSourceState[key].sourceId === sourceId,
+      (key) => state.Sources.transceiverSourceState[key].sourceId === sourceId
     )
     if (sourceId !== null) {
       sourceInitialMid = Object.values(state.Sources.sourceRemoteTracks).find(
-        (value) => value.sourceId === sourceId,
+        (value) => value.sourceId === sourceId
       ).transceiver.mid
     }
 
@@ -170,11 +170,11 @@ const deleteSource = (kind, sourceId) => {
         handleProjectVideo(
           state.Sources.selectedVideoSource.sourceId,
           `${sourceCurrentMid}`,
-          state.Sources.selectedVideoSource.trackId,
+          state.Sources.selectedVideoSource.trackId
         )
         if (state.Params.viewer.showLabels) {
           document.getElementById(
-            `sideLabel${state.Sources.selectedVideoSource.mid}`,
+            `sideLabel${state.Sources.selectedVideoSource.mid}`
           ).textContent = state.Sources.selectedVideoSource.sourceId
         }
       } else if (
@@ -184,11 +184,11 @@ const deleteSource = (kind, sourceId) => {
         if (sourceCurrentMid !== sourceInitialMid) {
           handleProjectVideo(
             state.Sources.transceiverSourceState[sourceInitialMid].sourceId,
-            state.Sources.transceiverSourceState[sourceCurrentMid].mid,
+            state.Sources.transceiverSourceState[sourceCurrentMid].mid
           )
           if (state.Params.viewer.showLabels) {
             document.getElementById(
-              `sideLabel${state.Sources.transceiverSourceState[sourceCurrentMid].mid}`,
+              `sideLabel${state.Sources.transceiverSourceState[sourceCurrentMid].mid}`
             ).textContent =
               state.Sources.transceiverSourceState[sourceInitialMid].sourceId
           }
@@ -200,7 +200,7 @@ const deleteSource = (kind, sourceId) => {
       ) {
         handleProjectVideo(
           state.Sources.transceiverSourceState[sourceInitialMid].sourceId,
-          state.Sources.selectedVideoSource.mid,
+          state.Sources.selectedVideoSource.mid
         )
         if (state.Params.viewer.showLabels) {
           document.getElementById(
@@ -208,7 +208,7 @@ const deleteSource = (kind, sourceId) => {
               state.Sources.transceiverSourceState[
                 state.Sources.selectedVideoSource.mid
               ].mid
-            }`,
+            }`
           ).textContent =
             state.Sources.transceiverSourceState[sourceInitialMid].sourceId
         }
@@ -291,7 +291,7 @@ export const handleProjectRemoteTracks = async (remoteTrack) => {
   handleProjectVideo(
     remoteTrack.sourceId,
     remoteTrack.transceiver?.mid ?? null,
-    state.Sources.transceiverSourceState[remoteTrack.transceiver?.mid].trackId,
+    state.Sources.transceiverSourceState[remoteTrack.transceiver?.mid].trackId
   )
   sidePlayerVideo.muted = true
   sidePlayerVideo.autoPlay = true

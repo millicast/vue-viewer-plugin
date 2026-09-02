@@ -78,7 +78,7 @@ export default {
     selectSource({ kind: 'video', source: this.videoSources[0] })
     this.setMainLabel(this.videoSources[0].name)
     this.sourceRemoteTracks.forEach(
-      async (remoteTrack) => await projectRemoteTracks(remoteTrack),
+      async (remoteTrack) => await projectRemoteTracks(remoteTrack)
     )
 
     this.playerRef = document.getElementById('player')
@@ -97,7 +97,7 @@ export default {
           await projectRemoteTracks(this.sourceRemoteTracks[lastIndex])
         } else {
           this.sourceRemoteTracks.forEach(
-            async (remoteTrack) => await projectRemoteTracks(remoteTrack),
+            async (remoteTrack) => await projectRemoteTracks(remoteTrack)
           )
         }
       },
@@ -125,7 +125,7 @@ export default {
       let midProjectedInMain = this.videoSources[0].mid
       const sourceName = source.name
       const audioSource = this.audioSources.find(
-        (currentSoruce) => currentSoruce.name === sourceName,
+        (currentSoruce) => currentSoruce.name === sourceName
       )
 
       if (this.getVideoHasMain) {
@@ -146,7 +146,7 @@ export default {
           sourceIdProjectedInMain,
           videoMid,
           this.transceiverSourceState[midProjectedInMain].trackId,
-          lowQualityLayer,
+          lowQualityLayer
         )
         this.updateTransceiverSourceState({ source })
       }
@@ -165,7 +165,7 @@ export default {
           this.toast.showToast(
             'error',
             'There was an error selecting the desired source, try again',
-            { timeout: 5000 },
+            { timeout: 5000 }
           )
         }
       }

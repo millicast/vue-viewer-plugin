@@ -21,7 +21,7 @@ const setDirectorEndpoint = () => {
   ) {
     Director.setEndpoint(
       state.Params.viewer.directorUrl ??
-        state.Params.environment.VUE_APP_DIRECTOR_ENDPOINT,
+        state.Params.environment.VUE_APP_DIRECTOR_ENDPOINT
     )
   }
 }
@@ -36,7 +36,7 @@ export const handleInitViewConnection = (accountId, streamName) => {
       streamName,
       accountId,
       state.Params.viewer.token,
-      state.Params.viewer.drm,
+      state.Params.viewer.drm
     )
     subscriber.catch((error) => {
       const errorMessage = `${error}`
@@ -136,7 +136,7 @@ export const setTrackEvent = () => {
         event.transceiver
     } else {
       state.ViewConnection.trackEvent[event.track.kind].transceiver.push(
-        event.transceiver,
+        event.transceiver
       )
     }
     state.ViewConnection.trackEvent[event.track.kind].track = true
