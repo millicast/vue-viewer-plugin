@@ -61,16 +61,16 @@
 </template>
 
 <script>
-import { mapMutations, mapState } from 'vuex'
-import { setCast } from '../../service/sdkManager'
+import { mapMutations, mapState } from 'vuex';
+import { setCast } from '../../service/sdkManager';
 import {
   VideoPlayerControlsFullscreen,
   VideoPlayerControlsPip,
   VideoPlayerControlsPlay,
   VideoPlayerControlsSettings,
   VideoPlayerControlsVolume,
-} from './index'
-import VideoPlayerControlsCast from './VideoPlayerControlsCast.vue'
+} from './index';
+import VideoPlayerControlsCast from './VideoPlayerControlsCast.vue';
 
 export default {
   name: 'VideoPlayer',
@@ -91,7 +91,7 @@ export default {
   data() {
     return {
       dropupShow: false,
-    }
+    };
   },
   computed: {
     ...mapState('Controls', {
@@ -105,7 +105,7 @@ export default {
       viewer: (state) => state.viewer,
     }),
     isVideoTag() {
-      return this.video?.nodeName === 'VIDEO'
+      return this.video?.nodeName === 'VIDEO';
     },
     pipEnabled() {
       return (
@@ -113,16 +113,16 @@ export default {
         document.pictureInPictureEnabled &&
         this.isLive &&
         this.isVideoTag
-      )
+      );
     },
   },
   methods: {
     ...mapMutations('Controls', ['setDropup', 'toggleFullscreen']),
   },
   async beforeMount() {
-    await setCast()
+    await setCast();
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

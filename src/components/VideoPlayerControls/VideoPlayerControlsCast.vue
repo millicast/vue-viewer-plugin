@@ -19,7 +19,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 
 export default {
   name: 'VideoPlayerControlsCast',
@@ -32,10 +32,10 @@ export default {
   },
   methods: {
     clickCast() {
-      this.$refs.cast.click()
+      this.$refs.cast.click();
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

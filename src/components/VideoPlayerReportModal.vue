@@ -57,9 +57,9 @@
 </template>
 
 <script>
-import { Logger } from '@millicast/sdk'
-import { mapState } from 'vuex'
-import CustomToast from '../service/utils/toast'
+import { Logger } from '@millicast/sdk';
+import { mapState } from 'vuex';
+import CustomToast from '../service/utils/toast';
 
 export default {
   name: 'VideoPlayerReportModal',
@@ -80,38 +80,38 @@ export default {
       },
       toast: new CustomToast(),
       isLoading: false,
-    }
+    };
   },
   methods: {
     async sendReport() {
-      if (this.isLoading) return
+      if (this.isLoading) return;
 
-      this.report.diagnostics = Logger.diagnose()
+      this.report.diagnostics = Logger.diagnose();
 
       try {
-        this.isLoading = true
-        const headers = { 'Content-Type': 'application/json' }
+        this.isLoading = true;
+        const headers = { 'Content-Type': 'application/json' };
         this.report.diagnostics.serverId =
-          this.report.diagnostics?.subscriberId ?? 'NOT_CONNECTED'
+          this.report.diagnostics?.subscriberId ?? 'NOT_CONNECTED';
         this.report.diagnostics.clusterId =
-          this.report.diagnostics?.clusterId ?? 'NOT_CONNECTED'
+          this.report.diagnostics?.clusterId ?? 'NOT_CONNECTED';
         await fetch(this.reportUrl + '/reports', {
           method: 'POST',
           headers,
           body: JSON.stringify(this.report),
-        })
+        });
         this.toast.showToast('success', 'Report sent successfully', {
           timeout: 3000,
-        })
+        });
       } catch (err) {
-        let message = "Error: couldn't send report"
+        let message = "Error: couldn't send report";
         if (err.response?.data) {
-          message += ', ' + err.response.data
+          message += ', ' + err.response.data;
         }
-        this.toast.showToast('error', message, { timeout: 3000 })
+        this.toast.showToast('error', message, { timeout: 3000 });
       } finally {
-        this.isLoading = false
-        this.close()
+        this.isLoading = false;
+        this.close();
       }
     },
   },
@@ -124,9 +124,9 @@ export default {
     }),
   },
   mounted() {
-    this.report.url = window.location.href
+    this.report.url = window.location.href;
   },
-}
+};
 </script>
 
 <style scoped>

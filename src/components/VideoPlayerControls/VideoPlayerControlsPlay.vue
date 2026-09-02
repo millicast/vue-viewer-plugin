@@ -10,8 +10,8 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
-import { connectToStream } from '../../service/sdkManager'
+import { mapState } from 'vuex';
+import { connectToStream } from '../../service/sdkManager';
 
 export default {
   name: 'VideoPlayerControlsPlay',
@@ -28,15 +28,15 @@ export default {
   methods: {
     togglePlay: async function () {
       if (this.playing) {
-        await this.video.pause()
-        await this.drmAudio?.pause()
+        await this.video.pause();
+        await this.drmAudio?.pause();
       } else if (this.video?.srcObject !== null || this.viewer.drm) {
         //For DRM streams srcObject never exists on the video.
-        await connectToStream()
-        await this.video.play()
-        await this.drmAudio?.play()
+        await connectToStream();
+        await this.video.play();
+        await this.drmAudio?.play();
       }
     },
   },
-}
+};
 </script>

@@ -1,4 +1,4 @@
-import store from '../store'
+import store from '../store';
 
 export const defaultEnvOptions = {
   NODE_ENV: '',
@@ -6,7 +6,7 @@ export const defaultEnvOptions = {
   VUE_APP_PUBLIC_PATH: '',
   VUE_APP_REPORT_URL: '',
   VUE_APP_CHROMECAST_ID: '',
-}
+};
 
 export default function processEnvironmentOptions(environment) {
   const options = {
@@ -23,10 +23,10 @@ export default function processEnvironmentOptions(environment) {
     VUE_APP_CHROMECAST_ID:
       environment?.VUE_APP_CHROMECAST_ID ??
       import.meta.env.VITE_DEFAULT_CHROMECAST_ID,
-  }
+  };
 
   store.commit('Params/setEnvironmentOptions', {
     ...defaultEnvOptions,
     ...options,
-  })
+  });
 }

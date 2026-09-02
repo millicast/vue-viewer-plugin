@@ -109,19 +109,19 @@
 </template>
 
 <script>
-import faker from '@faker-js/faker'
-const PubNub = require('pubnub')
+import faker from '@faker-js/faker';
+const PubNub = require('pubnub');
 const PubNubCredentials =
   process.env.VUE_APP_PUBNUB_PUBLISH_KEY &&
   process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY &&
-  process.env.VUE_APP_PUBNUB_UUID
+  process.env.VUE_APP_PUBNUB_UUID;
 const pubnub = PubNubCredentials
   ? new PubNub({
       publishKey: process.env.VUE_APP_PUBNUB_PUBLISH_KEY,
       subscribeKey: process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY,
       uuid: process.env.VUE_APP_PUBNUB_UUID,
     })
-  : null
+  : null;
 export default {
   data() {
     return {
@@ -135,13 +135,13 @@ export default {
         process.env.VUE_APP_MILLICAST_STREAM_NAME,
       pubnubSettled: PubNubCredentials,
       modalShow: false,
-    }
+    };
   },
   methods: {
     async publishSampleMessage() {
       if (this.textMsg !== '') {
-        const message = this.textMsg
-        this.resetInput()
+        const message = this.textMsg;
+        this.resetInput();
         await pubnub.publish({
           channel: this.streamId,
           message: {
@@ -149,13 +149,13 @@ export default {
             text: message,
             time: this.formatTime(),
           },
-        })
+        });
       }
     },
     subscribe() {
       pubnub.subscribe({
         channels: [this.streamId],
-      })
+      });
     },
     pubnubListeners() {
       pubnub.addListener({
@@ -165,74 +165,74 @@ export default {
             userName: messageEvent.message.userName,
             text: messageEvent.message.text,
             time: messageEvent.message.time,
-          })
+          });
           //I have to use waitForElm because await nextTick doesn't work
           this.waitForElm('#m' + this.messages.length).then((elem) => {
-            elem.scrollIntoView({ behaviour: 'smooth' })
-          })
+            elem.scrollIntoView({ behaviour: 'smooth' });
+          });
         },
-      })
+      });
     },
     messageAligne(name) {
       if (this.isUser(name)) {
-        return { 'justify-content-end': this.isUser }
+        return { 'justify-content-end': this.isUser };
       }
-      return { 'justify-content-start': this.isUser }
+      return { 'justify-content-start': this.isUser };
     },
     resetInput() {
-      this.textMsg = ''
+      this.textMsg = '';
     },
     isUser(name) {
-      return this.userName === name
+      return this.userName === name;
     },
     initialUserName(name) {
-      return name.charAt(0)
+      return name.charAt(0);
     },
     waitForElm(selector) {
       return new Promise((resolve) => {
         if (document.querySelector(selector)) {
-          return resolve(document.querySelector(selector))
+          return resolve(document.querySelector(selector));
         }
 
         const observer = new MutationObserver(() => {
           if (document.querySelector(selector)) {
-            resolve(document.querySelector(selector))
-            observer.disconnect()
+            resolve(document.querySelector(selector));
+            observer.disconnect();
           }
-        })
+        });
 
         observer.observe(document.body, {
           childList: true,
           subtree: true,
-        })
-      })
+        });
+      });
     },
     formatTime() {
-      var date = new Date()
-      var hours = date.getHours()
-      var minutes = date.getMinutes()
-      var ampm = hours >= 12 ? 'p.m' : 'a.m'
-      hours = hours % 12
-      hours = hours ? hours : 12
-      minutes = minutes < 10 ? '0' + minutes : minutes
-      var time = hours + ':' + minutes + ' ' + ampm
-      return time
+      var date = new Date();
+      var hours = date.getHours();
+      var minutes = date.getMinutes();
+      var ampm = hours >= 12 ? 'p.m' : 'a.m';
+      hours = hours % 12;
+      hours = hours ? hours : 12;
+      minutes = minutes < 10 ? '0' + minutes : minutes;
+      var time = hours + ':' + minutes + ' ' + ampm;
+      return time;
     },
     toggleActionMenu() {
-      this.showActionMenu = !this.showActionMenu
+      this.showActionMenu = !this.showActionMenu;
     },
     changeUsername() {
-      this.modalShow = !this.modalShow
-      this.toggleActionMenu()
+      this.modalShow = !this.modalShow;
+      this.toggleActionMenu();
     },
   },
   mounted() {
     if (this.pubnubSettled) {
-      this.pubnubListeners()
-      this.subscribe()
+      this.pubnubListeners();
+      this.subscribe();
     }
   },
-}
+};
 </script>
 
 <style>

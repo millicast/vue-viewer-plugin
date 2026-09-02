@@ -21,7 +21,7 @@
 </template>
 
 <script>
-import { mapState, mapMutations } from 'vuex'
+import { mapState, mapMutations } from 'vuex';
 
 export default {
   name: 'VideoPlayerControlsVolume',
@@ -29,16 +29,16 @@ export default {
     return {
       volume: 1,
       showVolume: false,
-    }
+    };
   },
   watch: {
     volume: function (newVolume) {
       if (this.volume === 0 && !this.muted) {
-        this.toggleMuted()
+        this.toggleMuted();
       } else if (this.muted) {
-        this.toggleMuted()
+        this.toggleMuted();
       }
-      this.setVideoVolume(newVolume)
+      this.setVideoVolume(newVolume);
     },
   },
   computed: {
@@ -47,13 +47,13 @@ export default {
     }),
     volumeIcon: function () {
       if (this.muted || this.volume === 0) {
-        return 'ml-viewer-bi-volume-mute-fill'
+        return 'ml-viewer-bi-volume-mute-fill';
       } else if (this.volume < 0.1) {
-        return 'ml-viewer-bi-volume-off-fill'
+        return 'ml-viewer-bi-volume-off-fill';
       } else if (this.volume < 0.5) {
-        return 'ml-viewer-bi-volume-down-fill'
+        return 'ml-viewer-bi-volume-down-fill';
       } else {
-        return 'ml-viewer-bi-volume-up-fill'
+        return 'ml-viewer-bi-volume-up-fill';
       }
     },
   },
@@ -61,18 +61,18 @@ export default {
     ...mapMutations('Controls', ['setVideoMuted', 'setVideoVolume']),
     toggleVolumeSlider() {
       if (this.showVolumeTimeout) {
-        clearTimeout(this.showVolumeTimeout)
+        clearTimeout(this.showVolumeTimeout);
       }
-      this.showVolume = true
+      this.showVolume = true;
       this.showVolumeTimeout = setTimeout(() => {
-        this.showVolume = false
-      }, 4000)
+        this.showVolume = false;
+      }, 4000);
     },
     toggleMuted() {
-      this.setVideoMuted(!this.muted)
+      this.setVideoMuted(!this.muted);
     },
   },
-}
+};
 </script>
 
 <style scoped lang="scss">

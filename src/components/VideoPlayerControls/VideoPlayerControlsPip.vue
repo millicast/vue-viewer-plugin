@@ -25,7 +25,7 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from 'vuex';
 
 export default {
   name: 'VideoPlayerControlsPip',
@@ -46,13 +46,13 @@ export default {
         (this.video.srcObject || this.viewer.drm) &&
         this.video.nodeName === 'VIDEO'
       ) {
-        this.video.requestPictureInPicture()
+        this.video.requestPictureInPicture();
       } else {
-        document.exitPictureInPicture()
+        document.exitPictureInPicture();
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>

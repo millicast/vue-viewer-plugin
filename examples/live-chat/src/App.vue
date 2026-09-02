@@ -38,14 +38,14 @@
 </template>
 
 <script>
-import LiveChat from './components/LiveChat.vue'
+import LiveChat from './components/LiveChat.vue';
 const PubNubCredentials =
   process.env.VUE_APP_PUBNUB_PUBLISH_KEY &&
   process.env.VUE_APP_PUBNUB_SUBSCRIBE_KEY &&
-  process.env.VUE_APP_PUBNUB_UUID
+  process.env.VUE_APP_PUBNUB_UUID;
 const MillicastCredentials =
   process.env.VUE_APP_MILLICAST_ACCOUNT_ID &&
-  process.env.VUE_APP_MILLICAST_STREAM_NAME
+  process.env.VUE_APP_MILLICAST_STREAM_NAME;
 export default {
   name: 'App',
   components: {
@@ -58,9 +58,9 @@ export default {
       pubnubSettled: PubNubCredentials,
       millicastSettled: MillicastCredentials,
       modalShow: true,
-    }
+    };
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

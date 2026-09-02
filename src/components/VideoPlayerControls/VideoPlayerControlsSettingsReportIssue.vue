@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import VideoPlayerReportModal from '../VideoPlayerReportModal.vue'
-import { mapMutations, mapState } from 'vuex'
+import VideoPlayerReportModal from '../VideoPlayerReportModal.vue';
+import { mapMutations, mapState } from 'vuex';
 export default {
   name: 'VideoPlayerControlsSettingsReportIssue',
   components: {
@@ -23,27 +23,27 @@ export default {
     return {
       showReportModal: false,
       showReportButton: false,
-    }
+    };
   },
   methods: {
     ...mapMutations('Controls', ['setDropup']),
     toggleReport() {
-      this.showReportModal = !this.showReportModal
-      this.setDropup('')
+      this.showReportModal = !this.showReportModal;
+      this.setDropup('');
     },
   },
   computed: {
     ...mapState('Params', {
       reportUrl(state) {
-        this.showReportButton = !!state.environment.VUE_APP_REPORT_URL
-        return state.environment.VUE_APP_REPORT_URL
+        this.showReportButton = !!state.environment.VUE_APP_REPORT_URL;
+        return state.environment.VUE_APP_REPORT_URL;
       },
     }),
   },
   watch: {
     reportUrl(value) {
-      this.showReportButton = !!value
+      this.showReportButton = !!value;
     },
   },
-}
+};
 </script>

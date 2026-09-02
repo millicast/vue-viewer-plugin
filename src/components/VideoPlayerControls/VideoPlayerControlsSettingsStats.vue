@@ -9,8 +9,8 @@
 </template>
 
 <script>
-import VideoPlayerStatsTable from '../VideoPlayerStatsTable.vue'
-import { mapMutations, mapState } from 'vuex'
+import VideoPlayerStatsTable from '../VideoPlayerStatsTable.vue';
+import { mapMutations, mapState } from 'vuex';
 
 export default {
   name: 'VideoPlayerControlsSettingsStats',
@@ -21,7 +21,7 @@ export default {
     return {
       stats: {},
       showStats: false,
-    }
+    };
   },
   computed: {
     ...mapState('Controls', ['isLive']),
@@ -29,11 +29,11 @@ export default {
   methods: {
     ...mapMutations('Controls', ['setDropup']),
     toggleStats() {
-      this.showStats = !this.showStats
-      this.setDropup()
+      this.showStats = !this.showStats;
+      this.setDropup();
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

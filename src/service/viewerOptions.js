@@ -1,4 +1,4 @@
-import store from '../store'
+import store from '../store';
 
 export const availableControls = [
   'play',
@@ -9,7 +9,7 @@ export const availableControls = [
   'liveBadge',
   'userCount',
   'settings',
-]
+];
 
 export const defaultViewerOptions = {
   audioOnly: false,
@@ -37,7 +37,7 @@ export const defaultViewerOptions = {
   abrStrategy: null,
   abrBandwidth: null,
   customKeys: null,
-}
+};
 
 export default function processViewerOptions({
   streamId,
@@ -67,79 +67,79 @@ export default function processViewerOptions({
   abrBandwidth,
   ...customKeys
 }) {
-  let options = {}
+  let options = {};
 
-  options.streamId = streamId
-  options.videoOnly = videoOnly ?? false
-  options.audioOnly = audioOnly ?? false
-  options.token = token
-  options.placeholderImg = image
-  options.directorUrl = directorUrl
-  options.hideButtons = hideButtons ?? []
-  options.muted = muted ?? false
-  store.commit('Controls/setVideoMuted', muted)
-  options.autoplay = autoplay ?? true
-  store.commit('Controls/setVideoAutoplay', autoplay)
-  options.multisource = multisource ?? false
-  options.audioFollowsVideo = audioFollowsVideo ?? false
-  options.layout = layout
-  options.showLabels = showLabels
-  options.drm = drm ?? false
-  options.metadata = metadata
+  options.streamId = streamId;
+  options.videoOnly = videoOnly ?? false;
+  options.audioOnly = audioOnly ?? false;
+  options.token = token;
+  options.placeholderImg = image;
+  options.directorUrl = directorUrl;
+  options.hideButtons = hideButtons ?? [];
+  options.muted = muted ?? false;
+  store.commit('Controls/setVideoMuted', muted);
+  options.autoplay = autoplay ?? true;
+  store.commit('Controls/setVideoAutoplay', autoplay);
+  options.multisource = multisource ?? false;
+  options.audioFollowsVideo = audioFollowsVideo ?? false;
+  options.layout = layout;
+  options.showLabels = showLabels;
+  options.drm = drm ?? false;
+  options.metadata = metadata;
   if (multisource) {
-    store.commit('Controls/setIsSplittedView', true)
+    store.commit('Controls/setIsSplittedView', true);
   }
   if (audioFollowsVideo) {
-    store.commit('Sources/setAudioFollowsVideo', true)
+    store.commit('Sources/setAudioFollowsVideo', true);
   }
   if (noDelay) {
-    options.forcePlayoutDelay = { min: 0, max: 0 }
+    options.forcePlayoutDelay = { min: 0, max: 0 };
   }
   if (options.layout && options.layout === 'grid') {
-    store.commit('Controls/setIsGrid', true)
+    store.commit('Controls/setIsGrid', true);
   }
   if (startingQuality) {
-    options.startingQuality = startingQuality
-    store.commit('Controls/setIsSelectingLayer', true)
+    options.startingQuality = startingQuality;
+    store.commit('Controls/setIsSelectingLayer', true);
   }
   if (hideToast !== null) {
-    options.hideToast = hideToast
-    store.commit('Controls/setHideToastError', hideToast)
+    options.hideToast = hideToast;
+    store.commit('Controls/setHideToastError', hideToast);
   }
   if (mainLabel) {
-    options.mainLabel = mainLabel
-    store.commit('Sources/setMainLabel', options.mainLabel)
+    options.mainLabel = mainLabel;
+    store.commit('Sources/setMainLabel', options.mainLabel);
   }
   if (forcePlayoutDelayMin && forcePlayoutDelayMax) {
     if (parseInt(forcePlayoutDelayMin) && parseInt(forcePlayoutDelayMax)) {
       options.forcePlayoutDelay = {
         min: parseInt(forcePlayoutDelayMin),
         max: parseInt(forcePlayoutDelayMax),
-      }
+      };
     }
   }
   if (parseInt(mediaBufferMs)) {
-    options.mediaBufferMs = parseInt(mediaBufferMs)
+    options.mediaBufferMs = parseInt(mediaBufferMs);
   }
-  options.showTimer = showTimer ?? false
-  const abrStrategies = ['quality', 'bandwidth', 'performance']
+  options.showTimer = showTimer ?? false;
+  const abrStrategies = ['quality', 'bandwidth', 'performance'];
   if (
     abrStrategy &&
     abrStrategies.some((x) => x === abrStrategy.toLowerCase())
   ) {
-    options.abrStrategy = abrStrategy
+    options.abrStrategy = abrStrategy;
   }
 
   if (!isNaN(abrBandwidth)) {
-    options.abrBandwidth = parseInt(abrBandwidth)
+    options.abrBandwidth = parseInt(abrBandwidth);
   }
 
   if (customKeys) {
-    options = { ...options, ...customKeys }
+    options = { ...options, ...customKeys };
   }
 
   store.commit('Params/setViewerOptions', {
     ...defaultViewerOptions,
     ...options,
-  })
+  });
 }

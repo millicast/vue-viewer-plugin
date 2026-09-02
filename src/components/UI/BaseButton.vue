@@ -8,7 +8,7 @@
 export default {
   name: 'BaseButton',
   props: ['btype', 'bstyle', 'bcolor'],
-}
+};
 </script>
 
 <style scoped>

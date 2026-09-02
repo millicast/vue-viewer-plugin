@@ -46,7 +46,7 @@ export default {
     title: String,
     toggle: Function,
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

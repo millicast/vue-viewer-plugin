@@ -33,7 +33,7 @@
 </template>
 
 <script>
-import { mapMutations } from 'vuex'
+import { mapMutations } from 'vuex';
 export default {
   name: 'VideoPlayerControlsSettingsDropdown',
   components: {},
@@ -51,11 +51,11 @@ export default {
     ...mapMutations('Controls', ['setDropup']),
 
     handleSelect(media) {
-      this.handleClick(media)
-      this.setDropup('')
+      this.handleClick(media);
+      this.setDropup('');
     },
   },
-}
+};
 </script>
 
 <style lang="scss" scoped>

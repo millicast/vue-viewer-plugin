@@ -1,18 +1,18 @@
-import { Director, View } from '@millicast/sdk'
+import { Director, View } from '@millicast/sdk';
 import {
   setVideoPlayer,
   addVideoEventListeners,
   removeVideoPauseListeners,
-} from '../sdkManager'
-import store from '../../store'
-import { nextTick } from 'vue'
-const { commit, state } = store
+} from '../sdkManager';
+import store from '../../store';
+import { nextTick } from 'vue';
+const { commit, state } = store;
 
-import canAutoPlay from 'can-autoplay'
+import canAutoPlay from 'can-autoplay';
 
 const setEnvironment = () => {
-  setDirectorEndpoint()
-}
+  setDirectorEndpoint();
+};
 
 const setDirectorEndpoint = () => {
   if (
@@ -22,70 +22,70 @@ const setDirectorEndpoint = () => {
     Director.setEndpoint(
       state.Params.viewer.directorUrl ??
         state.Params.environment.VUE_APP_DIRECTOR_ENDPOINT
-    )
+    );
   }
-}
+};
 
 export const handleInitViewConnection = (accountId, streamName) => {
   if (!streamName || !accountId) {
-    throw new Error('Stream ID not provided.')
+    throw new Error('Stream ID not provided.');
   }
-  setEnvironment()
+  setEnvironment();
   const tokenGenerator = () => {
     const subscriber = Director.getSubscriber(
       streamName,
       accountId,
       state.Params.viewer.token,
       state.Params.viewer.drm
-    )
+    );
     subscriber.catch((error) => {
-      const errorMessage = `${error}`
+      const errorMessage = `${error}`;
       if (!errorMessage.includes('stream not being published')) {
-        const splitedMessage = errorMessage.replace('FetchError: ', '')
-        commit('Errors/setMessage', splitedMessage)
-        commit('Errors/setType', 'SubscriberError')
-        commit('Errors/setShowError', true)
+        const splitedMessage = errorMessage.replace('FetchError: ', '');
+        commit('Errors/setMessage', splitedMessage);
+        commit('Errors/setType', 'SubscriberError');
+        commit('Errors/setShowError', true);
       }
-    })
-    return subscriber
-  }
+    });
+    return subscriber;
+  };
 
-  const millicastView = new View(streamName, tokenGenerator)
-  window.millicastView = millicastView
+  const millicastView = new View(streamName, tokenGenerator);
+  window.millicastView = millicastView;
   window.__defineGetter__('peer', () => {
-    return millicastView.getRTCPeerConnection()
-  })
-  commit('ViewConnection/setMillicastView', millicastView)
-}
+    return millicastView.getRTCPeerConnection();
+  });
+  commit('ViewConnection/setMillicastView', millicastView);
+};
 
 export const handleConnectToStream = async () => {
-  const millicastView = state.ViewConnection.millicastView
+  const millicastView = state.ViewConnection.millicastView;
   if (millicastView.isActive()) {
-    return
+    return;
   }
   try {
-    await setCanAutoPlayStream()
+    await setCanAutoPlayStream();
     const connectOptions = {
       enableDRM: state.Params.viewer.drm,
       events: ['active', 'inactive', 'layers', 'viewercount'],
       absCaptureTime: true,
-    }
+    };
     if (state.Params.viewer.audioOnly) {
-      connectOptions.disableVideo = true
+      connectOptions.disableVideo = true;
     }
     if (state.Params.viewer.videoOnly) {
-      connectOptions.disableAudio = true
+      connectOptions.disableAudio = true;
     }
     if (state.Params.viewer.forcePlayoutDelay) {
-      connectOptions.forcePlayoutDelay = state.Params.viewer.forcePlayoutDelay
+      connectOptions.forcePlayoutDelay = state.Params.viewer.forcePlayoutDelay;
     }
     if (state.Params.viewer.metadata) {
-      connectOptions.metadata = state.Params.viewer.metadata
+      connectOptions.metadata = state.Params.viewer.metadata;
     }
     if (state.Params.viewer.abrStrategy) {
       connectOptions.abrConfiguration = {
         strategy: state.Params.viewer.abrStrategy,
-      }
+      };
     }
     if (state.Params.viewer.abrBandwidth) {
       connectOptions.abrConfiguration = {
@@ -93,77 +93,77 @@ export const handleConnectToStream = async () => {
         metadata: {
           bitrate: state.Params.viewer.abrBandwidth,
         },
-      }
+      };
     }
 
     if (state.Params.viewer.customKeys) {
-      connectOptions.customKeys = { ...state.Params.viewer.customKeys }
+      connectOptions.customKeys = { ...state.Params.viewer.customKeys };
     }
 
-    await millicastView.connect(connectOptions)
-    addSignalingMigrateListener()
+    await millicastView.connect(connectOptions);
+    addSignalingMigrateListener();
   } catch (e) {
-    const message = e.response?.data?.data?.message
-    commit('Controls/setIsLoading', false)
-    commit('Controls/setIsLive', false)
-    millicastView.reconnect()
-    if (!message) return
+    const message = e.response?.data?.data?.message;
+    commit('Controls/setIsLoading', false);
+    commit('Controls/setIsLive', false);
+    millicastView.reconnect();
+    if (!message) return;
     if (!message.toLowerCase().includes('stream not being published')) {
       throw new Error(`${message.charAt(0).toUpperCase()}${message.slice(1)}`, {
         cause: e,
-      })
+      });
     }
   }
-}
+};
 
 export const setTrackEvent = () => {
-  const millicastView = state.ViewConnection.millicastView
+  const millicastView = state.ViewConnection.millicastView;
   millicastView.on('track', async (event) => {
     // Track event is handled by SDK for DRM
-    if (state.Params.viewer.drm) return
+    if (state.Params.viewer.drm) return;
     // map video trackId with mid
     if (event.track?.kind === 'video') {
       commit('Sources/addTrackIdMidMapping', {
         trackId: event.track?.id,
         mid: event.transceiver?.mid,
-      })
+      });
     }
     if (event.streams.length) {
-      await setStream(event.streams[0])
+      await setStream(event.streams[0]);
     }
     if (!state.ViewConnection.trackEvent[event.track.kind].transceiver[0]) {
       state.ViewConnection.trackEvent[event.track.kind].transceiver[0] =
-        event.transceiver
+        event.transceiver;
     } else {
       state.ViewConnection.trackEvent[event.track.kind].transceiver.push(
         event.transceiver
-      )
+      );
     }
-    state.ViewConnection.trackEvent[event.track.kind].track = true
-  })
+    state.ViewConnection.trackEvent[event.track.kind].track = true;
+  });
 
   if (state.Params.viewer.metadata) {
     millicastView.on('metadata', (metadata) => {
       const metadataEvent = new CustomEvent('metadata', {
         detail: { metadata },
-      })
-      window.dispatchEvent(metadataEvent)
-    })
+      });
+      window.dispatchEvent(metadataEvent);
+    });
   }
-}
+};
 
 const setStream = async (entrySrcObject) => {
-  const video = state.Controls.video
-  const drmAudio = state.Controls.drmAudio
-  addSignalingMigrateListener()
-  commit('Controls/setSrcObject', entrySrcObject)
+  const video = state.Controls.video;
+  const drmAudio = state.Controls.drmAudio;
+  addSignalingMigrateListener();
+  commit('Controls/setSrcObject', entrySrcObject);
   //If we already had a a stream and is not migrating then we ignore it (Firefox addRemoteTrack issue)
   if (
     video.srcObject &&
     video.srcObject.id !== entrySrcObject.id &&
     !state.Controls.viewerMigratingEvent
   ) {
-    return
+    return;
   }
   //If we already had a a stream
   if (
@@ -171,82 +171,82 @@ const setStream = async (entrySrcObject) => {
     video.srcObject.id !== entrySrcObject.id &&
     state.Controls.viewerMigratingEvent
   ) {
-    commit('Controls/setPreviousSplitState', state.Controls.isSplittedView)
-    commit('Controls/setIsMigrating', true)
-    commit('Controls/setIsSplittedView', false)
-    await nextTick()
+    commit('Controls/setPreviousSplitState', state.Controls.isSplittedView);
+    commit('Controls/setIsMigrating', true);
+    commit('Controls/setIsSplittedView', false);
+    await nextTick();
     const opositeElementRef =
-      state.Controls.currentElementRef === 'player' ? 'player2' : 'player'
-    const mediaTag = document.getElementById(opositeElementRef)
-    const drmAudio = document.getElementById('drm-audio-' + opositeElementRef)
-    mediaTag.srcObject = entrySrcObject
-    mediaTag.autoplay = state.Controls.playing
-    mediaTag.muted = state.Controls.muted
-    removeVideoPauseListeners()
+      state.Controls.currentElementRef === 'player' ? 'player2' : 'player';
+    const mediaTag = document.getElementById(opositeElementRef);
+    const drmAudio = document.getElementById('drm-audio-' + opositeElementRef);
+    mediaTag.srcObject = entrySrcObject;
+    mediaTag.autoplay = state.Controls.playing;
+    mediaTag.muted = state.Controls.muted;
+    removeVideoPauseListeners();
 
-    addVideoEventListeners(mediaTag)
+    addVideoEventListeners(mediaTag);
     mediaTag.onloadedmetadata = async () => {
-      commit('Controls/setVideo', mediaTag)
-      commit('Controls/setDrmAudio', drmAudio)
-      commit('Controls/setCurrentElementRef', opositeElementRef)
-      commit('Controls/setIsMigrating', false)
-      commit('Controls/setIsSplittedView', state.Controls.previousSplitState)
+      commit('Controls/setVideo', mediaTag);
+      commit('Controls/setDrmAudio', drmAudio);
+      commit('Controls/setCurrentElementRef', opositeElementRef);
+      commit('Controls/setIsMigrating', false);
+      commit('Controls/setIsSplittedView', state.Controls.previousSplitState);
       if (document.pictureInPictureElement) {
-        mediaTag.requestPictureInPicture()
+        mediaTag.requestPictureInPicture();
       }
-    }
-    commit('Controls/setViewerMigratingEvent', false)
-    commit('Controls/setMigrateListenerIsSet', false)
+    };
+    commit('Controls/setViewerMigratingEvent', false);
+    commit('Controls/setMigrateListenerIsSet', false);
     //We have to set the listener again since the signaling attribute of millicastView is changed after the migrate.
-    addSignalingMigrateListener()
+    addSignalingMigrateListener();
   } else {
     setVideoPlayer({
       videoPlayer: video,
       srcObject: entrySrcObject,
       drmAudio: drmAudio,
-    })
+    });
   }
-}
+};
 
 const setCanAutoPlayStream = async () => {
-  commit('Controls/setVideoAutoplay', state.Params.viewer.autoplay)
+  commit('Controls/setVideoAutoplay', state.Params.viewer.autoplay);
   if (state.Params.viewer.autoplay) {
     const canAutoPlayVideo = await canAutoPlay.video({
       muted: state.Params.viewer.muted,
-    })
+    });
     const muted = !state.Params.viewer.muted
       ? !canAutoPlayVideo.result
-      : state.Params.viewer.muted
-    commit('Controls/setVideoMuted', muted)
-    commit('Controls/setAutoPlayMuted', muted)
+      : state.Params.viewer.muted;
+    commit('Controls/setVideoMuted', muted);
+    commit('Controls/setAutoPlayMuted', muted);
   }
-}
+};
 
 export const setReconnect = () => {
   state.ViewConnection.eventListeners.reconnect =
     state.ViewConnection.eventListeners.reconnect ??
     state.ViewConnection.millicastView.on('reconnect', ({ timeout, error }) => {
-      const errorMessage = error?.toString().toLowerCase()
+      const errorMessage = error?.toString().toLowerCase();
       if (errorMessage?.toLowerCase().includes('stream not being published')) {
-        commit('Controls/setIsLoading', false)
-        commit('Controls/setIsLive', false)
+        commit('Controls/setIsLoading', false);
+        commit('Controls/setIsLive', false);
       } else {
-        commit('Controls/setPreviousSplitState', state.Controls.isSplittedView)
-        commit('Controls/setVideoSource', null)
-        commit('Controls/setSrcObject', null)
-        commit('Controls/setIsSplittedView', false)
-        commit('Controls/setViewerMigratingEvent', false)
-        commit('Controls/setMigrateListenerIsSet', false)
-        commit('Controls/handleReconnection', { timeout, error })
+        commit('Controls/setPreviousSplitState', state.Controls.isSplittedView);
+        commit('Controls/setVideoSource', null);
+        commit('Controls/setSrcObject', null);
+        commit('Controls/setIsSplittedView', false);
+        commit('Controls/setViewerMigratingEvent', false);
+        commit('Controls/setMigrateListenerIsSet', false);
+        commit('Controls/handleReconnection', { timeout, error });
       }
-    })
-}
+    });
+};
 
 export const handleStopStream = () => {
-  state.ViewConnection.millicastView?.stop()
-  commit('Controls/setVideoSource', null)
-  commit('Controls/setSrcObject', null)
-}
+  state.ViewConnection.millicastView?.stop();
+  commit('Controls/setVideoSource', null);
+  commit('Controls/setSrcObject', null);
+};
 
 const addSignalingMigrateListener = () => {
   if (
@@ -256,10 +256,10 @@ const addSignalingMigrateListener = () => {
   ) {
     setTimeout(() => {
       state.ViewConnection.millicastView.signaling.on('migrate', () => {
-        commit('Controls/setViewerMigratingEvent', true)
-      })
+        commit('Controls/setViewerMigratingEvent', true);
+      });
       // Avoid setting the event listener more than once
-      commit('Controls/setMigrateListenerIsSet', true)
-    }, 50) //We have to set a timeout because it takes a while before the millicastView signaling instance changes on migrate.
+      commit('Controls/setMigrateListenerIsSet', true);
+    }, 50); //We have to set a timeout because it takes a while before the millicastView signaling instance changes on migrate.
   }
-}
+};
