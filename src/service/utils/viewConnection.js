@@ -86,10 +86,9 @@ export const handleConnectToStream = async () => {
       connectOptions.abrConfiguration = {
         strategy: state.Params.viewer.abrStrategy,
       }
-
     }
     if (state.Params.viewer.abrBandwidth) {
-      connectOptions.abrConfiguration={
+      connectOptions.abrConfiguration = {
         ...connectOptions.abrConfiguration,
         metadata: {
           bitrate: state.Params.viewer.abrBandwidth,
@@ -97,11 +96,10 @@ export const handleConnectToStream = async () => {
       }
     }
 
-    
     if (state.Params.viewer.customKeys) {
-      connectOptions.customKeys = {...state.Params.viewer.customKeys}
+      connectOptions.customKeys = { ...state.Params.viewer.customKeys }
     }
-    
+
     await millicastView.connect(connectOptions)
     addSignalingMigrateListener()
   } catch (e) {
@@ -111,7 +109,9 @@ export const handleConnectToStream = async () => {
     millicastView.reconnect()
     if (!message) return
     if (!message.toLowerCase().includes('stream not being published')) {
-      throw new Error(`${message.charAt(0).toUpperCase()}${message.slice(1)}`, { cause: e })
+      throw new Error(`${message.charAt(0).toUpperCase()}${message.slice(1)}`, {
+        cause: e,
+      })
     }
   }
 }
