@@ -57,7 +57,7 @@ export default {
           customKeys,
         } = this.paramsOptions
         const shouldHideButtons =
-          controls === false ? availableControls : hideButtons ?? []
+          controls === false ? availableControls : (hideButtons ?? [])
 
         processViewerOptions({
           streamId: `${accountId}/${streamName}`,
@@ -119,7 +119,7 @@ export default {
     const plugin = document.createElement('script')
     plugin.setAttribute(
       'src',
-      '//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1'
+      '//www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1',
     )
     plugin.async = true
     document.head.appendChild(plugin)

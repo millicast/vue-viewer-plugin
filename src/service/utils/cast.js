@@ -58,11 +58,11 @@ export const handleSetCast = async () => {
               window.cast.framework.CastContextEventType
             await castContext.addEventListener(
               CAST_STATE_CHANGED,
-              async ({ castState }) => await castStateListener(castState)
+              async ({ castState }) => await castStateListener(castState),
             )
             await castContext.addEventListener(
               SESSION_STATE_CHANGED,
-              async (e) => await sessionListener(e)
+              async (e) => await sessionListener(e),
             )
           } else {
             commit('Controls/setCastAvailable', false)

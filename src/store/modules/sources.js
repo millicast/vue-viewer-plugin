@@ -41,14 +41,14 @@ export default {
     removeSource(state, { kind, sourceId }) {
       if (kind === 'video') {
         const sourceIndex = state.videoSources.findIndex(
-          (source) => source.sourceId === sourceId
+          (source) => source.sourceId === sourceId,
         )
         if (sourceIndex !== -1) {
           state.videoSources.splice(sourceIndex, 1)
         }
       } else if (kind === 'audio') {
         const sourceIndex = state.audioSources.findIndex(
-          (source) => source.sourceId === sourceId
+          (source) => source.sourceId === sourceId,
         )
         if (sourceIndex !== -1) {
           state.audioSources.splice(sourceIndex, 1)
@@ -71,7 +71,7 @@ export default {
       state.sourceRemoteTracks.push(sourceRemoteTrack)
       //I know that is video source because we don't implement multi audio
       const sid = state.videoSources.findIndex(
-        (v) => v.sourceId === sourceRemoteTrack.sourceId
+        (v) => v.sourceId === sourceRemoteTrack.sourceId,
       )
       if (sid !== -1) {
         const midTrack = sourceRemoteTrack.transceiver.mid
@@ -83,7 +83,7 @@ export default {
       state.sourceRemoteTracks[remoteTrackIndex] = sourceRemoteTrack
       //I know that is video source because we don't implement multi audio
       const sid = state.videoSources.findIndex(
-        (v) => v.sourceId === sourceRemoteTrack.sourceId
+        (v) => v.sourceId === sourceRemoteTrack.sourceId,
       )
       if (sid !== -1) {
         state.videoSources[sid].mid = sourceRemoteTrack.transceiver.mid
@@ -93,7 +93,7 @@ export default {
     },
     removeSourceRemoteTrack(state, sourceId) {
       const remoteToDeleteIndex = state.sourceRemoteTracks.findIndex(
-        (remoteTrack) => remoteTrack.sourceId === sourceId
+        (remoteTrack) => remoteTrack.sourceId === sourceId,
       )
       if (remoteToDeleteIndex !== -1) {
         state.sourceRemoteTracks.splice(remoteToDeleteIndex, 1)
@@ -101,14 +101,14 @@ export default {
     },
     removeTransceiverSourceState(state, sourceId) {
       const sourceCurrentMid = Object.keys(state.transceiverSourceState).find(
-        (key) => state.transceiverSourceState[key].sourceId === sourceId
+        (key) => state.transceiverSourceState[key].sourceId === sourceId,
       )
       const mainMidKey = Object.keys(state.transceiverSourceState).find(
-        (key) => state.transceiverSourceState[key].sourceId === null
+        (key) => state.transceiverSourceState[key].sourceId === null,
       )
       if (sourceCurrentMid !== -1 && sourceId !== null) {
         let sourceInitialMid = Object.values(state.sourceRemoteTracks).find(
-          (value) => value.sourceId === sourceId
+          (value) => value.sourceId === sourceId,
         ).transceiver.mid
         if (state.transceiverSourceState[sourceCurrentMid].mid === '0') {
           if (sourceInitialMid !== mainMidKey) {
@@ -125,7 +125,7 @@ export default {
             delete state.transceiverSourceState[sourceInitialMid]
           } else {
             sourceInitialMid = state.videoSources.find(
-              (source) => source.sourceId === sourceId
+              (source) => source.sourceId === sourceId,
             ).mid
             delete state.transceiverSourceState[sourceInitialMid]
             state.transceiverSourceState[sourceCurrentMid] =
@@ -155,7 +155,7 @@ export default {
       const currentSource =
         state.transceiverSourceState[state.videoSources[0].mid]
       const targetKey = Object.keys(state.transceiverSourceState).find(
-        (key) => state.transceiverSourceState[key].mid === source.mid
+        (key) => state.transceiverSourceState[key].mid === source.mid,
       )
       const targetSource = state.transceiverSourceState[targetKey]
       state.transceiverSourceState[state.videoSources[0].mid] = {

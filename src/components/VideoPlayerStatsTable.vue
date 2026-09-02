@@ -278,7 +278,7 @@ export default {
         this.stats.videoSynchronizationSources?.[0]?.timestamp
       ) {
         const captureTime = formatNtpToEpoch(
-          this.stats.videoSynchronizationSources[0].captureTimestamp
+          this.stats.videoSynchronizationSources[0].captureTimestamp,
         )
         timestamp = new Date(captureTime).toISOString()
       }
@@ -291,7 +291,7 @@ export default {
         this.stats.videoSynchronizationSources?.[0]?.timestamp
       ) {
         const captureTime = formatNtpToEpoch(
-          this.stats.videoSynchronizationSources[0].captureTimestamp
+          this.stats.videoSynchronizationSources[0].captureTimestamp,
         )
         delta =
           this.stats.videoSynchronizationSources?.[0].timestamp - captureTime

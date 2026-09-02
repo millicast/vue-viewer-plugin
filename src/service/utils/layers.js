@@ -27,7 +27,7 @@ export const updateLayers = (evntData) => {
       encoding.active[0]?.layers?.forEach((quality) => {
         if (
           !activeQualities.some(
-            (info) => info.spatialLayerId === quality.spatialLayerId
+            (info) => info.spatialLayerId === quality.spatialLayerId,
           )
         ) {
           quality.id = encoding.active[0].id
@@ -39,7 +39,7 @@ export const updateLayers = (evntData) => {
       encoding.inactive[0]?.layers?.forEach((quality) => {
         if (
           !inactiveQualities.some(
-            (info) => info.spatialLayerId === quality.spatialLayerId
+            (info) => info.spatialLayerId === quality.spatialLayerId,
           )
         ) {
           inactiveQualities.push(quality)
@@ -65,7 +65,7 @@ export const updateLayers = (evntData) => {
   })
   if (activeQualities.length >= 2) {
     activeQualities.sort(
-      (quality, nextQuality) => nextQuality.height - quality.height
+      (quality, nextQuality) => nextQuality.height - quality.height,
     )
     const names = qualityNames[activeQualities.length] || []
     activeQualities.forEach((quality, index) => {
@@ -106,7 +106,7 @@ export const handleSelectQuality = (media) => {
   }
   const mediaLayers = state.Layers.medias[layerIdx]?.layers
   const quality = mediaLayers.find(
-    (layer) => layer.simulcastIdx === media.simulcastIdx
+    (layer) => layer.simulcastIdx === media.simulcastIdx,
   )
   state.ViewConnection.millicastView?.project(source.sourceId, [
     {
@@ -163,7 +163,7 @@ const setSideSourcesQualityLow = (newLayers) => {
     videoSourceKeys.forEach((source) => {
       if (source.sourceId !== null && source.mid in diffActiveLayers) {
         diffActiveLayers[source.mid].sort(
-          (layer, nextLayer) => nextLayer.id - layer.id
+          (layer, nextLayer) => nextLayer.id - layer.id,
         )
         state.ViewConnection.millicastView?.project(source.name, [
           {

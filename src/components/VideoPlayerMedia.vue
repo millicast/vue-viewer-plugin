@@ -189,7 +189,7 @@ export default {
             this.setIsSplittedView(this.previousSplitState)
             this.millicastView.removeListener(
               'connectionStateChange',
-              setSplitView
+              setSplitView,
             )
             this.toast.clear()
           }
@@ -211,7 +211,7 @@ export default {
       let drmAudio
       if (this.viewer.drm) {
         drmAudio = document.getElementById(
-          'drm-audio-' + this.currentElementRef
+          'drm-audio-' + this.currentElementRef,
         )
       }
 
