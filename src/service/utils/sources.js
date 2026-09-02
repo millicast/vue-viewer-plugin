@@ -233,6 +233,7 @@ export const handleSelectSource = async ({ kind, source }) => {
     selectedSource = state.Sources.selectedVideoSource
   } else if (kind === 'audio') {
     track = state.ViewConnection.trackEvent.audio.track
+    // selectedSource = state.Sources.selectedVideoSource
     selectedSource = state.Sources.selectedAudioSource
   }
   commit('Sources/setSelectedSource', { kind, selectedSource: source })
