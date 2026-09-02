@@ -54,9 +54,10 @@ export default {
           showTimer,
           abrStrategy,
           abrBandwidth,
-          customKeys
+          customKeys,
         } = this.paramsOptions
-        const shouldHideButtons = controls === false ? availableControls : hideButtons ?? [];
+        const shouldHideButtons =
+          controls === false ? availableControls : hideButtons ?? []
 
         processViewerOptions({
           streamId: `${accountId}/${streamName}`,

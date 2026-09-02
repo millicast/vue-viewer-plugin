@@ -57,7 +57,7 @@ const pauseControlListener = () => {
 
 export const initViewModule = () => {
   //Expose Viewer version and SDK Logger into the console
-  window.Version = process.env.PACKAGE_VERSION
+  window.Version = import.meta.env.PACKAGE_VERSION
   window.Logger = Logger
   const accountId = params.getAccountId()
   const streamName = params.getStreamName()

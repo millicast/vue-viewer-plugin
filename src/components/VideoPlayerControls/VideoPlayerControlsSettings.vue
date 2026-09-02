@@ -196,7 +196,7 @@ export default {
     },
   },
   mounted() {
-    const version = process.env.PACKAGE_VERSION
+    const version = import.meta.env.PACKAGE_VERSION
     this.viewerVersion = version ? 'v' + version : ''
     this.toast = new CustomToast()
   },
@@ -214,7 +214,7 @@ export default {
               try {
                 await selectSource({ kind: 'video', source })
                 await this.setMainLabel(source.name)
-              } catch (error) {
+              } catch {
                 this.toast.showToast(
                   'error',
                   'There was an error selecting the desired source, try again',
@@ -239,7 +239,7 @@ export default {
                 this.setAudioFollowsVideo(false)
                 try {
                   await selectSource({ kind: 'audio', source })
-                } catch (error) {
+                } catch {
                   this.toast.showToast(
                     'error',
                     'There was an error selecting the desired source, try again',
