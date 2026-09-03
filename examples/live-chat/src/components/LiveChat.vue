@@ -109,7 +109,7 @@
 </template>
 
 <script>
-import faker from '@faker-js/faker';
+import { faker } from '@faker-js/faker';
 const PubNub = require('pubnub');
 const PubNubCredentials =
   process.env.VUE_APP_PUBNUB_PUBLISH_KEY &&
@@ -126,7 +126,7 @@ export default {
   data() {
     return {
       showActionMenu: false,
-      userName: faker.internet.userName(),
+      userName: faker.internet.username(),
       messages: [],
       textMsg: '',
       streamId:
