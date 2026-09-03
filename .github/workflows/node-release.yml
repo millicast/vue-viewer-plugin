@@ -28,7 +28,6 @@ on:
 jobs:
   release-gate:
     runs-on: ubuntu-latest
-    container: alpine:latest
     environment: release
     steps:
       - run: |
