@@ -4,6 +4,7 @@ minimumReleaseAge: 10080
 minimumReleaseAgeIgnoreMissingTime: false
 minimumReleaseAgeExclude:
   - '@millicast/*'
+  - '@dolbyio/*'
 trustPolicy: no-downgrade
 trustPolicyExclude:
   - ua-parser-js@1.0.41
