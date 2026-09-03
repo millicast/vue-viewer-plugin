@@ -26,6 +26,15 @@ on:
         default: false
 
 jobs:
+  release-gate:
+    runs-on: ubuntu-latest
+    container: alpine:latest
+    environment: release
+    steps:
+      - run: |
+          # noop command
+          :
+
   next-version:
     uses: millicast/github-actions/.github/workflows/npm-version-release.yml@v1.0.2
     # should ONLY be used from main
