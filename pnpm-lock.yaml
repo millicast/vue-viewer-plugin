@@ -16,8 +16,8 @@ importers:
         specifier: ^4.6.3
         version: 4.6.3(jquery@3.7.1)(popper.js@1.16.1)
       '@millicast/sdk':
-        specifier: ^0.8.0
-        version: 0.8.0
+        specifier: ^0.8.1
+        version: 0.8.1
       can-autoplay:
         specifier: ^3.0.0
         version: 3.0.2
@@ -81,8 +81,8 @@ packages:
     resolution: {integrity: sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==}
     engines: {node: '>=6.9.0'}
 
-  '@dolbyio/webrtc-stats@1.0.4':
-    resolution: {integrity: sha512-QOo1TVQSI3NVaSWG1p3JopLkTDB9z94t9Bi1JvJwaQbwrEkLwGXccOX9U+FjroUsfSh9QK2tlifKJifedEBa7w==}
+  '@dolbyio/webrtc-stats@1.3.0':
+    resolution: {integrity: sha512-MfZ/Gr+7F0FfnWalb5QwD5cyR6QpfnUOgjDh7rvT3lrKTyKILMsazbrCshxQBXMiysWHlmIm0pkJRDIr5eL9pA==}
 
   '@eslint-community/eslint-utils@4.10.1':
     resolution: {integrity: sha512-cuadcxVFE8sDK6iWJbs8Sn0av2Nrh2QSGQhVlBW9AaAHqHwjWsZHT8LJ4hFGPh7ASBV2deFdM7H/DPjulmh8rg==}
@@ -155,8 +155,8 @@ packages:
       jquery: 1.9.1 - 3
       popper.js: ^1.16.1
 
-  '@millicast/sdk@0.8.0':
-    resolution: {integrity: sha512-80cZRWXc+9kCGERhRrVdoxvvvveynQR3QU4pYvW/ZigCfFgm0DaX/nvW2L9IAmPEHCb+K3uDNzR9XYSXga2bdA==}
+  '@millicast/sdk@0.8.1':
+    resolution: {integrity: sha512-e0HXhtDRQiOHTbArh5zrYvysj17yxJt+2Bv4cAPJ+PUkgVu/V+974xGas/s1DMWEDFAbirn5kRS7nkBLo+/euA==}
 
   '@oxc-project/types@0.146.0':
     resolution: {integrity: sha512-XC0QsnnhVe7sLIWmYmdPw7x5P0h4W8vUU3Nv1ySgWXtvCz8NizoAEpGXA0sOYoJQV2Rl13LgURAHQ5cI5ILCSA==}
@@ -978,7 +978,7 @@ snapshots:
       '@babel/helper-string-parser': 7.29.7
       '@babel/helper-validator-identifier': 7.29.7
 
-  '@dolbyio/webrtc-stats@1.0.4':
+  '@dolbyio/webrtc-stats@1.3.0':
     dependencies:
       js-logger: 1.6.1
 
@@ -1041,9 +1041,9 @@ snapshots:
       jquery: 3.7.1
       popper.js: 1.16.1
 
-  '@millicast/sdk@0.8.0':
+  '@millicast/sdk@0.8.1':
     dependencies:
-      '@dolbyio/webrtc-stats': 1.0.4
+      '@dolbyio/webrtc-stats': 1.3.0
       '@types/node': 24.13.3
       Base64: 1.3.0
       buffer: 6.0.3
