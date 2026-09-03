@@ -5,16 +5,6 @@ settings:
   excludeLinksFromLockfile: false
   injectWorkspacePackages: true
 
-overrides:
-  postcss-selector-parser@6: ^6.1.3
-  postcss-selector-parser@7: ^7.1.3
-  semver@5: ^7.8.0
-  semver@6: ^7.8.0
-  css-declaration-sorter: ^7.4.0
-  ua-parser-js: ^1.0.41
-  serialize-javascript: ^7.0.5
-  uuid: ^11.0.0
-
 importers:
 
   .:
@@ -26,8 +16,8 @@ importers:
         specifier: ^4.6.3
         version: 4.6.3(jquery@3.7.1)(popper.js@1.16.1)
       '@millicast/sdk':
-        specifier: '*'
-        version: 0.6.1
+        specifier: ^0.8.0
+        version: 0.8.0
       can-autoplay:
         specifier: ^3.0.0
         version: 3.0.2
@@ -46,7 +36,7 @@ importers:
         version: 10.0.1(eslint@10.9.1)
       '@vitejs/plugin-vue':
         specifier: ^6.0.8
-        version: 6.0.8(vite@8.2.2(sass@1.103.1))(vue@3.5.41)
+        version: 6.0.8(vite@8.2.2(@types/node@24.13.3)(sass@1.103.1))(vue@3.5.41)
       eslint:
         specifier: ^10.0.0
         version: 10.9.1
@@ -64,7 +54,7 @@ importers:
         version: 1.103.1
       vite:
         specifier: ^8.2.2
-        version: 8.2.2(sass@1.103.1)
+        version: 8.2.2(@types/node@24.13.3)(sass@1.103.1)
       vue:
         specifier: ^3.0.0
         version: 3.5.41
@@ -91,8 +81,8 @@ packages:
     resolution: {integrity: sha512-Vj1jF3cPfxg7OAfoI7QnVKLoILlm2JF9pnVHrX8qx7AHMiYWT+NDAA7jChlNgRS4WTLc/fD1lXLmPixluj+3Gg==}
     engines: {node: '>=6.9.0'}
 
-  '@dolbyio/webrtc-stats@1.2.2':
-    resolution: {integrity: sha512-3MEZkHDntpo9yOxnBVxV3R3geif4Eut4p7naVOJTTWmLZvdpgQp6ayuKqnbBSvAKFwkv2X8XHQoBA5lcbNoBAw==}
+  '@dolbyio/webrtc-stats@1.0.4':
+    resolution: {integrity: sha512-QOo1TVQSI3NVaSWG1p3JopLkTDB9z94t9Bi1JvJwaQbwrEkLwGXccOX9U+FjroUsfSh9QK2tlifKJifedEBa7w==}
 
   '@eslint-community/eslint-utils@4.10.1':
     resolution: {integrity: sha512-cuadcxVFE8sDK6iWJbs8Sn0av2Nrh2QSGQhVlBW9AaAHqHwjWsZHT8LJ4hFGPh7ASBV2deFdM7H/DPjulmh8rg==}
@@ -165,8 +155,8 @@ packages:
       jquery: 1.9.1 - 3
       popper.js: ^1.16.1
 
-  '@millicast/sdk@0.6.1':
-    resolution: {integrity: sha512-pEBolQA9gPPyc+KT/I/PjobcJgJV4h7PM33xQDmrYVkjMUne2RWQX6e0kHCER2EIR3Ep9KUV9N9CGAL94GBmRQ==}
+  '@millicast/sdk@0.8.0':
+    resolution: {integrity: sha512-80cZRWXc+9kCGERhRrVdoxvvvveynQR3QU4pYvW/ZigCfFgm0DaX/nvW2L9IAmPEHCb+K3uDNzR9XYSXga2bdA==}
 
   '@oxc-project/types@0.146.0':
     resolution: {integrity: sha512-XC0QsnnhVe7sLIWmYmdPw7x5P0h4W8vUU3Nv1ySgWXtvCz8NizoAEpGXA0sOYoJQV2Rl13LgURAHQ5cI5ILCSA==}
@@ -361,8 +351,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/node@18.19.130':
-    resolution: {integrity: sha512-GRaXQx6jGfL8sKfaIDD6OupbIHBr9jv7Jnaml9tB7l4v068PAOXqfcujMMo5PhbIs6ggR1XODELqahT2R8v0fg==}
+  '@types/node@24.13.3':
+    resolution: {integrity: sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q==}
 
   '@vitejs/plugin-vue@6.0.8':
     resolution: {integrity: sha512-0ZjgOg7oO6farnNGup7yvoM/YXZV84OZxHAwtflItNa/6zzQyVb5LNxyea3FEKEX2XlagIKzrlH7wwxkKgtiew==}
@@ -635,8 +625,9 @@ packages:
   json-stable-stringify-without-jsonify@1.0.1:
     resolution: {integrity: sha512-Bdboy+l7tA3OGW6FjyFHWkP5LuByj1Tk33Ljyq0axyzdk9//JSi2u3fP1QSmd1KNwq6VOKYGlAu87CisVir6Pw==}
 
-  jwt-decode@3.1.2:
-    resolution: {integrity: sha512-UfpWE/VZn0iP50d8cz9NrZLM9lSWhcJ+0Gt/nm4by88UL+J1SiKN8/5dkjMmbEzwL2CAe+67GsegCbIKtbp75A==}
+  jwt-decode@4.0.0:
+    resolution: {integrity: sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==}
+    engines: {node: '>=18'}
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
@@ -871,8 +862,8 @@ packages:
     resolution: {integrity: sha512-LbBDqdIC5s8iROCUjMbW1f5dJQTEFB1+KO9ogbvlb3nm9n4YHa5p4KTvFPWvh2Hs8gZMBuiB1/8+pdfe/tDPug==}
     hasBin: true
 
-  undici-types@5.26.5:
-    resolution: {integrity: sha512-JlCMO+ehdEIKqlFxk6IfVoAUVmgz7cU7zD/h9XZ0qzeosSHmUJVOzSQvvYSYWXkFXC+IfLKSIffhv0sVZup6pA==}
+  undici-types@7.18.2:
+    resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
 
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
@@ -987,7 +978,7 @@ snapshots:
       '@babel/helper-string-parser': 7.29.7
       '@babel/helper-validator-identifier': 7.29.7
 
-  '@dolbyio/webrtc-stats@1.2.2':
+  '@dolbyio/webrtc-stats@1.0.4':
     dependencies:
       js-logger: 1.6.1
 
@@ -1050,16 +1041,16 @@ snapshots:
       jquery: 3.7.1
       popper.js: 1.16.1
 
-  '@millicast/sdk@0.6.1':
+  '@millicast/sdk@0.8.0':
     dependencies:
-      '@dolbyio/webrtc-stats': 1.2.2
-      '@types/node': 18.19.130
+      '@dolbyio/webrtc-stats': 1.0.4
+      '@types/node': 24.13.3
       Base64: 1.3.0
       buffer: 6.0.3
       events: 3.3.0
       js-logger: 1.6.1
       jsdoc-i18n-plugin: 0.0.3
-      jwt-decode: 3.1.2
+      jwt-decode: 4.0.0
       re-emitter: 1.1.4
       semantic-sdp: 3.31.1
       transaction-manager: 2.1.7
@@ -1180,14 +1171,14 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/node@18.19.130':
+  '@types/node@24.13.3':
     dependencies:
-      undici-types: 5.26.5
+      undici-types: 7.18.2
 
-  '@vitejs/plugin-vue@6.0.8(vite@8.2.2(sass@1.103.1))(vue@3.5.41)':
+  '@vitejs/plugin-vue@6.0.8(vite@8.2.2(@types/node@24.13.3)(sass@1.103.1))(vue@3.5.41)':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      vite: 8.2.2(sass@1.103.1)
+      vite: 8.2.2(@types/node@24.13.3)(sass@1.103.1)
       vue: 3.5.41
 
   '@vue/compiler-core@3.5.41':
@@ -1452,7 +1443,7 @@ snapshots:
 
   json-stable-stringify-without-jsonify@1.0.1: {}
 
-  jwt-decode@3.1.2: {}
+  jwt-decode@4.0.0: {}
 
   keyv@4.5.4:
     dependencies:
@@ -1661,7 +1652,7 @@ snapshots:
 
   ua-parser-js@1.0.41: {}
 
-  undici-types@5.26.5: {}
+  undici-types@7.18.2: {}
 
   uri-js@4.4.1:
     dependencies:
@@ -1671,7 +1662,7 @@ snapshots:
 
   valibot@1.4.2: {}
 
-  vite@8.2.2(sass@1.103.1):
+  vite@8.2.2(@types/node@24.13.3)(sass@1.103.1):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -1679,6 +1670,7 @@ snapshots:
       rolldown: 1.2.5
       tinyglobby: 0.2.17
     optionalDependencies:
+      '@types/node': 24.13.3
       fsevents: 2.3.3
       sass: 1.103.1
 
