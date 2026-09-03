@@ -19,9 +19,9 @@
     "README.md"
   ],
   "dependencies": {
-    "@millicast/sdk": "*",
-    "@millicast/bootstrap-ml": "^4.6.3",
     "@millicast/bootstrap-icons-ml": "^1.9.1",
+    "@millicast/bootstrap-ml": "^4.6.3",
+    "@millicast/sdk": "^0.8.0",
     "can-autoplay": "^3.0.0",
     "css-element-queries": "^1.2.3",
     "vue-toastification": "^2.0.0-rc.1",
