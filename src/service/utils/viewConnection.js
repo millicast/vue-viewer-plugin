@@ -155,9 +155,16 @@ export const setTrackEvent = () => {
     millicastView.on('peerRepair', (event) => {
       if (event.state === 'started') {
         commit('Controls/setViewerMigratingEvent', true);
-      } else if (event.state === 'failed') {
-        commit('Controls/setViewerMigratingEvent', false);
       }
+      // Deliberately not cleared on 'failed': the SDK's finishRepair() rollback path re-emits
+      // the original peer's track event right after emitting 'failed' to restore it, whenever
+      // the replacement had already progressed enough to swap in first (see View.js rollback()
+      // - "the application already received the tracks of the replacement; give it the
+      // current ones again"). That restoration needs this flag to still be set so setStream()
+      // takes the crossfade branch instead of dropping it. setStream() itself already clears
+      // the flag once any swap completes, which covers both the success and the
+      // restore-after-failed-repair case; clearing it eagerly here would race that re-emission
+      // and leave the video stuck on the (now-closing) replacement stream.
     });
   }
 
