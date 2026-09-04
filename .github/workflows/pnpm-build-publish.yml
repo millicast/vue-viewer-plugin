@@ -11,6 +11,10 @@ on:
         description: 'Distribution tag to publish package with'
         required: false
         type: string
+      dryrun:
+        description: 'dryrun'
+        required: false
+        type: boolean
   workflow_call:
     inputs:
       ref:
@@ -19,6 +23,9 @@ on:
       dist_tag:
         required: false
         type: string
+      dryrun:
+        required: false
+        type: boolean
 
 jobs:
   build-publish:
@@ -38,11 +45,15 @@ jobs:
       - name: "pnpm publish"
         env:
           dist_tag: ${{ inputs.dist_tag }}
+          dryrun: ${{ inputs.dryrun || 'false' }}
         shell: 'ash -e -o pipefail {0}'
         run: |
           set --
           if [ -n "${dist_tag}" ]; then
             set -- "$@" --tag "${dist_tag}"
           fi
+          if [ "${dryrun}" = 'true' ]; then
+            set -- "$@" --dry-run
+          fi
 
-          pnpm publish --provenance "$@"
+          pnpm publish --provenance --no-git-checks "$@"
