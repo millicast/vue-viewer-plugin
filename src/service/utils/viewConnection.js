@@ -96,6 +96,13 @@ export const handleConnectToStream = async () => {
       };
     }
 
+    if (state.Params.viewer.relayonly) {
+      connectOptions.peerConfig = { iceTransportPolicy: 'relay' };
+    }
+    if (state.Params.viewer.pcrepair) {
+      connectOptions.peerRepair = { enabled: true };
+    }
+
     if (state.Params.viewer.customKeys) {
       connectOptions.customKeys = { ...state.Params.viewer.customKeys };
     }
