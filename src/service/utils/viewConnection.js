@@ -149,6 +149,18 @@ export const setTrackEvent = () => {
     state.ViewConnection.trackEvent[event.track.kind].track = true;
   });
 
+  if (state.Params.viewer.pcrepair) {
+    // Client-initiated repair: the replacement peer emits a new track event,
+    // which setStream must handle like a server migration.
+    millicastView.on('peerRepair', (event) => {
+      if (event.state === 'started') {
+        commit('Controls/setViewerMigratingEvent', true);
+      } else if (event.state === 'failed') {
+        commit('Controls/setViewerMigratingEvent', false);
+      }
+    });
+  }
+
   if (state.Params.viewer.metadata) {
     millicastView.on('metadata', (metadata) => {
       const metadataEvent = new CustomEvent('metadata', {
