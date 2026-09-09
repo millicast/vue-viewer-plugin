@@ -11,4 +11,4 @@ trustPolicyExclude:
 engineStrict: true
 
 allowBuilds:
-  '@parcel/watcher': true
+  '@parcel/watcher': false
