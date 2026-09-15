@@ -54,6 +54,8 @@ export default {
           showTimer,
           abrStrategy,
           abrBandwidth,
+          relayonly,
+          pcrepair,
           customKeys,
         } = this.paramsOptions;
         const shouldHideButtons =
@@ -85,6 +87,8 @@ export default {
           showTimer: showTimer,
           abrStrategy: abrStrategy,
           abrBandwidth: abrBandwidth,
+          relayonly: relayonly ?? false,
+          pcrepair: pcrepair ?? false,
           customKeys,
         });
       }
