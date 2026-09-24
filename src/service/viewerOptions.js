@@ -36,6 +36,8 @@ export const defaultViewerOptions = {
   showTimer: false,
   abrStrategy: null,
   abrBandwidth: null,
+  relayonly: false,
+  pcrepair: false,
   customKeys: null,
 };
 
@@ -65,6 +67,8 @@ export default function processViewerOptions({
   showTimer,
   abrStrategy,
   abrBandwidth,
+  relayonly,
+  pcrepair,
   ...customKeys
 }) {
   let options = {};
@@ -133,6 +137,9 @@ export default function processViewerOptions({
   if (!isNaN(abrBandwidth)) {
     options.abrBandwidth = parseInt(abrBandwidth);
   }
+
+  options.relayonly = relayonly === true || relayonly === 'true';
+  options.pcrepair = pcrepair === true || pcrepair === 'true';
 
   if (customKeys) {
     options = { ...options, ...customKeys };

@@ -1,6 +1,6 @@
 {
   "name": "@millicast/vue-viewer-plugin",
-  "version": "1.8.2",
+  "version": "1.8.3-pcrepair.0",
   "private": false,
   "author": "Millicast, Inc.",
   "scripts": {
@@ -21,7 +21,7 @@
   "dependencies": {
     "@millicast/bootstrap-icons-ml": "^1.9.1",
     "@millicast/bootstrap-ml": "^4.6.3",
-    "@millicast/sdk": "^0.8.1",
+    "@millicast/sdk": "0.8.2-pcrepair.0",
     "can-autoplay": "^3.0.0",
     "css-element-queries": "^1.2.3",
     "vue-toastification": "^2.0.0-rc.1",
