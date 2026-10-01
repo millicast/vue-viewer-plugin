@@ -96,6 +96,13 @@ export const handleConnectToStream = async () => {
       };
     }
 
+    if (state.Params.viewer.relayonly) {
+      connectOptions.peerConfig = { iceTransportPolicy: 'relay' };
+    }
+    if (state.Params.viewer.pcrepair) {
+      connectOptions.peerRepair = { enabled: true };
+    }
+
     if (state.Params.viewer.customKeys) {
       connectOptions.customKeys = { ...state.Params.viewer.customKeys };
     }
@@ -141,6 +148,25 @@ export const setTrackEvent = () => {
     }
     state.ViewConnection.trackEvent[event.track.kind].track = true;
   });
+
+  if (state.Params.viewer.pcrepair) {
+    // Client-initiated repair: the replacement peer emits a new track event,
+    // which setStream must handle like a server migration.
+    millicastView.on('peerRepair', (event) => {
+      if (event.state === 'started') {
+        commit('Controls/setViewerMigratingEvent', true);
+      }
+      // Deliberately not cleared on 'failed': the SDK's finishRepair() rollback path re-emits
+      // the original peer's track event right after emitting 'failed' to restore it, whenever
+      // the replacement had already progressed enough to swap in first (see View.js rollback()
+      // - "the application already received the tracks of the replacement; give it the
+      // current ones again"). That restoration needs this flag to still be set so setStream()
+      // takes the crossfade branch instead of dropping it. setStream() itself already clears
+      // the flag once any swap completes, which covers both the success and the
+      // restore-after-failed-repair case; clearing it eagerly here would race that re-emission
+      // and leave the video stuck on the (now-closing) replacement stream.
+    });
+  }
 
   if (state.Params.viewer.metadata) {
     millicastView.on('metadata', (metadata) => {
