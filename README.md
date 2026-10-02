@@ -98,7 +98,7 @@ You can choose to show or hide certain buttons in the player in order to customi
 | `pip`        | Hides the button that allows the small reproduction (picture-in-picture mode), in a corner of the window. |
 | `fullscreen` | Hides the _fullscreen_ button.                                                                            |
 | `liveBadge`  | Hides the message that indicates whether the stream is live or not.                                       |
-| `userCount`  | Hides the number of concurrent viewers of the stream.                                                     |
+| `userCount`  | Hides the number of concurrent viewers of the stream. When hidden (or when `controls` is `false`), the player does not subscribe to viewer count events. |
 | `settings`   | Hides the _settings_ button.                                                                              |
 
 In case you want to disable all buttons at once, you can simply pass the `controls: false` paremeter, instead of using `hideButtons`.

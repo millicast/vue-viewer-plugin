@@ -67,9 +67,12 @@ export const handleConnectToStream = async () => {
     await setCanAutoPlayStream();
     const connectOptions = {
       enableDRM: state.Params.viewer.drm,
-      events: ['active', 'inactive', 'layers', 'viewercount'],
+      events: ['active', 'inactive', 'layers'],
       absCaptureTime: true,
     };
+    if (!state.Params.viewer.hideButtons.includes('userCount')) {
+      connectOptions.events.push('viewercount');
+    }
     if (state.Params.viewer.audioOnly) {
       connectOptions.disableVideo = true;
     }
