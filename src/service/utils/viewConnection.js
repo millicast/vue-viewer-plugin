@@ -60,7 +60,7 @@ export const handleInitViewConnection = (accountId, streamName) => {
 
 export const handleConnectToStream = async () => {
   const millicastView = state.ViewConnection.millicastView;
-  if (millicastView.isActive()) {
+  if (millicastView.isActive() || millicastView.isConnecting()) {
     return;
   }
   try {
