@@ -54,6 +54,8 @@ export default {
           showTimer,
           abrStrategy,
           abrBandwidth,
+          relayonly,
+          pcrepair,
           customKeys,
           clientStats,
         } = this.paramsOptions;
@@ -86,6 +88,8 @@ export default {
           showTimer: showTimer,
           abrStrategy: abrStrategy,
           abrBandwidth: abrBandwidth,
+          relayonly: relayonly ?? false,
+          pcrepair: pcrepair ?? false,
           customKeys,
           clientStats: clientStats ?? false,
         });

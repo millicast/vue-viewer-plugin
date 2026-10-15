@@ -5,7 +5,7 @@
       playsinline
       id="player"
       ref="player"
-      :class="{ 'display: none;': currentElementRef === 'player2' }"
+      :style="{ display: currentElementRef === 'player2' ? 'none' : '' }"
     ></audio>
     <template v-else>
       <video
@@ -13,8 +13,10 @@
         id="player"
         ref="player"
         :poster="viewer.placeholderImg"
-        :class="{ 'display: none;': currentElementRef === 'player2' }"
-        :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
+        :style="{
+          display: currentElementRef === 'player2' ? 'none' : '',
+          borderRadius: isSplittedView ? '0.25rem' : '0',
+        }"
       ></video>
       <audio v-if="viewer.drm" id="drm-audio-player" playsinline></audio>
     </template>
@@ -25,7 +27,7 @@
       playsinline
       id="player2"
       ref="player2"
-      :class="{ 'display: none;': currentElementRef === 'player' }"
+      :style="{ display: currentElementRef === 'player' ? 'none' : '' }"
     ></audio>
     <template v-else>
       <video
@@ -33,8 +35,10 @@
         id="player2"
         ref="player2"
         :poster="viewer.placeholderImg"
-        :class="{ 'display: none;': currentElementRef === 'player' }"
-        :style="isSplittedView ? 'border-radius: 0.25rem' : 'border-radius: 0'"
+        :style="{
+          display: currentElementRef === 'player' ? 'none' : '',
+          borderRadius: isSplittedView ? '0.25rem' : '0',
+        }"
       ></video>
       <audio
         v-if="viewer.drm"
