@@ -1,6 +1,6 @@
 {
   "name": "@millicast/vue-viewer-plugin",
-  "version": "1.8.6-rec01.6",
+  "version": "1.8.7-rec01.0",
   "private": false,
   "author": "Millicast, Inc.",
   "scripts": {
@@ -20,7 +20,7 @@
   "dependencies": {
     "@millicast/bootstrap-icons-ml": "^1.9.1",
     "@millicast/bootstrap-ml": "^4.6.3",
-    "@millicast/sdk": "0.9.4-rec01.4",
+    "@millicast/sdk": "0.9.2-rec01.1",
     "can-autoplay": "^3.0.0",
     "css-element-queries": "^1.2.3",
     "vue-toastification": "^2.0.0-rc.1",
