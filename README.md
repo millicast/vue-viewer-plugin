@@ -58,6 +58,8 @@ import '@millicast/vue-viewer-plugin/dist/millicast-vue-viewer-plugin.css'
 
 You can now use the plugin in any Vue file of your project as a component.
 
+The version of the `@millicast/sdk` bundled in the plugin, as reported by the SDK at runtime (`Logger.VERSION`), is available as `VideoPlayer.sdkVersion`.
+
 ### Configuration Parameters
 
 | Name                   | Type             | Attribute | Default             | Description                                                                                                                                                            |

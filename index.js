@@ -1,3 +1,5 @@
+import { Logger } from '@millicast/sdk';
+
 import videoPlayer from './src/App.vue';
 
 import baseModal from './src/components/UI/BaseModal';
@@ -21,6 +23,7 @@ const filterBeforeCreate = (toast, toasts) => {
 };
 
 export default {
+  sdkVersion: Logger.VERSION,
   install(vue, options) {
     if (!options.store) {
       vue.use(store);
