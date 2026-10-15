@@ -51,6 +51,7 @@ export const handleInitViewConnection = (accountId, streamName) => {
   };
 
   const millicastView = new View(streamName, tokenGenerator);
+  millicastView.debugCaptureIdentity = { accountId, streamName };
   window.millicastView = millicastView;
   window.__defineGetter__('peer', () => {
     return millicastView.getRTCPeerConnection();
@@ -104,7 +105,7 @@ export const handleConnectToStream = async () => {
     }
 
     if (state.Params.viewer.clientStats) {
-      connectOptions.debugCapture = true;
+      connectOptions.debugCapture = { enabled: true, ...millicastView.debugCaptureIdentity };
     }
 
     await millicastView.connect(connectOptions);
