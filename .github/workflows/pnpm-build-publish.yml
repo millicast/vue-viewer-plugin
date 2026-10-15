@@ -31,7 +31,6 @@ jobs:
   build-publish:
     name: "build-publish ${{ inputs.ref }}"
     runs-on: ubuntu-latest
-    container: node:24-alpine
     permissions:
       contents: read
       id-token: write
@@ -46,7 +45,7 @@ jobs:
         env:
           dist_tag: ${{ inputs.dist_tag }}
           dryrun: ${{ inputs.dryrun || 'false' }}
-        shell: 'ash -e -o pipefail {0}'
+        shell: 'bash --noprofile --norc -euo pipefail {0}'
         run: |
           set --
           if [ -n "${dist_tag}" ]; then
