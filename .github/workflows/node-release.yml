@@ -35,7 +35,7 @@ jobs:
           :
 
   next-version:
-    uses: millicast/github-actions/.github/workflows/npm-version-release.yml@v1.0.2
+    uses: millicast/github-actions/.github/workflows/npm-version-release.yml@v1.0.3
     needs: [release-gate]
     # should ONLY be used from main
     if: github.ref_name == 'main' || inputs.bump_version == 'prerelease'

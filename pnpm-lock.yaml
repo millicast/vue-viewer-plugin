@@ -16,8 +16,8 @@ importers:
         specifier: ^4.6.3
         version: 4.6.3(jquery@3.7.1)(popper.js@1.16.1)
       '@millicast/sdk':
-        specifier: 0.9.4-rec01.3
-        version: 0.9.4-rec01.3
+        specifier: 0.9.4-rec01.4
+        version: 0.9.4-rec01.4
       can-autoplay:
         specifier: ^3.0.0
         version: 3.0.2
@@ -36,7 +36,7 @@ importers:
         version: 10.0.1(eslint@10.12.0)
       '@vitejs/plugin-vue':
         specifier: ^6.0.8
-        version: 6.0.9(vite@8.3.2(@types/node@24.13.3)(sass@1.105.1))(vue@3.5.43)
+        version: 6.0.9(vite@8.3.3(@types/node@24.19.1)(sass@1.105.1))(vue@3.5.43)
       eslint:
         specifier: ^10.0.0
         version: 10.12.0
@@ -54,7 +54,7 @@ importers:
         version: 1.105.1
       vite:
         specifier: ^8.2.2
-        version: 8.3.2(@types/node@24.13.3)(sass@1.105.1)
+        version: 8.3.3(@types/node@24.19.1)(sass@1.105.1)
       vue:
         specifier: ^3.0.0
         version: 3.5.43
@@ -170,8 +170,8 @@ packages:
       jquery: 1.9.1 - 3
       popper.js: ^1.16.1
 
-  '@millicast/sdk@0.9.4-rec01.3':
-    resolution: {integrity: sha512-wny+QWhoxd+1CpmDWgoc0asflCipFEVQ85ssDJ5XZXhsnAcg0k/1zZuCVU2Iz/G11Phq6LuC3d9gyF7xmmBF5g==}
+  '@millicast/sdk@0.9.4-rec01.4':
+    resolution: {integrity: sha512-I+vFQSBZd6Lgu/+CGGqGYW9jz6Ez3Go2XTdUSpO+fxpBaECaEyzHzODiSgYu7x1+TPpz6k5ThACdMnBlQmVerw==}
 
   '@oxc-project/types@0.151.0':
     resolution: {integrity: sha512-J1yXrIlNDZVzE3ada310xeAw7nH8yCAyLPuUIsjKatFPmfn5bS1oW+cM+QsGOtVWd5nhSpbwZWx/rue+r5Z+PA==}
@@ -366,8 +366,8 @@ packages:
   '@types/json-schema@7.0.15':
     resolution: {integrity: sha512-5+fP8P8MFNC+AyZCDxrB2pkZFPGzqQWUzpSeuuVLvm8VMcorNYavBqoFcxK8bQz4Qsbn4oUEEem4wDLfcysGHA==}
 
-  '@types/node@24.13.3':
-    resolution: {integrity: sha512-Dh8vAsV36ig5wa9OX4pXvMc9D3Veibfw2wix0CUwYODLD8nkj9UsLjASr49nPg+2eKzxhBV+v7L8pXvT4e639Q==}
+  '@types/node@24.19.1':
+    resolution: {integrity: sha512-aS3/DG0oM05K0RIXXP+hKjinGG5IgSSVGzswZxW3O0sS3pH4/fycXundUC9XsszgKCk4gHXylTEK6hyFxVxnoQ==}
 
   '@vitejs/plugin-vue@6.0.9':
     resolution: {integrity: sha512-rD/MORlhaZMlXWW0rEn4FB4wMinWC0z/D7Ye160S5+Rs1mC8ZDAdcDp4SjKfUhG5t8q1ktcPVw4xuTkPRlzrSA==}
@@ -889,8 +889,8 @@ packages:
     resolution: {integrity: sha512-LbBDqdIC5s8iROCUjMbW1f5dJQTEFB1+KO9ogbvlb3nm9n4YHa5p4KTvFPWvh2Hs8gZMBuiB1/8+pdfe/tDPug==}
     hasBin: true
 
-  undici-types@7.18.2:
-    resolution: {integrity: sha512-AsuCzffGHJybSaRrmr5eHr81mwJU3kjw6M+uprWvCXiNeN9SOGwQ3Jn8jb8m3Z6izVgknn1R0FTCEAP2QrLY/w==}
+  undici-types@7.24.6:
+    resolution: {integrity: sha512-WRNW+sJgj5OBN4/0JpHFqtqzhpbnV0GuB+OozA9gCL7a993SmU+1JBZCzLNxYsbMfIeDL+lTsphD5jN5N+n0zg==}
 
   uri-js@4.4.1:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
@@ -898,16 +898,16 @@ packages:
   util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
 
-  valibot@1.4.2:
-    resolution: {integrity: sha512-gjdCvJ6d3RyHAneqxMYMW9QMCwYMb3jpOO0IyHZV1bnRHFBHrX3VkIILt5XYR0WhwHiH7Mty8ovuPZ/O3gamrg==}
+  valibot@1.5.0:
+    resolution: {integrity: sha512-nil6AkP2TChWL43Z5uJ6GTxX01CUA+g8LWUM+N/rB9NBbkUMaUsi9PUNzlUPgoKASgmx9f7eGOYpJ04/fSa6FQ==}
     peerDependencies:
       typescript: '>=5'
     peerDependenciesMeta:
       typescript:
         optional: true
 
-  vite@8.3.2:
-    resolution: {integrity: sha512-SQr1x6W5vVSbROg7vsyXIaxK9b0G7zsT68acdWWRmnBUsgDieLCRG+Rep9WdZgcposvv/GSnr4GUUBqB3vXq6w==}
+  vite@8.3.3:
+    resolution: {integrity: sha512-cTAldKPImjg6c+gk48U19POPn3GCBzZwpdsN8ZMEEcbpes+6/wvfqUd0C2y3qYY4wsj8PwgFwrZ/1jBPVttMSg==}
     engines: {node: ^20.19.0 || >=22.12.0}
     hasBin: true
     peerDependencies:
@@ -1088,10 +1088,10 @@ snapshots:
       jquery: 3.7.1
       popper.js: 1.16.1
 
-  '@millicast/sdk@0.9.4-rec01.3':
+  '@millicast/sdk@0.9.4-rec01.4':
     dependencies:
       '@dolbyio/webrtc-stats': 1.3.0
-      '@types/node': 24.13.3
+      '@types/node': 24.19.1
       Base64: 1.3.0
       buffer: 6.0.3
       events: 3.3.0
@@ -1102,7 +1102,7 @@ snapshots:
       semantic-sdp: 3.31.1
       transaction-manager: 2.1.7
       ua-parser-js: 1.0.41
-      valibot: 1.4.2
+      valibot: 1.5.0
     transitivePeerDependencies:
       - typescript
 
@@ -1218,14 +1218,14 @@ snapshots:
 
   '@types/json-schema@7.0.15': {}
 
-  '@types/node@24.13.3':
+  '@types/node@24.19.1':
     dependencies:
-      undici-types: 7.18.2
+      undici-types: 7.24.6
 
-  '@vitejs/plugin-vue@6.0.9(vite@8.3.2(@types/node@24.13.3)(sass@1.105.1))(vue@3.5.43)':
+  '@vitejs/plugin-vue@6.0.9(vite@8.3.3(@types/node@24.19.1)(sass@1.105.1))(vue@3.5.43)':
     dependencies:
       '@rolldown/pluginutils': 1.0.1
-      vite: 8.3.2(@types/node@24.13.3)(sass@1.105.1)
+      vite: 8.3.3(@types/node@24.19.1)(sass@1.105.1)
       vue: 3.5.43
 
   '@vue/compiler-core@3.5.43':
@@ -1718,7 +1718,7 @@ snapshots:
 
   ua-parser-js@1.0.41: {}
 
-  undici-types@7.18.2: {}
+  undici-types@7.24.6: {}
 
   uri-js@4.4.1:
     dependencies:
@@ -1726,9 +1726,9 @@ snapshots:
 
   util-deprecate@1.0.2: {}
 
-  valibot@1.4.2: {}
+  valibot@1.5.0: {}
 
-  vite@8.3.2(@types/node@24.13.3)(sass@1.105.1):
+  vite@8.3.3(@types/node@24.19.1)(sass@1.105.1):
     dependencies:
       lightningcss: 1.33.0
       picomatch: 4.0.7
@@ -1736,7 +1736,7 @@ snapshots:
       rolldown: 1.2.11
       tinyglobby: 0.2.17
     optionalDependencies:
-      '@types/node': 24.13.3
+      '@types/node': 24.19.1
       fsevents: 2.3.3
       sass: 1.105.1
 

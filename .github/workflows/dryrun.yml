@@ -12,10 +12,9 @@ jobs:
   dryrun:
     name: "Build dryrun"
     runs-on: ubuntu-latest
-    container: node:24-alpine
     permissions:
       contents: read
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
 
       - uses: ./.github/actions/pnpm-build

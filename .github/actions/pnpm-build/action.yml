@@ -4,10 +4,15 @@ description: Shared pnpm build step
 runs:
   using: composite
   steps:
+    - uses: millicast/pnpm-setup@v3
+      with:
+        node-version-file: .nvmrc
+        cache: true
+        install: false
+
     - name: 'pnpm run build'
-      shell: 'sh -e -o pipefail {0}'
+      shell: 'bash --noprofile --norc -euo pipefail {0}'
       run: |
-        corepack enable
         pnpm ci
         pnpm run build
 
