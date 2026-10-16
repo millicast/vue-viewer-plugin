@@ -1,5 +1,5 @@
 <template>
-  <vue-resizable class="resizable">
+  <vue-resizable class="resizable" :width="960" :height="540">
     <VideoPlayer :paramsOptions="viewerPluginParams" />
   </vue-resizable>
 </template>
