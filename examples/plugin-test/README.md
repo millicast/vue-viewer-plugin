@@ -12,9 +12,11 @@ Before you can use the plugin, you will need to set up some environment variable
 
 3. Set the following enviroment variables according to your Dolby Real Time Streaming account id and stream name:
 
-    -  `VUE_APP_MILLICAST_ACCOUNT_ID` - Dolby Real Time Streaming account id
+    -  `VUE_APP_DOLBY_RTS_ACCOUNT_ID` - Dolby Real Time Streaming account id
 
-    -  `VUE_APP_MILLICAST_STREAM_NAME` - Dolby Real Time Streaming stream name
+    -  `VUE_APP_DOLBY_RTS_STREAM_NAME` - Dolby Real Time Streaming stream name
+
+The plugin connects to the production director (`VITE_DEFAULT_DIRECTOR_ENDPOINT` in the repository root `.env`), so use a production account and stream.
 
 ## Project setup
 ```
