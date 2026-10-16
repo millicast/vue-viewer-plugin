@@ -6,6 +6,7 @@
   "scripts": {
     "build": "vite build && vite build --mode umd",
     "lint": "eslint",
+    "test": "vitest run",
     "pretty": "prettier --write \"./**/*.{js,json,vue}\""
   },
   "main": "dist/millicast-vue-viewer-plugin.umd.js",
@@ -32,9 +33,11 @@
     "eslint": "^10.0.0",
     "eslint-plugin-vue": "^10.10.0",
     "globals": "^17.0.0",
+    "jsdom": "^30.1.2",
     "prettier": "^3.9.6",
     "sass": "^1.103.1",
     "vite": "^8.2.2",
+    "vitest": "^5.0.3",
     "vue": "^3.0.0",
     "vue-eslint-parser": "^10.3.0"
   },
