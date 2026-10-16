@@ -16,8 +16,8 @@ importers:
         specifier: ^4.6.3
         version: 4.6.3(jquery@3.7.1)(popper.js@1.16.1)
       '@millicast/sdk':
-        specifier: ^0.9.2
-        version: 0.9.2
+        specifier: ^0.9.3
+        version: 0.9.3
       can-autoplay:
         specifier: ^3.0.0
         version: 3.0.2
@@ -170,8 +170,8 @@ packages:
       jquery: 1.9.1 - 3
       popper.js: ^1.16.1
 
-  '@millicast/sdk@0.9.2':
-    resolution: {integrity: sha512-Cth9yw/TsHE6Wy1UHPOd5Mz6wTdg6jB1ZVwQGNr7PE1cKlKL69qog+v+kFN5nTX51wwRAh7csT0gvj0YA2uEqg==}
+  '@millicast/sdk@0.9.3':
+    resolution: {integrity: sha512-oW7ZOejtOi9JMtTKyocaFaK0toP4KXzt1ykZ8CDBBkPfr+bRa1s8adF/rUyyMMIQHAAsyyMSzNAOYfRFE50r4g==}
 
   '@oxc-project/types@0.151.0':
     resolution: {integrity: sha512-J1yXrIlNDZVzE3ada310xeAw7nH8yCAyLPuUIsjKatFPmfn5bS1oW+cM+QsGOtVWd5nhSpbwZWx/rue+r5Z+PA==}
@@ -1088,7 +1088,7 @@ snapshots:
       jquery: 3.7.1
       popper.js: 1.16.1
 
-  '@millicast/sdk@0.9.2':
+  '@millicast/sdk@0.9.3':
     dependencies:
       '@dolbyio/webrtc-stats': 1.3.0
       '@types/node': 24.19.1
