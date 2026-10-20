@@ -48,6 +48,7 @@
       />
       <VideoPlayerControlsSettingsStats />
       <VideoPlayerControlsSettingsReportIssue :streamId="streamId" />
+      <VideoPlayerControlsSettingsClientStats />
     </div>
     <div
       class="dropdown-menu dropdown-menu-right"
@@ -76,6 +77,7 @@ import VideoPlayerControlsSettingsAudioTrack from './VideoPlayerControlsSettings
 import VideoPlayerControlsSettingsQuality from './VideoPlayerControlsSettingsQuality.vue';
 import VideoPlayerControlsSettingsStats from './VideoPlayerControlsSettingsStats.vue';
 import VideoPlayerControlsSettingsReportIssue from './VideoPlayerControlsSettingsReportIssue.vue';
+import VideoPlayerControlsSettingsClientStats from './VideoPlayerControlsSettingsClientStats.vue';
 import VideoPlayerControlsSettingsDropdown from './VideoPlayerControlsSettingsDropdown.vue';
 import VideoPlayerControlsSettingsSplitView from './VideoPlayerControlsSettingsSplitView.vue';
 import VideoPlayerControlsSettingsLayout from './VideoPlayerControlsSettingsLayout.vue';
@@ -91,6 +93,7 @@ export default {
     VideoPlayerControlsSettingsQuality,
     VideoPlayerControlsSettingsStats,
     VideoPlayerControlsSettingsReportIssue,
+    VideoPlayerControlsSettingsClientStats,
     VideoPlayerControlsSettingsDropdown,
     VideoPlayerControlsSettingsSplitView,
     VideoPlayerControlsSettingsLayout,
