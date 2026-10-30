@@ -55,6 +55,7 @@ export default {
           abrStrategy,
           abrBandwidth,
           customKeys,
+          clientStats,
         } = this.paramsOptions;
         const shouldHideButtons =
           controls === false ? availableControls : (hideButtons ?? []);
@@ -86,6 +87,7 @@ export default {
           abrStrategy: abrStrategy,
           abrBandwidth: abrBandwidth,
           customKeys,
+          clientStats: clientStats ?? false,
         });
       }
       processEnvironmentOptions(this.paramsOptions?.environment);
