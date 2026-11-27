@@ -35,6 +35,8 @@ export default defineConfig(({ mode }) => {
     define: {
       'process.env.NODE_ENV': JSON.stringify('production'),
       'import.meta.env.PACKAGE_VERSION': JSON.stringify(packageJson.version),
+      // Bundled UMD deps (css-element-queries, SDK internals) must not register with a host AMD loader (e.g. webpack)
+      'define.amd': 'undefined',
     },
     css: {
       preprocessorOptions: {

@@ -1,5 +1,5 @@
 name: pnpm run build
-description: Shared pnpm build step
+description: Shared pnpm build and test step
 
 runs:
   using: composite
@@ -10,10 +10,11 @@ runs:
         cache: true
         install: false
 
-    - name: 'pnpm run build'
+    - name: 'pnpm run build and test'
       shell: 'bash --noprofile --norc -euo pipefail {0}'
       run: |
         pnpm ci
         pnpm run build
+        pnpm test
 
         printf '\nNODE: %s\nPNPM: %s\n\n' "$(node --version)" "$(pnpm --version)"
