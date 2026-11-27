@@ -37,6 +37,7 @@ export const defaultViewerOptions = {
   abrStrategy: null,
   abrBandwidth: null,
   customKeys: null,
+  clientStats: false,
 };
 
 export default function processViewerOptions({
@@ -65,6 +66,7 @@ export default function processViewerOptions({
   showTimer,
   abrStrategy,
   abrBandwidth,
+  clientStats,
   ...customKeys
 }) {
   let options = {};
@@ -122,6 +124,7 @@ export default function processViewerOptions({
     options.mediaBufferMs = parseInt(mediaBufferMs);
   }
   options.showTimer = showTimer ?? false;
+  options.clientStats = clientStats === true || clientStats === 'true';
   const abrStrategies = ['quality', 'bandwidth', 'performance'];
   if (
     abrStrategy &&
